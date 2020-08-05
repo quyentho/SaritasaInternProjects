@@ -32,9 +32,8 @@ namespace RestaurantCheck
                         continue;
                     }
 
-                    double total, discount, totalWithTax;
-                    CalculatetTotalPrice(checkRestaurant, out total, out discount, out totalWithTax);
-                    DisplayResult(total, discount, totalWithTax);
+                    CheckResult checkResult = checkRestaurant.Calculate();
+                    DisplayResult(checkResult.TotalBeforeTax, checkResult.DiscountAmount, checkResult.TotalAfterTax);
                 }
                 else
                 {
@@ -71,13 +70,6 @@ namespace RestaurantCheck
         private static bool InputEmpty(string[] input)
         {
             return string.IsNullOrEmpty(input.First());
-        }
-
-        private static void CalculatetTotalPrice(Check checkRestaurant, out double total, out double discount, out double totalWithTax)
-        {
-            total = checkRestaurant.CalculateTotalBeforeTax();
-            discount = checkRestaurant.CalculateDiscount(checkRestaurant.CalculateToTalPriceOfItems());
-            totalWithTax = checkRestaurant.CalculateTotalAfterTax();
         }
 
         private static bool InputExitCode(string[] input)

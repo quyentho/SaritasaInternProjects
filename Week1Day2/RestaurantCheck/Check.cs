@@ -11,23 +11,13 @@ namespace RestaurantCheck
     /// </summary>
     public class Check
     {
+        private const double DiscountRate = 0.05;
+        private const double TaxRate = 0.02;
+
         /// <summary>
         /// Gets or sets list check items.
         /// </summary>
         public List<CheckItem> Items { get; set; } = new List<CheckItem>();
-
-        /// <summary>
-        /// Calculate total with tax.
-        /// </summary>
-        /// <returns>Total price after tax.</returns>
-        public double CalculateTotalAfterTax()
-        {
-            double total = this.CalculateTotalBeforeTax();
-
-            double tax = 0.02;
-
-            return Math.Round(total + (total * tax), 2);
-        }
 
         /// <summary>
         /// Check if list item is empty.
@@ -44,35 +34,40 @@ namespace RestaurantCheck
         }
 
         /// <summary>
-        /// Calculate total price before tax.
-        /// </summary>
-        /// <returns>Total price before tax.</returns>
-        public double CalculateTotalBeforeTax()
-        {
-            var total = this.CalculateToTalPriceOfItems();
-
-            return Math.Round(total - this.CalculateDiscount(total), 2);
-        }
-
-        public double CalculateToTalPriceOfItems()
-        {
-            return this.Items.Select(i => i.Price).Sum();
-        }
-
-        /// <summary>
         /// Calculate discount.
         /// </summary>
         /// <param name="total">Total price to determine if discount.</param>
         /// <returns>total * 5% discount.</returns>
-        public double CalculateDiscount(double total)
+        private double GetDiscountAmout(double total)
         {
             double discount = 0;
             if (total > 20)
             {
-                discount = Math.Round(total * 0.05, 2);
+                discount = total * DiscountRate;
             }
 
             return discount;
         }
-     }
+        /// <summary>
+        /// Calculate Check Result.
+        /// </summary>
+        /// <returns>CheckResult</returns>
+        public CheckResult Calculate()
+        {
+            var total = this.Items.Sum(i => i.Price);
+
+            var discountAmount = this.GetDiscountAmout(total);
+
+            var totalBeforeTax = total - discountAmount;
+
+            var totalAfterTax = totalBeforeTax + GetTaxAmount(totalBeforeTax);
+
+            return new CheckResult() { DiscountAmount = discountAmount, TotalAfterTax = totalAfterTax, TotalBeforeTax = totalBeforeTax };
+        }
+
+        private static double GetTaxAmount(double totalBeforeTax)
+        {
+            return totalBeforeTax * TaxRate;
+        }
+    }
 }

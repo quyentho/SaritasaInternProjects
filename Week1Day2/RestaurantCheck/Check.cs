@@ -54,7 +54,7 @@ namespace RestaurantCheck
             return Math.Round(total - this.CalculateDiscount(total), 2);
         }
 
-        private double CalculateToTalPriceOfItems()
+        public double CalculateToTalPriceOfItems()
         {
             return this.Items.Select(i => i.Price).Sum();
         }

@@ -76,7 +76,7 @@ namespace RestaurantCheck
         private static void CalculatetTotalPrice(Check checkRestaurant, out double total, out double discount, out double totalWithTax)
         {
             total = checkRestaurant.CalculateTotalBeforeTax();
-            discount = checkRestaurant.CalculateDiscount(total);
+            discount = checkRestaurant.CalculateDiscount(checkRestaurant.CalculateToTalPriceOfItems());
             totalWithTax = checkRestaurant.CalculateTotalAfterTax();
         }
 

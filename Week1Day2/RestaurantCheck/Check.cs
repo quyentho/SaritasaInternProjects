@@ -6,16 +6,20 @@ namespace RestaurantCheck
     using System.Collections.Generic;
     using System.Linq;
 
-    /// <sumary>
-    ///  Contains logic to check totals.
-    /// </sumary>
+    /// <summary>
+    /// Contains logic to check totals.
+    /// </summary>
     public class Check
     {
+        /// <summary>
+        /// List check items.
+        /// </summary>
         public List<CheckItem> Items { get; set; } = new List<CheckItem>();
 
-        /// <sumary>
+        /// <summary>
         /// Calculate total with tax.
-        /// </sumary>
+        /// </summary>
+        /// <returns>Total price after tax.</returns>
         public double CalculateTotalAfterTax()
         {
             double total = this.CalculateTotalBeforeTax();
@@ -25,9 +29,10 @@ namespace RestaurantCheck
             return Math.Round(total + (total * tax), 2);
         }
 
-        /// <sumary>
+        /// <summary>
         /// Check if list item is empty.
-        /// </sumary>
+        /// </summary>
+        /// <returns>True if empty.</returns>
         public bool IsEmpty()
         {
             if (this.Items.Count == 0)
@@ -38,9 +43,10 @@ namespace RestaurantCheck
             return false;
         }
 
-        /// <sumary>
+        /// <summary>
         /// Calculate total price before tax.
-        /// </sumary>
+        /// </summary>
+        /// <returns>Total price before tax.</returns>
         public double CalculateTotalBeforeTax()
         {
             var total = this.CalculateToTalPriceOfItems();
@@ -53,9 +59,11 @@ namespace RestaurantCheck
             return this.Items.Select(i => i.Price).Sum();
         }
 
-        /// <sumary>
+        /// <summary>
         /// Calculate discount.
-        /// </sumary>
+        /// </summary>
+        /// <param name="total">Total price to determine if discount.</param>
+        /// <returns>total * 5% discount.</returns>
         public double CalculateDiscount(double total)
         {
             double discount = 0;

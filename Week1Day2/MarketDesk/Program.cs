@@ -4,6 +4,9 @@ namespace MarketDesk
     using System;
     using System.Linq;
 
+    /// <summary>
+    /// Application entry point.
+    /// </summary>
     internal class Program
     {
         private static void Main(string[] args)

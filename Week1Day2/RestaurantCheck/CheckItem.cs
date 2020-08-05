@@ -2,18 +2,18 @@
 
 namespace RestaurantCheck
 {
-    /// <sumary>
+    /// <summary>
     /// Represent Item To Check.
-    /// </sumary>
+    /// </summary>
     public class CheckItem
     {
         /// <summary>
-        /// assdasd.
+        /// Gets or sets item name.
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// 
+        /// Gets or sets price.
         /// </summary>
         public double Price { get; set; }
     }

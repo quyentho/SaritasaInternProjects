@@ -1,17 +1,22 @@
-﻿namespace RestaurantCheck
+﻿// Copyright (c) Saritasa, LLC
+
+namespace RestaurantCheck
 {
     using System;
     using System.Linq;
-    class Program
+
+    /// <summary>
+    /// Application entry point.
+    /// </summary>
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Check checkRestaurant = new Check();
 
             Console.WriteLine("Enter foods you want to check, enter 'x' to quit\n");
             do
             {
-
                 string[] input = Console.ReadLine().Split(',');
 
                 if (input.First() == "x")
@@ -53,7 +58,8 @@
                         continue;
                     }
                 }
-            } while (true);
+            }
+            while (true);
         }
 
         private static void DisplayResult(double total, double discount, double totalWithTax)

@@ -12,7 +12,7 @@ namespace RestaurantCheck
     public class Check
     {
         /// <summary>
-        /// List check items.
+        /// Gets or sets list check items.
         /// </summary>
         public List<CheckItem> Items { get; set; } = new List<CheckItem>();
 

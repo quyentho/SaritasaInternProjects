@@ -19,47 +19,70 @@ namespace RestaurantCheck
             {
                 string[] input = Console.ReadLine().Split(',');
 
-                if (input.First() == "x")
+                if (InputExitCode(input))
                 {
                     break;
                 }
 
-                if (string.IsNullOrEmpty(input.First()))
+                if (InputEmpty(input))
                 {
                     if (checkRestaurant.IsEmpty())
                     {
-                        Console.WriteLine("Not have value to check");
+                        Console.WriteLine("Not have item to check, please input:");
                         continue;
                     }
 
-                    var total = checkRestaurant.CalculateTotalBeforeTax();
-                    var discount = checkRestaurant.CalculateDiscount(total);
-                    var totalWithTax = checkRestaurant.CalculateTotalAfterTax();
-
+                    double total, discount, totalWithTax;
+                    CalculatetTotalPrice(checkRestaurant, out total, out discount, out totalWithTax);
                     DisplayResult(total, discount, totalWithTax);
                 }
                 else
                 {
-                    try
-                    {
-                        string name = input.First().Trim();
-                        double price = Convert.ToDouble(input.Last().Trim());
-                        if (price < 0)
-                        {
-                            Console.WriteLine("Price cannot be negative");
-                            break;
-                        }
-
-                        checkRestaurant.Items.Add(new CheckItem { Name = name, Price = price });
-                    }
-                    catch (Exception)
-                    {
-                        Console.WriteLine("input must contain price after comma");
-                        continue;
-                    }
+                    GetCheckItemFromInput(input, checkRestaurant);
                 }
             }
             while (true);
+        }
+
+        private static void GetCheckItemFromInput(string[] input, Check checkRestaurant)
+        {
+            try
+            {
+                string name = input.First().Trim();
+                double price = Convert.ToDouble(input.Last().Trim());
+                if (price < 0)
+                {
+                    Console.WriteLine("Price cannot be negative");
+                }
+
+                AddToCheckList(checkRestaurant, name, price);
+            }
+            catch (InvalidCastException)
+            {
+                Console.WriteLine("input must contain price after comma");
+            }
+        }
+
+        private static void AddToCheckList(Check checkRestaurant, string name, double price)
+        {
+            checkRestaurant.Items.Add(new CheckItem { Name = name, Price = price });
+        }
+
+        private static bool InputEmpty(string[] input)
+        {
+            return string.IsNullOrEmpty(input.First());
+        }
+
+        private static void CalculatetTotalPrice(Check checkRestaurant, out double total, out double discount, out double totalWithTax)
+        {
+            total = checkRestaurant.CalculateTotalBeforeTax();
+            discount = checkRestaurant.CalculateDiscount(total);
+            totalWithTax = checkRestaurant.CalculateTotalAfterTax();
+        }
+
+        private static bool InputExitCode(string[] input)
+        {
+            return input.First() == "x";
         }
 
         private static void DisplayResult(double total, double discount, double totalWithTax)

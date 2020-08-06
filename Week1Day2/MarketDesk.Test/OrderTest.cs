@@ -1,50 +1,46 @@
-//using FluentAssertions;
-//using System;
-//using System.Collections.Generic;
-//using Xunit;
+using FluentAssertions;
+using System;
+using System.Collections.Generic;
+using Xunit;
 
-//namespace MarketDesk.Test
-//{
-//    public class OrderTest
-//    {
-//        private Order sut;
-//        public OrderTest()
-//        {
-//            sut = new Order();
-//        }
+namespace MarketDesk.Test
+{
+    public class OrderTest
+    {
+        private Order sut;
+        public OrderTest()
+        {
+            sut = new Order();
+        }
 
-//        [Fact]
-//        public void IsEmpty_EmptyItems_ReturnsTrue()
-//        {
-//            bool result = sut.IsEmpty();
+        [Fact]
+        public void IsEmpty_EmptyItems_ReturnsTrue()
+        {
+            bool result = sut.IsEmpty();
 
-//            result.Should().BeTrue();
-//        }
+            result.Should().BeTrue();
+        }
 
-//        [Fact]
-//        public void IsEmpty_NotEmptyItems_ReturnsTrue()
-//        {
-//            string input = "food,10,1";
-//            sut.Items.Add(new OrderItem(input));
+        [Fact]
+        public void IsEmpty_NotEmptyItems_ReturnsTrue()
+        {
+            sut.Items.Add(new OrderItem() {  Name = "food", Price = 10, Quantity = 5});
 
-//            bool result = sut.IsEmpty();
+            bool result = sut.IsEmpty();
 
-//            result.Should().BeFalse();
-//        }
+            result.Should().BeFalse();
+        }
 
-//        [Fact]
-//        public void Calculate_ValidItems_ReturnsExactOrderResult()
-//        {
-//            string input = "Vodka,10,1.0";
-//            string input2 = "Beer,3,6.0";
-//            string input3 = "Fish,1,10";
-//            sut.Items.Add(new OrderItem(input));
-//            sut.Items.Add(new OrderItem(input2));
-//            sut.Items.Add(new OrderItem(input3));
+        [Fact]
+        public void Calculate_ValidItems_ReturnsExactOrderResult()
+        {
+            sut.Items.Add(new OrderItem() { Name= "Vodka", Quantity = 10, Price = 1 });
+            sut.Items.Add(new OrderItem() { Name= "Beer", Quantity = 3, Price = 6 });
+            sut.Items.Add(new OrderItem() { Name= "Fish", Quantity = 1, Price = 10 });
 
-//            OrderResult result = sut.Calculate();
+            OrderResult result = sut.Calculate();
 
-//            result.Should().Match<OrderResult>(r => r.Total == 38 && r.TotalWithTax == 39.14);
-//        }
-//    }
-//}
+            result.Should().Match<OrderResult>(r => r.Total == 38 && r.TotalWithTax == 39.14);
+        }
+    }
+}

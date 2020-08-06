@@ -23,47 +23,52 @@ namespace MarketDesk
             {
                 orderItem = new ExitOrderItem();
                 orderItem.Message = "Exit";
+                return orderItem;
             }
-            else if (input.Equals(string.Empty))
+
+            if (input.Equals(string.Empty))
             {
                 orderItem = new EmptyOrderItem();
+                return orderItem;
             }
-            else
+
+            string[] values = input.Split(",");
+            if (HasInvalidInput(values))
             {
-                string[] values = input.Split(",");
-                if (values.Count() > 3)
+                orderItem = new InvalidOrderItem();
+                orderItem.Message = "Invalid input format.";
+                return orderItem;
+            }
+
+            try
+            {
+                var quantity = Convert.ToInt32(values[1]);
+                var price = Convert.ToDouble(values[2]);
+                if (IsNegative(quantity, price))
                 {
                     orderItem = new InvalidOrderItem();
-                    orderItem.Message = "Invalid input format.";
+                    orderItem.Message = "Price and Quantity cannot negative";
+                    return orderItem;
                 }
-                else
-                {
-                    try
-                    {
-                        var quantity = Convert.ToInt32(values[1]);
-                        var price = Convert.ToDouble(values[2]);
-                        if (IsNegative(quantity, price))
-                        {
-                            orderItem = new InvalidOrderItem();
-                            orderItem.Message = "Price and Quantity cannot negative";
-                        }
-                        else
-                        {
-                            orderItem = new OrderItem();
-                            (orderItem as OrderItem).Name = values.First();
-                            (orderItem as OrderItem).Quantity = quantity;
-                            (orderItem as OrderItem).Price = price;
-                        }
-                    }
-                    catch (FormatException)
-                    {
-                        orderItem = new InvalidOrderItem();
-                        orderItem.Message = "Price And Quantity must be number";
-                    }
-                }
+
+                orderItem = new OrderItem();
+                (orderItem as OrderItem).Name = values.First();
+                (orderItem as OrderItem).Quantity = quantity;
+                (orderItem as OrderItem).Price = price;
+            }
+            catch (FormatException)
+            {
+                orderItem = new InvalidOrderItem();
+                orderItem.Message = "Price And Quantity must be number";
             }
 
             return orderItem;
+
+        }
+
+        private static bool HasInvalidInput(string[] values)
+        {
+            return values.Count() != 3;
         }
 
         private static bool IsNegative(int quantity, double price)

@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using System;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using System.Text;
 using Xunit;
 
@@ -72,6 +73,28 @@ namespace RestaurantCheck.Test
             bool result = sut.IsEmpty();
 
             result.Should().BeFalse();
+        }
+
+        [Fact]
+        public void GetCheckItemFromInput_NegativePrice_ThrowsArgumentOutOfRangeException()
+        {
+            string[] input = { "food", "-1" };
+
+            Action act = () => sut.GetCheckItemFromInput(input);
+
+            act.Should().Throw<ArgumentOutOfRangeException>()
+                .WithMessage("Price Cannot Be Negative (Parameter 'price')")
+                .And.ParamName.Should().Be("price");
+        }
+
+        [Fact]
+        public void GetCheckItemFromInput_PriceInputIsNotNumber_ThrowsInvalidCastException()
+        {
+            string[] input = { "food", "not a number" };
+
+            Action act = () => sut.GetCheckItemFromInput(input);
+
+            act.Should().Throw<FormatException>();
         }
 
     }

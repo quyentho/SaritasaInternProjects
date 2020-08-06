@@ -25,7 +25,7 @@ namespace RestaurantCheck
                 }
 
                 if (InputEmpty(input))
-                {
+                { // Start Calculate.
                     if (checkRestaurant.IsEmpty())
                     {
                         Console.WriteLine("Not have item to check, please input:");
@@ -36,35 +36,23 @@ namespace RestaurantCheck
                     DisplayResult(checkResult);
                 }
                 else
-                {
-                    GetCheckItemFromInput(input, checkRestaurant);
+                { // Get value from input and add to check list.
+                    try
+                    {
+                        var result = checkRestaurant.GetCheckItemFromInput(input);
+                        checkRestaurant.AddItemToCheckList(result.name, result.price);
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Input Price must be a number");
+                    }
+                    catch (ArgumentOutOfRangeException e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
                 }
             }
             while (true);
-        }
-
-        private static void GetCheckItemFromInput(string[] input, Check checkRestaurant)
-        {
-            try
-            {
-                string name = input.First().Trim();
-                double price = Convert.ToDouble(input.Last().Trim());
-                if (price < 0)
-                {
-                    Console.WriteLine("Price cannot be negative");
-                }
-
-                AddToCheckList(checkRestaurant, name, price);
-            }
-            catch (InvalidCastException)
-            {
-                Console.WriteLine("input must contain price after comma");
-            }
-        }
-
-        private static void AddToCheckList(Check checkRestaurant, string name, double price)
-        {
-            checkRestaurant.Items.Add(new CheckItem { Name = name, Price = price });
         }
 
         private static bool InputEmpty(string[] input)

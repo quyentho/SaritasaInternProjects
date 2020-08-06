@@ -45,6 +45,5 @@ namespace MarketDesk.Test
 
             result.Should().BeAssignableTo<OrderItem>();
         }
-
     }
 }

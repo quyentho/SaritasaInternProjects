@@ -12,61 +12,39 @@ namespace RestaurantCheck
     {
         private static void Main(string[] args)
         {
-            Check checkRestaurant = new Check();
+            Check check = new Check();
 
             Console.WriteLine("Enter foods you want to check, enter 'x' to quit\n");
             do
             {
                 string input = Console.ReadLine();
-
-                if (HasExitCode(input))
+                ICheckItem item = CheckItemFactory.Create(input);
+                if (item is ExitCheckItem)
                 {
                     break;
                 }
-
-                if (IsEmptyInput(input))
+                else if (item is EmptyCheckItem)
                 { // Start Calculate.
-                    if (checkRestaurant.IsEmpty())
+                    if (check.IsEmpty())
                     {
                         Console.WriteLine("Not have item to check, please input:");
                         continue;
                     }
 
-                    CheckResult checkResult = checkRestaurant.Calculate();
+                    CheckResult checkResult = check.Calculate();
                     DisplayResult(checkResult);
                 }
-                else
-                { // Get value from input and add to check list.
-                    try
-                    {
-                        CheckItem item = new CheckItem(input);
-                        checkRestaurant.Items.Add(item);
-                    }
-                    catch (FormatException ex)
-                    {
-                        Console.WriteLine("Input Price must be a number");
-
-                        throw ex;
-
-                        throw;
-                    }
-                    catch (ArgumentOutOfRangeException e)
-                    {
-                        Console.WriteLine(e.Message);
-                    }
+                else if (item is InvalidCheckItem)
+                {
+                    Console.WriteLine(item.Message);
+                    continue;
+                }
+                else if (item is CheckItem)
+                {
+                    check.Items.Add(item as CheckItem);
                 }
             }
             while (true);
-        }
-
-        private static bool IsEmptyInput(string input)
-        {
-            return string.IsNullOrEmpty(input);
-        }
-
-        private static bool HasExitCode(string input)
-        {
-            return input.Equals("x", StringComparison.InvariantCultureIgnoreCase);
         }
 
         private static void DisplayResult(CheckResult result)

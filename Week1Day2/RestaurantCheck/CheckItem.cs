@@ -7,25 +7,8 @@ namespace RestaurantCheck
     /// <summary>
     /// Represent Item To Check.
     /// </summary>
-    public class CheckItem
+    public class CheckItem : ICheckItem
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CheckItem"/> class. Throws ArgumentOutOfRangeException if price is negative.
-        /// </summary>
-        /// <param name="input">User input.</param>
-        public CheckItem(string input)
-        {
-            string[] values = input.Split(",");
-
-            this.Name = values[0].Trim();
-            this.Price = Convert.ToDouble(values[1].Trim());
-
-            if (this.Price < 0)
-            {
-                throw new ArgumentOutOfRangeException(string.Empty, "Price cannot be negative");
-            }
-        }
-
         /// <summary>
         /// Gets or sets item name.
         /// </summary>
@@ -37,9 +20,8 @@ namespace RestaurantCheck
         public double Price { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CheckItem"/> class.
-        /// Throw ArgumentOutOfRangeException if price is negative.
+        /// Gets or sets Message.
         /// </summary>
-        /// <param name="input">user input.</param>
+        public string Message { get; set; }
     }
 }

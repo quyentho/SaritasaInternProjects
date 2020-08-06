@@ -37,10 +37,5 @@ namespace MarketDesk
         /// Gets or sets message to display.
         /// </summary>
         public string Message { get; set; }
-
-        private bool IsNegative(int quantity, double price)
-        {
-            return price < 0 || quantity < 0;
-        }
     }
 }

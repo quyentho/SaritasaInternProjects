@@ -7,7 +7,7 @@ using Xunit;
 
 namespace RestaurantCheck.Test
 {
-    
+
     public class CheckTest
     {
         Check sut;
@@ -97,5 +97,14 @@ namespace RestaurantCheck.Test
             act.Should().Throw<FormatException>();
         }
 
+        [Fact]
+        public void GetCheckItemFromInput_ValidInput_ReturnsNameAndPrice()
+        {
+            string[] input = { "food", "10" };
+
+            var result = sut.GetCheckItemFromInput(input);
+
+            result.Should().Be(("food", 10));
+        }
     }
 }

@@ -35,12 +35,16 @@ namespace MarketDesk.Test
         [Fact]
         public void Calculate_ValidItems_ReturnsExactOrderResult()
         {
-            string input = "food, 5, 20";
+            string input = "Vodka,10,1.0";
+            string input2 = "Beer,3,6.0";
+            string input3 = "Fish,1,10";
             sut.Items.Add(new OrderItem(input));
+            sut.Items.Add(new OrderItem(input2));
+            sut.Items.Add(new OrderItem(input3));
 
             OrderResult result = sut.Calculate();
 
-            result.Should().Match<OrderResult>(r => r.Total == 100 && r.TotalWithTax == 103);
+            result.Should().Match<OrderResult>(r => r.Total == 38 && r.TotalWithTax == 39.14);
         }
     }
 }

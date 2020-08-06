@@ -20,10 +20,11 @@ namespace RestaurantCheck.Test
         [Fact]
         public void Calculate_WithDiscount_ReturnsTotalExactly()
         {
+            string input = "food1,50";
             sut.Items = new List<CheckItem>()
             {
-                new CheckItem(){ Name = "food1", Price = 50},
-                new CheckItem(){ Name = "food1", Price = 50}
+                new CheckItem(input),
+                new CheckItem(input)
             };
 
             var checkResult = sut.Calculate();
@@ -38,10 +39,11 @@ namespace RestaurantCheck.Test
         [Fact]
         public void Calculate_WithNoDiscount_ReturnsTotalExactly()
         {
+            string input = "food1,5";
             sut.Items = new List<CheckItem>()
             {
-                new CheckItem(){ Name = "food1", Price = 5},
-                new CheckItem(){ Name = "food1", Price = 5}
+                new CheckItem(input),
+                new CheckItem(input)
             };
 
             var checkResult = sut.Calculate();
@@ -65,46 +67,15 @@ namespace RestaurantCheck.Test
         [Fact]
         public void IsEmpty_NotEmptyCheckItems_ReturnsTrue()
         {
+            string input = "food1,5";
             sut.Items = new List<CheckItem>()
             {
-                new CheckItem(){ Name = "food1", Price = 5},
+                new CheckItem(input),
             };
 
             bool result = sut.IsEmpty();
 
             result.Should().BeFalse();
-        }
-
-        [Fact]
-        public void GetCheckItemFromInput_NegativePrice_ThrowsArgumentOutOfRangeException()
-        {
-            string[] input = { "food", "-1" };
-
-            Action act = () => sut.GetCheckItemFromInput(input);
-
-            act.Should().Throw<ArgumentOutOfRangeException>()
-                .WithMessage("Price Cannot Be Negative (Parameter 'price')")
-                .And.ParamName.Should().Be("price");
-        }
-
-        [Fact]
-        public void GetCheckItemFromInput_PriceInputIsNotNumber_ThrowsInvalidCastException()
-        {
-            string[] input = { "food", "not a number" };
-
-            Action act = () => sut.GetCheckItemFromInput(input);
-
-            act.Should().Throw<FormatException>();
-        }
-
-        [Fact]
-        public void GetCheckItemFromInput_ValidInput_ReturnsNameAndPrice()
-        {
-            string[] input = { "food", "10" };
-
-            var result = sut.GetCheckItemFromInput(input);
-
-            result.Should().Be(("food", 10));
         }
     }
 }

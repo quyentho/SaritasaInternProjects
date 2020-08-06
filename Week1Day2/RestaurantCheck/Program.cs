@@ -17,7 +17,7 @@ namespace RestaurantCheck
             Console.WriteLine("Enter foods you want to check, enter 'x' to quit\n");
             do
             {
-                string[] input = Console.ReadLine().Split(',');
+                string input = Console.ReadLine();
 
                 if (InputExitCode(input))
                 {
@@ -39,8 +39,8 @@ namespace RestaurantCheck
                 { // Get value from input and add to check list.
                     try
                     {
-                        var result = checkRestaurant.GetCheckItemFromInput(input);
-                        checkRestaurant.AddItemToCheckList(result.name, result.price);
+                        CheckItem item = new CheckItem(input);
+                        checkRestaurant.Items.Add(item);
                     }
                     catch (FormatException)
                     {
@@ -55,14 +55,14 @@ namespace RestaurantCheck
             while (true);
         }
 
-        private static bool InputEmpty(string[] input)
+        private static bool InputEmpty(string input)
         {
-            return string.IsNullOrEmpty(input.First());
+            return string.IsNullOrEmpty(input);
         }
 
-        private static bool InputExitCode(string[] input)
+        private static bool InputExitCode(string input)
         {
-            return input.First() == "x";
+            return input == "x";
         }
 
         private static void DisplayResult(CheckResult result)

@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "EAlDxbj6AoFwoKJFpG999sCvr2cbEPLIetqOho9psFDoIvKR3j10n9DyOevqShF8S5PXApMWCZ8D+rGqBGhdyQ==",
+  "success": true,
+  "projectFilePath": "D:\\Projects\\quyen.tho\\Week1Day4\\Week1Day4\\TasksReader\\TasksReader.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Quyen DotNet\\.nuget\\packages\\csvhelper\\15.0.5\\csvhelper.15.0.5.nupkg.sha512",
+    "C:\\Users\\Quyen DotNet\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512"
+  ],
+  "logs": []
+}

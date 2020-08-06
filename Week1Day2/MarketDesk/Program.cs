@@ -18,12 +18,13 @@ namespace MarketDesk
             {
                 string input = Console.ReadLine();
 
-                if (InputExitCharacter(input))
+                IOrderItem orderItem = OrderItemFactory.Create(input);
+
+                if (orderItem is ExitOrderItem)
                 {
                     break;
                 }
-
-                if (InputEmpty(input))
+                else if (orderItem is EmptyOrderItem)
                 {
                     if (order.IsEmpty())
                     {
@@ -34,34 +35,17 @@ namespace MarketDesk
                     OrderResult result = order.Calculate();
                     DisplayResult(result.Total, result.TotalWithTax);
                 }
-                else
+                else if (orderItem is InvalidOrderItem)
                 {
-                    try
-                    {
-                        OrderItem item = new OrderItem(input);
-                        order.Items.Add(item);
-                    }
-                    catch (ArgumentOutOfRangeException e)
-                    {
-                        Console.WriteLine(e.Message);
-                    }
-                    catch (FormatException)
-                    {
-                        Console.WriteLine("Price and Quantity must be number.");
-                    }
+                    Console.WriteLine(orderItem.Message);
+                    continue;
+                }
+                else if (orderItem is OrderItem)
+                {
+                        order.Items.Add(orderItem as OrderItem);
                 }
             }
             while (true);
-        }
-
-        private static bool InputEmpty(string input)
-        {
-            return string.IsNullOrEmpty(input);
-        }
-
-        private static bool InputExitCharacter(string input)
-        {
-            return input == "x";
         }
 
         private static void DisplayResult(double total, double totalWithTax)

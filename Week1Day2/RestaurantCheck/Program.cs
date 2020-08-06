@@ -19,12 +19,12 @@ namespace RestaurantCheck
             {
                 string input = Console.ReadLine();
 
-                if (InputExitCode(input))
+                if (HasExitCode(input))
                 {
                     break;
                 }
 
-                if (InputEmpty(input))
+                if (IsEmptyInput(input))
                 { // Start Calculate.
                     if (checkRestaurant.IsEmpty())
                     {
@@ -42,9 +42,13 @@ namespace RestaurantCheck
                         CheckItem item = new CheckItem(input);
                         checkRestaurant.Items.Add(item);
                     }
-                    catch (FormatException)
+                    catch (FormatException ex)
                     {
                         Console.WriteLine("Input Price must be a number");
+
+                        throw ex;
+
+                        throw;
                     }
                     catch (ArgumentOutOfRangeException e)
                     {
@@ -55,21 +59,21 @@ namespace RestaurantCheck
             while (true);
         }
 
-        private static bool InputEmpty(string input)
+        private static bool IsEmptyInput(string input)
         {
             return string.IsNullOrEmpty(input);
         }
 
-        private static bool InputExitCode(string input)
+        private static bool HasExitCode(string input)
         {
-            return input == "x";
+            return input.Equals("x", StringComparison.InvariantCultureIgnoreCase);
         }
 
         private static void DisplayResult(CheckResult result)
         {
             Console.WriteLine($"Discount: ${result.DiscountAmount}");
             Console.WriteLine($"Total: ${result.TotalBeforeTax}");
-            Console.WriteLine($"total with tax: ${result.TotalAfterTax}");
+            Console.WriteLine($"Total with tax: ${result.TotalAfterTax}");
         }
     }
 }

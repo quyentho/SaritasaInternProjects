@@ -5,7 +5,6 @@ namespace RestaurantCheck
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Runtime.CompilerServices;
 
     /// <summary>
     /// Contains logic to check totals.
@@ -26,12 +25,7 @@ namespace RestaurantCheck
         /// <returns>True if empty.</returns>
         public bool IsEmpty()
         {
-            if (this.Items.Count == 0)
-            {
-                return true;
-            }
-
-            return false;
+            return this.Items.Count == 0;
         }
 
         /// <summary>
@@ -55,7 +49,7 @@ namespace RestaurantCheck
         /// Calculate discount.
         /// </summary>
         /// <param name="total">Total price to determine if discount.</param>
-        /// <returns>total * 5% discount.</returns>
+        /// <returns>total * 5% discount rate.</returns>
         private double GetDiscountAmout(double total)
         {
             double discountAmount = 0;

@@ -7,25 +7,15 @@ namespace MarketDesk
     /// <summary>
     /// Represent order item.
     /// </summary>
-    public class OrderItem
+    public class OrderItem : IOrderItem
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderItem"/> class.
         /// Gets value from input to initialize OrderItem.
         /// </summary>
         /// <param name="input">User input.</param>
-        public OrderItem(string input)
+        public OrderItem()
         {
-            string[] values = input.Split(",");
-
-            this.Name = values[0].Trim();
-            this.Quantity = Convert.ToInt32(values[1].Trim());
-            this.Price = Convert.ToDouble(values[2].Trim());
-
-            if (this.IsNegative(this.Quantity, this.Price))
-            {
-                throw new ArgumentOutOfRangeException(string.Empty, "Price and Quantity cannot be negative");
-            }
         }
 
         /// <summary>
@@ -42,6 +32,11 @@ namespace MarketDesk
         /// Gets or sets quantity.
         /// </summary>
         public int Quantity { get; set; }
+
+        /// <summary>
+        /// Gets or sets message to display.
+        /// </summary>
+        public string Message { get; set; }
 
         private bool IsNegative(int quantity, double price)
         {

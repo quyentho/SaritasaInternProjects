@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿// Copyright (c) Saritasa, LLC
 
 namespace RestaurantCheck
 {
@@ -9,10 +7,19 @@ namespace RestaurantCheck
     /// </summary>
     public class CheckResult
     {
+        /// <summary>
+        /// Gets or sets total price before tax.
+        /// </summary>
         public double TotalBeforeTax { get; set; }
 
+        /// <summary>
+        /// Gets or sets total price after tax.
+        /// </summary>
         public double TotalAfterTax { get; set; }
 
+        /// <summary>
+        /// Gets or sets discount amount.
+        /// </summary>
         public double DiscountAmount { get; set; }
     }
 }

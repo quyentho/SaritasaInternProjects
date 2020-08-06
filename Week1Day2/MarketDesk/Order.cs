@@ -39,12 +39,7 @@ namespace MarketDesk
         /// <returns>True if empty.</returns>
         public bool IsEmpty()
         {
-            if (this.Items.Count == 0)
-            {
-                return true;
-            }
-
-            return false;
+            return this.Items.Count == 0;
         }
     }
 }

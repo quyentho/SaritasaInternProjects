@@ -33,7 +33,7 @@ namespace RestaurantCheck
                     }
 
                     CheckResult checkResult = checkRestaurant.Calculate();
-                    DisplayResult(checkResult.TotalBeforeTax, checkResult.DiscountAmount, checkResult.TotalAfterTax);
+                    DisplayResult(checkResult);
                 }
                 else
                 {
@@ -77,11 +77,11 @@ namespace RestaurantCheck
             return input.First() == "x";
         }
 
-        private static void DisplayResult(double total, double discount, double totalWithTax)
+        private static void DisplayResult(CheckResult result)
         {
-            Console.WriteLine($"Discount: {discount}");
-            Console.WriteLine($"Total: {total}");
-            Console.WriteLine($"total with tax: {totalWithTax}");
+            Console.WriteLine($"Discount: ${result.DiscountAmount}");
+            Console.WriteLine($"Total: ${result.TotalBeforeTax}");
+            Console.WriteLine($"total with tax: ${result.TotalAfterTax}");
         }
     }
 }

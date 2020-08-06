@@ -16,6 +16,41 @@ namespace RestaurantCheck.Test
         }
 
         // TODO: Create Test for Calculate().
+        [Fact]
+        public void Calculate_WithDiscount_ReturnsTotalExactly()
+        {
+            sut.Items = new List<CheckItem>()
+            {
+                new CheckItem(){ Name = "food1", Price = 50},
+                new CheckItem(){ Name = "food1", Price = 50}
+            };
+
+            var checkResult = sut.Calculate();
+
+            checkResult.Should().Match<CheckResult>(r =>
+            r.DiscountAmount == 5 &&
+            r.TotalBeforeTax == 95 &&
+            r.TotalAfterTax == 96.9
+            );
+        }
+
+        [Fact]
+        public void Calculate_WithNoDiscount_ReturnsTotalExactly()
+        {
+            sut.Items = new List<CheckItem>()
+            {
+                new CheckItem(){ Name = "food1", Price = 5},
+                new CheckItem(){ Name = "food1", Price = 5}
+            };
+
+            var checkResult = sut.Calculate();
+
+            checkResult.Should().Match<CheckResult>(r =>
+            r.DiscountAmount == 0 &&
+            r.TotalBeforeTax == 10 &&
+            r.TotalAfterTax == 10.2
+            );
+        }
 
 
         [Fact]

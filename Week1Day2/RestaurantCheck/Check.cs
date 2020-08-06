@@ -64,12 +64,12 @@ namespace RestaurantCheck
                 discountAmount = total * DiscountRate;
             }
 
-            return Math.Round(discountAmount,2);
+            return Math.Round(discountAmount, 2);
         }
 
         private double GetTaxAmount(double totalBeforeTax)
         {
-            return Math.Round(totalBeforeTax * TaxRate,2);
+            return Math.Round(totalBeforeTax * TaxRate, 2);
         }
     }
 }

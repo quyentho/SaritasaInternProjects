@@ -20,11 +20,9 @@ namespace RestaurantCheck.Test
         [Fact]
         public void Calculate_WithDiscount_ReturnsTotalExactly()
         {
-            string input = "food1,50";
-            sut.Items = new List<CheckItem>()
-            {
-                new CheckItem(input),
-                new CheckItem(input)
+            sut.Items = new List<CheckItem>() { 
+                new CheckItem() { Name = "foo", Price = 50 }, 
+                new CheckItem() { Name = "foo", Price = 50 } 
             };
 
             var checkResult = sut.Calculate();
@@ -39,11 +37,10 @@ namespace RestaurantCheck.Test
         [Fact]
         public void Calculate_WithNoDiscount_ReturnsTotalExactly()
         {
-            string input = "food1,5";
             sut.Items = new List<CheckItem>()
             {
-                new CheckItem(input),
-                new CheckItem(input)
+                new CheckItem(){ Name = "foo", Price = 5},
+                new CheckItem(){ Name = "foo", Price = 5},
             };
 
             var checkResult = sut.Calculate();
@@ -54,7 +51,6 @@ namespace RestaurantCheck.Test
             r.TotalAfterTax == 10.2
             );
         }
-
 
         [Fact]
         public void IsEmpty_EmptyCheckItems_ReturnsTrue()
@@ -67,10 +63,9 @@ namespace RestaurantCheck.Test
         [Fact]
         public void IsEmpty_NotEmptyCheckItems_ReturnsTrue()
         {
-            string input = "food1,5";
             sut.Items = new List<CheckItem>()
             {
-                new CheckItem(input),
+                new CheckItem()
             };
 
             bool result = sut.IsEmpty();

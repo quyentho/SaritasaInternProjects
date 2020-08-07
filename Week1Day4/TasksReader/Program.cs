@@ -14,31 +14,57 @@ namespace TasksReader
     {
         private static void Main(string[] args)
         {
+            var readerService = new TasksReaderService();
+
+            TaskReaderCachingService additionalService = new TaskReaderCachingService(readerService);
+            additionalService.ReadFromFile();
+            Console.WriteLine("Press Ctrl + C to exit");
+            Console.WriteLine("Enter D to see 10 last searched items");
             do
             {
-                var readerService = new TasksReaderService();
-
-                AdditionalService additionalService = new TaskReaderCachingService(readerService);
-                additionalService.ReadFromFile();
-
                 string input = Console.ReadLine();
+                if (IsShowCache(input))
+                {
+                    DisplayValidTasks(additionalService.GetCachedTasks());
+                    continue;
+                }
 
                 var searchResult = additionalService.FindByIds(input);
 
-                Display(searchResult);
-            } while (true);
+                DisplaySearchResult(searchResult);
+            }
+            while (true);
         }
 
-        private static void Display(SearchResult searchResult)
+        private static bool IsShowCache(string input)
         {
-            foreach (var item in searchResult.FoundItems)
-            {
-                Console.WriteLine($"{item.Id},{item.Title}");
-            }
+            return input.Equals("d", StringComparison.InvariantCultureIgnoreCase);
+        }
 
-            foreach (var id in searchResult.NotFoundIds)
+        private static bool IsPressControlD(ConsoleKeyInfo consoleKeyInfo)
+        {
+            return consoleKeyInfo.Modifiers == ConsoleModifiers.Control && consoleKeyInfo.Key == ConsoleKey.D;
+        }
+
+        private static void DisplaySearchResult(SearchResult searchResult)
+        {
+            DisplayValidTasks(searchResult.FoundItems);
+            DisplayInvalidTasks(searchResult.NotFoundIds);
+        }
+
+        private static void DisplayInvalidTasks(List<int> searchResult)
+        {
+            foreach (var id in searchResult)
             {
                 Console.WriteLine($"{id}: [!] Task with id {id} not found");
+            }
+        }
+
+        private static void DisplayValidTasks(List<TaskItem> searchResult)
+        {
+            foreach (var item in searchResult)
+            {
+                Console.WriteLine($"{item.Id},{item.Title}");
             }
         }
     }

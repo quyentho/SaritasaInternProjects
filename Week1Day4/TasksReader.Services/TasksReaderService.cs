@@ -53,6 +53,11 @@ namespace TasksReader.Services
             IEnumerable<int> foundIds = result.FoundItems.Select(t => t.Id);
             result.NotFoundIds = listOfIds.Except(foundIds).ToList();
 
+            //if (result.NotFoundIds.Count > 0)
+            //{
+            //    throw new TaskNotFoundException();
+            //}
+
             return result;
         }
 

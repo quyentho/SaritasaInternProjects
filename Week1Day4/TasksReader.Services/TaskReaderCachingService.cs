@@ -23,11 +23,9 @@ namespace TasksReader.Services
         }
 
         /// <summary>
-        /// Gets or sets list of task item.
+        /// Gets or sets cached items.
         /// </summary>
-        public List<TaskItem> Tasks { get; set; }
-
-        public List<TaskItem> CachedItems { get; set; }
+        public List<TaskItem> CachedItems { get; set; } = new List<TaskItem>();
 
         /// <summary>
         /// Find task by list id.
@@ -50,6 +48,16 @@ namespace TasksReader.Services
             }
 
             return result;
+        }
+
+        public List<TaskItem> GetCachedTasks()
+        {
+            if (this.CachedItems is null)
+            {
+                throw new TaskNotFoundException();
+            }
+
+            return this.CachedItems;
         }
 
         private void AddNewCachingItem(List<TaskItem> items)

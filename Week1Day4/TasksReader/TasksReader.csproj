@@ -6,6 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CsvHelper" Version="15.0.5" />
     <PackageReference Include="Saritasa.Tools.Domain" Version="0.8.0" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
@@ -16,6 +24,11 @@
 
   <ItemGroup>
     <Folder Include="Data\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TasksReader.Model\TasksReader.Model.csproj" />
+    <ProjectReference Include="..\TasksReader.Services\TasksReader.Services.csproj" />
   </ItemGroup>
 
 </Project>

@@ -3,6 +3,8 @@
 namespace TasksReader
 {
     using System;
+    using System.Collections.Generic;
+    using TasksReader.Services;
 
     /// <summary>
     /// Application entry point.
@@ -11,7 +13,8 @@ namespace TasksReader
     {
         private static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var readerService = new TasksReaderService();
+            List<TaskItem> tasks = readerService.ReadFromFile();
         }
     }
 }

@@ -32,7 +32,7 @@ namespace TasksReader.Services
         /// </summary>
         /// <param name="input">User input.</param>
         /// <returns>SearchResult object.</returns>
-        public SearchResult FindByIds(string input)
+        public override SearchResult FindByIds(string input)
         {
             var result = base.FindByIds(input);
 
@@ -68,7 +68,7 @@ namespace TasksReader.Services
         /// <summary>
         /// Read data from file.
         /// </summary>
-        public void ReadFromFile()
+        public override void ReadFromFile() 
         {
             base.ReadFromFile();
         }

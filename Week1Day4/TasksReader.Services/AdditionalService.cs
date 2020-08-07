@@ -24,14 +24,14 @@ namespace TasksReader.Services
         /// <summary>
         /// Gets or sets list task item.
         /// </summary>
-        public List<TaskItem> Tasks { get; set; }
+        public virtual List<TaskItem> Tasks { get; set; }
 
         /// <summary>
         /// Find task by list id.
         /// </summary>
         /// <param name="input">User input.</param>
         /// <returns>SearchResult object.</returns>
-        public SearchResult FindByIds(string input)
+        public virtual SearchResult FindByIds(string input)
         {
             return this.tasksReaderService.FindByIds(input);
         }
@@ -39,7 +39,7 @@ namespace TasksReader.Services
         /// <summary>
         /// Read data from file.
         /// </summary>
-        public void ReadFromFile()
+        public virtual void ReadFromFile()
         {
             this.tasksReaderService.ReadFromFile();
         }

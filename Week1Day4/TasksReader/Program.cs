@@ -1,8 +1,13 @@
-﻿using System;
+﻿// Copyright (c) Saritasa, LLC
 
 namespace TasksReader
 {
-    class Program
+    using System;
+
+    /// <summary>
+    /// Application entry point.
+    /// </summary>
+    internal class Program
     {
         private static void Main(string[] args)
         {

@@ -1,4 +1,6 @@
-﻿namespace TasksReader
+﻿// Copyright (c) Saritasa, LLC
+
+namespace TasksReader
 {
     /// <summary>
     /// Represent each task.

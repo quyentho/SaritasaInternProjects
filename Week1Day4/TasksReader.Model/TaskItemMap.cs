@@ -3,6 +3,7 @@
 namespace TasksReader.Model
 {
     using CsvHelper.Configuration;
+
     /// <summary>
     /// Mapping class for CsvHelper library.
     /// </summary>

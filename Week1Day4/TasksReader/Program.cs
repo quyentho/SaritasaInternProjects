@@ -14,15 +14,19 @@ namespace TasksReader
     {
         private static void Main(string[] args)
         {
-            var readerService = new TasksReaderService();
+            do
+            {
+                var readerService = new TasksReaderService();
 
-            readerService.ReadFromFile();
+                AdditionalService additionalService = new TaskReaderCachingService(readerService);
+                additionalService.ReadFromFile();
 
-            string input = Console.ReadLine();
+                string input = Console.ReadLine();
 
-            var searchResult = readerService.FindByIds(input);
+                var searchResult = additionalService.FindByIds(input);
 
-            Display(searchResult);
+                Display(searchResult);
+            } while (true);
         }
 
         private static void Display(SearchResult searchResult)

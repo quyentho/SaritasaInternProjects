@@ -13,7 +13,7 @@ namespace TasksReader.Services
     /// <summary>
     /// Service for reading task.
     /// </summary>
-    public class TasksReaderService
+    public class TasksReaderService : ITasksReaderService
     {
         /// <summary>
         /// Gets or sets list of task item.

@@ -2,13 +2,19 @@
 
 namespace TasksReader.Services
 {
-
+    using System.Collections.Generic;
     using TasksReader.Model;
+
     /// <summary>
-    /// 
+    /// Declare functionality for business layer.
     /// </summary>
     public interface ITasksReaderService
     {
+        /// <summary>
+        /// Gets or sets list of task item.
+        /// </summary>
+        public List<TaskItem> Tasks { get; set; }
+
         /// <summary>
         /// Read data from file.
         /// </summary>

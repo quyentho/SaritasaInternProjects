@@ -5,9 +5,13 @@ VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyReader", "CurrencyReader\CurrencyReader.csproj", "{B673A9A6-7743-45F8-BE94-E7A81431BF16}"
 EndProject
+<<<<<<< HEAD
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyReader.Model", "CurrencyReader.Model\CurrencyReader.Model.csproj", "{A4EDF566-7EF1-4F63-80A8-2EEC2C9B3778}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyReader.Service", "CurrencyReader.Service\CurrencyReader.Service.csproj", "{4A5D1E25-91B1-4375-AA71-89EB4336C94B}"
+=======
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyReader.Model", "CurrencyReader.Model\CurrencyReader.Model.csproj", "{A4EDF566-7EF1-4F63-80A8-2EEC2C9B3778}"
+>>>>>>> 62dfcef360ad46131d7bf4328ad8c7c509b431a0
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +27,13 @@ Global
 		{A4EDF566-7EF1-4F63-80A8-2EEC2C9B3778}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4EDF566-7EF1-4F63-80A8-2EEC2C9B3778}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4EDF566-7EF1-4F63-80A8-2EEC2C9B3778}.Release|Any CPU.Build.0 = Release|Any CPU
+<<<<<<< HEAD
 		{4A5D1E25-91B1-4375-AA71-89EB4336C94B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4A5D1E25-91B1-4375-AA71-89EB4336C94B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A5D1E25-91B1-4375-AA71-89EB4336C94B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A5D1E25-91B1-4375-AA71-89EB4336C94B}.Release|Any CPU.Build.0 = Release|Any CPU
+=======
+>>>>>>> 62dfcef360ad46131d7bf4328ad8c7c509b431a0
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

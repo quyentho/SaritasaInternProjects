@@ -1,5 +1,7 @@
-﻿using CurrencyReader.Service;
+﻿using CurrencyReader.Model;
+using CurrencyReader.Service;
 using System;
+using System.Collections.Generic;
 
 namespace CurrencyReader
 {
@@ -7,9 +9,22 @@ namespace CurrencyReader
     {
         static void Main(string[] args)
         {
-            ReadCurrencyService service = new ReadCurrencyService();
+            try
+            {
+                ReadCurrencyService readCurrencyservice = new ReadCurrencyService();
 
-            var data = service.ReadFromFile();
+                List<Currency> data = readCurrencyservice.ReadFromFile();
+
+                var input = Console.ReadLine();
+                var cachedService = new CachedFindCurrencyReaderService(new FindCurrencyService());
+                var result = cachedService.GetCurrency(data, input);
+
+                Console.WriteLine($"{result.Date} : {result.Rub} RUB");
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Input must in (yyyy-MM-dd) format.");
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿
+﻿// Copyright (c) Saritasa, LLC
+
 using CurrencyReader.Model;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -12,6 +13,10 @@ namespace CurrencyReader.Service
     /// </summary>
     public class ReadCurrencyService : IReadCurrencyService
     {
+        /// <summary>
+        /// Read data from json file.
+        /// </summary>
+        /// <returns>List of currency item.</returns>
         public List<Currency> ReadFromFile()
         {
             var file = File.ReadAllText(ConfigurationManager.AppSettings["Path"]);
@@ -22,4 +27,3 @@ namespace CurrencyReader.Service
         }
     }
 }
-

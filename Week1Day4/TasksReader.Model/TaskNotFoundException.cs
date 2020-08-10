@@ -10,7 +10,6 @@ namespace TasksReader.Model
     /// </summary>
     public class TaskNotFoundException : DomainException
     {
-
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskNotFoundException"/> class.
         /// </summary>

@@ -14,48 +14,55 @@ namespace TasksReader
     {
         private static void Main(string[] args)
         {
-            var readTasksService = new ReadTasksService();
-            var tasks = readTasksService.ReadFromFile();
-
-            CachedFindTasksService cachedFindTasksService = new CachedFindTasksService(new FindTasksService());
-
-            Console.WriteLine("Press Ctrl + C to exit");
-            Console.WriteLine("Enter D to see 10 last searched items");
-            do
+            try
             {
-                string input = Console.ReadLine();
-                SearchResult searchResult = new SearchResult();
-                if (IsShowCache(input))
+                var readTasksService = new ReadTasksService();
+                var tasks = readTasksService.ReadFromFile();
+
+                CachedFindTasksService cachedFindTasksService = new CachedFindTasksService(new FindTasksService());
+
+                Console.WriteLine("Press Ctrl + C to exit");
+                Console.WriteLine("Enter D to see 10 last searched items");
+                do
                 {
-                    searchResult.FoundItems = cachedFindTasksService.GetCachedTasks();
-                    DisplaySearchResult(searchResult);
-                }
-                else
-                {
-                    try
+                    string input = Console.ReadLine();
+                    SearchResult searchResult = new SearchResult();
+                    if (IsShowCache(input))
                     {
-                        searchResult = FindTasks(cachedFindTasksService, tasks, input);
+                        searchResult.FoundItems = cachedFindTasksService.GetCachedTasks();
                         DisplaySearchResult(searchResult);
                     }
-                    catch (FormatException)
+                    else
                     {
-                        Console.WriteLine("Input must be number.");
-                    }
-                    catch (TaskNotFoundException e)
-                    {
-                        Console.WriteLine(e.Message);
+                        try
+                        {
+                            searchResult = FindTasks(cachedFindTasksService, tasks, input);
+                            DisplaySearchResult(searchResult);
+                        }
+                        catch (FormatException)
+                        {
+                            Console.WriteLine("Input must be number.");
+                        }
+                        catch (TaskNotFoundException e)
+                        {
+                            Console.WriteLine(e.Message);
+                        }
                     }
                 }
+                while (true);
             }
-            while (true);
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
 
         private static SearchResult FindTasks(CachedFindTasksService cachedFindTasksService, List<TaskItem> tasks, string input)
         {
             try
             {
-                var ids = cachedFindTasksService.GetIdsFromInput(input);
-                var searchResult = cachedFindTasksService.FindByIds(tasks, ids);
+                List<int> ids = cachedFindTasksService.GetIdsFromInput(input);
+                SearchResult searchResult = cachedFindTasksService.FindByIds(tasks, ids);
                 return searchResult;
             }
             catch

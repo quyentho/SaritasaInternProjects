@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CurrencyReader.Service
 {
-    public interface ICurrencyReaderService
+    public interface IReadCurrencyService
     {
         List<Currency> ReadFromFile();
     }

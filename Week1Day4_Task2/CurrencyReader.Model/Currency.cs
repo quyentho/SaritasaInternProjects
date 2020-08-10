@@ -15,11 +15,11 @@ namespace CurrencyReader.Model
         /// <summary>
         /// Gets or sets Ruble rate.
         /// </summary>
-        public double Ruble { get; set; }
+        public double Rub { get; set; }
 
         /// <summary>
         /// Gets or sets Euro rate.
         /// </summary>
-        public double Euro { get; set; }
+        public double Eur { get; set; }
     }
 }

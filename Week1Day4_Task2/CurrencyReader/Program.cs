@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CurrencyReader.Service;
+using System;
 
 namespace CurrencyReader
 {
@@ -6,7 +7,9 @@ namespace CurrencyReader
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            ReadCurrencyService service = new ReadCurrencyService();
+
+            var data = service.ReadFromFile();
         }
     }
 }

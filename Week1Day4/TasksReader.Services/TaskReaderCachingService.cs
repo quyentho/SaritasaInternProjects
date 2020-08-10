@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Saritasa, LLC
 
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using TasksReader.Model;
 
 namespace TasksReader.Services
@@ -68,7 +67,7 @@ namespace TasksReader.Services
         /// <summary>
         /// Read data from file.
         /// </summary>
-        public override void ReadFromFile() 
+        public override void ReadFromFile()
         {
             base.ReadFromFile();
         }

@@ -16,7 +16,7 @@ namespace TasksReader
         {
             var readerService = new TasksReaderService();
 
-            TaskReaderCachingService additionalService = new TaskReaderCachingService(readerService);
+            AdditionalService additionalService = new TaskReaderCachingService(readerService);
             additionalService.ReadFromFile();
             Console.WriteLine("Press Ctrl + C to exit");
             Console.WriteLine("Enter D to see 10 last searched items");
@@ -25,7 +25,7 @@ namespace TasksReader
                 string input = Console.ReadLine();
                 if (IsShowCache(input))
                 {
-                    DisplayValidTasks(additionalService.GetCachedTasks());
+                    DisplayValidTasks((additionalService as TaskReaderCachingService).GetCachedTasks());
                     continue;
                 }
 

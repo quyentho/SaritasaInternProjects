@@ -14,26 +14,36 @@ namespace TasksReader
     {
         private static void Main(string[] args)
         {
-            var readerService = new TasksReaderService();
+            var tasksReaderService = new TasksReaderService();
+            var tasks = tasksReaderService.ReadFromFile();
 
-            TaskReaderCachingService additionalService = new TaskReaderCachingService(readerService);
-            additionalService.ReadFromFile();
+            CachedFindTasksService cachedFindTasksService = new CachedFindTasksService(tasksReaderService);
+
             Console.WriteLine("Press Ctrl + C to exit");
             Console.WriteLine("Enter D to see 10 last searched items");
             do
             {
                 string input = Console.ReadLine();
+                SearchResult searchResult = new SearchResult();
                 if (IsShowCache(input))
                 {
-                    DisplayValidTasks(additionalService.GetCachedTasks());
-                    continue;
+                    searchResult.FoundItems = cachedFindTasksService.GetCachedTasks();
                 }
-
-                var searchResult = additionalService.FindByIds(input);
+                else
+                {
+                    searchResult = FindTasks(tasks, cachedFindTasksService, input);
+                }
 
                 DisplaySearchResult(searchResult);
             }
             while (true);
+        }
+
+        private static SearchResult FindTasks(List<TaskItem> tasks, CachedFindTasksService cachedFindTasksService, string input)
+        {
+            var ids = cachedFindTasksService.GetIdsFromInput(input);
+            var searchResult = cachedFindTasksService.FindByIds(tasks, ids);
+            return searchResult;
         }
 
         private static bool IsShowCache(string input)
@@ -49,20 +59,23 @@ namespace TasksReader
         private static void DisplaySearchResult(SearchResult searchResult)
         {
             DisplayValidTasks(searchResult.FoundItems);
-            DisplayInvalidTasks(searchResult.NotFoundIds);
+            if (!(searchResult.NotFoundIds is null))
+            {
+                DisplayInvalidTasks(searchResult.NotFoundIds);
+            }
         }
 
-        private static void DisplayInvalidTasks(List<int> searchResult)
+        private static void DisplayInvalidTasks(List<int> notFoundsIds)
         {
-            foreach (var id in searchResult)
+            foreach (var id in notFoundsIds)
             {
                 Console.WriteLine($"{id}: [!] Task with id {id} not found");
             }
         }
 
-        private static void DisplayValidTasks(List<TaskItem> searchResult)
+        private static void DisplayValidTasks(List<TaskItem> foundItems)
         {
-            foreach (var item in searchResult)
+            foreach (var item in foundItems)
             {
                 Console.WriteLine($"{item.Id},{item.Title}");
             }

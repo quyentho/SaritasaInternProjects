@@ -14,10 +14,10 @@ namespace TasksReader
     {
         private static void Main(string[] args)
         {
-            var tasksReaderService = new TasksReaderService();
+            var readTasksService = new ReadTasksService();
+            var tasks = readTasksService.ReadFromFile();
 
-            CachedTasksReaderService cachedTasksReaderService = new CachedTasksReaderService(tasksReaderService);
-            var tasks = cachedTasksReaderService.ReadFromFile();
+            CachedFindTasksService cachedFindTasksService = new CachedFindTasksService(new FindTasksService());
 
             Console.WriteLine("Press Ctrl + C to exit");
             Console.WriteLine("Enter D to see 10 last searched items");
@@ -27,13 +27,14 @@ namespace TasksReader
                 SearchResult searchResult = new SearchResult();
                 if (IsShowCache(input))
                 {
-                    searchResult.FoundItems = cachedTasksReaderService.GetCachedTasks();
+                    searchResult.FoundItems = cachedFindTasksService.GetCachedTasks();
+                    DisplaySearchResult(searchResult);
                 }
                 else
                 {
                     try
                     {
-                        searchResult = FindTasks(cachedTasksReaderService, tasks, input);
+                        searchResult = FindTasks(cachedFindTasksService, tasks, input);
                         DisplaySearchResult(searchResult);
                     }
                     catch (FormatException)
@@ -49,11 +50,18 @@ namespace TasksReader
             while (true);
         }
 
-        private static SearchResult FindTasks(CachedTasksReaderService cachedFindTasksService, List<TaskItem> tasks, string input)
+        private static SearchResult FindTasks(CachedFindTasksService cachedFindTasksService, List<TaskItem> tasks, string input)
         {
-            var ids = cachedFindTasksService.GetIdsFromInput(input);
-            var searchResult = cachedFindTasksService.FindByIds(tasks, ids);
-            return searchResult;
+            try
+            {
+                var ids = cachedFindTasksService.GetIdsFromInput(input);
+                var searchResult = cachedFindTasksService.FindByIds(tasks, ids);
+                return searchResult;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         private static bool IsShowCache(string input)

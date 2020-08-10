@@ -8,7 +8,7 @@ namespace TasksReader.Services
     /// <summary>
     /// Interface for Find tasks service.
     /// </summary>
-    public interface ITasksReaderService
+    public interface IFindTasksService
     {
        /// <summary>
        /// Finds tasks.
@@ -24,11 +24,5 @@ namespace TasksReader.Services
         /// <param name="input">User input.</param>
         /// <returns>List of ids.</returns>
         List<int> GetIdsFromInput(string input);
-
-        /// <summary>
-        /// Read data from file.
-        /// </summary>
-        /// <returns>List of tasks.</returns>
-        List<TaskItem> ReadFromFile();
     }
 }

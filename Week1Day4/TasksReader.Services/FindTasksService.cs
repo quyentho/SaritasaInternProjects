@@ -14,7 +14,7 @@ namespace TasksReader.Services
     /// <summary>
     /// Service for reading task.
     /// </summary>
-    public class TasksReaderService : ITasksReaderService
+    public class FindTasksService : IFindTasksService
     {
         /// <summary>
         /// Split input into list of ids.
@@ -24,25 +24,6 @@ namespace TasksReader.Services
         public List<int> GetIdsFromInput(string input)
         {
             return input.Split(",", System.StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
-        }
-
-        /// <summary>
-        /// Read data from csv file.
-        /// </summary>
-        /// <returns>List of tasks.</returns>
-        public List<TaskItem> ReadFromFile()
-        {
-            using (var reader = new StreamReader(ConfigurationManager.AppSettings["Path"]))
-            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-            {
-                csv.Configuration.BadDataFound = null;
-                csv.Configuration.Delimiter = ";";
-                csv.Configuration.RegisterClassMap(new TaskItemMap());
-
-                var tasks = new List<TaskItem>();
-                tasks = csv.GetRecords<TaskItem>().ToList<TaskItem>();
-                return tasks;
-            }
         }
 
         /// <summary>
@@ -61,10 +42,15 @@ namespace TasksReader.Services
                 throw new TaskNotFoundException("Task Not Found!");
             }
 
-            IEnumerable<int> foundIds = result.FoundItems.Select(t => t.Id);
-            result.NotFoundIds = ids.Except(foundIds).ToList();
+            result.NotFoundIds = this.GetNotFoundIds(ids, result);
 
             return result;
+        }
+
+        private List<int> GetNotFoundIds(List<int> ids, SearchResult result)
+        {
+            IEnumerable<int> foundIds = result.FoundItems.Select(t => t.Id);
+            return ids.Except(foundIds).ToList();
         }
     }
 }

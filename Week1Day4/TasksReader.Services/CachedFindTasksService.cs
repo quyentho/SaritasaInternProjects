@@ -8,15 +8,15 @@ namespace TasksReader.Services
     /// <summary>
     /// Decorator to caching service.
     /// </summary>
-    public class CachedTasksReaderService : ITasksReaderService
+    public class CachedFindTasksService : IFindTasksService
     {
-        private readonly ITasksReaderService tasksReaderService;
+        private readonly IFindTasksService tasksReaderService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CachedTasksReaderService"/> class.
+        /// Initializes a new instance of the <see cref="CachedFindTasksService"/> class.
         /// </summary>
         /// <param name="tasksReaderService">Service inject from outside.</param>
-        public CachedTasksReaderService(ITasksReaderService tasksReaderService)
+        public CachedFindTasksService(IFindTasksService tasksReaderService)
         {
             this.tasksReaderService = tasksReaderService;
         }
@@ -36,13 +36,7 @@ namespace TasksReader.Services
         {
             var result = this.tasksReaderService.FindByIds(tasks, ids);
 
-            int numberOfItemAfterAdded = this.CachedItems.Count + result.FoundItems.Count;
-            if (numberOfItemAfterAdded > 10)
-            {
-                this.CachedItems.RemoveRange(0, numberOfItemAfterAdded - 10);
-            }
-
-            this.AddNewCachedItem(result.FoundItems);
+            this.CacheItems(result);
 
             return result;
         }
@@ -71,18 +65,15 @@ namespace TasksReader.Services
             return this.tasksReaderService.GetIdsFromInput(input);
         }
 
-        /// <summary>
-        /// Read data from file.
-        /// </summary>
-        /// <returns>List of tasks.</returns>
-        public List<TaskItem> ReadFromFile()
+        private void CacheItems(SearchResult result)
         {
-            return this.tasksReaderService.ReadFromFile();
-        }
+            int numberOfItemAfterAdded = this.CachedItems.Count + result.FoundItems.Count;
+            if (numberOfItemAfterAdded > 10)
+            {
+                this.CachedItems.RemoveRange(0, numberOfItemAfterAdded - 10);
+            }
 
-        private void AddNewCachedItem(List<TaskItem> items)
-        {
-            this.CachedItems.AddRange(items);
+            this.CachedItems.AddRange(result.FoundItems);
         }
     }
 }

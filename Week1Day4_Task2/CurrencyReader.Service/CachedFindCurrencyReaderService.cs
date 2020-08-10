@@ -29,23 +29,24 @@ namespace CurrencyReader.Service
         /// <param name="currencies">List of currency from file.</param>
         /// <param name="input">User input.</param>
         /// <returns>Currency object if found.</returns>
-        public Currency GetCurrency(List<Currency> currencies, string input)
+        public SearchResult GetCurrencies(List<Currency> currencies, string input)
         {
-            Currency result = this.findCurrencyService.GetCurrency(currencies, input);
+            SearchResult result = this.findCurrencyService.GetCurrencies(currencies, input);
 
-            this.CacheResult(result);
+            this.CacheResult(result.FoundItems);
 
             return result;
         }
 
-        private void CacheResult(Currency result)
+        private void CacheResult(List<Currency> foundItems)
         {
-            if (this.CachedList.Count > 10)
+            int numberOfItemsAfterAdded = this.CachedList.Count + foundItems.Count;
+            if (numberOfItemsAfterAdded > 10)
             {
-                this.CachedList.RemoveAt(0);
+                this.CachedList.RemoveRange(0, numberOfItemsAfterAdded - 10);
             }
 
-            this.CachedList.Add(result);
+            this.CachedList.AddRange(foundItems);
         }
     }
 }

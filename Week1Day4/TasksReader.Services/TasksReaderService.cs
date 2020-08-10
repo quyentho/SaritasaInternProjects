@@ -48,7 +48,7 @@ namespace TasksReader.Services
         /// <summary>
         /// Find tasks by ids. All input not found task, throw TaskNotFoundException.
         /// </summary>
-        /// <param name="tasks">List of tasks</param>
+        /// <param name="tasks">List of tasks.</param>
         /// <param name="ids">lists of ids.</param>
         /// <returns>SearchResult object.</returns>
         public SearchResult FindByIds(List<TaskItem> tasks, List<int> ids)

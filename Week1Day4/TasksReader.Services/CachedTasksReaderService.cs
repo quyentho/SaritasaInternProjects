@@ -47,6 +47,10 @@ namespace TasksReader.Services
             return result;
         }
 
+        /// <summary>
+        /// Gets tasks cached.
+        /// </summary>
+        /// <returns>List of tasks cached.</returns>
         public List<TaskItem> GetCachedTasks()
         {
             if (this.CachedItems is null)

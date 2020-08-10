@@ -37,7 +37,7 @@ namespace MarketDesk.Test
         }
 
         [Fact]
-        public void Create_ValidInput_ReturnsInvalidOrderItem()
+        public void Create_ValidInput_ReturnsOrderItem()
         {
             string input = "test,10,2";
 
@@ -45,6 +45,5 @@ namespace MarketDesk.Test
 
             result.Should().BeAssignableTo<OrderItem>();
         }
-
     }
 }

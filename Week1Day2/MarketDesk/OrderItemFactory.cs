@@ -63,7 +63,6 @@ namespace MarketDesk
             }
 
             return orderItem;
-
         }
 
         private static bool HasInvalidInput(string[] values)

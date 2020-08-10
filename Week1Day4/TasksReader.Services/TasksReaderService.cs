@@ -14,7 +14,7 @@ namespace TasksReader.Services
     /// <summary>
     /// Service for reading task.
     /// </summary>
-    public class TasksReaderService : IReadFileService, IFindTasksService
+    public class TasksReaderService : ITasksReaderService
     {
         /// <summary>
         /// Split input into list of ids.
@@ -56,14 +56,13 @@ namespace TasksReader.Services
             SearchResult result = new SearchResult();
 
             result.FoundItems = tasks.Where(t => ids.Contains(t.Id)).ToList();
-
-            IEnumerable<int> foundIds = result.FoundItems.Select(t => t.Id);
-            result.NotFoundIds = ids.Except(foundIds).ToList();
-
-            if (result.FoundItems.Count <= 0 && result.NotFoundIds.Count > 0)
+            if (result.FoundItems.Count <= 0)
             {
                 throw new TaskNotFoundException("Task Not Found!");
             }
+
+            IEnumerable<int> foundIds = result.FoundItems.Select(t => t.Id);
+            result.NotFoundIds = ids.Except(foundIds).ToList();
 
             return result;
         }

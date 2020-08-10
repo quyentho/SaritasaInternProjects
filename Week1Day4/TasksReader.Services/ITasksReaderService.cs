@@ -5,8 +5,10 @@ using TasksReader.Model;
 
 namespace TasksReader.Services
 {
-
-    public interface IFindTasksService
+    /// <summary>
+    /// Interface for Find tasks service.
+    /// </summary>
+    public interface ITasksReaderService
     {
        /// <summary>
        /// Finds tasks.
@@ -22,5 +24,11 @@ namespace TasksReader.Services
         /// <param name="input">User input.</param>
         /// <returns>List of ids.</returns>
         List<int> GetIdsFromInput(string input);
+
+        /// <summary>
+        /// Read data from file.
+        /// </summary>
+        /// <returns>List of tasks.</returns>
+        List<TaskItem> ReadFromFile();
     }
 }

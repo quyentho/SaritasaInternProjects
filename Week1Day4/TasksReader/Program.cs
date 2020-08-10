@@ -15,9 +15,9 @@ namespace TasksReader
         private static void Main(string[] args)
         {
             var tasksReaderService = new TasksReaderService();
-            var tasks = tasksReaderService.ReadFromFile();
 
-            CachedFindTasksService cachedFindTasksService = new CachedFindTasksService(tasksReaderService);
+            CachedTasksReaderService cachedFindTasksService = new CachedTasksReaderService(tasksReaderService);
+            var tasks = cachedFindTasksService.ReadFromFile();
 
             Console.WriteLine("Press Ctrl + C to exit");
             Console.WriteLine("Enter D to see 10 last searched items");
@@ -31,15 +31,26 @@ namespace TasksReader
                 }
                 else
                 {
-                    searchResult = FindTasks(tasks, cachedFindTasksService, input);
+                    try
+                    {
+                        searchResult = FindTasks(tasks, cachedFindTasksService, input);
+                        DisplaySearchResult(searchResult);
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Input must be number.");
+                    }
+                    catch (TaskNotFoundException e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
                 }
 
-                DisplaySearchResult(searchResult);
             }
             while (true);
         }
 
-        private static SearchResult FindTasks(List<TaskItem> tasks, CachedFindTasksService cachedFindTasksService, string input)
+        private static SearchResult FindTasks(List<TaskItem> tasks, CachedTasksReaderService cachedFindTasksService, string input)
         {
             var ids = cachedFindTasksService.GetIdsFromInput(input);
             var searchResult = cachedFindTasksService.FindByIds(tasks, ids);
@@ -49,11 +60,6 @@ namespace TasksReader
         private static bool IsShowCache(string input)
         {
             return input.Equals("d", StringComparison.InvariantCultureIgnoreCase);
-        }
-
-        private static bool IsPressControlD(ConsoleKeyInfo consoleKeyInfo)
-        {
-            return consoleKeyInfo.Modifiers == ConsoleModifiers.Control && consoleKeyInfo.Key == ConsoleKey.D;
         }
 
         private static void DisplaySearchResult(SearchResult searchResult)

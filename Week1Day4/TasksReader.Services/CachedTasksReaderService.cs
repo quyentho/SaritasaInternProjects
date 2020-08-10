@@ -8,17 +8,17 @@ namespace TasksReader.Services
     /// <summary>
     /// Decorator to caching service.
     /// </summary>
-    public class CachedFindTasksService : IFindTasksService
+    public class CachedTasksReaderService : ITasksReaderService
     {
-        private readonly IFindTasksService findTasksService;
+        private readonly ITasksReaderService tasksReaderService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CachedFindTasksService"/> class.
+        /// Initializes a new instance of the <see cref="CachedTasksReaderService"/> class.
         /// </summary>
-        /// <param name="findTasksService">Service inject from outside.</param>
-        public CachedFindTasksService(IFindTasksService findTasksService)
+        /// <param name="tasksReaderService">Service inject from outside.</param>
+        public CachedTasksReaderService(ITasksReaderService tasksReaderService)
         {
-            this.findTasksService = findTasksService;
+            this.tasksReaderService = tasksReaderService;
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace TasksReader.Services
         /// <returns>SearchResult object.</returns>
         public SearchResult FindByIds(List<TaskItem> tasks, List<int> ids)
         {
-            var result = this.findTasksService.FindByIds(tasks, ids);
+            var result = this.tasksReaderService.FindByIds(tasks, ids);
 
             int numberOfItemAfterAdded = this.CachedItems.Count + result.FoundItems.Count;
             if (numberOfItemAfterAdded > 10)
@@ -64,7 +64,16 @@ namespace TasksReader.Services
         /// <returns>List of ids.</returns>
         public List<int> GetIdsFromInput(string input)
         {
-            return this.findTasksService.GetIdsFromInput(input);
+            return this.tasksReaderService.GetIdsFromInput(input);
+        }
+
+        /// <summary>
+        /// Read data from file.
+        /// </summary>
+        /// <returns>List of tasks.</returns>
+        public List<TaskItem> ReadFromFile()
+        {
+            return this.tasksReaderService.ReadFromFile();
         }
 
         private void AddNewCachedItem(List<TaskItem> items)

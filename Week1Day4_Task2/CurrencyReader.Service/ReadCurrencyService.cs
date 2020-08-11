@@ -19,6 +19,7 @@ namespace CurrencyReader.Service
         /// <returns>List of currency item.</returns>
         public List<Currency> ReadFromFile()
         {
+            // TODO: config path to be relative path.
             var file = File.ReadAllText(ConfigurationManager.AppSettings["Path"]);
 
             List<Currency> currencyItems = JsonConvert.DeserializeObject<List<Currency>>(file);

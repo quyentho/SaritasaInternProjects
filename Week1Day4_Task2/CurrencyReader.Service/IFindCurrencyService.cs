@@ -16,6 +16,6 @@ namespace CurrencyReader.Service
         /// <param name="currencies">List currency read from file.</param>
         /// <param name="input">User input.</param>
         /// <returns>Currency object if found.</returns>
-        Currency GetCurrency(List<Currency> currencies, string input);
+        SearchResult GetCurrencies (List<Currency> currencies, string input);
     }
 }

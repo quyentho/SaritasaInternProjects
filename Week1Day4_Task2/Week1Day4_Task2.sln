@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyReader", "CurrencyR
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyReader.Model", "CurrencyReader.Model\CurrencyReader.Model.csproj", "{A4EDF566-7EF1-4F63-80A8-2EEC2C9B3778}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyReader.Service", "CurrencyReader.Service\CurrencyReader.Service.csproj", "{4A5D1E25-91B1-4375-AA71-89EB4336C94B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyReader.Service", "CurrencyReader.Service\CurrencyReader.Service.csproj", "{4A5D1E25-91B1-4375-AA71-89EB4336C94B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

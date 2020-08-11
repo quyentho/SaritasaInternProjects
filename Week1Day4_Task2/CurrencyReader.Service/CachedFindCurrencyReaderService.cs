@@ -1,10 +1,11 @@
-﻿using CurrencyReader.Model;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CurrencyReader.Service
+﻿namespace CurrencyReader.Service
 {
+    using System.Collections.Generic;
+    using CurrencyReader.Model;
+
+    /// <summary>
+    /// Decorator class to cach find result.
+    /// </summary>
     public class CachedFindCurrencyReaderService : IFindCurrencyService
     {
         private readonly IFindCurrencyService findCurrencyService;

@@ -1,13 +1,14 @@
 ﻿// Copyright (c) Saritasa, LLC
 
-using CurrencyReader.Model;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
-using System.Resources;
 namespace CurrencyReader.Service
 {
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.IO;
+    using System.Resources;
+    using CurrencyReader.Model;
+    using Newtonsoft.Json;
+
     /// <summary>
     /// Read data service.
     /// </summary>

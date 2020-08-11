@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace CurrencyReader.Model
+﻿namespace CurrencyReader.Model
 {
+    using System;
+
     /// <summary>
     /// Represent currency data in file.
     /// </summary>

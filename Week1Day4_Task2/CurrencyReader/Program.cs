@@ -1,14 +1,21 @@
-﻿using CurrencyReader.Model;
-using CurrencyReader.Service;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace CurrencyReader
+﻿namespace CurrencyReader
 {
-    class Program
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using CurrencyReader.Model;
+    using CurrencyReader.Service;
+
+    /// <summary>
+    /// Program class.
+    /// </summary>
+    internal class Program
     {
-        static void Main(string[] args)
+        /// <summary>
+        /// Application entry point.
+        /// </summary>
+        /// <param name="args">Application arguments.</param>
+        private static void Main(string[] args)
         {
             try
             {

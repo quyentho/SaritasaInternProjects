@@ -1,11 +1,11 @@
-﻿using CurrencyReader.Model;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-
-namespace CurrencyReader.Service
+﻿namespace CurrencyReader.Service
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using CurrencyReader.Model;
+
     /// <summary>
     /// Service for find currency.
     /// </summary>
@@ -21,7 +21,7 @@ namespace CurrencyReader.Service
         {
             try
             {
-                IEnumerable<DateTime> dates = GetListDateFromInput(input);
+                IEnumerable<DateTime> dates = this.GetListDateFromInput(input);
                 SearchResult result = new SearchResult();
                 result.FoundItems = currencies.Where(c => dates.Contains(c.Date)).ToList();
                 if (result.FoundItems.Count <= 0)
@@ -29,7 +29,7 @@ namespace CurrencyReader.Service
                     throw new CurrencyNotFoundException($"{input}: [!] Currency for specific date is not found.");
                 }
 
-                result.NotFoundDates = this.GetNotFoundDates(dates,result);
+                result.NotFoundDates = this.GetNotFoundDates(dates, result);
                 return result;
             }
             catch (FormatException)
@@ -48,7 +48,7 @@ namespace CurrencyReader.Service
             return dates.Except(foundDates).ToList();
         }
 
-        private static IEnumerable<DateTime> GetListDateFromInput(string input)
+        private IEnumerable<DateTime> GetListDateFromInput(string input)
         {
             string[] listDate = input.Split(",", StringSplitOptions.RemoveEmptyEntries);
             IEnumerable<DateTime> dates = listDate

@@ -1,12 +1,12 @@
 ﻿// Copyright (c) Saritasa, LLC
 
-using CurrencyReader.Model;
-using System.Collections.Generic;
-
 namespace CurrencyReader.Service
 {
+    using System.Collections.Generic;
+    using CurrencyReader.Model;
+
     /// <summary>
-    /// Find service interface.
+    /// Interface for find service .
     /// </summary>
     public interface IFindCurrencyService
     {
@@ -16,6 +16,6 @@ namespace CurrencyReader.Service
         /// <param name="currencies">List currency read from file.</param>
         /// <param name="input">User input.</param>
         /// <returns>Currency object if found.</returns>
-        SearchResult GetCurrencies (List<Currency> currencies, string input);
+        SearchResult GetCurrencies(List<Currency> currencies, string input);
     }
 }

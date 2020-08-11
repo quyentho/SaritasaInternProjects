@@ -15,25 +15,13 @@ namespace CurrencyReader
                 ReadCurrencyService readCurrencyservice = new ReadCurrencyService();
 
                 List<Currency> data = readCurrencyservice.ReadFromFile();
-                // TODO: Refactor for more readable.
                 do
                 {
                     var input = Console.ReadLine();
-                    var cachedService = new CachedFindCurrencyReaderService(new FindCurrencyService());
-                    SearchResult result = cachedService.GetCurrencies(data, input);
-                    foreach (var currency in result.FoundItems)
-                    {
-                        Console.WriteLine($"{currency.Date} : {currency.Rub} RUB");
-                    }
-
-                    if (result.NotFoundDates.Count() > 0)
-                    {
-                        foreach (var date in result.NotFoundDates)
-                        {
-                            Console.WriteLine($"{date}: [!] Currency for specific date is not found.");
-                        }
-                    }
-                } while (true);
+                    SearchResult result = FindCurrenciesFromData(data, input);
+                    DisplayResult(result);
+                }
+                while (true);
             }
             catch (FormatException)
             {
@@ -42,6 +30,29 @@ namespace CurrencyReader
             catch (CurrencyNotFoundException e)
             {
                 Console.WriteLine(e.Message);
+            }
+        }
+
+        private static SearchResult FindCurrenciesFromData(List<Currency> data, string input)
+        {
+            var cachedService = new CachedFindCurrencyReaderService(new FindCurrencyService());
+            SearchResult result = cachedService.GetCurrencies(data, input);
+            return result;
+        }
+
+        private static void DisplayResult(SearchResult result)
+        {
+            foreach (var currency in result.FoundItems)
+            {
+                Console.WriteLine($"{currency.Date.ToShortDateString()} : {currency.Rub} RUB");
+            }
+
+            if (result.NotFoundDates.Count() > 0)
+            {
+                foreach (var date in result.NotFoundDates)
+                {
+                    Console.WriteLine($"{date}: [!] Currency for specific date is not found.");
+                }
             }
         }
     }

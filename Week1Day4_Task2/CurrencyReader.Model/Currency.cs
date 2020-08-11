@@ -7,8 +7,6 @@ namespace CurrencyReader.Model
     /// </summary>
     public class Currency
     {
-        // TODO: Format Datetime to display properly: yyyy-mm-dd
-
         /// <summary>
         /// Gets or sets Date.
         /// </summary>

@@ -23,7 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\JIRADayIssues.Model\JIRADayIssues.Service.csproj" />
+    <ProjectReference Include="..\JIRADayIssues.Model\JIRADayIssues.Model.csproj" />
+    <ProjectReference Include="..\JIRADayIssues.Service\JIRADayIssues.Service.csproj" />
   </ItemGroup>
 
 </Project>

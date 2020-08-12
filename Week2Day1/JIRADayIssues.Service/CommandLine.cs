@@ -6,6 +6,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace JIRADayIssues.Service
 {
+    /// <summary>
+    /// Command line manipulation.
+    /// </summary>
     public class CommandLine
     {
         /// <summary>
@@ -21,24 +24,48 @@ namespace JIRADayIssues.Service
         [Option("-d|--date", CommandOptionType.SingleOrNoValue, Description = "Date to check.")]
         public (bool hasValue, DateTime value) DateOption { get; set; }
 
+        /// <summary>
+        /// Gets or sets token to authentication.
+        /// </summary>
         [Option("-t|--token", CommandOptionType.SingleValue, Description = "Token to authentication")]
         [Required]
         public string TokenOption { get; set; }
 
-        private void OnExecute()
+        /// <summary>
+        /// Execute command.
+        /// </summary>
+        public void OnExecute()
         {
-            DateTime date = new DateTime(2020, 08, 11).Date;
-            if(this.DateOption.hasValue)
+            DateTime date = SetDateOption();
+
+            IRestResponse response = MakeRequest(date);
+
+            DisplayResponse(response);
+        }
+
+        private static void DisplayResponse(IRestResponse response)
+        {
+            var responseHandling = new ResponseHandling();
+            var responseObject = responseHandling.DeserializeResponse(response);
+            responseHandling.DisplayResponse(responseObject);
+        }
+
+        private IRestResponse MakeRequest(DateTime date)
+        {
+            var manipulation = new APIsManipulation();
+            IRestResponse response = manipulation.GetResponse(date, UserNameOption, TokenOption);
+            return response;
+        }
+
+        private DateTime SetDateOption()
+        {
+            DateTime date = DateTime.Now.AddDays(-1);
+            if (this.DateOption.hasValue)
             {
                 date = DateOption.value.Date;
             }
-            
-            var manipulation = new APIsManipulation();
-            IRestResponse response = manipulation.GetResponse(this.DateOption.value,UserNameOption, TokenOption);
 
-            var responseHandling = new ResponseHandling();
-            ResponseObject responseObject = responseHandling.DeserializeResponse(response);
-            responseHandling.DisplayResponse(responseObject);
+            return date; 
         }
     }
 }

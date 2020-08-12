@@ -9,8 +9,18 @@ using System.Text;
 
 namespace JIRADayIssues.Service
 {
+    /// <summary>
+    /// Manipulation on API calls.
+    /// </summary>
     public class APIsManipulation
     {
+        /// <summary>
+        /// Request to JIRA API to get worklog on specific date.
+        /// </summary>
+        /// <param name="date">Date gets from user input, default is current</param>
+        /// <param name="username">Username to authentication.</param>
+        /// <param name="token">Token to authentication.</param>
+        /// <returns>Object of type IRestResponse.</returns>
         public IRestResponse GetResponse(DateTime date,string username, string token)
         {
             var client = new RestClient($"https://saritasa.atlassian.net/rest/api/2/search");
@@ -18,10 +28,9 @@ namespace JIRADayIssues.Service
             client.Authenticator = new HttpBasicAuthenticator(username, token);
 
             var request = new RestRequest(Method.GET);
-            request.AddParameter("jql", $"worklogDate = { DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd")} AND worklogAuthor = currentuser()");
-            IRestResponse response = client.Execute(request);
+            request.AddParameter("jql", $"worklogDate = { date.ToString("yyyy-MM-dd")} AND worklogAuthor = currentuser()");
 
-            return response;
+            return client.Execute(request); ;
         }
 
 

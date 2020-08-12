@@ -23,6 +23,10 @@ namespace JIRADayIssues.Service
             return JsonConvert.DeserializeObject<ResponseObject>(response.Content);
         }
 
+        /// <summary>
+        /// Format and display result from API response.
+        /// </summary>
+        /// <param name="responseObject">Object to display.</param>
         public void DisplayResponse(ResponseObject responseObject)
         {
             foreach (var issue in responseObject.Issues)

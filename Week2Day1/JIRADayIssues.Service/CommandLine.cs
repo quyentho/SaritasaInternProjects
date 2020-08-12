@@ -59,7 +59,7 @@ namespace JIRADayIssues.Service
 
         private DateTime SetDateOption()
         {
-            DateTime date = DateTime.Now.AddDays(-1);
+            DateTime date = DateTime.Now;
             if (this.DateOption.hasValue)
             {
                 date = DateOption.value.Date;

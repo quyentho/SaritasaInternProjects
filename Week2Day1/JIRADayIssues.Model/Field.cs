@@ -17,7 +17,7 @@ namespace JIRADayIssues.Model
         /// Gets or sets timespent on the issue.
         /// </summary>
         [JsonProperty("timespent")]
-        public string TimeSpent { get; set; }
+        public double TimeSpent { get; set; }
 
         /// <summary>
         /// Gets or sets summary of the issue.

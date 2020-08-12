@@ -4,6 +4,7 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 
 namespace JIRADayIssues.Service
@@ -29,12 +30,19 @@ namespace JIRADayIssues.Service
         /// <param name="responseObject">Object to display.</param>
         public void DisplayResponse(ResponseObject responseObject)
         {
+            TimeSpan totalTime =TimeSpan.FromSeconds(responseObject.Issues.Sum(s => s.Field.TimeSpent));
+
             foreach (var issue in responseObject.Issues)
             {
                 Console.WriteLine(issue.Field.Project.Name);
                 var timeSpent = TimeSpan.FromSeconds(Convert.ToDouble(issue.Field.TimeSpent));
                 var estimateTime = TimeSpan.FromSeconds(Convert.ToDouble(issue.Field.EstimateTime));
                 Console.WriteLine(string.Format("{0,40} {1:0h}/{2:0h}", issue.Field.Summary, timeSpent.TotalHours, estimateTime.TotalHours));
+            }
+
+            if(responseObject.Issues.Count > 0)
+            {
+                Console.WriteLine(string.Format("{0:0h} {1:0m}", totalTime.Hours, totalTime.Minutes));
             }
         }
     }

@@ -4,6 +4,7 @@ using RestSharp;
 using RestSharp.Authenticators;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -28,11 +29,10 @@ namespace JIRADayIssues.Service
             client.Authenticator = new HttpBasicAuthenticator(username, token);
 
             var request = new RestRequest(Method.GET);
-            request.AddParameter("jql", $"worklogDate = { date.ToString("yyyy-MM-dd")} AND worklogAuthor = currentuser()");
+            request.AddParameter("jql", $"worklogDate = { date.ToString("yyyy-MM-dd").ToString(CultureInfo.CreateSpecificCulture("en-US"))} AND worklogAuthor = currentuser()");
 
-            return client.Execute(request); ;
+            return client.Execute(request);
         }
-
 
     }
 }

@@ -2,7 +2,7 @@
   "profiles": {
     "JIRADayIssues": {
       "commandName": "Project",
-      "commandLineArgs": "--help"
+      "commandLineArgs": "--username=quyen.tho@saritasa.com --token=muvykLqdTaYg3qbbdFmf37FE"
     }
   }
 }

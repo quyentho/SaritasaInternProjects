@@ -1,4 +1,6 @@
-﻿using McMaster.Extensions.CommandLineUtils;
+﻿using JIRADayIssues.Model;
+using McMaster.Extensions.CommandLineUtils;
+using RestSharp;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -25,9 +27,18 @@ namespace JIRADayIssues.Service
 
         private void OnExecute()
         {
-            Console.WriteLine($"Date: {this.DateOption}");
-            Console.WriteLine($"Username: {this.UserNameOption}");
-            Console.WriteLine($"Token: {this.TokenOption}");
+            DateTime date = new DateTime(2020, 08, 11).Date;
+            if(this.DateOption.hasValue)
+            {
+                date = DateOption.value.Date;
+            }
+            
+            var manipulation = new APIsManipulation();
+            IRestResponse response = manipulation.GetResponse(this.DateOption.value,UserNameOption, TokenOption);
+
+            var responseHandling = new ResponseHandling();
+            ResponseObject responseObject = responseHandling.DeserializeResponse(response);
+            responseHandling.DisplayResponse(responseObject);
         }
     }
 }

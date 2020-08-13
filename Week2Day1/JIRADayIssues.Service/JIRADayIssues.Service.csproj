@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\JIRADayIssues.Model\JIRADayIssues.Model.csproj" />
+    <ProjectReference Include="..\JiraDayIssues.Model\JiraDayIssues.Model.csproj" />
   </ItemGroup>
 
 </Project>

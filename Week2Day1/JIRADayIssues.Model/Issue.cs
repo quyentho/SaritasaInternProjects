@@ -2,7 +2,7 @@
 using System.Reflection.Metadata.Ecma335;
 using System.Text.Json.Serialization;
 
-namespace JIRADayIssues.Model
+namespace JiraDayIssues.Model
 {
     /// <summary>
     /// Represent issues come from request.

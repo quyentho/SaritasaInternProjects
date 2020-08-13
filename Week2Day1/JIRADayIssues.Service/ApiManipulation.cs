@@ -1,4 +1,4 @@
-﻿using JIRADayIssues.Model;
+﻿using JiraDayIssues.Model;
 using Newtonsoft.Json;
 using RestSharp;
 using RestSharp.Authenticators;
@@ -8,12 +8,12 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 
-namespace JIRADayIssues.Service
+namespace JiraDayIssues.Service
 {
     /// <summary>
     /// Manipulation on API calls.
     /// </summary>
-    public class APIsManipulation
+    public class ApiManipulation
     {
         /// <summary>
         /// Request to JIRA API to get worklog on specific date.

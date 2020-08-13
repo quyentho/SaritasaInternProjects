@@ -1,4 +1,4 @@
-﻿using JIRADayIssues.Model;
+﻿using JiraDayIssues.Model;
 using Newtonsoft.Json;
 using RestSharp;
 using System;
@@ -7,7 +7,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 
-namespace JIRADayIssues.Service
+namespace JiraDayIssues.Service
 {
     /// <summary>
     /// Converts response from API requests to appropriate value.

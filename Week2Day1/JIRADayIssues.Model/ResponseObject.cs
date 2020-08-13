@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace JIRADayIssues.Model
+namespace JiraDayIssues.Model
 {
     /// <summary>
     /// Represent list issues response from API request.

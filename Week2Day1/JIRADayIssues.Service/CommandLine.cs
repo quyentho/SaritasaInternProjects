@@ -1,10 +1,10 @@
-﻿using JIRADayIssues.Model;
+﻿using JiraDayIssues.Model;
 using McMaster.Extensions.CommandLineUtils;
 using RestSharp;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace JIRADayIssues.Service
+namespace JiraDayIssues.Service
 {
     /// <summary>
     /// Command line manipulation.
@@ -52,7 +52,7 @@ namespace JIRADayIssues.Service
 
         private IRestResponse MakeRequest(DateTime date)
         {
-            var manipulation = new APIsManipulation();
+            var manipulation = new ApiManipulation();
             IRestResponse response = manipulation.GetResponse(date, UserNameOption, TokenOption);
             return response;
         }

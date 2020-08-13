@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Reflection.Metadata.Ecma335;
 
-namespace JIRADayIssues.Model
+namespace JiraDayIssues.Model
 {
     /// <summary>
     /// Represent the project contains the issue.

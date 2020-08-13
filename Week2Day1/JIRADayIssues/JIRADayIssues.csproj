@@ -24,8 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\JIRADayIssues.Model\JIRADayIssues.Model.csproj" />
-    <ProjectReference Include="..\JIRADayIssues.Service\JIRADayIssues.Service.csproj" />
+    <ProjectReference Include="..\JiraDayIssues.Model\JiraDayIssues.Model.csproj" />
+    <ProjectReference Include="..\JiraDayIssues.Service\JiraDayIssues.Service.csproj" />
   </ItemGroup>
 
 </Project>

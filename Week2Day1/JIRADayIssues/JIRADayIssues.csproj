@@ -6,6 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+<<<<<<< HEAD
+=======
+    <None Remove="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="3.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+>>>>>>> feature/Week2Day1
     <PackageReference Include="RestSharp" Version="106.11.4" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
@@ -13,4 +22,16 @@
     </PackageReference>
   </ItemGroup>
 
+<<<<<<< HEAD
+=======
+  <ItemGroup>
+    <Page Include="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\JiraDayIssues.Model\JiraDayIssues.Model.csproj" />
+    <ProjectReference Include="..\JiraDayIssues.Service\JiraDayIssues.Service.csproj" />
+  </ItemGroup>
+
+>>>>>>> feature/Week2Day1
 </Project>

@@ -1,5 +1,6 @@
-﻿using McMaster.Extensions.CommandLineUtils;
-using JiraDayIssues.Service;
+﻿using JiraDayIssues.Service;
+using McMaster.Extensions.CommandLineUtils;
+
 namespace JiraDayIssues
 {
     [Command(Name = "Saritasa.JiraChecker", Description = "Check user's hours for the day.")]

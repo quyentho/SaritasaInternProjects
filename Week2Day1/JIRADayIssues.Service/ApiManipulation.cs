@@ -34,7 +34,7 @@ namespace JiraDayIssues.Service
             request.AddParameter("jql", $"worklogDate = { date.ToString("yyyy-MM-dd").ToString(CultureInfo.CreateSpecificCulture("en-US"))} AND worklogAuthor = IvanKozhin");
             
             logger.Info($"Get issues and work logs for user {username} and date {date}.");
-            logger.Trace("{resquest}", request);
+            logger.Trace("Request: {resquest}", request);
 
             return client.Execute(request);
         }

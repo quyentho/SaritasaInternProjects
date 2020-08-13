@@ -41,7 +41,7 @@ namespace JiraDayIssues.Service
             DateTime date = SetDateOption();
 
             IRestResponse response = MakeRequest(date);
-            logger.Trace("{response}", response);
+            logger.Trace("Response: {response}", response);
 
             DisplayResponse(response);
         }
@@ -51,8 +51,6 @@ namespace JiraDayIssues.Service
             var responseHandling = new ResponseHandling();
             var responseObject = responseHandling.DeserializeResponse(response);
             
-           // logger.Trace("Response object: {object}", responseObject); // log response.
-
             responseHandling.DisplayResponse(responseObject);
         }
 

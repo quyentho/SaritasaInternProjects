@@ -26,6 +26,6 @@ namespace JIRADayIssues.Model
         public string Summary { get; set; }
 
         [JsonProperty("timeoriginalestimate")]
-        public string EstimateTime { get; set; }
+        public double EstimateTime { get; set; }
     }
 }

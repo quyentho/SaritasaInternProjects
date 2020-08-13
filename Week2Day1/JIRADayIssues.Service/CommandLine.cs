@@ -1,9 +1,8 @@
-﻿using JiraDayIssues.Model;
-using McMaster.Extensions.CommandLineUtils;
+﻿using McMaster.Extensions.CommandLineUtils;
+using NLog;
 using RestSharp;
 using System;
 using System.ComponentModel.DataAnnotations;
-
 namespace JiraDayIssues.Service
 {
     /// <summary>
@@ -11,6 +10,8 @@ namespace JiraDayIssues.Service
     /// </summary>
     public class CommandLine
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Gets or sets value for username option.
         /// </summary>
@@ -52,6 +53,7 @@ namespace JiraDayIssues.Service
 
         private IRestResponse MakeRequest(DateTime date)
         {
+            logger.Info("Make request.");
             var manipulation = new ApiManipulation();
             IRestResponse response = manipulation.GetResponse(date, UserNameOption, TokenOption);
             return response;
@@ -59,6 +61,7 @@ namespace JiraDayIssues.Service
 
         private DateTime SetDateOption()
         {
+            logger.Info("Set date option.");
             DateTime date = DateTime.Now;
             if (this.DateOption.hasValue)
             {

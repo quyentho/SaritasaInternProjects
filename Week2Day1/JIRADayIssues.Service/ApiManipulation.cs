@@ -1,5 +1,6 @@
 ﻿using JiraDayIssues.Model;
 using Newtonsoft.Json;
+using NLog;
 using RestSharp;
 using RestSharp.Authenticators;
 using System;
@@ -15,6 +16,7 @@ namespace JiraDayIssues.Service
     /// </summary>
     public class ApiManipulation
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
         /// <summary>
         /// Request to JIRA API to get worklog on specific date.
         /// </summary>
@@ -30,7 +32,9 @@ namespace JiraDayIssues.Service
 
             var request = new RestRequest(Method.GET);
             request.AddParameter("jql", $"worklogDate = { date.ToString("yyyy-MM-dd").ToString(CultureInfo.CreateSpecificCulture("en-US"))} AND worklogAuthor = currentuser()");
-
+            
+            logger.Info($"Get issues and work logs for user {username} and date {date}.");
+            
             return client.Execute(request);
         }
 

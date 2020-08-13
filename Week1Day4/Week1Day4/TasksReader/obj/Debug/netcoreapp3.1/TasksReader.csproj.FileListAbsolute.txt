@@ -1,0 +1,4 @@
+D:\Projects\quyen.tho\Week1Day4\Week1Day4\TasksReader\bin\Debug\netcoreapp3.1\TasksReader.exe
+D:\Projects\quyen.tho\Week1Day4\Week1Day4\TasksReader\obj\Debug\netcoreapp3.1\TasksReader.csprojAssemblyReference.cache
+D:\Projects\quyen.tho\Week1Day4\Week1Day4\TasksReader\obj\Debug\netcoreapp3.1\TasksReader.AssemblyInfoInputs.cache
+D:\Projects\quyen.tho\Week1Day4\Week1Day4\TasksReader\obj\Debug\netcoreapp3.1\TasksReader.AssemblyInfo.cs

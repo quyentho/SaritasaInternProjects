@@ -71,7 +71,7 @@ namespace JiraDayIssues.Service
                 date = DateOption.value.Date;
             }
 
-            return date; 
+            return date;
         }
     }
 }

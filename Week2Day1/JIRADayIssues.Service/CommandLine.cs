@@ -1,5 +1,6 @@
 ﻿using McMaster.Extensions.CommandLineUtils;
 using NLog;
+using NLog.Fluent;
 using RestSharp;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -40,20 +41,24 @@ namespace JiraDayIssues.Service
             DateTime date = SetDateOption();
 
             IRestResponse response = MakeRequest(date);
+            logger.Trace("{response}", response);
 
             DisplayResponse(response);
         }
 
-        private static void DisplayResponse(IRestResponse response)
+        private void DisplayResponse(IRestResponse response)
         {
             var responseHandling = new ResponseHandling();
             var responseObject = responseHandling.DeserializeResponse(response);
+            
+           // logger.Trace("Response object: {object}", responseObject); // log response.
+
             responseHandling.DisplayResponse(responseObject);
         }
 
         private IRestResponse MakeRequest(DateTime date)
         {
-            logger.Info("Make request.");
+           
             var manipulation = new ApiManipulation();
             IRestResponse response = manipulation.GetResponse(date, UserNameOption, TokenOption);
             return response;

@@ -21,7 +21,7 @@ namespace JiraDayIssues.Service
         /// <returns>Response object.</returns>
         public ResponseObject DeserializeResponse(IRestResponse response)
         {
-            return JsonConvert.DeserializeObject<ResponseObject>(response.Content);
+            return JsonConvert.DeserializeObject<ResponseObject>(response.Content, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore});
         }
 
         /// <summary>

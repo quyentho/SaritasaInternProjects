@@ -31,10 +31,11 @@ namespace JiraDayIssues.Service
             client.Authenticator = new HttpBasicAuthenticator(username, token);
 
             var request = new RestRequest(Method.GET);
-            request.AddParameter("jql", $"worklogDate = { date.ToString("yyyy-MM-dd").ToString(CultureInfo.CreateSpecificCulture("en-US"))} AND worklogAuthor = currentuser()");
+            request.AddParameter("jql", $"worklogDate = { date.ToString("yyyy-MM-dd").ToString(CultureInfo.CreateSpecificCulture("en-US"))} AND worklogAuthor = IvanKozhin");
             
             logger.Info($"Get issues and work logs for user {username} and date {date}.");
-            
+            logger.Trace("{resquest}", request);
+
             return client.Execute(request);
         }
 

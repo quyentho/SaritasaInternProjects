@@ -21,7 +21,7 @@ namespace JiraDayIssues.Service
         /// <returns>Response object.</returns>
         public ResponseObject DeserializeResponse(IRestResponse response)
         {
-            return JsonConvert.DeserializeObject<ResponseObject>(response.Content);
+            return JsonConvert.DeserializeObject<ResponseObject>(response.Content, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace JiraDayIssues.Service
 
             if(responseObject.Issues.Count > 0)
             {
-                Console.WriteLine(string.Format("{0:0h} {1:0m}", totalTime.Hours, totalTime.Minutes));
+                Console.WriteLine(string.Format("Total {0:0h} {1:0m}", totalTime.Hours, totalTime.Minutes));
             }
         }
     }

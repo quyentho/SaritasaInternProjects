@@ -19,7 +19,7 @@
         {
             try
             {
-                ReadCurrencyService readCurrencyservice = new ReadCurrencyService();
+                var readCurrencyservice = new ReadCurrencyService();
 
                 List<Currency> data = readCurrencyservice.ReadFromFile();
                 do
@@ -43,8 +43,10 @@
         private static SearchResult FindCurrenciesFromData(List<Currency> data, string input)
         {
             IFindCurrencyService findCurrencyService = new FindCurrencyService();
-            findCurrencyService = new CacheCurrencyDecorator(findCurrencyService);
+            findCurrencyService = new CacheFindCurrencyService(findCurrencyService);
+
             SearchResult result = findCurrencyService.GetCurrencies(data, input);
+
             return result;
         }
 

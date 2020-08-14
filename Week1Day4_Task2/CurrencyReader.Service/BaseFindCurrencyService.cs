@@ -8,15 +8,15 @@ namespace CurrencyReader.Service
     /// <summary>
     /// Decorator for Find currency service.
     /// </summary>
-    public abstract class FindCurrencyServiceDecorator : IFindCurrencyService
+    public abstract class BaseFindCurrencyService : IFindCurrencyService
     {
         private IFindCurrencyService findCurrencyService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FindCurrencyServiceDecorator"/> class.
+        /// Initializes a new instance of the <see cref="BaseFindCurrencyService"/> class.
         /// </summary>
         /// <param name="findCurrencyService">IFindCurrencyService for DI.</param>
-        public FindCurrencyServiceDecorator(IFindCurrencyService findCurrencyService)
+        public BaseFindCurrencyService(IFindCurrencyService findCurrencyService)
         {
             this.findCurrencyService = findCurrencyService;
         }
@@ -31,7 +31,7 @@ namespace CurrencyReader.Service
         {
             var result = this.findCurrencyService.GetCurrencies(currencies, input);
 
-            Decorate(result);
+            this.PostProcess(result);
 
             return result;
         }
@@ -39,6 +39,7 @@ namespace CurrencyReader.Service
         /// <summary>
         /// Additional functionality after find currency.
         /// </summary>
-        public abstract void Decorate(SearchResult result);
+        /// <param name="result">result to post process.</param>
+        public abstract void PostProcess(SearchResult result);
     }
 }

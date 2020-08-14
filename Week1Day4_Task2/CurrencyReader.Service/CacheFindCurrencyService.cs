@@ -6,14 +6,13 @@
     /// <summary>
     /// Decorator class to cach find result.
     /// </summary>
-    public class CacheCurrencyDecorator : FindCurrencyServiceDecorator
+    public class CacheFindCurrencyService : BaseFindCurrencyService
     {
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="CacheCurrencyDecorator"/> class.
+        /// Initializes a new instance of the <see cref="CacheFindCurrencyService"/> class.
         /// </summary>
         /// <param name="findCurrencyService">Instance of IFindCurrency.</param>
-        public CacheCurrencyDecorator(IFindCurrencyService findCurrencyService)
+        public CacheFindCurrencyService(IFindCurrencyService findCurrencyService)
             : base(findCurrencyService)
         {
         }
@@ -26,8 +25,8 @@
         /// <summary>
         /// Caches 10 recent found value.
         /// </summary>
-        /// <param name="result"></param>
-        public override void Decorate(SearchResult result)
+        /// <param name="result">Result to cache.</param>
+        public override void PostProcess(SearchResult result)
         {
             this.CacheResult(result.FoundItems);
         }

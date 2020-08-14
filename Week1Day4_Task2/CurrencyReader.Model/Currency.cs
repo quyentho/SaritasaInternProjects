@@ -1,4 +1,8 @@
-﻿namespace CurrencyReader.Model
+﻿// <copyright file="Currency.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+namespace CurrencyReader.Model
 {
     using System;
 

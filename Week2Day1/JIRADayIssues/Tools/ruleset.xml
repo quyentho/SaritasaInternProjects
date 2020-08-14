@@ -114,7 +114,6 @@
 		<Rule Id="SA1127" Action="None" />
 		<Rule Id="SA1128" Action="None" />
 		<Rule Id="SA1132" Action="None" />
-		<Rule Id="SA1200" Action="None" />
 		<Rule Id="SA1201" Action="None" />
 		<Rule Id="SA1202" Action="None" />
 		<Rule Id="SA1204" Action="None" />

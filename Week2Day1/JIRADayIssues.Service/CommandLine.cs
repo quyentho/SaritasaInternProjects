@@ -1,11 +1,11 @@
-﻿using McMaster.Extensions.CommandLineUtils;
-using NLog;
-using NLog.Fluent;
-using RestSharp;
-using System;
-using System.ComponentModel.DataAnnotations;
-namespace JiraDayIssues.Service
+﻿namespace JiraDayIssues.Service
 {
+    using System;
+    using System.ComponentModel.DataAnnotations;
+    using McMaster.Extensions.CommandLineUtils;
+    using NLog;
+    using RestSharp;
+
     /// <summary>
     /// Command line manipulation.
     /// </summary>
@@ -16,7 +16,7 @@ namespace JiraDayIssues.Service
         /// <summary>
         /// Gets or sets value for username option.
         /// </summary>
-        [Option("-u|--username",CommandOptionType.SingleValue, Description = "username to authentication")]
+        [Option("-u|--username", CommandOptionType.SingleValue, Description = "username to authentication")]
         [Required]
         public string UserNameOption { get; set; }
 
@@ -38,27 +38,27 @@ namespace JiraDayIssues.Service
         /// </summary>
         public void OnExecute()
         {
-            DateTime date = SetDateOption();
+            DateTime date = this.SetDateOption();
 
-            IRestResponse response = MakeRequest(date);
-            logger.Trace("Response: {response}", response);
+            IRestResponse response = this.MakeRequest(date);
 
-            DisplayResponse(response);
+            this.DisplayResponse(response);
         }
 
         private void DisplayResponse(IRestResponse response)
         {
             var responseHandling = new ResponseHandling();
             var responseObject = responseHandling.DeserializeResponse(response);
-            
             responseHandling.DisplayResponse(responseObject);
         }
 
         private IRestResponse MakeRequest(DateTime date)
         {
-           
-            var manipulation = new ApiManipulation();
-            IRestResponse response = manipulation.GetResponse(date, UserNameOption, TokenOption);
+            IApiManipulation apiManipulation = new ApiManipulation();
+            apiManipulation = new CacheDecorator(apiManipulation);
+
+            IRestRequest request = apiManipulation.ConfigureRequest(date);
+            IRestResponse response = apiManipulation.GetResponse(request, this.UserNameOption, this.TokenOption);
             return response;
         }
 
@@ -68,7 +68,7 @@ namespace JiraDayIssues.Service
             DateTime date = DateTime.Now;
             if (this.DateOption.hasValue)
             {
-                date = DateOption.value.Date;
+                date = this.DateOption.value.Date;
             }
 
             return date;

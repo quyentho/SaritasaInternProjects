@@ -1,27 +1,24 @@
-﻿using JiraDayIssues.Model;
+﻿using System;
+using System.Linq;
+using JiraDayIssues.Model;
 using Newtonsoft.Json;
 using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
 
 namespace JiraDayIssues.Service
 {
     /// <summary>
     /// Converts response from API requests to appropriate value.
     /// </summary>
-    class ResponseHandling
+    public class ResponseHandling
     {
         /// <summary>
         /// Deserialize response to get required value.
         /// </summary>
-        /// <param name="response">Response from API request</param>
+        /// <param name="response">Response from API request.</param>
         /// <returns>Response object.</returns>
         public ResponseObject DeserializeResponse(IRestResponse response)
         {
-            return JsonConvert.DeserializeObject<ResponseObject>(response.Content, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore});
+            return JsonConvert.DeserializeObject<ResponseObject>(response.Content, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
         }
 
         /// <summary>
@@ -30,7 +27,7 @@ namespace JiraDayIssues.Service
         /// <param name="responseObject">Object to display.</param>
         public void DisplayResponse(ResponseObject responseObject)
         {
-            TimeSpan totalTime =TimeSpan.FromSeconds(responseObject.Issues.Sum(s => s.Field.TimeSpent));
+            TimeSpan totalTime = TimeSpan.FromSeconds(responseObject.Issues.Sum(s => s.Field.TimeSpent));
 
             foreach (var issue in responseObject.Issues)
             {
@@ -42,7 +39,7 @@ namespace JiraDayIssues.Service
 
             if(responseObject.Issues.Count > 0)
             {
-                Console.WriteLine(string.Format("{0:0h} {1:0m}", totalTime.Hours, totalTime.Minutes));
+                Console.WriteLine(string.Format("Total {0:0h} {1:0m}", totalTime.Hours, totalTime.Minutes));
             }
         }
     }

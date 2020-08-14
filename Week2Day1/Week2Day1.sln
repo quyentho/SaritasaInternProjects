@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JiraDayIssues.Model", "JIRA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JiraDayIssues.Service", "JIRADayIssues.Service\JiraDayIssues.Service.csproj", "{8D4CAB4C-64F8-4FF2-B062-D75A71B94319}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JiraDayIssues.UI", "JiraDayIssues.UI\JiraDayIssues.UI.csproj", "{2639D958-C3D8-4B1C-9F05-679A767D21A2}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{8D4CAB4C-64F8-4FF2-B062-D75A71B94319}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D4CAB4C-64F8-4FF2-B062-D75A71B94319}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D4CAB4C-64F8-4FF2-B062-D75A71B94319}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2639D958-C3D8-4B1C-9F05-679A767D21A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2639D958-C3D8-4B1C-9F05-679A767D21A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2639D958-C3D8-4B1C-9F05-679A767D21A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2639D958-C3D8-4B1C-9F05-679A767D21A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

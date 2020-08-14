@@ -38,9 +38,7 @@ namespace JiraDayIssues.Service
                 var timeSpent = TimeSpan.FromSeconds(issue.Field.TimeSpent);
                 var estimateTime = TimeSpan.FromSeconds(issue.Field.EstimateTime);
                 Console.WriteLine(string.Format("{0,40} {1:0h}/{2:0h}", issue.Field.Summary, timeSpent.TotalHours, estimateTime.TotalHours));
-                Console.WriteLine($"Description: {issue.Field.Description}");
                 Console.WriteLine("\n");
-
             }
             if (responseObject.Issues.Count > 0)
             {

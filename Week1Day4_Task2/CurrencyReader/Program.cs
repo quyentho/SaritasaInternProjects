@@ -42,8 +42,9 @@
 
         private static SearchResult FindCurrenciesFromData(List<Currency> data, string input)
         {
-            var cachedService = new CachedFindCurrencyReaderService(new FindCurrencyService());
-            SearchResult result = cachedService.GetCurrencies(data, input);
+            IFindCurrencyService findCurrencyService = new FindCurrencyService();
+            findCurrencyService = new CacheCurrencyDecorator(findCurrencyService);
+            SearchResult result = findCurrencyService.GetCurrencies(data, input);
             return result;
         }
 

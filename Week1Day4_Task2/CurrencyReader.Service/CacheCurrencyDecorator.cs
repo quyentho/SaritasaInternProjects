@@ -6,17 +6,16 @@
     /// <summary>
     /// Decorator class to cach find result.
     /// </summary>
-    public class CachedFindCurrencyReaderService : IFindCurrencyService
+    public class CacheCurrencyDecorator : FindCurrencyServiceDecorator
     {
-        private readonly IFindCurrencyService findCurrencyService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CachedFindCurrencyReaderService"/> class.
+        /// Initializes a new instance of the <see cref="CacheCurrencyDecorator"/> class.
         /// </summary>
         /// <param name="findCurrencyService">Instance of IFindCurrency.</param>
-        public CachedFindCurrencyReaderService(IFindCurrencyService findCurrencyService)
+        public CacheCurrencyDecorator(IFindCurrencyService findCurrencyService)
+            : base(findCurrencyService)
         {
-            this.findCurrencyService = findCurrencyService;
         }
 
         /// <summary>
@@ -25,18 +24,12 @@
         public List<Currency> CachedList { get; set; } = new List<Currency>();
 
         /// <summary>
-        /// Finds currency and cached 10 recent found items.
+        /// Caches 10 recent found value.
         /// </summary>
-        /// <param name="currencies">List of currency from file.</param>
-        /// <param name="input">User input.</param>
-        /// <returns>Currency object if found.</returns>
-        public SearchResult GetCurrencies(List<Currency> currencies, string input)
+        /// <param name="result"></param>
+        public override void Decorate(SearchResult result)
         {
-            SearchResult result = this.findCurrencyService.GetCurrencies(currencies, input);
-
             this.CacheResult(result.FoundItems);
-
-            return result;
         }
 
         private void CacheResult(List<Currency> foundItems)

@@ -29,7 +29,7 @@ namespace JiraDayIssues.Service
             client.Authenticator = new HttpBasicAuthenticator(username, token);
 
             var request = new RestRequest(Method.GET);
-            request.AddParameter("jql", $"worklogDate = { date.ToString("yyyy-MM-dd").ToString(CultureInfo.CreateSpecificCulture("en-US"))} AND worklogAuthor = currentuser()");
+            request.AddParameter("jql", $"worklogDate = { date.ToString("yyyy-MM-dd").ToString(CultureInfo.CreateSpecificCulture("en-US"))} AND worklogAuthor = IvanKozhin");
 
             return client.Execute(request);
         }

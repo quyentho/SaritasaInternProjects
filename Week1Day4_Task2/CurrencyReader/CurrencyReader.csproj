@@ -17,4 +17,10 @@
     <ProjectReference Include="..\CurrencyReader.Service\CurrencyReader.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Data\rates.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

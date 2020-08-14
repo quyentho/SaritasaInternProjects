@@ -3,7 +3,6 @@
     using System;
     using System.ComponentModel.DataAnnotations;
     using McMaster.Extensions.CommandLineUtils;
-    using NLog;
     using RestSharp;
 
     /// <summary>

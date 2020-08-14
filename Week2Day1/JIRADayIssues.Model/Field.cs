@@ -27,5 +27,8 @@ namespace JiraDayIssues.Model
 
         [JsonProperty("timeoriginalestimate")]
         public double EstimateTime { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
     }
 }

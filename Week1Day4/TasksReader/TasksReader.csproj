@@ -31,4 +31,10 @@
     <ProjectReference Include="..\TasksReader.Services\TasksReader.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Data\tasks.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

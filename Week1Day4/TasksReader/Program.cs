@@ -19,7 +19,8 @@ namespace TasksReader
                 var readTasksService = new ReadTasksService();
                 var tasks = readTasksService.ReadFromFile();
 
-                CachedFindTasksService cachedFindTasksService = new CachedFindTasksService(new FindTasksService());
+                IFindTasksService findTasksService = new FindTasksService();
+                findTasksService = new CacheTasksDecorator(findTasksService);
 
                 Console.WriteLine("Press Ctrl + C to exit");
                 Console.WriteLine("Enter D to see 10 last searched items");
@@ -29,14 +30,14 @@ namespace TasksReader
                     SearchResult searchResult = new SearchResult();
                     if (IsShowCache(input))
                     {
-                        searchResult.FoundItems = cachedFindTasksService.GetCachedTasks();
+                        searchResult.FoundItems = (findTasksService as CacheTasksDecorator).GetCachedTasks();
                         DisplaySearchResult(searchResult);
                     }
                     else
                     {
                         try
                         {
-                            searchResult = FindTasks(cachedFindTasksService, tasks, input);
+                            searchResult = FindTasks(findTasksService, tasks, input);
                             DisplaySearchResult(searchResult);
                         }
                         catch (FormatException)
@@ -57,7 +58,7 @@ namespace TasksReader
             }
         }
 
-        private static SearchResult FindTasks(CachedFindTasksService cachedFindTasksService, List<TaskItem> tasks, string input)
+        private static SearchResult FindTasks(IFindTasksService cachedFindTasksService, List<TaskItem> tasks, string input)
         {
             try
             {

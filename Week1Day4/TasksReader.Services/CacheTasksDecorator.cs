@@ -8,17 +8,15 @@ namespace TasksReader.Services
     /// <summary>
     /// Decorator to caching service.
     /// </summary>
-    public class CachedFindTasksService : IFindTasksService
+    public class CacheTasksDecorator : FindTaskServiceDecorator
     {
-        private readonly IFindTasksService tasksReaderService;
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="CachedFindTasksService"/> class.
+        /// Initializes a new instance of the <see cref="CacheTasksDecorator"/> class.
         /// </summary>
-        /// <param name="tasksReaderService">Service inject from outside.</param>
-        public CachedFindTasksService(IFindTasksService tasksReaderService)
+        /// <param name="findTasksService">Service inject from outside.</param>
+        public CacheTasksDecorator(IFindTasksService findTasksService)
+            : base(findTasksService)
         {
-            this.tasksReaderService = tasksReaderService;
         }
 
         /// <summary>
@@ -27,18 +25,12 @@ namespace TasksReader.Services
         public List<TaskItem> CachedItems { get; set; } = new List<TaskItem>();
 
         /// <summary>
-        /// Cached tasks 10 recent found tasks.
+        /// Caches 10 recent found tasks.
         /// </summary>
-        /// <param name="tasks">List of tasks.</param>
-        /// <param name="ids">List of ids from user input.</param>
-        /// <returns>SearchResult object.</returns>
-        public SearchResult FindByIds(List<TaskItem> tasks, List<int> ids)
+        /// <param name="result">Search result to cache.</param>
+        public override void Decorate(SearchResult result)
         {
-            var result = this.tasksReaderService.FindByIds(tasks, ids);
-
             this.CacheItems(result);
-
-            return result;
         }
 
         /// <summary>
@@ -53,16 +45,6 @@ namespace TasksReader.Services
             }
 
             return this.CachedItems;
-        }
-
-        /// <summary>
-        /// Split input into list of ids.
-        /// </summary>
-        /// <param name="input">User input.</param>
-        /// <returns>List of ids.</returns>
-        public List<int> GetIdsFromInput(string input)
-        {
-            return this.tasksReaderService.GetIdsFromInput(input);
         }
 
         private void CacheItems(SearchResult result)

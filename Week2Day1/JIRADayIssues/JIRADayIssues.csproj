@@ -6,15 +6,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-<<<<<<< HEAD
-=======
+    <None Remove="nlog.config" />
     <None Remove="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="nlog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="3.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
->>>>>>> feature/Week2Day1
     <PackageReference Include="RestSharp" Version="106.11.4" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
@@ -22,8 +26,6 @@
     </PackageReference>
   </ItemGroup>
 
-<<<<<<< HEAD
-=======
   <ItemGroup>
     <Page Include="stylecop.json" />
   </ItemGroup>
@@ -33,5 +35,4 @@
     <ProjectReference Include="..\JiraDayIssues.Service\JiraDayIssues.Service.csproj" />
   </ItemGroup>
 
->>>>>>> feature/Week2Day1
 </Project>

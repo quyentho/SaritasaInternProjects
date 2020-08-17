@@ -47,19 +47,7 @@
 
             List<IRestResponse> worklogsResponses = this.MakeWorklogsRequest(issuesResponse);
 
-            //this.DisplayResponse(issuesResponse);
-
-            this.DisplayWorlogs(worklogsResponses);
-        }
-
-        private void DisplayWorlogs(List<IRestResponse> worklogsResponses)
-        {
-            var responseHandling = new ResponseHandling();
-            foreach (var response in worklogsResponses)
-            {
-                ResponseObject worklog = JsonConvert.DeserializeObject<ResponseObject>(response.Content, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-                responseHandling.DisplayWorklog(worklog);
-            }
+            this.DisplayIssues(issuesResponse);
         }
 
         private List<IRestResponse> MakeWorklogsRequest(IRestResponse issuesResponse)
@@ -67,8 +55,10 @@
             var responseHandling = new ResponseHandling();
             ResponseObject responseObject = responseHandling.DeserializeResponse(issuesResponse);
 
+            List<Issue> issues = responseObject.Issues;
+
             var responseList = new List<IRestResponse>();
-            foreach (var issue in responseObject.Issues)
+            foreach (var issue in issues)
             {
                 var apiManipulation = new ApiManipulation();
                 IRestRequest request = apiManipulation.ConfigureGetWorklogRequest(issue.Id);
@@ -79,7 +69,7 @@
             return responseList;
         }
 
-        private void DisplayResponse(IRestResponse response)
+        private void DisplayIssues(IRestResponse response)
         {
             var responseHandling = new ResponseHandling();
             ResponseObject responseObject = responseHandling.DeserializeResponse(response);

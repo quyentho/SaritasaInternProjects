@@ -11,9 +11,12 @@ namespace JiraDayIssues.Model
     public class ResponseObject
     {
         /// <summary>
-        /// Gets or sets issues;
+        /// Gets or sets issues.
         /// </summary>
         [JsonProperty]
         public List<Issue> Issues { get; set; }
+
+        [JsonProperty("worklogs")]
+        public List<Worklog> Worklogs { get; set; }
     }
 }

@@ -1,8 +1,12 @@
 ﻿namespace JiraDayIssues.Service
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using JiraDayIssues.Model;
     using McMaster.Extensions.CommandLineUtils;
+    using Newtonsoft.Json;
+    using NLog;
     using RestSharp;
 
     /// <summary>
@@ -39,19 +43,51 @@
         {
             DateTime date = this.SetDateOption();
 
-            IRestResponse response = this.MakeRequest(date);
+            IRestResponse issuesResponse = this.MakeIssuesRequest(date);
 
-            this.DisplayResponse(response);
+            List<IRestResponse> worklogsResponses = this.MakeWorklogsRequest(issuesResponse);
+
+            //this.DisplayResponse(issuesResponse);
+
+            this.DisplayWorlogs(worklogsResponses);
+        }
+
+        private void DisplayWorlogs(List<IRestResponse> worklogsResponses)
+        {
+            var responseHandling = new ResponseHandling();
+            foreach (var response in worklogsResponses)
+            {
+                ResponseObject worklog = JsonConvert.DeserializeObject<ResponseObject>(response.Content, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                responseHandling.DisplayWorklog(worklog);
+            }
+        }
+
+        private List<IRestResponse> MakeWorklogsRequest(IRestResponse issuesResponse)
+        {
+            var responseHandling = new ResponseHandling();
+            ResponseObject responseObject = responseHandling.DeserializeResponse(issuesResponse);
+
+            var responseList = new List<IRestResponse>();
+            foreach (var issue in responseObject.Issues)
+            {
+                var apiManipulation = new ApiManipulation();
+                IRestRequest request = apiManipulation.ConfigureGetWorklogRequest(issue.Id);
+                IRestResponse response = apiManipulation.GetResponse(request, this.UserNameOption, this.TokenOption);
+                responseList.Add(response);
+            }
+
+            return responseList;
         }
 
         private void DisplayResponse(IRestResponse response)
         {
             var responseHandling = new ResponseHandling();
-            var responseObject = responseHandling.DeserializeResponse(response);
+            ResponseObject responseObject = responseHandling.DeserializeResponse(response);
+
             responseHandling.DisplayResponse(responseObject);
         }
 
-        private IRestResponse MakeRequest(DateTime date)
+        private IRestResponse MakeIssuesRequest(DateTime date)
         {
             IApiManipulation apiManipulation = new ApiManipulation();
             apiManipulation = new CacheDecorator(apiManipulation);

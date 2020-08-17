@@ -33,6 +33,15 @@ namespace JiraDayIssues.Service
             return request;
         }
 
+        public IRestRequest ConfigureGetWorklogRequest(string issueId)
+        {
+            IRestRequest request = this.apiManipulation.ConfigureGetWorklogRequest(issueId);
+
+            this.PostProcess(request);
+
+            return request;
+        }
+
         /// <summary>
         /// Get response after request with authentication.
         /// </summary>

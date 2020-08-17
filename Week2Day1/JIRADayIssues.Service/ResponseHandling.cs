@@ -37,9 +37,20 @@ namespace JiraDayIssues.Service
                 Console.WriteLine(string.Format("{0,40} {1:0h}/{2:0h}", issue.Field.Summary, timeSpent.TotalHours, estimateTime.TotalHours));
                 Console.WriteLine("\n");
             }
+
             if (responseObject.Issues.Count > 0)
             {
                 Console.WriteLine(string.Format("Total {0:0h} {1:0m}", totalTime.Hours, totalTime.Minutes));
+            }
+        }
+
+        public void DisplayWorklog(ResponseObject responseObject)
+        {
+            foreach (var worklog in responseObject.Worklogs)
+            {
+                Console.WriteLine($"Comment: {worklog.Comment}");
+                Console.WriteLine($"Time spent: {worklog.TimeSpent}");
+                Console.WriteLine();
             }
         }
     }

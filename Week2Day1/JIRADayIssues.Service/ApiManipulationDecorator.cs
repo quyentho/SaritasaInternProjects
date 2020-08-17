@@ -24,9 +24,9 @@ namespace JiraDayIssues.Service
         /// </summary>
         /// <param name="date">Date to query on request to API.</param>
         /// <returns>Instance of IRequest.</returns>
-        public IRestRequest ConfigureRequest(DateTime date)
+        public IRestRequest ConfigureGetIssuesRequest(DateTime date)
         {
-            IRestRequest request = this.apiManipulation.ConfigureRequest(date);
+            IRestRequest request = this.apiManipulation.ConfigureGetIssuesRequest(date);
 
             this.PostProcess(request);
 

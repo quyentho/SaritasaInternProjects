@@ -56,7 +56,7 @@
             IApiManipulation apiManipulation = new ApiManipulation();
             apiManipulation = new CacheDecorator(apiManipulation);
 
-            IRestRequest request = apiManipulation.ConfigureRequest(date);
+            IRestRequest request = apiManipulation.ConfigureGetIssuesRequest(date);
             IRestResponse response = apiManipulation.GetResponse(request, this.UserNameOption, this.TokenOption);
             return response;
         }

@@ -11,11 +11,18 @@ namespace JiraDayIssues.Service
     public interface IApiManipulation
     {
         /// <summary>
-        /// Add parameters for resquest.
+        /// Configure request to get issues on specific date.
         /// </summary>
-        /// <param name="date">Date to query on request to API.</param>
-        /// <returns>Instance of IRequest.</returns>
-        IRestRequest ConfigureRequest(DateTime date);
+        /// <param name="date">Date to get issues.</param>
+        /// <returns>Request after config.</returns>
+        IRestRequest ConfigureGetIssuesRequest(DateTime date);
+
+        /// <summary>
+        /// Configure request to get worklogs on specific issue.
+        /// </summary>
+        /// <param name="issueId">Issue to get worklogs.</param>
+        /// <returns>Request after config.</returns>
+        IRestRequest ConfigureGetWorklogRequest(string issueId);
 
         /// <summary>
         /// Get response after request with authentication.

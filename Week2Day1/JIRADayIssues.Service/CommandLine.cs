@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Threading.Tasks;
     using JiraDayIssues.Model;
     using McMaster.Extensions.CommandLineUtils;
     using Newtonsoft.Json;
@@ -37,36 +38,15 @@
         public string TokenOption { get; set; }
 
         /// <summary>
-        /// Execute command.
+        /// Execute command asynchronously.
         /// </summary>
-        public void OnExecute()
+        /// <returns>Task represent asynchronous process.</returns>
+        public async Task OnExecuteAsync()
         {
             DateTime date = this.SetDateOption();
 
-            IRestResponse issuesResponse = this.MakeIssuesRequest(date);
-
-            List<IRestResponse> worklogsResponses = this.MakeWorklogsRequest(issuesResponse);
-
+            IRestResponse issuesResponse = await this.MakeIssuesRequestAsync(date);
             this.DisplayIssues(issuesResponse);
-        }
-
-        private List<IRestResponse> MakeWorklogsRequest(IRestResponse issuesResponse)
-        {
-            var responseHandling = new ResponseHandling();
-            ResponseObject responseObject = responseHandling.DeserializeResponse(issuesResponse);
-
-            List<Issue> issues = responseObject.Issues;
-
-            var responseList = new List<IRestResponse>();
-            foreach (var issue in issues)
-            {
-                var apiManipulation = new ApiManipulation();
-                IRestRequest request = apiManipulation.ConfigureGetWorklogRequest(issue.Id);
-                IRestResponse response = apiManipulation.GetResponse(request, this.UserNameOption, this.TokenOption);
-                responseList.Add(response);
-            }
-
-            return responseList;
         }
 
         private void DisplayIssues(IRestResponse response)
@@ -77,13 +57,14 @@
             responseHandling.DisplayResponse(responseObject);
         }
 
-        private IRestResponse MakeIssuesRequest(DateTime date)
+        private async Task<IRestResponse> MakeIssuesRequestAsync(DateTime date)
         {
             IApiManipulation apiManipulation = new ApiManipulation();
             apiManipulation = new CacheDecorator(apiManipulation);
 
             IRestRequest request = apiManipulation.ConfigureGetIssuesRequest(date);
-            IRestResponse response = apiManipulation.GetResponse(request, this.UserNameOption, this.TokenOption);
+            Console.WriteLine("Pending....");
+            IRestResponse response = await apiManipulation.GetResponseAsync(request, this.UserNameOption, this.TokenOption);
             return response;
         }
 

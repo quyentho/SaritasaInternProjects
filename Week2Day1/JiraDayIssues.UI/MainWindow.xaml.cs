@@ -27,16 +27,16 @@ namespace JiraDayIssues.UI
         private List<Issue> issues ;
         private ApiManipulation apiManipulation = new ApiManipulation();
         private ResponseHandling responseHandling = new ResponseHandling();
-        private string userName;
-
+        
+        private string username;
         private string token;
 
         public MainWindow()
         {
-            userName = Prompt.GetString("Please provide your username:");
+            username = Prompt.GetString("Please provide your username:");
 
             token = Prompt.GetPassword("Please provide your token:");
-            if (string.IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(token))
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(token))
             {
                 MessageBox.Show("You must provide correct username and token to use application.");
                 Environment.Exit(0);
@@ -45,30 +45,58 @@ namespace JiraDayIssues.UI
             InitializeComponent();
         }
 
-        private void IssuesCell_MouseUp(object sender, RoutedEventArgs e)
+        private async void IssuesCell_MouseUp(object sender, RoutedEventArgs e)
         {
-            var index = IssuesGrid.SelectedIndex;
+            IRestResponse response = await RequestToGetWorklogs();
 
-            IRestRequest request = apiManipulation.ConfigureGetWorklogRequest(issues[index].Id);
-            IRestResponse response = apiManipulation.GetResponse(request, userName, token);
             ResponseObject responseObject = responseHandling.DeserializeResponse(response);
+            
+            DisplayWorklogs(responseObject);
+        }
 
-
+        private void DisplayWorklogs(ResponseObject responseObject)
+        {
             List<Worklog> worklogs = responseObject.Worklogs;
 
             WorklogsGrid.ItemsSource = worklogs;
         }
 
-        private void DateTimePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        private async Task<IRestResponse> RequestToGetWorklogs()
         {
-            IRestRequest request = apiManipulation.ConfigureGetIssuesRequest(DateTimePicker.SelectedDate.GetValueOrDefault());
-            IRestResponse response = apiManipulation.GetResponse(request, userName, token);
+            var index = IssuesGrid.SelectedIndex;
+
+            IRestRequest request = apiManipulation.ConfigureGetWorklogsRequest(issues[index].Id);
+
+            LoadingLabel.Visibility = Visibility.Visible;
+            IRestResponse response = await apiManipulation.GetResponseAsync(request, username, token);
+            LoadingLabel.Visibility = Visibility.Hidden;
+            return response;
+        }
+
+        private async void DateTimePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            IRestResponse response = await RequestToGetIssues();
 
             var responseObject = responseHandling.DeserializeResponse(response);
+            
+            DisplayIssues(responseObject);
+        }
 
+        private void DisplayIssues(ResponseObject responseObject)
+        {
             issues = responseObject.Issues;
 
             IssuesGrid.ItemsSource = issues;
+        }
+
+        private async Task<IRestResponse> RequestToGetIssues()
+        {
+            IRestRequest request = apiManipulation.ConfigureGetIssuesRequest(DateTimePicker.SelectedDate.GetValueOrDefault());
+
+            LoadingLabel.Visibility = Visibility.Visible;
+            IRestResponse response = await apiManipulation.GetResponseAsync(request, username, token);
+            LoadingLabel.Visibility = Visibility.Hidden;
+            return response;
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)

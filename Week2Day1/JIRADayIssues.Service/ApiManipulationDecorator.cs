@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using RestSharp;
 
 namespace JiraDayIssues.Service
@@ -33,9 +34,10 @@ namespace JiraDayIssues.Service
             return request;
         }
 
-        public IRestRequest ConfigureGetWorklogRequest(string issueId)
+        /// <inheritdoc/>
+        public IRestRequest ConfigureGetWorklogsRequest(string issueId)
         {
-            IRestRequest request = this.apiManipulation.ConfigureGetWorklogRequest(issueId);
+            IRestRequest request = this.apiManipulation.ConfigureGetWorklogsRequest(issueId);
 
             this.PostProcess(request);
 
@@ -49,9 +51,9 @@ namespace JiraDayIssues.Service
         /// <param name="username">Username to authentication.</param>
         /// <param name="token">Token to authentication.</param>
         /// <returns>Instance of IRestResponse.</returns>
-        public IRestResponse GetResponse(IRestRequest request, string username, string token)
+        public async Task<IRestResponse> GetResponseAsync(IRestRequest request, string username, string token)
         {
-            IRestResponse response = this.apiManipulation.GetResponse(request, username, token);
+            IRestResponse response = await this.apiManipulation.GetResponseAsync(request, username, token);
 
             this.PostProcess(response);
 

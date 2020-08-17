@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using RestSharp;
 
 namespace JiraDayIssues.Service
@@ -22,7 +23,7 @@ namespace JiraDayIssues.Service
         /// </summary>
         /// <param name="issueId">Issue to get worklogs.</param>
         /// <returns>Request after config.</returns>
-        IRestRequest ConfigureGetWorklogRequest(string issueId);
+        IRestRequest ConfigureGetWorklogsRequest(string issueId);
 
         /// <summary>
         /// Get response after request with authentication.
@@ -31,6 +32,6 @@ namespace JiraDayIssues.Service
         /// <param name="username">Username to authentication.</param>
         /// <param name="token">Token to authentication.</param>
         /// <returns>Instance of IRestResponse.</returns>
-        IRestResponse GetResponse(IRestRequest request, string username, string token);
+        Task<IRestResponse> GetResponseAsync(IRestRequest request, string username, string token);
     }
 }

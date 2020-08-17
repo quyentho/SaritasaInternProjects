@@ -40,6 +40,7 @@
                     </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
+            <Label x:Name="LoadingLabel" Content="Loading..." Visibility="Hidden" HorizontalAlignment="Left" Margin="648,27,0,0" VerticalAlignment="Top" Width="132" FontWeight="Bold" FontSize="20" Background="#00000000" Foreground="#FFDA1515" />
         </Grid>
 
     </Grid>

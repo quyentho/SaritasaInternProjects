@@ -5,6 +5,7 @@
     using System.Globalization;
     using System.Linq;
     using System.Text;
+    using System.Threading.Tasks;
     using JiraDayIssues.Model;
     using Newtonsoft.Json;
     using NLog;
@@ -34,7 +35,7 @@
         /// </summary>
         /// <param name="issueId">Issue to get worklogs.</param>
         /// <returns>Request after config.</returns>
-        public IRestRequest ConfigureGetWorklogRequest(string issueId)
+        public IRestRequest ConfigureGetWorklogsRequest(string issueId)
         {
             var request = new RestRequest("/rest/api/2/issue/{issueId}/worklog", Method.GET);
             request.AddUrlSegment("issueId", issueId);
@@ -49,13 +50,13 @@
         /// <param name="username">Username to authentication.</param>
         /// <param name="token">Token to authentication.</param>
         /// <returns>Response object.</returns>
-        public IRestResponse GetResponse(IRestRequest request, string username, string token)
+        public async Task<IRestResponse> GetResponseAsync(IRestRequest request, string username, string token)
         {
             var client = new RestClient($"https://saritasa.atlassian.net");
             client.Timeout = -1;
             client.Authenticator = new HttpBasicAuthenticator(username, token);
 
-            return client.Execute(request);
+            return await client.ExecuteAsync(request);
         }
     }
 }

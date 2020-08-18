@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="ResponseHandling.cs" company="Saritasa, LLC">
+// copyright Saritasa, LLC
+// </copyright>
+
+using System;
 using System.Linq;
 using JiraDayIssues.Model;
 using Newtonsoft.Json;

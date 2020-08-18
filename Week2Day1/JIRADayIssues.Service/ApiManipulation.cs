@@ -1,4 +1,8 @@
-﻿namespace JiraDayIssues.Service
+﻿// <copyright file="ApiManipulation.cs" company="Saritasa, LLC">
+// copyright Saritasa, LLC
+// </copyright>
+
+namespace JiraDayIssues.Service
 {
     using System;
     using System.Globalization;
@@ -38,16 +42,6 @@
             client.Authenticator = new HttpBasicAuthenticator(username, token);
 
             return await client.ExecuteAsync(request, cancellationToken);
-        }
-
-        // TODO: Refactor to not violate DRY.
-        public async Task<IRestResponse> GetResponseAsync(IRestRequest request, string username, string token)
-        {
-            var client = new RestClient($"https://saritasa.atlassian.net");
-            client.Timeout = -1;
-            client.Authenticator = new HttpBasicAuthenticator(username, token);
-
-            return await client.ExecuteAsync(request);
         }
     }
 }

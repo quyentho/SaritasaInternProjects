@@ -1,10 +1,14 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using RestSharp;
+﻿// <copyright file="ApiManipulationDecorator.cs" company="Saritasa, LLC">
+// copyright Saritasa, LLC
+// </copyright>
 
 namespace JiraDayIssues.Service
 {
+    using System;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using RestSharp;
+
     /// <summary>
     /// Decorator for ApiManipulation class.
     /// </summary>
@@ -45,17 +49,6 @@ namespace JiraDayIssues.Service
         public async Task<IRestResponse> GetResponseAsync(IRestRequest request, string username, string token, CancellationToken cancellationToken)
         {
             IRestResponse response = await this.apiManipulation.GetResponseAsync(request, username, token, cancellationToken);
-
-            this.PostProcess(response);
-
-            return response;
-        }
-
-        // TODO: Refactor to not violate DRY.
-        /// <inheritdoc/>
-        public async Task<IRestResponse> GetResponseAsync(IRestRequest request, string username, string token)
-        {
-            IRestResponse response = await this.apiManipulation.GetResponseAsync(request, username, token);
 
             this.PostProcess(response);
 

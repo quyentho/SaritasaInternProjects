@@ -1,9 +1,12 @@
-﻿namespace JiraDayIssues.Service
-{
-    using System;
-    using NLog;
-    using RestSharp;
+﻿// <copyright file="CacheDecorator.cs" company="Saritasa, LLC">
+// copyright Saritasa, LLC
+// </copyright>
 
+using NLog;
+using RestSharp;
+
+namespace JiraDayIssues.Service
+{
     /// <summary>
     /// Decorator for caching service.
     /// </summary>

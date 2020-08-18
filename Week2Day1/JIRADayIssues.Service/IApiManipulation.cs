@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="IApiManipulation.cs" company="Saritasa, LLC">
+// copyright Saritasa, LLC
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
@@ -35,14 +39,5 @@ namespace JiraDayIssues.Service
         /// <param name="cancellationToken">Token to cancel request.</param>
         /// <returns>Instance of IRestResponse.</returns>
         Task<IRestResponse> GetResponseAsync(IRestRequest request, string username, string token, CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Get response after request with authentication.
-        /// </summary>
-        /// <param name="request">Request configured.</param>
-        /// <param name="username">Username to authentication.</param>
-        /// <param name="token">Token to authentication.</param>
-        /// <returns>Instance of IRestResponse.</returns>
-        Task<IRestResponse> GetResponseAsync(IRestRequest request, string username, string token);
     }
 }

@@ -1,16 +1,19 @@
-﻿namespace JiraDayIssues.Service
-{
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using JiraDayIssues.Model;
-    using McMaster.Extensions.CommandLineUtils;
-    using Newtonsoft.Json;
-    using NLog;
-    using RestSharp;
+﻿// <copyright file="CommandLine.cs" company="Saritasa, LLC">
+// copyright Saritasa, LLC
+// </copyright>
 
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.Threading;
+using System.Threading.Tasks;
+using JiraDayIssues.Model;
+using McMaster.Extensions.CommandLineUtils;
+using Newtonsoft.Json;
+using NLog;
+using RestSharp;
+
+namespace JiraDayIssues.Service
+{
     /// <summary>
     /// Command line manipulation.
     /// </summary>
@@ -66,14 +69,14 @@
 
             IRestRequest request = apiManipulation.ConfigureIssuesRequest(date);
 
-            CancellationTokenSource cancellationToken = CheckCancelRequest();
+            CancellationTokenSource cancellationToken = this.CheckCancelRequest();
 
             IRestResponse response = await apiManipulation.GetResponseAsync(request, this.UserNameOption, this.TokenOption, cancellationToken.Token);
 
             return response;
         }
 
-        private static CancellationTokenSource CheckCancelRequest()
+        private CancellationTokenSource CheckCancelRequest()
         {
             Console.WriteLine("Pending....");
             Console.WriteLine("Press ESC to cancel.");

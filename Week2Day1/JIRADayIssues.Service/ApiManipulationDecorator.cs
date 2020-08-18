@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using RestSharp;
 
@@ -20,11 +21,7 @@ namespace JiraDayIssues.Service
             this.apiManipulation = apiManipulation;
         }
 
-        /// <summary>
-        /// Add parameters for resquest.
-        /// </summary>
-        /// <param name="date">Date to query on request to API.</param>
-        /// <returns>Instance of IRequest.</returns>
+        /// <inheritdoc/>
         public IRestRequest ConfigureIssuesRequest(DateTime date)
         {
             IRestRequest request = this.apiManipulation.ConfigureIssuesRequest(date);
@@ -44,13 +41,18 @@ namespace JiraDayIssues.Service
             return request;
         }
 
-        /// <summary>
-        /// Get response after request with authentication.
-        /// </summary>
-        /// <param name="request">Request configured.</param>
-        /// <param name="username">Username to authentication.</param>
-        /// <param name="token">Token to authentication.</param>
-        /// <returns>Instance of IRestResponse.</returns>
+        /// <inheritdoc/>
+        public async Task<IRestResponse> GetResponseAsync(IRestRequest request, string username, string token, CancellationToken cancellationToken)
+        {
+            IRestResponse response = await this.apiManipulation.GetResponseAsync(request, username, token, cancellationToken);
+
+            this.PostProcess(response);
+
+            return response;
+        }
+
+        // TODO: Refactor to not violate DRY.
+        /// <inheritdoc/>
         public async Task<IRestResponse> GetResponseAsync(IRestRequest request, string username, string token)
         {
             IRestResponse response = await this.apiManipulation.GetResponseAsync(request, username, token);

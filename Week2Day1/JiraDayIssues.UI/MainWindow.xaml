@@ -44,8 +44,8 @@
                     </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <Label x:Name="LoadingLabel" Content="Loading..." Visibility="Visible" HorizontalAlignment="Left" Margin="542,25,0,0" VerticalAlignment="Top" Width="132" FontWeight="Bold" FontSize="20" Background="#00000000" Foreground="#FFDA1515" />
-            <Button Content="Cancel" HorizontalAlignment="Left" Margin="679,37,0,0" VerticalAlignment="Top" Width="51" IsEnabled="False" Click="Button_Click"/>
+            <Label x:Name="loadingLabel" Content="Loading..." Visibility="Hidden" HorizontalAlignment="Left" Margin="542,25,0,0" VerticalAlignment="Top" Width="132" FontWeight="Bold" FontSize="20" Background="#00000000" Foreground="#FFDA1515" />
+            <Button Content="Cancel" x:Name="cancelButton" HorizontalAlignment="Left" Margin="679,37,0,0" VerticalAlignment="Top" Width="51" IsEnabled="False" Click="Button_Click"/>
         </Grid>
     </Grid>
 </Window>

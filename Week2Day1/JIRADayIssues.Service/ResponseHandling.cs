@@ -7,7 +7,7 @@ using RestSharp;
 namespace JiraDayIssues.Service
 {
     /// <summary>
-    /// Converts response from API requests to appropriate value.
+    /// Converts response from API requests to appropriate value and display.
     /// </summary>
     public class ResponseHandling
     {

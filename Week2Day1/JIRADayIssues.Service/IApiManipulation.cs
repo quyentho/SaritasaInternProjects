@@ -1,5 +1,5 @@
 ﻿// <copyright file="IApiManipulation.cs" company="Saritasa, LLC">
-// copyright Saritasa, LLC
+// copyright (c) Saritasa, LLC
 // </copyright>
 
 using System;

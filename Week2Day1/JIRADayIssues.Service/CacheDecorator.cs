@@ -1,5 +1,5 @@
 ﻿// <copyright file="CacheDecorator.cs" company="Saritasa, LLC">
-// copyright Saritasa, LLC
+// copyright (c) Saritasa, LLC
 // </copyright>
 
 using NLog;

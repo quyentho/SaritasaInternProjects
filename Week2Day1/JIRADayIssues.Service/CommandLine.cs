@@ -1,5 +1,5 @@
 ﻿// <copyright file="CommandLine.cs" company="Saritasa, LLC">
-// copyright Saritasa, LLC
+// copyright (c) Saritasa, LLC
 // </copyright>
 
 using System;
@@ -64,7 +64,7 @@ namespace JiraDayIssues.Service
 
         private async Task<IRestResponse> MakeIssuesRequestAsync(DateTime date)
         {
-            IApiManipulation apiManipulation = new ApiManipulation();
+            IApiManipulation apiManipulation = new ApiManipulation(new RestClient());
             apiManipulation = new CacheDecorator(apiManipulation);
 
             IRestRequest request = apiManipulation.ConfigureIssuesRequest(date);

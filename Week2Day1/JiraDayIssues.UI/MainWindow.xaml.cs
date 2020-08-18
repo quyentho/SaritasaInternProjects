@@ -5,19 +5,10 @@ using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace JiraDayIssues.UI
 {
@@ -27,7 +18,7 @@ namespace JiraDayIssues.UI
     public partial class MainWindow : Window
     {
         private List<Issue> issues;
-        private ApiManipulation apiManipulation = new ApiManipulation();
+        private ApiManipulation apiManipulation;
         private ResponseHandling responseHandling = new ResponseHandling();
         CancellationTokenSource cancellationToken;
 
@@ -36,6 +27,8 @@ namespace JiraDayIssues.UI
 
         public MainWindow()
         {
+            this.apiManipulation = new ApiManipulation(new RestClient());
+
             username = Prompt.GetString("Please provide your username:");
             token = Prompt.GetPassword("Please provide your token:");
 

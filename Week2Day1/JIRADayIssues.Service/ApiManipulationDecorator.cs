@@ -1,5 +1,5 @@
 ﻿// <copyright file="ApiManipulationDecorator.cs" company="Saritasa, LLC">
-// copyright Saritasa, LLC
+// copyright (c) Saritasa, LLC
 // </copyright>
 
 namespace JiraDayIssues.Service

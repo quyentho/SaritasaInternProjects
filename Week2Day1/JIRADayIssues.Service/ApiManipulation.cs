@@ -1,5 +1,5 @@
 ﻿// <copyright file="ApiManipulation.cs" company="Saritasa, LLC">
-// copyright Saritasa, LLC
+// copyright (c) Saritasa, LLC
 // </copyright>
 
 namespace JiraDayIssues.Service
@@ -16,6 +16,17 @@ namespace JiraDayIssues.Service
     /// </summary>
     public class ApiManipulation : IApiManipulation
     {
+        private readonly RestClient client;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ApiManipulation"/> class.
+        /// </summary>
+        /// <param name="client">RestClient instance.</param>
+        public ApiManipulation(RestClient client)
+        {
+            this.client = client;
+        }
+
         /// <inheritdoc/>
         public IRestRequest ConfigureIssuesRequest(DateTime date)
         {
@@ -37,11 +48,11 @@ namespace JiraDayIssues.Service
         /// <inheritdoc/>
         public async Task<IRestResponse> GetResponseAsync(IRestRequest request, string username, string token, CancellationToken cancellationToken)
         {
-            var client = new RestClient($"https://saritasa.atlassian.net");
-            client.Timeout = -1;
-            client.Authenticator = new HttpBasicAuthenticator(username, token);
+            this.client.BaseUrl = new Uri("https://saritasa.atlassian.net");
+            this.client.Timeout = -1;
+            this.client.Authenticator = new HttpBasicAuthenticator(username, token);
 
-            return await client.ExecuteAsync(request, cancellationToken);
+            return await this.client.ExecuteAsync(request, cancellationToken);
         }
     }
 }

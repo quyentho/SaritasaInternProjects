@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Threading;
     using System.Threading.Tasks;
     using JiraDayIssues.Model;
     using McMaster.Extensions.CommandLineUtils;
@@ -64,9 +65,27 @@
             apiManipulation = new CacheDecorator(apiManipulation);
 
             IRestRequest request = apiManipulation.ConfigureIssuesRequest(date);
-            Console.WriteLine("Pending....");
-            IRestResponse response = await apiManipulation.GetResponseAsync(request, this.UserNameOption, this.TokenOption);
+
+            CancellationTokenSource cancellationToken = CheckCancelRequest();
+
+            IRestResponse response = await apiManipulation.GetResponseAsync(request, this.UserNameOption, this.TokenOption, cancellationToken.Token);
+
             return response;
+        }
+
+        private static CancellationTokenSource CheckCancelRequest()
+        {
+            Console.WriteLine("Pending....");
+            Console.WriteLine("Press ESC to cancel.");
+            bool isCancel = Console.ReadKey(true).Key == ConsoleKey.Escape;
+            CancellationTokenSource cancellationToken = new CancellationTokenSource();
+            if (isCancel == true)
+            {
+                cancellationToken.Cancel();
+                Console.WriteLine("Request canceled.");
+            }
+
+            return cancellationToken;
         }
 
         private DateTime SetDateOption()

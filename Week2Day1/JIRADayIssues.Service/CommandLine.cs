@@ -46,6 +46,7 @@
             DateTime date = this.SetDateOption();
 
             IRestResponse issuesResponse = await this.MakeIssuesRequestAsync(date);
+
             this.DisplayIssues(issuesResponse);
         }
 
@@ -62,7 +63,7 @@
             IApiManipulation apiManipulation = new ApiManipulation();
             apiManipulation = new CacheDecorator(apiManipulation);
 
-            IRestRequest request = apiManipulation.ConfigureGetIssuesRequest(date);
+            IRestRequest request = apiManipulation.ConfigureIssuesRequest(date);
             Console.WriteLine("Pending....");
             IRestResponse response = await apiManipulation.GetResponseAsync(request, this.UserNameOption, this.TokenOption);
             return response;

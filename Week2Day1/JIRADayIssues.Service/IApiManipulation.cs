@@ -16,14 +16,14 @@ namespace JiraDayIssues.Service
         /// </summary>
         /// <param name="date">Date to get issues.</param>
         /// <returns>Request after config.</returns>
-        IRestRequest ConfigureGetIssuesRequest(DateTime date);
+        IRestRequest ConfigureIssuesRequest(DateTime date);
 
         /// <summary>
         /// Configure request to get worklogs on specific issue.
         /// </summary>
         /// <param name="issueId">Issue to get worklogs.</param>
         /// <returns>Request after config.</returns>
-        IRestRequest ConfigureGetWorklogsRequest(string issueId);
+        IRestRequest ConfigureWorklogsRequest(string issueId);
 
         /// <summary>
         /// Get response after request with authentication.

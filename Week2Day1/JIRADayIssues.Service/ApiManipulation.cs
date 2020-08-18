@@ -22,7 +22,7 @@
         /// </summary>
         /// <param name="date">Date to get issues.</param>
         /// <returns>Request after config.</returns>
-        public IRestRequest ConfigureGetIssuesRequest(DateTime date)
+        public IRestRequest ConfigureIssuesRequest(DateTime date)
         {
             var request = new RestRequest("/rest/api/2/search", Method.GET);
             request.AddParameter("jql", $"worklogDate = {date.ToString("yyyy-MM-dd").ToString(CultureInfo.CreateSpecificCulture("en-US"))} AND worklogAuthor = IvanKozhin");
@@ -35,7 +35,7 @@
         /// </summary>
         /// <param name="issueId">Issue to get worklogs.</param>
         /// <returns>Request after config.</returns>
-        public IRestRequest ConfigureGetWorklogsRequest(string issueId)
+        public IRestRequest ConfigureWorklogsRequest(string issueId)
         {
             var request = new RestRequest("/rest/api/2/issue/{issueId}/worklog", Method.GET);
             request.AddUrlSegment("issueId", issueId);

@@ -27,6 +27,12 @@ namespace JiraDayIssues.Service
         /// <param name="responseObject">Object to display.</param>
         public void DisplayResponse(ResponseObject responseObject)
         {
+            if (responseObject.Issues == null)
+            {
+                Console.WriteLine("No issues found.");
+                return;
+            }
+
             TimeSpan totalTime = TimeSpan.FromSeconds(responseObject.Issues.Sum(s => s.Field.TimeSpent));
 
             foreach (var issue in responseObject.Issues)
@@ -38,20 +44,7 @@ namespace JiraDayIssues.Service
                 Console.WriteLine("\n");
             }
 
-            if (responseObject.Issues.Count > 0)
-            {
-                Console.WriteLine(string.Format("Total {0:0h} {1:0m}", totalTime.Hours, totalTime.Minutes));
-            }
-        }
-
-        public void DisplayWorklog(ResponseObject responseObject)
-        {
-            foreach (var worklog in responseObject.Worklogs)
-            {
-                Console.WriteLine($"Comment: {worklog.Comment}");
-                Console.WriteLine($"Time spent: {worklog.TimeSpent}");
-                Console.WriteLine();
-            }
+            Console.WriteLine(string.Format("Total {0:0h} {1:0m}", totalTime.Hours, totalTime.Minutes));
         }
     }
 }

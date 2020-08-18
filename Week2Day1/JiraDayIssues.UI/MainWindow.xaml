@@ -7,11 +7,15 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.ColumnSpan="2">
             <DatePicker x:Name="DateTimePicker" HorizontalAlignment="Center" Margin="0,33,0,0" VerticalAlignment="Top" Width="268" Height="24" SelectedDateFormat="Short"
                 SelectedDateChanged="DateTimePicker_SelectedDateChanged"/>
         </Grid>
-        <Grid Margin="0,0,10,0">
+        <Grid Margin="0,0,10,0" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
@@ -40,8 +44,8 @@
                     </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <Label x:Name="LoadingLabel" Content="Loading..." Visibility="Hidden" HorizontalAlignment="Left" Margin="648,27,0,0" VerticalAlignment="Top" Width="132" FontWeight="Bold" FontSize="20" Background="#00000000" Foreground="#FFDA1515" />
+            <Label x:Name="LoadingLabel" Content="Loading..." Visibility="Visible" HorizontalAlignment="Left" Margin="542,25,0,0" VerticalAlignment="Top" Width="132" FontWeight="Bold" FontSize="20" Background="#00000000" Foreground="#FFDA1515" />
+            <Button Content="Cancel" HorizontalAlignment="Left" Margin="679,37,0,0" VerticalAlignment="Top" Width="51" IsEnabled="False" Click="Button_Click"/>
         </Grid>
-
     </Grid>
 </Window>

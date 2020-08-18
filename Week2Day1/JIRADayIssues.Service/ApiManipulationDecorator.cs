@@ -25,9 +25,9 @@ namespace JiraDayIssues.Service
         /// </summary>
         /// <param name="date">Date to query on request to API.</param>
         /// <returns>Instance of IRequest.</returns>
-        public IRestRequest ConfigureGetIssuesRequest(DateTime date)
+        public IRestRequest ConfigureIssuesRequest(DateTime date)
         {
-            IRestRequest request = this.apiManipulation.ConfigureGetIssuesRequest(date);
+            IRestRequest request = this.apiManipulation.ConfigureIssuesRequest(date);
 
             this.PostProcess(request);
 
@@ -35,9 +35,9 @@ namespace JiraDayIssues.Service
         }
 
         /// <inheritdoc/>
-        public IRestRequest ConfigureGetWorklogsRequest(string issueId)
+        public IRestRequest ConfigureWorklogsRequest(string issueId)
         {
-            IRestRequest request = this.apiManipulation.ConfigureGetWorklogsRequest(issueId);
+            IRestRequest request = this.apiManipulation.ConfigureWorklogsRequest(issueId);
 
             this.PostProcess(request);
 

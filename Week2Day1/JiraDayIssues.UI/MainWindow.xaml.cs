@@ -34,8 +34,8 @@ namespace JiraDayIssues.UI
         public MainWindow()
         {
             username = Prompt.GetString("Please provide your username:");
-
             token = Prompt.GetPassword("Please provide your token:");
+            
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(token))
             {
                 MessageBox.Show("You must provide correct username and token to use application.");
@@ -47,7 +47,7 @@ namespace JiraDayIssues.UI
 
         private async void IssuesCell_MouseUp(object sender, RoutedEventArgs e)
         {
-            IRestResponse response = await RequestToGetWorklogs();
+            IRestResponse response = await GetWorklogsResponse();
 
             ResponseObject responseObject = responseHandling.DeserializeResponse(response);
             
@@ -61,11 +61,11 @@ namespace JiraDayIssues.UI
             WorklogsGrid.ItemsSource = worklogs;
         }
 
-        private async Task<IRestResponse> RequestToGetWorklogs()
+        private async Task<IRestResponse> GetWorklogsResponse()
         {
             var index = IssuesGrid.SelectedIndex;
 
-            IRestRequest request = apiManipulation.ConfigureGetWorklogsRequest(issues[index].Id);
+            IRestRequest request = apiManipulation.ConfigureWorklogsRequest(issues[index].Id);
 
             LoadingLabel.Visibility = Visibility.Visible;
             IRestResponse response = await apiManipulation.GetResponseAsync(request, username, token);
@@ -75,7 +75,7 @@ namespace JiraDayIssues.UI
 
         private async void DateTimePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            IRestResponse response = await RequestToGetIssues();
+            IRestResponse response = await GetIssuesResponse();
 
             var responseObject = responseHandling.DeserializeResponse(response);
             
@@ -89,19 +89,20 @@ namespace JiraDayIssues.UI
             IssuesGrid.ItemsSource = issues;
         }
 
-        private async Task<IRestResponse> RequestToGetIssues()
+        private async Task<IRestResponse> GetIssuesResponse()
         {
-            IRestRequest request = apiManipulation.ConfigureGetIssuesRequest(DateTimePicker.SelectedDate.GetValueOrDefault());
+            IRestRequest request = apiManipulation.ConfigureIssuesRequest(DateTimePicker.SelectedDate.GetValueOrDefault());
 
             LoadingLabel.Visibility = Visibility.Visible;
             IRestResponse response = await apiManipulation.GetResponseAsync(request, username, token);
             LoadingLabel.Visibility = Visibility.Hidden;
+           
             return response;
         }
 
-        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+
         }
     }
 }

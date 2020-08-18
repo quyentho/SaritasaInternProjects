@@ -1,8 +1,7 @@
 {
   "profiles": {
     "JiraDayIssues.UI": {
-      "commandName": "Project",
-      "commandLineArgs": "--username=quyen.tho@saritasa.com --token=muvykLqdTaYg3qbbdFmf37FE"
+      "commandName": "Project"
     }
   }
 }

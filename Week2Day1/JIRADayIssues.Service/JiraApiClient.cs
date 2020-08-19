@@ -19,27 +19,25 @@ namespace JiraDayIssues.Service
     /// </summary>
     public class JiraApiClient : IJiraApiClient
     {
-        private readonly RestClient _client;
+        private readonly RestClient _client = new RestClient();
 
-        private Uri _baseRequestUri = new Uri("https://saritasa.atlassian.net");
+        private readonly Uri _baseRequestUri = new Uri("https://saritasa.atlassian.net");
 
-        private string _username;
+        private readonly string _username;
 
-        private string _token;
+        private readonly string _token;
 
         private static Logger _logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JiraApiClient"/> class.
         /// </summary>
-        /// <param name="client">RestClient instance.</param>
         /// <param name="username">username to authentication.</param>
         /// <param name="token">token to authentication.</param>
-        public JiraApiClient(RestClient client, string username, string token)
+        public JiraApiClient(string username, string token)
         {
-            this._client = client;
-            this._username = username;
-            this._token = token;
+            _username = username;
+            _token = token;
         }
 
         /// <inheritdoc/>

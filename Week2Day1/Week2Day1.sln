@@ -3,15 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
-<<<<<<< HEAD
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JIRADayIssues", "JIRADayIssues\JIRADayIssues.csproj", "{184811A5-86D4-4779-941D-1931D4CA2C7C}"
-=======
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JiraDayIssues", "JIRADayIssues\JiraDayIssues.csproj", "{184811A5-86D4-4779-941D-1931D4CA2C7C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JiraDayIssues.Model", "JIRADayIssues.Model\JiraDayIssues.Model.csproj", "{D6CFD928-0A48-4A59-BE31-DC46AE68E6EE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JiraDayIssues.Service", "JIRADayIssues.Service\JiraDayIssues.Service.csproj", "{8D4CAB4C-64F8-4FF2-B062-D75A71B94319}"
->>>>>>> feature/Week2Day1
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,8 +19,6 @@ Global
 		{184811A5-86D4-4779-941D-1931D4CA2C7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{184811A5-86D4-4779-941D-1931D4CA2C7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{184811A5-86D4-4779-941D-1931D4CA2C7C}.Release|Any CPU.Build.0 = Release|Any CPU
-<<<<<<< HEAD
-=======
 		{D6CFD928-0A48-4A59-BE31-DC46AE68E6EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D6CFD928-0A48-4A59-BE31-DC46AE68E6EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6CFD928-0A48-4A59-BE31-DC46AE68E6EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -33,7 +27,6 @@ Global
 		{8D4CAB4C-64F8-4FF2-B062-D75A71B94319}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D4CAB4C-64F8-4FF2-B062-D75A71B94319}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D4CAB4C-64F8-4FF2-B062-D75A71B94319}.Release|Any CPU.Build.0 = Release|Any CPU
->>>>>>> feature/Week2Day1
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

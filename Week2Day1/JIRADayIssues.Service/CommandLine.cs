@@ -1,20 +1,21 @@
-﻿using JiraDayIssues.Model;
-using McMaster.Extensions.CommandLineUtils;
-using RestSharp;
-using System;
-using System.ComponentModel.DataAnnotations;
-
-namespace JiraDayIssues.Service
+﻿namespace JiraDayIssues.Service
 {
+    using System;
+    using System.ComponentModel.DataAnnotations;
+    using McMaster.Extensions.CommandLineUtils;
+    using RestSharp;
+
     /// <summary>
     /// Command line manipulation.
     /// </summary>
     public class CommandLine
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Gets or sets value for username option.
         /// </summary>
-        [Option("-u|--username",CommandOptionType.SingleValue, Description = "username to authentication")]
+        [Option("-u|--username", CommandOptionType.SingleValue, Description = "username to authentication")]
         [Required]
         public string UserNameOption { get; set; }
 
@@ -36,14 +37,14 @@ namespace JiraDayIssues.Service
         /// </summary>
         public void OnExecute()
         {
-            DateTime date = SetDateOption();
+            DateTime date = this.SetDateOption();
 
-            IRestResponse response = MakeRequest(date);
+            IRestResponse response = this.MakeRequest(date);
 
-            DisplayResponse(response);
+            this.DisplayResponse(response);
         }
 
-        private static void DisplayResponse(IRestResponse response)
+        private void DisplayResponse(IRestResponse response)
         {
             var responseHandling = new ResponseHandling();
             var responseObject = responseHandling.DeserializeResponse(response);
@@ -52,20 +53,24 @@ namespace JiraDayIssues.Service
 
         private IRestResponse MakeRequest(DateTime date)
         {
-            var manipulation = new ApiManipulation();
-            IRestResponse response = manipulation.GetResponse(date, UserNameOption, TokenOption);
+            IApiManipulation apiManipulation = new ApiManipulation();
+            apiManipulation = new CacheDecorator(apiManipulation);
+
+            IRestRequest request = apiManipulation.ConfigureRequest(date);
+            IRestResponse response = apiManipulation.GetResponse(request, this.UserNameOption, this.TokenOption);
             return response;
         }
 
         private DateTime SetDateOption()
         {
+            logger.Info("Set date option.");
             DateTime date = DateTime.Now;
             if (this.DateOption.hasValue)
             {
-                date = DateOption.value.Date;
+                date = this.DateOption.value.Date;
             }
 
-            return date; 
+            return date;
         }
     }
 }

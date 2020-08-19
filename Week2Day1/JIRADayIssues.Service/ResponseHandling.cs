@@ -21,7 +21,7 @@ namespace JiraDayIssues.Service
         /// <returns>Response object.</returns>
         public ResponseObject DeserializeResponse(IRestResponse response)
         {
-            return JsonConvert.DeserializeObject<ResponseObject>(response.Content);
+            return JsonConvert.DeserializeObject<ResponseObject>(response.Content, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
         }
 
         /// <summary>
@@ -38,11 +38,11 @@ namespace JiraDayIssues.Service
                 var timeSpent = TimeSpan.FromSeconds(issue.Field.TimeSpent);
                 var estimateTime = TimeSpan.FromSeconds(issue.Field.EstimateTime);
                 Console.WriteLine(string.Format("{0,40} {1:0h}/{2:0h}", issue.Field.Summary, timeSpent.TotalHours, estimateTime.TotalHours));
+                Console.WriteLine("\n");
             }
-
-            if(responseObject.Issues.Count > 0)
+            if (responseObject.Issues.Count > 0)
             {
-                Console.WriteLine(string.Format("{0:0h} {1:0m}", totalTime.Hours, totalTime.Minutes));
+                Console.WriteLine(string.Format("Total {0:0h} {1:0m}", totalTime.Hours, totalTime.Minutes));
             }
         }
     }

@@ -70,7 +70,7 @@ namespace JiraDayIssues.Service
 
         private async Task<JiraIssueResponse> GetResponse(DateTime date)
         {
-            IJiraApiClient jiraApiClient = new JiraApiClient(new RestClient(), this.UserNameOption, this.TokenOption);
+            IJiraApiClient jiraApiClient = new JiraApiClient(this.UserNameOption, this.TokenOption);
 
             CancellationTokenSource cancellationToken = this.CheckCancelRequest();
 
@@ -82,7 +82,8 @@ namespace JiraDayIssues.Service
         private CancellationTokenSource CheckCancelRequest()
         {
             Console.WriteLine("Pending....");
-            Console.WriteLine("Press ESC to cancel.");
+            Console.WriteLine("Press ESC to cancel press any key to continue.");
+            
             CancellationTokenSource cancellationToken = new CancellationTokenSource();
             bool isCancel = Console.ReadKey(true).Key == ConsoleKey.Escape;
             if (isCancel)

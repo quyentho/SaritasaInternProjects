@@ -17,37 +17,57 @@ namespace JiraDayIssues.UI
     /// </summary>
     public partial class MainWindow : Window
     {
-        private List<Issue> _issues;
         private JiraApiClient _jiraApiClient;
         private CancellationTokenSource _cancellationTokenSource;
 
-        private string _username;
-        private string _token;
-
         public MainWindow()
         {
+            string username = Prompt.GetString("Please provide your username:");
+            string token = Prompt.GetPassword("Please provide your token:");
 
-            _username = Prompt.GetString("Please provide your username:");
-            _token = Prompt.GetPassword("Please provide your token:");
-
-            if (string.IsNullOrWhiteSpace(_username) || string.IsNullOrWhiteSpace(_token))
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(token))
             {
                 MessageBox.Show("You must provide correct username and token to use application.");
                 Environment.Exit(0);
             }
-            
-            this._jiraApiClient = new JiraApiClient(new RestClient(), this._username, this._token);
-            
+
+            _jiraApiClient = new JiraApiClient(username, token);
+
             InitializeComponent();
         }
 
+        #region Events
         private async void IssuesCell_MouseUp(object sender, RoutedEventArgs e)
+        {
+            await GetWorklogs();
+        }
+
+        private async void btnExecute_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtWorklogAuthor.Text))
+            {
+                this.ClearDataGrids();
+                return;
+            }
+
+            if (_cancellationTokenSource != null) // This times click to cancel.
+            {
+                _cancellationTokenSource.Cancel();
+                return;
+            }
+
+            await GetIssues();
+        }
+        #endregion
+
+        private async Task GetWorklogs()
         {
             try
             {
                 this.PreProcess();
 
-                JiraWorklogResponse worklogs = await GetWorklogsResponse();
+                var issueId = (dgIssues.SelectedItem as Issue).Id;
+                JiraWorklogResponse worklogs = await _jiraApiClient.GetWorklogsAsync(issueId, _cancellationTokenSource.Token);
 
                 DisplayWorklogs(worklogs);
             }
@@ -61,31 +81,31 @@ namespace JiraDayIssues.UI
             }
         }
 
-        private void DisplayWorklogs( JiraWorklogResponse responseObject)
+        private void DisplayWorklogs(JiraWorklogResponse responseObject)
         {
-            List<Worklog> worklogs = responseObject.Worklogs;
-
-            WorklogsGrid.ItemsSource = worklogs;
+            dgWorklog.ItemsSource = responseObject.Worklogs;
         }
 
-        private async Task<JiraWorklogResponse> GetWorklogsResponse()
+        private void DisplayIssues(JiraIssueResponse responseObject)
         {
-            var index = IssuesGrid.SelectedIndex;
-
-
-            JiraWorklogResponse response = await _jiraApiClient.GetWorklogsAsync(_issues[index].Id, _cancellationTokenSource.Token);
-
-            return response;
+            dgIssues.ItemsSource = responseObject.Issues;
         }
 
-        private async void DateTimePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        private void ClearDataGrids()
+        {
+            dgIssues.ItemsSource = null;
+            dgIssues.Items.Refresh();
+            dgWorklog.ItemsSource = null;
+            dgWorklog.Items.Refresh();
+        }
+
+        private async Task GetIssues()
         {
             try
             {
                 PreProcess();
 
-                JiraIssueResponse response = await GetIssuesResponse();
-
+                JiraIssueResponse response = await _jiraApiClient.GetIssuesAsync(dateTimePicker.SelectedDate.GetValueOrDefault(), txtWorklogAuthor.Text, _cancellationTokenSource.Token);
 
                 DisplayIssues(response);
             }
@@ -103,38 +123,22 @@ namespace JiraDayIssues.UI
             }
         }
 
-        private void DisplayIssues(JiraIssueResponse responseObject)
-        {
-            _issues = responseObject.Issues;
-
-            IssuesGrid.ItemsSource = _issues;
-        }
-
-        private async Task<JiraIssueResponse> GetIssuesResponse()
-        {
-            JiraIssueResponse response = await _jiraApiClient.GetIssuesAsync(DateTimePicker.SelectedDate.GetValueOrDefault(), WorkLogAuthorTextBox.Text, _cancellationTokenSource.Token);
-
-            return response;
-        }
-
         private void PostProcess()
         {
-            loadingLabel.Visibility = Visibility.Hidden;
-            cancelButton.IsEnabled = false;
+            lbLoad.Visibility = Visibility.Hidden;
+
+            btnExecute.Content = "Search";
+
+            _cancellationTokenSource = null;
         }
 
         private void PreProcess()
         {
-
-            loadingLabel.Visibility = Visibility.Visible;
-            cancelButton.IsEnabled = true;
-
             _cancellationTokenSource = new CancellationTokenSource();
-        }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            _cancellationTokenSource.Cancel();
+            lbLoad.Visibility = Visibility.Visible;
+
+            btnExecute.Content = "Cancel";
         }
     }
 }

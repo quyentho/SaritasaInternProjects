@@ -28,22 +28,29 @@ namespace JiraDayIssues.Service
                 return;
             }
 
-            TimeSpan totalTime = TimeSpan.FromSeconds(jiraResponse.Issues.Sum(s => s.Field.TimeSpent));
+            string contents = this.GetContents(jiraResponse);
 
-            StringBuilder stringBuilder = new StringBuilder();
+            Console.WriteLine(contents);
+        }
+
+        private string GetContents(JiraIssueResponse jiraResponse)
+        {
+            var stringBuilder = new StringBuilder();
 
             foreach (var issue in jiraResponse.Issues)
             {
                 stringBuilder.AppendLine(issue.Field.Project.Name);
+
                 var timeSpent = TimeSpan.FromSeconds(issue.Field.TimeSpent);
                 var estimateTime = TimeSpan.FromSeconds(issue.Field.EstimateTime);
-
                 stringBuilder.AppendFormat("{0,40} {1:0h}/{2:0h}", issue.Field.Summary, timeSpent.TotalHours, estimateTime.TotalHours);
                 stringBuilder.AppendLine("\n");
             }
 
-            Console.WriteLine(stringBuilder.ToString());
-            Console.WriteLine(string.Format("Total {0:0h} {1:0m}", totalTime.Hours, totalTime.Minutes));
+            TimeSpan totalTime = TimeSpan.FromSeconds(jiraResponse.Issues.Sum(s => s.Field.TimeSpent));
+            stringBuilder.AppendFormat("Total {0:0h} {1:0m}", totalTime.Hours, totalTime.Minutes);
+
+            return stringBuilder.ToString();
         }
     }
 }

@@ -12,14 +12,14 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid Grid.ColumnSpan="2">
-            <DatePicker x:Name="DateTimePicker" HorizontalAlignment="Center" Margin="0,33,0,0" VerticalAlignment="Top" Width="268" Height="24" SelectedDateFormat="Short"
-                SelectedDateChanged="DateTimePicker_SelectedDateChanged"/>
+            <DatePicker x:Name="dateTimePicker" HorizontalAlignment="Center" Margin="0,33,0,0" VerticalAlignment="Top" Width="268" Height="24" SelectedDateFormat="Short"/>
         </Grid>
-        <Grid Margin="0,0,10,0" Grid.ColumnSpan="2">
+        <Grid Margin="5,0,5,0" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="359*"/>
+                <ColumnDefinition Width="36*"/>
             </Grid.ColumnDefinitions>
-            <DataGrid x:Name="IssuesGrid" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Left" AlternatingRowBackground = "LightBlue" AlternationCount = "2" IsReadOnly="True" ColumnWidth="Auto"  AutoGenerateColumns = "False" Width="257" Margin="0,67,0,0">
+            <DataGrid x:Name="dgIssues" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Left" AlternatingRowBackground = "LightBlue" AlternationCount = "2" IsReadOnly="True" ColumnWidth="Auto"  AutoGenerateColumns = "False" Width="257" Margin="0,67,0,0">
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="*" Header="Issues" FontSize="20">
                         <DataGridTextColumn.Binding>
@@ -36,7 +36,7 @@
                     </Style>
                 </DataGrid.CellStyle>
             </DataGrid>
-            <DataGrid x:Name="WorklogsGrid" HorizontalAlignment="Left" AlternatingRowBackground = "LightBlue" AlternationCount = "2" IsReadOnly="True" ColumnWidth="Auto"  AutoGenerateColumns = "False" Width="497" Margin="293,67,0,0" SelectionMode="Single" SelectionUnit="Cell">
+            <DataGrid x:Name="dgWorklog" HorizontalAlignment="Left" AlternatingRowBackground = "LightBlue" AlternationCount = "2" IsReadOnly="True" ColumnWidth="Auto"  AutoGenerateColumns = "False" Width="497" Margin="293,67,0,0" SelectionMode="Single" SelectionUnit="Cell" Grid.ColumnSpan="2">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Worklog" Width="4*" FontSize="20" Binding="{Binding Comment}">
                     </DataGridTextColumn>
@@ -44,10 +44,9 @@
                     </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <Label x:Name="loadingLabel" Content="Loading..." Visibility="Hidden" HorizontalAlignment="Left" Margin="542,25,0,0" VerticalAlignment="Top" Width="132" FontWeight="Bold" FontSize="20" Background="#00000000" Foreground="#FFDA1515" />
-            <Button Content="Cancel" x:Name="cancelButton" HorizontalAlignment="Left" Margin="679,37,0,0" VerticalAlignment="Top" Width="51" IsEnabled="False" Click="Button_Click"/>
-            <TextBox x:Name="WorkLogAuthorTextBox" HorizontalAlignment="Left" Margin="113,37,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="20"/>
-            <Label Content="Worklog Author" HorizontalAlignment="Left" Margin="10,34,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.232,0.417"/>
+            <Label x:Name="lbLoad" Content="Loading..." Visibility="Hidden" HorizontalAlignment="Left" Margin="622,25,0,0" VerticalAlignment="Top" Width="132" FontWeight="Bold" FontSize="20" Background="#00000000" Foreground="#FFDA1515" Grid.ColumnSpan="2" />
+            <Button Content="Get" x:Name="btnExecute" HorizontalAlignment="Left" Margin="542,37,0,0" VerticalAlignment="Top" Width="66" Click="btnExecute_Click"/>
+            <TextBox x:Name="txtWorklogAuthor" HorizontalAlignment="Left" Margin="113,37,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="20"/>
         </Grid>
     </Grid>
 </Window>

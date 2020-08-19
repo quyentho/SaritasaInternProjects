@@ -4,22 +4,14 @@
 
 namespace JiraDayIssues.Model
 {
-    using System;
     using System.Collections.Generic;
-    using System.Text;
     using Newtonsoft.Json;
 
     /// <summary>
-    /// Represent list issues response from API request.
+    /// Represent list worklogs response from API request.
     /// </summary>
-    public class ResponseObject
+    public class JiraWorklogResponse
     {
-        /// <summary>
-        /// Gets or sets issues.
-        /// </summary>
-        [JsonProperty]
-        public List<Issue> Issues { get; set; }
-
         /// <summary>
         /// Gets or sets worklogs.
         /// </summary>

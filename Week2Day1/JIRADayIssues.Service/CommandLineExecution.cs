@@ -17,9 +17,9 @@ namespace JiraDayIssues.Service
     /// <summary>
     /// Command line manipulation.
     /// </summary>
-    public class CommandLine
+    public class CommandLineExecution
     {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Gets or sets value for username option.
@@ -27,6 +27,13 @@ namespace JiraDayIssues.Service
         [Option("-u|--username", CommandOptionType.SingleValue, Description = "username to authentication")]
         [Required]
         public string UserNameOption { get; set; }
+
+        /// <summary>
+        /// Gets or sets value for worklog author option.
+        /// </summary>
+        [Option("-w|--worklogauthor", CommandOptionType.SingleValue, Description = "worklog author to check")]
+        [Required]
+        public string WorklogAuthorOption { get; set; }
 
         /// <summary>
         /// Gets or sets date to check, default is current date.
@@ -47,31 +54,27 @@ namespace JiraDayIssues.Service
         /// <returns>Task represent asynchronous process.</returns>
         public async Task OnExecuteAsync()
         {
-            DateTime date = this.SetDateOption();
+            DateTime date = this.GetDateOption();
 
-            IRestResponse issuesResponse = await this.MakeIssuesRequestAsync(date);
+            JiraIssueResponse response = await this.GetResponse(date);
 
-            this.DisplayIssues(issuesResponse);
+            this.DisplayIssues(response);
         }
 
-        private void DisplayIssues(IRestResponse response)
+        private void DisplayIssues(JiraIssueResponse response)
         {
-            var responseHandling = new ResponseHandling();
-            ResponseObject responseObject = responseHandling.DeserializeResponse(response);
+            var responsePresenter = new ResponsePresenter();
 
-            responseHandling.DisplayResponse(responseObject);
+            responsePresenter.DisplayResponse(response);
         }
 
-        private async Task<IRestResponse> MakeIssuesRequestAsync(DateTime date)
+        private async Task<JiraIssueResponse> GetResponse(DateTime date)
         {
-            IApiManipulation apiManipulation = new ApiManipulation(new RestClient());
-            apiManipulation = new CacheDecorator(apiManipulation);
-
-            IRestRequest request = apiManipulation.ConfigureIssuesRequest(date);
+            IJiraApiClient jiraApiClient = new JiraApiClient(new RestClient(), this.UserNameOption, this.TokenOption);
 
             CancellationTokenSource cancellationToken = this.CheckCancelRequest();
 
-            IRestResponse response = await apiManipulation.GetResponseAsync(request, this.UserNameOption, this.TokenOption, cancellationToken.Token);
+            JiraIssueResponse response = await jiraApiClient.GetIssuesAsync(date, this.WorklogAuthorOption, cancellationToken.Token);
 
             return response;
         }
@@ -80,9 +83,9 @@ namespace JiraDayIssues.Service
         {
             Console.WriteLine("Pending....");
             Console.WriteLine("Press ESC to cancel.");
-            bool isCancel = Console.ReadKey(true).Key == ConsoleKey.Escape;
             CancellationTokenSource cancellationToken = new CancellationTokenSource();
-            if (isCancel == true)
+            bool isCancel = Console.ReadKey(true).Key == ConsoleKey.Escape;
+            if (isCancel)
             {
                 cancellationToken.Cancel();
                 Console.WriteLine("Request canceled.");
@@ -91,9 +94,9 @@ namespace JiraDayIssues.Service
             return cancellationToken;
         }
 
-        private DateTime SetDateOption()
+        private DateTime GetDateOption()
         {
-            logger.Info("Set date option.");
+            _logger.Info("Set date option.");
             DateTime date = DateTime.Now;
             if (this.DateOption.hasValue)
             {

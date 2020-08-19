@@ -83,7 +83,7 @@ namespace JiraDayIssues.Service
         {
             Console.WriteLine("Pending....");
             Console.WriteLine("Press ESC to cancel press any key to continue.");
-            
+
             CancellationTokenSource cancellationToken = new CancellationTokenSource();
             bool isCancel = Console.ReadKey(true).Key == ConsoleKey.Escape;
             if (isCancel)

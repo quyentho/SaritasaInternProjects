@@ -6,47 +6,39 @@
         xmlns:local="clr-namespace:JiraDayIssues.UI"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
+    <Grid  Margin="5,0,5,0" Grid.ColumnSpan="2">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0*"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Grid Grid.ColumnSpan="2">
-            <DatePicker x:Name="dateTimePicker" HorizontalAlignment="Center" Margin="0,33,0,0" VerticalAlignment="Top" Width="268" Height="24" SelectedDateFormat="Short"/>
-        </Grid>
-        <Grid Margin="5,0,5,0" Grid.ColumnSpan="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="359*"/>
-                <ColumnDefinition Width="36*"/>
-            </Grid.ColumnDefinitions>
-            <DataGrid x:Name="dgIssues" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Left" AlternatingRowBackground = "LightBlue" AlternationCount = "2" IsReadOnly="True" ColumnWidth="Auto"  AutoGenerateColumns = "False" Width="257" Margin="0,67,0,0">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Width="*" Header="Issues" FontSize="20">
-                        <DataGridTextColumn.Binding>
-                            <MultiBinding StringFormat="{}{0}&#x0a;{1}">
-                                <Binding Path="Key"/>
-                                <Binding Path="Field.Summary"/>
-                            </MultiBinding>
-                        </DataGridTextColumn.Binding>
-                    </DataGridTextColumn>
-                </DataGrid.Columns>
-                <DataGrid.CellStyle>
-                    <Style TargetType="DataGridCell">
-                        <EventSetter Event="MouseUp" Handler="IssuesCell_MouseUp"/>
-                    </Style>
-                </DataGrid.CellStyle>
-            </DataGrid>
-            <DataGrid x:Name="dgWorklog" HorizontalAlignment="Left" AlternatingRowBackground = "LightBlue" AlternationCount = "2" IsReadOnly="True" ColumnWidth="Auto"  AutoGenerateColumns = "False" Width="497" Margin="293,67,0,0" SelectionMode="Single" SelectionUnit="Cell" Grid.ColumnSpan="2">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Worklog" Width="4*" FontSize="20" Binding="{Binding Comment}">
-                    </DataGridTextColumn>
-                    <DataGridTextColumn Header="Time" Width="1*" FontSize="20" Binding="{Binding TimeSpent}">
-                    </DataGridTextColumn>
-                </DataGrid.Columns>
-            </DataGrid>
-            <Label x:Name="lbLoad" Content="Loading..." Visibility="Hidden" HorizontalAlignment="Left" Margin="622,25,0,0" VerticalAlignment="Top" Width="132" FontWeight="Bold" FontSize="20" Background="#00000000" Foreground="#FFDA1515" Grid.ColumnSpan="2" />
-            <Button Content="Get" x:Name="btnExecute" HorizontalAlignment="Left" Margin="542,37,0,0" VerticalAlignment="Top" Width="66" Click="btnExecute_Click"/>
-            <TextBox x:Name="txtWorklogAuthor" HorizontalAlignment="Left" Margin="113,37,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="20"/>
-        </Grid>
+        <DatePicker SelectedDate="08/18/2020" x:Name="dateTimePicker" HorizontalAlignment="Left" Margin="261,35,0,0" VerticalAlignment="Top" Width="268" Height="24" SelectedDateFormat="Short"/>
+        <DataGrid  x:Name="dgIssues" HorizontalScrollBarVisibility="Auto" HorizontalAlignment="Left" AlternatingRowBackground = "LightBlue" AlternationCount = "2" IsReadOnly="True" ColumnWidth="Auto"  AutoGenerateColumns = "False" Width="277" Margin="0,67,0,0">
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="*" Header="Issues" FontSize="20">
+                    <DataGridTextColumn.Binding>
+                        <MultiBinding StringFormat="{}{0}&#x0a;{1}">
+                            <Binding Path="Key"/>
+                            <Binding Path="Field.Summary"/>
+                        </MultiBinding>
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <EventSetter Event="MouseUp" Handler="IssuesCell_MouseUp"/>
+                </Style>
+            </DataGrid.CellStyle>
+        </DataGrid>
+        <DataGrid x:Name="dgWorklog" HorizontalAlignment="Left" AlternatingRowBackground = "LightBlue" AlternationCount = "2" IsReadOnly="True" ColumnWidth="Auto"  AutoGenerateColumns = "False" Width="497" Margin="293,67,0,0" SelectionMode="Single" SelectionUnit="Cell" Grid.ColumnSpan="2">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Worklog" Width="4*" FontSize="20" Binding="{Binding Comment}">
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Time" Width="1*" FontSize="20" Binding="{Binding TimeSpent}">
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Label x:Name="lbLoad" Content="Loading..." Visibility="Hidden" HorizontalAlignment="Left" Margin="622,25,0,0" VerticalAlignment="Top" Width="132" FontWeight="Bold" FontSize="20" Background="#00000000" Foreground="#FFDA1515" Grid.ColumnSpan="2" />
+        <Button Content="Get" x:Name="btnExecute" HorizontalAlignment="Left" Margin="542,37,0,0" VerticalAlignment="Top" Width="66" Click="btnExecute_Click"/>
+        <TextBox Text="IvanKozhin" x:Name="txtWorklogAuthor" HorizontalAlignment="Left" Margin="113,37,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="20"/>
     </Grid>
 </Window>

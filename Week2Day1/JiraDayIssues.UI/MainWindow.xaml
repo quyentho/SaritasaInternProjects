@@ -16,8 +16,14 @@
             <RowDefinition Height="1*"></RowDefinition>
             <RowDefinition Height="4*"></RowDefinition>
         </Grid.RowDefinitions>
-        <Label Content="Worklog author:" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" FontWeight="Bold"  FontSize="11" VerticalAlignment="Center" />
-        <TextBox x:Name="txtWorklogAuthor" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Right"  TextWrapping="Wrap" Width="152" Height="24"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Label Content="Worklog author:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontWeight="Bold"  FontSize="11"/>
+            <TextBox x:Name="txtWorklogAuthor" VerticalContentAlignment="Center"  TextWrapping="Wrap" Width="Auto" Height="24" Grid.Column="1"/>
+        </Grid>
         <DatePicker Grid.Column="2" x:Name="dateTimePicker" HorizontalAlignment="Left" VerticalAlignment="Center" Width="268" Height="24" SelectedDateFormat="Short" />
         <Button Content="Get" x:Name="btnExecute" Click="btnExecute_Click" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="2" Height="24" Width="62" Margin="273,0,0,0"/>
         <Label x:Name="lbLoad" 

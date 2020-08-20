@@ -20,7 +20,7 @@ namespace JiraDayIssues.UI
     {
         private JiraApiClient _jiraApiClient;
         private CancellationTokenSource _cancellationTokenSource;
-        private List<Issue> _cachedIssues;
+        private List<Issue> _cachedIssues = new List<Issue>();
         private Dictionary<string, List<Worklog>> _cachedWorklogs = new Dictionary<string, List<Worklog>>();
         public MainWindow()
         {
@@ -68,9 +68,9 @@ namespace JiraDayIssues.UI
             }
 
             await GetIssues();
-
-            await CacheWorklogs();
-        }
+           
+            await CacheWorklogs(); // BUG: Task will be canceled if click the get button when it running in background.
+        }                          // Fix idea: allow to cancel and handle the exception occur by logging.
 
         private async Task CacheWorklogs()
         {
@@ -86,19 +86,16 @@ namespace JiraDayIssues.UI
         {
             try
             {
-                this.PreProcess();
-
-                List<Worklog> worklogs;
+                _cancellationTokenSource = new CancellationTokenSource();
                 if (_cachedWorklogs.ContainsKey(issueId))
                 {
-                    worklogs = _cachedWorklogs[issueId];
+                    List<Worklog> worklogs = _cachedWorklogs[issueId];
+                    return worklogs;
                 }
-                else
-                {
-                    JiraWorklogResponse worklogResponse = await _jiraApiClient.GetWorklogsAsync(issueId, _cancellationTokenSource.Token);
-                    worklogs = worklogResponse.Worklogs;
-                }
-                return worklogs;
+
+                JiraWorklogResponse worklogResponse = 
+                    await _jiraApiClient.GetWorklogsAsync(issueId, _cancellationTokenSource.Token);
+                return worklogResponse.Worklogs;
             }
             catch (Exception ex)
             {
@@ -116,9 +113,9 @@ namespace JiraDayIssues.UI
             dgWorklog.ItemsSource = worklogs;
         }
 
-        private void DisplayIssues(JiraIssueResponse responseObject)
+        private void DisplayIssues(List<Issue> issues)
         {
-            dgIssues.ItemsSource = responseObject.Issues;
+            dgIssues.ItemsSource = issues;
         }
 
         private void ClearDataGrids()
@@ -137,8 +134,8 @@ namespace JiraDayIssues.UI
 
                 JiraIssueResponse response = await _jiraApiClient.GetIssuesAsync(datePicker.SelectedDate.GetValueOrDefault(), txtWorklogAuthor.Text, _cancellationTokenSource.Token);
                 _cachedIssues = response.Issues;
-               
-                DisplayIssues(response);
+
+                DisplayIssues(_cachedIssues);
             }
             catch (JsonReaderException)
             {
@@ -166,6 +163,8 @@ namespace JiraDayIssues.UI
         private void PreProcess()
         {
             _cancellationTokenSource = new CancellationTokenSource();
+            _cachedIssues.Clear();
+            _cachedWorklogs.Clear();
 
             lbLoad.Visibility = Visibility.Visible;
 

@@ -25,7 +25,7 @@
             <Label Content="Worklog author:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontWeight="Bold"  FontSize="11"/>
             <TextBox Text="IvanKozhin" x:Name="txtWorklogAuthor" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Width="Auto" Height="24" Grid.Column="1"/>
         </Grid>
-        <DatePicker Grid.Column="2" x:Name="dateTimePicker" HorizontalAlignment="Left" VerticalAlignment="Center" Width="268" Height="24" SelectedDateFormat="Short">
+        <DatePicker Grid.Column="2" x:Name="datePicker" HorizontalAlignment="Left" VerticalAlignment="Center" Width="268" Height="24" SelectedDateFormat="Short">
         </DatePicker>
         <Button Content="Get" x:Name="btnExecute" Click="btnExecute_Click" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="2" Height="24" Width="62" Margin="273,0,0,0"/>
         <Label x:Name="lbLoad" 

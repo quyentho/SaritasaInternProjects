@@ -57,7 +57,6 @@ namespace JiraDayIssues.Service
 
         private async Task<T> ExecuteRequest<T>(RestRequest request, CancellationToken cancellationToken)
         {
-
             _logger.Trace("Request: {request}", request);
 
             var response = await this._client.ExecuteAsync(request, cancellationToken);

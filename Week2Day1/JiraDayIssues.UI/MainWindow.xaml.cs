@@ -2,6 +2,7 @@
 using JiraDayIssues.Service;
 using McMaster.Extensions.CommandLineUtils;
 using Newtonsoft.Json;
+using NLog.Time;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -19,10 +20,11 @@ namespace JiraDayIssues.UI
     {
         private JiraApiClient _jiraApiClient;
         private CancellationTokenSource _cancellationTokenSource;
-
+        private List<Issue> _cachedIssues;
+        private Dictionary<string, List<Worklog>> _cachedWorklogs = new Dictionary<string, List<Worklog>>();
         public MainWindow()
         {
-           // string username = Prompt.GetString("Please provide your username:");
+            // string username = Prompt.GetString("Please provide your username:");
             string username = "quyen.tho@saritasa.com";
             //string token = Prompt.GetPassword("Please provide your token:");
             string token = "muvykLqdTaYg3qbbdFmf37FE";
@@ -36,13 +38,19 @@ namespace JiraDayIssues.UI
             _jiraApiClient = new JiraApiClient(username, token);
 
             InitializeComponent();
-            dateTimePicker.SelectedDate = DateTime.Today.AddDays(-1);
+            datePicker.SelectedDate = DateTime.Today.AddDays(-1);
         }
 
         #region Events
         private async void IssuesCell_MouseUp(object sender, RoutedEventArgs e)
         {
-            await GetWorklogs();
+            string issueId = _cachedIssues[dgIssues.SelectedIndex].Id;
+            List<Worklog> worklogs = await GetWorklogs(issueId);
+            if (worklogs is null)
+            {
+                return;
+            }
+            DisplayWorklogs(worklogs);
         }
 
         private async void btnExecute_Click(object sender, RoutedEventArgs e)
@@ -60,33 +68,52 @@ namespace JiraDayIssues.UI
             }
 
             await GetIssues();
+
+            await CacheWorklogs();
+        }
+
+        private async Task CacheWorklogs()
+        {
+            foreach (var issue in _cachedIssues)
+            {
+                List<Worklog> worklogs = await GetWorklogs(issue.Id);
+                _cachedWorklogs.Add(issue.Id, worklogs);
+            }
         }
         #endregion
 
-        private async Task GetWorklogs()
+        private async Task<List<Worklog>> GetWorklogs(string issueId)
         {
             try
             {
                 this.PreProcess();
 
-                var issueId = (dgIssues.SelectedItem as Issue).Id;
-                JiraWorklogResponse worklogs = await _jiraApiClient.GetWorklogsAsync(issueId, _cancellationTokenSource.Token);
-
-                DisplayWorklogs(worklogs);
+                List<Worklog> worklogs;
+                if (_cachedWorklogs.ContainsKey(issueId))
+                {
+                    worklogs = _cachedWorklogs[issueId];
+                }
+                else
+                {
+                    JiraWorklogResponse worklogResponse = await _jiraApiClient.GetWorklogsAsync(issueId, _cancellationTokenSource.Token);
+                    worklogs = worklogResponse.Worklogs;
+                }
+                return worklogs;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                return null;
             }
             finally
             {
-                this.PostProcess();
+                PostProcess();
             }
         }
 
-        private void DisplayWorklogs(JiraWorklogResponse responseObject)
+        private void DisplayWorklogs(List<Worklog> worklogs)
         {
-            dgWorklog.ItemsSource = responseObject.Worklogs;
+            dgWorklog.ItemsSource = worklogs;
         }
 
         private void DisplayIssues(JiraIssueResponse responseObject)
@@ -108,8 +135,9 @@ namespace JiraDayIssues.UI
             {
                 PreProcess();
 
-                JiraIssueResponse response = await _jiraApiClient.GetIssuesAsync(dateTimePicker.SelectedDate.GetValueOrDefault(), txtWorklogAuthor.Text, _cancellationTokenSource.Token);
-
+                JiraIssueResponse response = await _jiraApiClient.GetIssuesAsync(datePicker.SelectedDate.GetValueOrDefault(), txtWorklogAuthor.Text, _cancellationTokenSource.Token);
+                _cachedIssues = response.Issues;
+               
                 DisplayIssues(response);
             }
             catch (JsonReaderException)

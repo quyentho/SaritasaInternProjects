@@ -12,32 +12,32 @@ using RestSharp;
 namespace JiraDayIssues.Service
 {
     /// <summary>
-    /// Converts response from API requests to appropriate value and display.
+    /// Display Response get from API request.
     /// </summary>
     public class ResponsePresenter
     {
         /// <summary>
-        /// Format and display result from API response.
+        /// Display Response in correct format, announce back to console if response is null.
         /// </summary>
-        /// <param name="jiraResponse">Object to display.</param>
-        public void DisplayResponse(JiraIssueResponse jiraResponse)
+        /// <param name="jiraIssuesResponse">Object to display.</param>
+        public void DisplayResponse(JiraIssueResponse jiraIssuesResponse)
         {
-            if (jiraResponse.Issues == null)
+            if (jiraIssuesResponse.Issues == null)
             {
                 Console.WriteLine("No issue found.");
                 return;
             }
 
-            string contents = this.GetContents(jiraResponse);
+            string contents = this.GetContent(jiraIssuesResponse);
 
             Console.WriteLine(contents);
         }
 
-        private string GetContents(JiraIssueResponse jiraResponse)
+        private string GetContent(JiraIssueResponse jiraIssuesResponse)
         {
             var stringBuilder = new StringBuilder();
 
-            foreach (var issue in jiraResponse.Issues)
+            foreach (var issue in jiraIssuesResponse.Issues)
             {
                 stringBuilder.AppendLine(issue.Field.Project.Name);
 
@@ -47,7 +47,7 @@ namespace JiraDayIssues.Service
                 stringBuilder.AppendLine("\n");
             }
 
-            TimeSpan totalTime = TimeSpan.FromSeconds(jiraResponse.Issues.Sum(s => s.Field.TimeSpent));
+            TimeSpan totalTime = TimeSpan.FromSeconds(jiraIssuesResponse.Issues.Sum(s => s.Field.TimeSpent));
             stringBuilder.AppendFormat("Total {0:0h} {1:0m}", totalTime.Hours, totalTime.Minutes);
 
             return stringBuilder.ToString();

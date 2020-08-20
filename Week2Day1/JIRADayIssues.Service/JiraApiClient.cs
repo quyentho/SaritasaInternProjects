@@ -15,17 +15,11 @@ namespace JiraDayIssues.Service
     using RestSharp.Authenticators;
 
     /// <summary>
-    /// Manipulation on API calls.
+    /// Perform Jira API Request.
     /// </summary>
     public class JiraApiClient : IJiraApiClient
     {
-        private readonly RestClient _client = new RestClient();
-
-        private readonly Uri _baseRequestUri = new Uri("https://saritasa.atlassian.net");
-
-        private readonly string _username;
-
-        private readonly string _token;
+        private readonly RestClient _client = new RestClient("https://saritasa.atlassian.net");
 
         private static Logger _logger = LogManager.GetCurrentClassLogger();
 
@@ -36,8 +30,7 @@ namespace JiraDayIssues.Service
         /// <param name="token">token to authentication.</param>
         public JiraApiClient(string username, string token)
         {
-            _username = username;
-            _token = token;
+            SetupClient(username, token);
         }
 
         /// <inheritdoc/>
@@ -64,19 +57,20 @@ namespace JiraDayIssues.Service
 
         private async Task<T> ExecuteRequest<T>(RestRequest request, CancellationToken cancellationToken)
         {
-            _client.BaseUrl = this._baseRequestUri;
-            _client.Timeout = -1;
-            _client.Authenticator = new HttpBasicAuthenticator(this._username, this._token);
 
-            _logger.Info("Make request:");
             _logger.Trace("Request: {request}", request);
 
             var response = await this._client.ExecuteAsync(request, cancellationToken);
 
-            _logger.Info("Receive Response: ");
             _logger.Trace("Response: {response}", response);
 
             return JsonConvert.DeserializeObject<T>(response.Content, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
+        }
+
+        private void SetupClient(string username, string token)
+        {
+            _client.Timeout = -1;
+            _client.Authenticator = new HttpBasicAuthenticator(username, token);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace JiraDayIssues.Service
     /// <summary>
     /// Display Response get from API request.
     /// </summary>
-    public class ResponsePresenter
+    public class ResponseDisplayer
     {
         /// <summary>
         /// Display Response in correct format, announce back to console if response is null.
@@ -28,9 +28,9 @@ namespace JiraDayIssues.Service
                 return;
             }
 
-            string contents = this.GetContent(jiraIssuesResponse);
+            string content = this.GetContent(jiraIssuesResponse);
 
-            Console.WriteLine(contents);
+            Console.WriteLine(content);
         }
 
         private string GetContent(JiraIssueResponse jiraIssuesResponse)

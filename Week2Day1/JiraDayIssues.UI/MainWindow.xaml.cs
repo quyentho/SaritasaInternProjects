@@ -36,6 +36,7 @@ namespace JiraDayIssues.UI
             _jiraApiClient = new JiraApiClient(username, token);
 
             InitializeComponent();
+            dateTimePicker.SelectedDate = DateTime.Today.AddDays(-1);
         }
 
         #region Events

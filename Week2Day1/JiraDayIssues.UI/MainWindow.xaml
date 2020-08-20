@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:JiraDayIssues.UI"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid  Margin="5,0,5,0">
@@ -22,16 +23,17 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Label Content="Worklog author:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontWeight="Bold"  FontSize="11"/>
-            <TextBox Text="IvanKozhin" x:Name="txtWorklogAuthor" VerticalContentAlignment="Center"  TextWrapping="Wrap" Width="Auto" Height="24" Grid.Column="1"/>
+            <TextBox Text="IvanKozhin" x:Name="txtWorklogAuthor" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Width="Auto" Height="24" Grid.Column="1"/>
         </Grid>
-        <DatePicker Grid.Column="2" x:Name="dateTimePicker" HorizontalAlignment="Left" VerticalAlignment="Center" Width="268" Height="24" SelectedDateFormat="Short" />
+        <DatePicker Grid.Column="2" x:Name="dateTimePicker" HorizontalAlignment="Left" VerticalAlignment="Center" Width="268" Height="24" SelectedDateFormat="Short">
+        </DatePicker>
         <Button Content="Get" x:Name="btnExecute" Click="btnExecute_Click" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="2" Height="24" Width="62" Margin="273,0,0,0"/>
         <Label x:Name="lbLoad" 
                Grid.Column="2" 
                VerticalAlignment="Center" 
                HorizontalAlignment="Left" 
                Content="Loading..." 
-               Visibility="Hidden" 
+               Visibility="Hidden"
                Width="Auto" 
                FontWeight="Bold" 
                FontSize="20" Background="#00000000" Foreground="#FFDA1515" Margin="397,0,0,0"/>

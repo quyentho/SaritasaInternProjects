@@ -63,7 +63,7 @@ namespace JiraDayIssues.Service
 
         private void DisplayIssues(JiraIssueResponse response)
         {
-            var responsePresenter = new ResponsePresenter();
+            var responsePresenter = new ResponseDisplayer();
 
             responsePresenter.DisplayResponse(response);
         }

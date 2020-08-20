@@ -22,8 +22,10 @@ namespace JiraDayIssues.UI
 
         public MainWindow()
         {
-            string username = Prompt.GetString("Please provide your username:");
-            string token = Prompt.GetPassword("Please provide your token:");
+           // string username = Prompt.GetString("Please provide your username:");
+            string username = "quyen.tho@saritasa.com";
+            //string token = Prompt.GetPassword("Please provide your token:");
+            string token = "muvykLqdTaYg3qbbdFmf37FE";
 
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(token))
             {

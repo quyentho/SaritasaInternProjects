@@ -2,6 +2,7 @@
 using JiraDayIssues.Service;
 using McMaster.Extensions.CommandLineUtils;
 using Newtonsoft.Json;
+using NLog;
 using NLog.Time;
 using RestSharp;
 using System;
@@ -22,6 +23,8 @@ namespace JiraDayIssues.UI
         private CancellationTokenSource _cancellationTokenSource;
         private List<Issue> _cachedIssues = new List<Issue>();
         private Dictionary<string, List<Worklog>> _cachedWorklogs = new Dictionary<string, List<Worklog>>();
+
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
         public MainWindow()
         {
             // string username = Prompt.GetString("Please provide your username:");
@@ -32,6 +35,7 @@ namespace JiraDayIssues.UI
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(token))
             {
                 MessageBox.Show("You must provide correct username and token to use application.");
+                _logger.Info("Not input username or password .Exit application.");
                 Environment.Exit(0);
             }
 
@@ -69,8 +73,8 @@ namespace JiraDayIssues.UI
 
             await GetIssues();
            
-            await CacheWorklogs(); // BUG: Task will be canceled if click the get button when it running in background.
-        }                          // Fix idea: allow to cancel and handle the exception occur by logging.
+            await CacheWorklogs();
+        }                          
 
         private async Task CacheWorklogs()
         {
@@ -99,7 +103,7 @@ namespace JiraDayIssues.UI
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                _logger.Error(ex.Message);
                 return null;
             }
             finally
@@ -140,10 +144,12 @@ namespace JiraDayIssues.UI
             catch (JsonReaderException)
             {
                 MessageBox.Show("Wrong credentials!");
+                _logger.Error("Cannot desirialize response.");
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                _logger.Error(ex.Message);
             }
             finally
             {

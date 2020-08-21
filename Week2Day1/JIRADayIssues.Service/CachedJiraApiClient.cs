@@ -43,16 +43,17 @@ namespace JiraDayIssues.Service
                 return CachedWorklogs[issueId];
             }
 
-            return await _jiraApiClient.GetWorklogsAsync(issueId, cancellationToken);
+            var worklogs = await _jiraApiClient.GetWorklogsAsync(issueId, cancellationToken);
+            CachedWorklogs.Add(issueId, worklogs);
+
+            return worklogs;
         }
 
         private async Task CacheWorklogsAsync(JiraIssueResponse jiraIssuesResponse, CancellationToken cancellationToken)
         {
             foreach (var issue in jiraIssuesResponse.Issues)
             {
-                List<Worklog> worklogs = await GetWorklogsAsync(issue.Id, cancellationToken);
-
-                CachedWorklogs.Add(issue.Id, worklogs);
+                await GetWorklogsAsync(issue.Id, cancellationToken);
             }
         }
     }

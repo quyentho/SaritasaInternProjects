@@ -19,10 +19,9 @@ namespace JiraDayIssues.UI
     /// </summary>
     public partial class MainWindow : Window
     {
-        private JiraApiClient _jiraApiClient;
+        private IJiraApiClient _jiraApiClient;
         private CancellationTokenSource _cancellationTokenSource;
-        private List<Issue> _cachedIssues = new List<Issue>();
-        private Dictionary<string, List<Worklog>> _cachedWorklogs = new Dictionary<string, List<Worklog>>();
+
 
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         public MainWindow()
@@ -35,20 +34,23 @@ namespace JiraDayIssues.UI
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(token))
             {
                 MessageBox.Show("You must provide correct username and token to use application.");
+
                 _logger.Info("Not input username or password .Exit application.");
+
                 Environment.Exit(0);
             }
 
-            _jiraApiClient = new JiraApiClient(username, token);
+            _jiraApiClient = new IJiraClientDecorator(new JiraApiClient(username, token));
 
             InitializeComponent();
+
             datePicker.SelectedDate = DateTime.Today.AddDays(-1);
         }
 
         #region Events
         private async void IssuesCell_MouseUp(object sender, RoutedEventArgs e)
         {
-            string issueId = _cachedIssues[dgIssues.SelectedIndex].Id;
+            string issueId = (dgIssues.SelectedItem as Issue).Id;
             List<Worklog> worklogs = await GetWorklogs(issueId);
             if (worklogs is null)
             {
@@ -72,18 +74,7 @@ namespace JiraDayIssues.UI
             }
 
             await GetIssues();
-           
-            await CacheWorklogs();
         }                          
-
-        private async Task CacheWorklogs()
-        {
-            foreach (var issue in _cachedIssues)
-            {
-                List<Worklog> worklogs = await GetWorklogs(issue.Id);
-                _cachedWorklogs.Add(issue.Id, worklogs);
-            }
-        }
         #endregion
 
         private async Task<List<Worklog>> GetWorklogs(string issueId)
@@ -91,9 +82,10 @@ namespace JiraDayIssues.UI
             try
             {
                 _cancellationTokenSource = new CancellationTokenSource();
-                if (_cachedWorklogs.ContainsKey(issueId))
+
+                if ((_jiraApiClient as IJiraClientDecorator).CachedWorklogs.ContainsKey(issueId))
                 {
-                    List<Worklog> worklogs = _cachedWorklogs[issueId];
+                    List<Worklog> worklogs = (_jiraApiClient as IJiraClientDecorator).CachedWorklogs[issueId];
                     return worklogs;
                 }
 
@@ -126,6 +118,7 @@ namespace JiraDayIssues.UI
         {
             dgIssues.ItemsSource = null;
             dgIssues.Items.Refresh();
+
             dgWorklog.ItemsSource = null;
             dgWorklog.Items.Refresh();
         }
@@ -137,9 +130,8 @@ namespace JiraDayIssues.UI
                 PreProcess();
 
                 JiraIssueResponse response = await _jiraApiClient.GetIssuesAsync(datePicker.SelectedDate.GetValueOrDefault(), txtWorklogAuthor.Text, _cancellationTokenSource.Token);
-                _cachedIssues = response.Issues;
 
-                DisplayIssues(_cachedIssues);
+                DisplayIssues(response.Issues);
             }
             catch (JsonReaderException)
             {
@@ -164,13 +156,15 @@ namespace JiraDayIssues.UI
             btnExecute.Content = "Search";
 
             _cancellationTokenSource.Dispose();
+
+            _cancellationTokenSource = null;
         }
 
         private void PreProcess()
         {
             _cancellationTokenSource = new CancellationTokenSource();
-            _cachedIssues.Clear();
-            _cachedWorklogs.Clear();
+
+            (_jiraApiClient as IJiraClientDecorator).CachedWorklogs.Clear();
 
             lbLoad.Visibility = Visibility.Visible;
 

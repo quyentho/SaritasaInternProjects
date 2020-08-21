@@ -44,6 +44,7 @@ namespace JiraDayIssues.Service
             }
 
             var worklogs = await _jiraApiClient.GetWorklogsAsync(issueId, cancellationToken);
+
             CachedWorklogs.Add(issueId, worklogs);
 
             return worklogs;

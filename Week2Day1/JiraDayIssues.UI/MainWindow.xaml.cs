@@ -1,16 +1,12 @@
 ﻿using JiraDayIssues.Model;
 using JiraDayIssues.Service;
-using McMaster.Extensions.CommandLineUtils;
 using Newtonsoft.Json;
 using NLog;
-using NLog.Time;
-using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace JiraDayIssues.UI
 {
@@ -24,6 +20,7 @@ namespace JiraDayIssues.UI
 
 
         private static Logger _logger = LogManager.GetCurrentClassLogger();
+        
         public MainWindow()
         {
             // string username = Prompt.GetString("Please provide your username:");
@@ -131,7 +128,7 @@ namespace JiraDayIssues.UI
             catch (JsonReaderException)
             {
                 MessageBox.Show("Wrong credentials!");
-                _logger.Error("Cannot desirialize response.");
+                _logger.Error("Cannot deserialize response.");
             }
             catch (Exception ex)
             {

@@ -163,7 +163,7 @@ namespace JiraDayIssues.UI
 
             btnExecute.Content = "Search";
 
-            _cancellationTokenSource = null;
+            _cancellationTokenSource.Dispose();
         }
 
         private void PreProcess()

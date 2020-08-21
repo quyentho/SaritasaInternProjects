@@ -5,6 +5,7 @@
 namespace JiraDayIssues.Service
 {
     using System;
+    using System.Collections.Generic;
     using System.Globalization;
     using System.Threading;
     using System.Threading.Tasks;
@@ -45,14 +46,14 @@ namespace JiraDayIssues.Service
         }
 
         /// <inheritdoc/>
-        public async Task<JiraWorklogResponse> GetWorklogsAsync(string issueId, CancellationToken cancellationToken)
+        public async Task<List<Worklog>> GetWorklogsAsync(string issueId, CancellationToken cancellationToken)
         {
             var request = new RestRequest("/rest/api/2/issue/{issueId}/worklog", Method.GET);
             request.AddUrlSegment("issueId", issueId);
 
             var response = await this.ExecuteRequest<JiraWorklogResponse>(request, cancellationToken);
 
-            return response;
+            return response.Worklogs;
         }
 
         private async Task<T> ExecuteRequest<T>(RestRequest request, CancellationToken cancellationToken)

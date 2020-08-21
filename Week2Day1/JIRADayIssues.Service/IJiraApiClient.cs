@@ -3,6 +3,7 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using JiraDayIssues.Model;
@@ -26,6 +27,6 @@ namespace JiraDayIssues.Service
         /// </summary>
         /// <param name="issueId">Issue to get worklogs.</param>
         /// <returns>Request after config.</returns>
-       Task<JiraWorklogResponse> GetWorklogsAsync(string issueId, CancellationToken cancellationToken);
+       Task<List<Worklog>> GetWorklogsAsync(string issueId, CancellationToken cancellationToken);
     }
 }

@@ -40,7 +40,7 @@ namespace JiraDayIssues.UI
                 Environment.Exit(0);
             }
 
-            _jiraApiClient = new IJiraClientDecorator(new JiraApiClient(username, token));
+            _jiraApiClient = new CachedJiraApiClient(new JiraApiClient(username, token));
 
             InitializeComponent();
 
@@ -83,15 +83,10 @@ namespace JiraDayIssues.UI
             {
                 _cancellationTokenSource = new CancellationTokenSource();
 
-                if ((_jiraApiClient as IJiraClientDecorator).CachedWorklogs.ContainsKey(issueId))
-                {
-                    List<Worklog> worklogs = (_jiraApiClient as IJiraClientDecorator).CachedWorklogs[issueId];
-                    return worklogs;
-                }
-
-                JiraWorklogResponse worklogResponse = 
+                List<Worklog> worklogs =
                     await _jiraApiClient.GetWorklogsAsync(issueId, _cancellationTokenSource.Token);
-                return worklogResponse.Worklogs;
+                
+                return worklogs;
             }
             catch (Exception ex)
             {
@@ -164,7 +159,7 @@ namespace JiraDayIssues.UI
         {
             _cancellationTokenSource = new CancellationTokenSource();
 
-            (_jiraApiClient as IJiraClientDecorator).CachedWorklogs.Clear();
+            (_jiraApiClient as CachedJiraApiClient).CachedWorklogs.Clear();
 
             lbLoad.Visibility = Visibility.Visible;
 

@@ -20,7 +20,7 @@ namespace JiraDayIssues.UI
 
 
         private static Logger _logger = LogManager.GetCurrentClassLogger();
-        
+
         public MainWindow()
         {
             // string username = Prompt.GetString("Please provide your username:");
@@ -46,11 +46,11 @@ namespace JiraDayIssues.UI
 
         private void SetDefaultSelectedDate()
         {
-            if(DateTime.Today.DayOfWeek == DayOfWeek.Sunday)
+            if (DateTime.Today.DayOfWeek == DayOfWeek.Sunday)
             {
                 datePicker.SelectedDate = DateTime.Today.AddDays(-2);
             }
-            else if(DateTime.Today.DayOfWeek == DayOfWeek.Monday)
+            else if (DateTime.Today.DayOfWeek == DayOfWeek.Monday)
             {
                 datePicker.SelectedDate = DateTime.Today.AddDays(-3);
             }
@@ -87,7 +87,7 @@ namespace JiraDayIssues.UI
             }
 
             await GetIssues();
-        }                          
+        }
         #endregion
 
         private async Task<List<Worklog>> GetWorklogs(string issueId)
@@ -98,7 +98,7 @@ namespace JiraDayIssues.UI
 
                 List<Worklog> worklogs =
                     await _jiraApiClient.GetWorklogsAsync(issueId, _cancellationTokenSource.Token);
-                
+
                 return worklogs;
             }
             catch (Exception ex)

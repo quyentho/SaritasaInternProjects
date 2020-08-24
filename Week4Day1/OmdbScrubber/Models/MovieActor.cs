@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace OmdbScrubber.Models
+{
+    public class MovieActor
+    {
+        public Guid ActorId { get; set; }
+        public Actor Actor { get; set; }
+
+        public Guid MovieId { get; set; }
+        public Movie Movie { get; set; }
+    }
+}

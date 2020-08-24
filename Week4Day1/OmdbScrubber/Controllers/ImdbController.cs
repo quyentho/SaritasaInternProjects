@@ -16,6 +16,7 @@ namespace OmdbScrubber.Controllers
 
         public IActionResult Upload()
         {
+            // TODO: upgrade better view;
             return View(new InputVM()); 
         }
 
@@ -23,7 +24,19 @@ namespace OmdbScrubber.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Upload(InputVM input)
         {
-            return RedirectToAction(nameof(Index), nameof(HomeController));
+            // TODO: Validate input and return back the message.
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction();
+            }
+
+            var imdbIds = input.UserInput.Split(",", StringSplitOptions.RemoveEmptyEntries);
+            return RedirectToAction(nameof(List));
+        }
+
+        public IActionResult List(string[] imdbIds)
+        {
+            return View();
         }
     }
 }

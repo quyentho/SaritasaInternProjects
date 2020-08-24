@@ -60,7 +60,7 @@ namespace OmdbScrubber
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Imdb}/{action=List}/{id?}");
             });
         }
     }

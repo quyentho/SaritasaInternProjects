@@ -42,12 +42,15 @@ namespace JiraDayIssues.Service
                 stringBuilder.AppendLine(issue.Field.Project.Name);
 
                 var timeSpent = TimeSpan.FromSeconds(issue.Field.TimeSpent);
+
                 var estimateTime = TimeSpan.FromSeconds(issue.Field.EstimateTime);
+
                 stringBuilder.AppendFormat("{0,40} {1:0h}/{2:0h}", issue.Field.Summary, timeSpent.TotalHours, estimateTime.TotalHours);
                 stringBuilder.AppendLine("\n");
             }
 
             TimeSpan totalTime = TimeSpan.FromSeconds(jiraIssuesResponse.Issues.Sum(s => s.Field.TimeSpent));
+
             stringBuilder.AppendFormat("Total {0:0h} {1:0m}", totalTime.Hours, totalTime.Minutes);
 
             return stringBuilder.ToString();

@@ -41,7 +41,23 @@ namespace JiraDayIssues.UI
 
             InitializeComponent();
 
-            datePicker.SelectedDate = DateTime.Today.AddDays(-1);
+            SetDefaultSelectedDate();
+        }
+
+        private void SetDefaultSelectedDate()
+        {
+            if(DateTime.Today.DayOfWeek == DayOfWeek.Sunday)
+            {
+                datePicker.SelectedDate = DateTime.Today.AddDays(-2);
+            }
+            else if(DateTime.Today.DayOfWeek == DayOfWeek.Monday)
+            {
+                datePicker.SelectedDate = DateTime.Today.AddDays(-3);
+            }
+            else
+            {
+                datePicker.SelectedDate = DateTime.Today.AddDays(-1);
+            }
         }
 
         #region Events

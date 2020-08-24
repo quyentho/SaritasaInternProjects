@@ -98,7 +98,9 @@ namespace JiraDayIssues.Service
         private DateTime GetDateOption()
         {
             _logger.Info("Set date option.");
+
             DateTime date = DateTime.Now;
+
             if (this.DateOption.hasValue)
             {
                 date = this.DateOption.value.Date;

@@ -48,7 +48,8 @@
                   AlternatingRowBackground = "LightBlue" 
                   AlternationCount = "2" 
                   IsReadOnly="True" 
-                  AutoGenerateColumns = "False">
+                  AutoGenerateColumns = "False"
+                  Margin="0 0 0 20">
             <DataGrid.Columns>
                 <DataGridTextColumn Width="*" Header="Issues" FontSize="20">
                     <DataGridTextColumn.ElementStyle>
@@ -70,7 +71,7 @@
                 </Style>
             </DataGrid.CellStyle>
         </DataGrid>
-        <DataGrid x:Name="dgWorklog" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AlternatingRowBackground = "LightBlue" AlternationCount = "2" IsReadOnly="True" AutoGenerateColumns = "False" SelectionMode="Single" SelectionUnit="Cell" Grid.ColumnSpan="2">
+        <DataGrid x:Name="dgWorklog" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AlternatingRowBackground = "LightBlue" AlternationCount = "2" IsReadOnly="True" AutoGenerateColumns = "False" SelectionMode="Single" SelectionUnit="Cell" Grid.ColumnSpan="2" Margin="0 0 0 20">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Worklog" Width="4*" FontSize="20" Binding="{Binding Comment}">
                     <DataGridTextColumn.ElementStyle>

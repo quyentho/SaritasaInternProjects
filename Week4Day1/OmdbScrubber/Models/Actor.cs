@@ -11,7 +11,7 @@ namespace OmdbScrubber.Models
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        public Guid MyProperty { get; set; }
+        public Guid Id { get; set; }
 
         public string Name { get; set; }
 

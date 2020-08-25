@@ -8,6 +8,11 @@ namespace OmdbScrubber.Models
 {
     public class OmdbContext : DbContext
     {
+        public OmdbContext() : base()
+        {
+
+        }
+
         public OmdbContext(DbContextOptions<OmdbContext> options) : base(options)
         {
         }

@@ -1,40 +1,41 @@
-﻿<table class="table table-striped">
-    <div class="row">
-        <div class="col">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text" id="inputGroup-sizing-default">Rating above</span>
-                </div>
-                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+﻿@model List<Movie>
+<div class="row">
+    <div class="col">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-default">Rating above</span>
             </div>
-        </div>
-        <div class="col">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item " href="#">Rumtime Minutes Above</a>
-                        <a class="dropdown-item" href="#">Rumtime Minutes Below</a>
-                    </div>
-                </div>
-                <input type="text" class="form-control" aria-label="Text input with dropdown button">
-            </div>
+            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
         </div>
     </div>
-    <div class="row">
-        <div class="col">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text" id="inputGroup-sizing-default">Actor name</span>
+    <div class="col">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item " href="#">Rumtime Minutes Above</a>
+                    <a class="dropdown-item" href="#">Rumtime Minutes Below</a>
                 </div>
-                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
             </div>
+            <input type="text" class="form-control" aria-label="Text input with dropdown button">
         </div>
     </div>
-    <div class="row float-right mr-1 mb-1">
-        <button type="button" class="btn btn-success float-right">Filter</button>
+</div>
+<div class="row">
+    <div class="col">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-default">Actor name</span>
+            </div>
+            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
     </div>
+</div>
+<div class="row float-right mr-1 mb-1">
+    <button type="button" class="btn btn-success float-right">Filter</button>
+</div>
 
+<table class="table table-striped">
 
     <thead>
         <tr>

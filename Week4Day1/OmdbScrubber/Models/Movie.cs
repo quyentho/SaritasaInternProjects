@@ -1,27 +1,19 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace OmdbScrubber.Models
 {
-    public class Movie
+    public class Movie : MovieBaseModel
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public Guid Id { get; set; }
 
-        public string ImdbId { get; set; }
-
-        public string Title { get; set; }
-
-        public string Genre { get; set; }
-
-        public DateTime ReleaseDate { get; set; }
-
         public int RuntimeMins { get; set; }
-
-        public decimal ImdbRating { get; set; }
 
         public DateTime CreateAt { get; set; }
 

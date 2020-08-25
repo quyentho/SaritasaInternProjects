@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OmdbScrubber.Models;
 
 namespace OmdbScrubber.Migrations
 {
     [DbContext(typeof(OmdbContext))]
-    partial class OmdbContextModelSnapshot : ModelSnapshot
+    [Migration("20200825032028_UpdateIdFieldOfActor")]
+    partial class UpdateIdFieldOfActor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

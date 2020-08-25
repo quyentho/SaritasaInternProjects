@@ -16,6 +16,7 @@ namespace OmdbScrubber.Models
         {
             modelBuilder.Entity<MovieActor>().HasKey(c => new { c.MovieId, c.ActorId });
             modelBuilder.Entity<Movie>().Property(m => m.ImdbRating).HasColumnType("decimal(10,2)");
+            modelBuilder.Entity<Movie>().Property(m => m.ReleaseDate).HasColumnType("date");
         }
 
         public DbSet<Actor> Actors { get; set; }

@@ -20,14 +20,18 @@ namespace OmdbScrubber.Repositories
             _mapper = mapper;
         }
 
+        public List<Movie> Movies { get; private set; }
+
         public async Task<List<Movie>> GetMovies(string input)
         {
             var imdbIds = input.Split(",", StringSplitOptions.RemoveEmptyEntries);
 
+            var moviesFromDb = _context.Movies.ToList();
+
+            // TODO: Use Except
+
 
             RestClient client = new RestClient("https://www.omdbapi.com/");
-
-            List<Movie> movies = new List<Movie>();
 
             for (int i = 0; i < imdbIds.Length; i++)
             {
@@ -38,11 +42,12 @@ namespace OmdbScrubber.Repositories
                 if (movieResponse.ImdbId != null)
                 {
                     Movie movie = _mapper.Map<Movie>(movieResponse);
-                    movies.Add(movie);
+                    SaveMovies(movie);
+                    Movies.Add(movie);
                 }
             }
 
-            return movies;
+            return Movies;
         }
 
         public async Task SaveMovies(List<Movie> movies)

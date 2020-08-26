@@ -52,32 +52,16 @@ namespace OmdbScrubber.Controllers
             {
                 await _movieRepository.SaveMovies(movies);
 
-                TempData["movies"] = JsonConvert.SerializeObject(movies, Formatting.None, new JsonSerializerSettings()
-                {
-                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                });
-
                 return RedirectToAction(nameof(List));
             }
 
             return Json($"Not found movie with imdb id: {input}.");
         }
 
-        public IActionResult List()
+        public IActionResult List(decimal? ratingAbove,int? runtimeMinsAbove,int? runtimeMinsBelow,string? hasActor)
         {
-            var movies = JsonConvert.DeserializeObject<List<Movie>>((string)TempData["movies"]);
             var movieVM = new MovieVM() { Movies = movies };
             return View(movieVM);
         }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult List(MovieVM movieVM)
-        {
-            return RedirectToAction();
-        }
-
-    
-       
     }
 }

@@ -1,8 +1,9 @@
-﻿@model InputVM
+﻿@model string
 
 <h1>Search for movie information</h1>
 
 <form asp-controller="Imdb" asp-action="Upload" method="post">
-    ImdbIds: <textarea asp-for="UserInput"></textarea>
+    ImdbIds: <textarea type="text" name="input"></textarea>
+    <br />
     <button type="submit">Submit</button>
 </form>

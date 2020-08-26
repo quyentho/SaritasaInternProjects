@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using OmdbScrubber.Models;
 using OmdbScrubber.Models.ViewModels;
+using OmdbScrubber.Repositories;
 using RestSharp;
 
 namespace OmdbScrubber.Controllers
@@ -15,12 +16,15 @@ namespace OmdbScrubber.Controllers
     public class ImdbController : Controller
     {
 
-        OmdbContext _omdbContext;
+        private readonly OmdbContext _omdbContext;
         private readonly IMapper _mapper;
+        private readonly MovieRepository _movieRepository;
         public ImdbController(OmdbContext omdbContext, IMapper mapper)
         {
             _omdbContext = omdbContext;
             _mapper = mapper;
+            _movieRepository = new MovieRepository(_omdbContext, _mapper);
+
         }
         public IActionResult Index()
         {
@@ -30,12 +34,12 @@ namespace OmdbScrubber.Controllers
         public IActionResult Upload()
         {
             // TODO: upgrade better view;
-            return View(new InputVM());
+            return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Upload(InputVM input)
+        public async Task<IActionResult> Upload(string input)
         {
             // TODO: Validate input and return back the message.
             if (!ModelState.IsValid)
@@ -43,10 +47,10 @@ namespace OmdbScrubber.Controllers
                 return RedirectToAction();
             }
 
-            List<Movie> movies = await GetMovies(input);
+            List<Movie> movies = await _movieRepository.GetMovies(input);
             if(movies.Count > 0)
             {
-                await SaveMovies(movies);
+                await _movieRepository.SaveMovies(movies);
 
                 TempData["movies"] = JsonConvert.SerializeObject(movies, Formatting.None, new JsonSerializerSettings()
                 {
@@ -56,7 +60,7 @@ namespace OmdbScrubber.Controllers
                 return RedirectToAction(nameof(List));
             }
 
-            return Json($"Not found movie with imdb id: {input.UserInput}.");
+            return Json($"Not found movie with imdb id: {input}.");
         }
 
         public IActionResult List()
@@ -70,59 +74,10 @@ namespace OmdbScrubber.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult List(MovieVM movieVM)
         {
-            var filtered = movieVM.Movies.Where(m => m.MovieActors.Where(ma => ma.Actor.Name == movieVM.HasActor).ToList() && m.ImdbRating >= movieVM.RatingAbove && (m.RuntimeMins >= movieVM.RuntimeMinsAbove || movieVM.RuntimeMinsBelow > m.RuntimeMins)).ToList();
             return RedirectToAction();
         }
 
-        private async Task SaveMovies(List<Movie> movies)
-        {
-            foreach (var movie in movies)
-            {
-                if (!_omdbContext.Movies.Any(m => m.ImdbId == movie.ImdbId)) // Check if not duplicate.
-                {
-                    _omdbContext.Movies.Add(movie);
-                }
-            }
-
-            await _omdbContext.SaveChangesAsync();
-        }
-
-        private async Task<List<Movie>> GetMovies(InputVM input)
-        {
-
-            var imdbIds = input.UserInput.Split(",", StringSplitOptions.RemoveEmptyEntries);
-            
-
-            RestClient client = new RestClient("https://www.omdbapi.com/");
-
-            List<Movie> movies = new List<Movie>();
-
-            for (int i = 0; i < imdbIds.Length; i++)
-            {
-                IRestResponse response = await GetResponse(client, imdbIds[i]);
-
-                MovieResponse movieResponse = JsonConvert.DeserializeObject<MovieResponse>(response.Content);
-                
-                if (movieResponse.ImdbId != null)
-                {
-                    Movie movie = _mapper.Map<Movie>(movieResponse);
-                    movies.Add(movie);
-                }
-            }
-
-            return movies;
-        }
-
-        private static async Task<IRestResponse> GetResponse(RestClient client, string imdbId)
-        {
-            RestRequest request = new RestRequest();
-            request.AddParameter("i", imdbId);
-            request.AddParameter("apikey", "19e14e4");
-
-            IRestResponse response = await client.ExecuteAsync(request);
-            return response;
-        }
-
+    
        
     }
 }

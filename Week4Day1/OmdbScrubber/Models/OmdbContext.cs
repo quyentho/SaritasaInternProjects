@@ -19,7 +19,17 @@ namespace OmdbScrubber.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MovieActor>().HasKey(c => new { c.MovieId, c.ActorId });
+            modelBuilder.Entity<MovieActor>().HasKey(ma => new { ma.MovieId, ma.ActorId });
+            modelBuilder.Entity<MovieActor>()
+                .HasOne(ma => ma.Movie)
+                .WithMany(m => m.MovieActors)
+                .HasForeignKey(ma => ma.MovieId);
+            
+            modelBuilder.Entity<MovieActor>()
+                .HasOne(ma => ma.Actor)
+                .WithMany(m => m.MovieActors)
+                .HasForeignKey(ma => ma.ActorId);
+
             modelBuilder.Entity<Movie>().Property(m => m.ImdbRating).HasColumnType("decimal(10,2)");
             modelBuilder.Entity<Movie>().Property(m => m.ReleaseDate).HasColumnType("date");
         }

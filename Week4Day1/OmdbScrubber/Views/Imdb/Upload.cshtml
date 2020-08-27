@@ -1,9 +1,11 @@
-﻿@model string
+﻿@model OmdbScrubber.Models.ViewModels.UploadViewModel
 
 <h1>Search for movie information</h1>
 
 <form asp-controller="Imdb" asp-action="Upload" method="post">
-    ImdbIds: <textarea type="text" name="input"></textarea>
-    <br />
-    <button type="submit">Submit</button>
+    <div class="form-group">
+        <label>Imdb Ids:</label>
+        <textarea class="form-control" asp-for="Input" rows="3"></textarea>
+    </div>
+    <button type="submit" class="btn btn-outline-success">Search</button>
 </form>

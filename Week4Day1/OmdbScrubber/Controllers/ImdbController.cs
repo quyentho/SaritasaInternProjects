@@ -4,8 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Newtonsoft.Json;
+using OmdbScrubber.Extensions;
 using OmdbScrubber.Models;
 using OmdbScrubber.Models.ViewModels;
 using OmdbScrubber.Repositories;
@@ -19,12 +18,12 @@ namespace OmdbScrubber.Controllers
         private readonly OmdbContext _omdbContext;
         private readonly IMapper _mapper;
         private readonly MovieRepository _movieRepository;
+
         public ImdbController(OmdbContext omdbContext, IMapper mapper)
         {
             _omdbContext = omdbContext;
             _mapper = mapper;
             _movieRepository = new MovieRepository(_omdbContext, _mapper);
-
         }
         public IActionResult Index()
         {
@@ -33,35 +32,44 @@ namespace OmdbScrubber.Controllers
 
         public IActionResult Upload()
         {
-            // TODO: upgrade better view;
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Upload(string input)
+        public async Task<IActionResult> Upload(UploadViewModel uploadVm)
         {
-            // TODO: Validate input and return back the message.
             if (!ModelState.IsValid)
             {
                 return RedirectToAction();
             }
 
-            List<Movie> movies = await _movieRepository.GetMovies(input);
-            if(movies.Count > 0)
+            List<Movie> movies = await _movieRepository.GetMovies(uploadVm.Input);
+            if (movies.Count > 0)
             {
-                await _movieRepository.SaveMovies(movies);
+                HttpContext.Session.SetSession("movies", movies);
 
                 return RedirectToAction(nameof(List));
             }
 
-            return Json($"Not found movie with imdb id: {input}.");
+            return Json($"Not found movie with imdb id: {uploadVm.Input}.");
         }
 
-        public IActionResult List(decimal? ratingAbove,int? runtimeMinsAbove,int? runtimeMinsBelow,string? hasActor)
+        public IActionResult List(decimal? ratingAbove, int? runtimeMinsAbove, int? runtimeMinsBelow, string? hasActor)
         {
-            var movieVM = new MovieVM() { Movies = movies };
-            return View(movieVM);
+            List<Movie> movies = HttpContext.Session.GetSession<List<Movie>>("movies");
+
+            FilterCriterials filterCriterials =new  FilterCriterials()
+            {
+               RatingAbove = ratingAbove,
+               RuntimeMinsBelow = runtimeMinsBelow,
+               RuntimeMinsAbove = runtimeMinsAbove,
+               ActorName = hasActor
+            };
+
+            movies = _movieRepository.GetMoviesFiltered(movies, filterCriterials);
+
+            return View(movies);
         }
     }
 }

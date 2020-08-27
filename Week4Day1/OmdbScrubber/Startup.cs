@@ -32,6 +32,9 @@ namespace OmdbScrubber
 
             services.AddMvc();
 
+            services.AddDistributedMemoryCache();
+            services.AddSession();
+
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new AutomapperProfile());
@@ -48,7 +51,6 @@ namespace OmdbScrubber
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetRequiredService<OmdbContext>();
-                context.Database.EnsureDeleted();
                 context.Database.Migrate();
             }
 
@@ -66,11 +68,13 @@ namespace OmdbScrubber
 
             app.UseAuthorization();
 
+            app.UseSession();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Imdb}/{action=Upload}/{id?}");
             });
         }
     }

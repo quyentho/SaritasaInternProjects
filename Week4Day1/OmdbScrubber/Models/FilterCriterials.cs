@@ -1,21 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore.Infrastructure;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace OmdbScrubber.Models.ViewModels
+namespace OmdbScrubber.Models
 {
-    public class MovieVM
+    public class FilterCriterials
     {
-        public List<Movie> Movies { get; set; }
-
         public decimal? RatingAbove { get; set; }
 
         public int? RuntimeMinsAbove { get; set; }
 
         public int? RuntimeMinsBelow { get; set; }
 
-        public string? HasActor { get; set; }
+        public string? ActorName { get; set; }
     }
 }

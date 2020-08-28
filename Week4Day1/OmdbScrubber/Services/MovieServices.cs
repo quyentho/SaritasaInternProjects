@@ -34,6 +34,7 @@ namespace ServicesLayer
             {
                 Movie movie = await _apiClient.GetMovie(id);
 
+
                 if (movie != null) // valid movie.
                 {
                     movies.Add(movie);

@@ -29,21 +29,15 @@ namespace OmdbScrubber
             services.AddDbContext<OmdbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddControllersWithViews();
+            
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddMvc();
 
             services.AddDistributedMemoryCache();
             services.AddSession();
 
-            var mapperConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new AutomapperProfile());
-            });
-
-            IMapper mapper = mapperConfig.CreateMapper();
-
-            services.AddSingleton(mapper)
-                    .AddTransient<IMovieRepository, MovieRepository>()
+            services.AddTransient<IMovieRepository, MovieRepository>()
                     .AddTransient<IMovieServices, MovieServices>()
                     .AddTransient<IApiClient, ImdbApiClient>();
         }

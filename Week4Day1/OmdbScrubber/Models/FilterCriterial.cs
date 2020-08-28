@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace OmdbScrubber.Models
+﻿namespace OmdbScrubber.Models
 {
-    public class FilterCriterials
+    public class FilterCriterial
     {
         public decimal? RatingAbove { get; set; }
 

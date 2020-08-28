@@ -1,19 +1,30 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OmdbScrubber.Models
 {
     public class OmdbContext : DbContext
     {
-        public OmdbContext() : base()
-        {
 
+        public DbSet<Actor> Actors { get; set; }
+
+        public DbSet<Movie> Movies { get; set; }
+
+        public DbSet<MovieActor> MovieActors { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OmdbContext"/> class.
+        /// </summary>
+        public OmdbContext() 
+            : base()
+        {
         }
 
-        public OmdbContext(DbContextOptions<OmdbContext> options) : base(options)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OmdbContext"/> class.
+        /// </summary>
+        /// <param name="options">Dbcontext options.</param>
+        public OmdbContext(DbContextOptions<OmdbContext> options) 
+            : base(options)
         {
         }
 
@@ -34,10 +45,6 @@ namespace OmdbScrubber.Models
             modelBuilder.Entity<Movie>().Property(m => m.ReleaseDate).HasColumnType("date");
         }
 
-        public DbSet<Actor> Actors { get; set; }
-
-        public DbSet<Movie> Movies { get; set; }
-
-        public DbSet<MovieActor> MovieActors { get; set; }
+        
     }
 }

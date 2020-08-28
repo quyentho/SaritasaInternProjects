@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OmdbScrubber", "OmdbScrubber\OmdbScrubber.csproj", "{79CAEF19-C52C-41F8-BFF2-3E4EFF5BD2B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OmdbSrubber.Test", "OmdbSrubber.Test\OmdbSrubber.Test.csproj", "{7C8C04F6-9152-4E05-B4DE-2E12E43E21F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OmdbSrubber.Test", "OmdbSrubber.Test\OmdbSrubber.Test.csproj", "{7C8C04F6-9152-4E05-B4DE-2E12E43E21F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,6 +1,24 @@
-﻿namespace OmdbScrubber.Repositories
+﻿using OmdbScrubber.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace OmdbScrubber.Repositories
 {
     public interface IMovieRepository
     {
+        /// <summary>
+        /// Gets Movies from database, query from api if not exist and save to database.
+        /// </summary>
+        /// <param name="input">ids input by user.</param>
+        /// <returns>List of movies found.</returns>
+        Task<List<Movie>> GetMovies(List<string> imdbIds);
+
+
+        /// <summary>
+        /// Save Movie.
+        /// </summary>
+        /// <param name="movie">Movie to save.</param>
+        /// <returns>Task represent save action.</returns>
+        Task SaveMovie(Movie movie);
     }
 }

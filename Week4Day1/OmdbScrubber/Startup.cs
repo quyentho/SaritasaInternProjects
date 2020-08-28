@@ -1,15 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
+using DataAccessLayer.ApiClient;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using OmdbScrubber.ApiClient;
 using OmdbScrubber.Models;
+using OmdbScrubber.Repositories;
+using ServicesLayer;
 
 namespace OmdbScrubber
 {
@@ -41,7 +41,11 @@ namespace OmdbScrubber
             });
 
             IMapper mapper = mapperConfig.CreateMapper();
-            services.AddSingleton(mapper);
+
+            services.AddSingleton(mapper)
+                    .AddScoped<IMovieRepository, MovieRepository>()
+                    .AddScoped<IMovieServices, MovieServices>()
+                    .AddScoped<IApiClient, ImdbApiClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,6 +66,7 @@ namespace OmdbScrubber
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
             app.UseStaticFiles();
 
             app.UseRouting();

@@ -43,9 +43,9 @@ namespace OmdbScrubber
             IMapper mapper = mapperConfig.CreateMapper();
 
             services.AddSingleton(mapper)
-                    .AddScoped<IMovieRepository, MovieRepository>()
-                    .AddScoped<IMovieServices, MovieServices>()
-                    .AddScoped<IApiClient, ImdbApiClient>();
+                    .AddTransient<IMovieRepository, MovieRepository>()
+                    .AddTransient<IMovieServices, MovieServices>()
+                    .AddTransient<IApiClient, ImdbApiClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

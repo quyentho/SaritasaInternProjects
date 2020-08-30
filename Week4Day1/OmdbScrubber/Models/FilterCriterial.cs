@@ -8,6 +8,6 @@
 
         public int? RuntimeMinsBelow { get; set; }
 
-        public string? ActorName { get; set; }
+        public string ActorName { get; set; }
     }
 }

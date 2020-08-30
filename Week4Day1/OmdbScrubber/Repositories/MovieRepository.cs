@@ -18,7 +18,7 @@ namespace OmdbScrubber.Repositories
         }
 
         /// <inheritdoc />
-        public async Task<List<Movie>> GetMovies(List<string> imdbIds)
+        public Task<List<Movie>> GetMovies(List<string> imdbIds)
         {
 
             var moviesFromDb = _context.Movies
@@ -27,14 +27,19 @@ namespace OmdbScrubber.Repositories
                 .Where(m => imdbIds.Contains(m.ImdbId))
                 .ToListAsync();
 
-            return await moviesFromDb;
+            return moviesFromDb;
         }
 
         /// <inheritdoc/>
-        public async Task SaveMovie(Movie movie)
+        public async Task<int> SaveMovies()
+        {
+           return await _context.SaveChangesAsync();
+        }
+
+        /// <inheritdoc/>
+        public void AddMovieToContext(Movie movie)
         {
             _context.Movies.Add(movie);
-            await _context.SaveChangesAsync();
         }
     }
 }

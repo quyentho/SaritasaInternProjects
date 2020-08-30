@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using OmdbScrubber.ApiClient;
 using OmdbScrubber.Models;
 using OmdbScrubber.Repositories;
+using RestSharp.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,44 +27,48 @@ namespace ServicesLayer
         {
             List<string> imdbIds = input.Split(",", StringSplitOptions.RemoveEmptyEntries).Select(id => id.Trim()).ToList();
 
-            var movies = await _movieRepository.GetMovies(imdbIds); // Get movies exist in database.
+            var movies = await _movieRepository.GetMovies(imdbIds).ConfigureAwait(false); // Get movies exist in database.
 
             var newMovieIds = imdbIds.Except(movies.Select(m => m.ImdbId)).ToList(); // List movie ids not exist in database.
 
-            foreach (var id in newMovieIds) // Make api call if not found in database.
+            if (newMovieIds.Count > 0)
             {
-                Movie movie = await _apiClient.GetMovie(id);
-
-
-                if (movie != null) // valid movie.
+                foreach (var id in newMovieIds) // Make api call if not found in database.
                 {
-                    movies.Add(movie);
-                    await _movieRepository.SaveMovie(movie);
-                }
-            }
+                    Movie movie = await _apiClient.GetMovie(id).ConfigureAwait(false);
 
-            return movies;
+                    if (movie != null) // valid movie.
+                    {
+                        movies.Add(movie);
+                        _movieRepository.AddMovieToContext(movie);
+                    }
+                }
+
+                await _movieRepository.SaveMovies().ConfigureAwait(false);
+            }
+         
+           return movies;
         }
 
         /// <inheritdoc></inheritdoc>/>
         public List<Movie> GetMoviesFiltered(List<Movie> movies, FilterCriterial filterCriterials)
         {
-            if (filterCriterials.RatingAbove != null)
+            if (filterCriterials.RatingAbove.HasValue)
             {
                 movies = GetMoviesRatingAbove(movies, filterCriterials.RatingAbove);
             }
 
-            if (filterCriterials.RuntimeMinsAbove != null)
+            if (filterCriterials.RuntimeMinsAbove.HasValue)
             {
                 movies = GetMoviesAboveRuntimeMins(movies, filterCriterials.RuntimeMinsAbove);
             }
 
-            if (filterCriterials.RuntimeMinsBelow != null)
+            if (filterCriterials.RuntimeMinsBelow.HasValue)
             {
                 movies = GetMoviesBelowRuntimeMins(movies, filterCriterials.RuntimeMinsBelow);
             }
 
-            if (filterCriterials.ActorName != null)
+            if (filterCriterials.ActorName.HasValue())
             {
                 movies = GetMoviesHasActor(movies, filterCriterials.ActorName);
             }

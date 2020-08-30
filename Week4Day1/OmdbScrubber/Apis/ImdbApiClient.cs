@@ -36,14 +36,13 @@ namespace DataAccessLayer.ApiClient
             return null;
         }
 
-        private static async Task<IRestResponse> GetResponse(RestClient client, string imdbId)
+        private Task<IRestResponse> GetResponse(RestClient client, string imdbId)
         {
             RestRequest request = new RestRequest();
             request.AddParameter("i", imdbId);
             request.AddParameter("apikey", "19e14e4");
 
-            IRestResponse response = await client.ExecuteAsync(request);
-            return response;
+            return client.ExecuteAsync(request);
         }
     }
 }

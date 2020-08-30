@@ -31,7 +31,7 @@ namespace OmdbScrubber.Repositories
         }
 
         /// <inheritdoc/>
-        public async Task<int> SaveMovies()
+        public async Task<int> Save()
         {
            return await _context.SaveChangesAsync();
         }

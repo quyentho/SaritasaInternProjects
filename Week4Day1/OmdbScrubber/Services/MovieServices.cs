@@ -44,7 +44,7 @@ namespace ServicesLayer
                     }
                 }
 
-                await _movieRepository.SaveMovies().ConfigureAwait(false);
+                await _movieRepository.Save().ConfigureAwait(false);
             }
          
            return movies;

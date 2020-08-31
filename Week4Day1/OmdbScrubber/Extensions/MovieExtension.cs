@@ -26,7 +26,7 @@ namespace OmdbScrubber.Extensions
 
         private static Expression<Func<Movie, bool>> GetSearchConditions(FilterCriteria filterCriteria)
         {
-            var searchConditions = PredicateBuilder.New<Movie>();
+            var searchConditions = PredicateBuilder.New<Movie>(true);
 
             if (filterCriteria.RuntimeMinsBelow.HasValue)
             {
@@ -40,6 +40,7 @@ namespace OmdbScrubber.Extensions
             {
                 searchConditions.And(m => m.MovieActors.Select(ma => ma.Actor.Name).Contains(filterCriteria.ActorName));
             }
+
 
             return searchConditions;
         }

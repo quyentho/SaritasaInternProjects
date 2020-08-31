@@ -29,19 +29,19 @@ namespace ServicesLayer
 
             var movies = await _movieRepository.GetMovies(imdbIds).ConfigureAwait(false); // Get movies exist in database.
 
-            var newMovieIds = imdbIds.Except(movies.Select(m => m.ImdbId)).ToList(); // List movie ids not exist in database.
+            var notFoundMovieIds = imdbIds.Except(movies.Select(m => m.ImdbId)).ToList(); // List movie ids not exist in database.
 
-            if (newMovieIds.Count > 0)
+            if (notFoundMovieIds.Count > 0)
             {
-                await GetMoviesFromInternetAndSaveToDatabase(movies, newMovieIds).ConfigureAwait(false);
+                await GetMoviesFromInternetAndSaveToDatabase(movies, notFoundMovieIds).ConfigureAwait(false);
             }
 
             return movies;
         }
 
-        private async Task GetMoviesFromInternetAndSaveToDatabase(List<Movie> movies, List<string> newMovieIds)
+        private async Task GetMoviesFromInternetAndSaveToDatabase(List<Movie> movies, List<string> notFoundMovieIds)
         {
-            foreach (var id in newMovieIds) // Make api call if not found in database.
+            foreach (var id in notFoundMovieIds) // Make api call if not found in database.
             {
                 Movie movie = await _apiClient.GetMovie(id).ConfigureAwait(false);
 

@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "JiraDayIssues.UI": {
+      "commandName": "Project"
+    }
+  }
+}

@@ -1,3 +1,7 @@
+// <copyright file="Program.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using JiraDayIssues.Service;
 using McMaster.Extensions.CommandLineUtils;
 
@@ -15,6 +19,6 @@ namespace JiraDayIssues
         /// </summary>
         /// <param name="args">Arguments get from console.</param>
         /// <returns>Execution status code.</returns>
-        public static int Main(string[] args) => CommandLineApplication.Execute<CommandLine>(args);
+        public static int Main(string[] args) => CommandLineApplication.Execute<CommandLineExecution>(args);
     }
 }

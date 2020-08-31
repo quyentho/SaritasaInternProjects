@@ -1,6 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.Reflection.Metadata.Ecma335;
-using System.Text.Json.Serialization;
 
 namespace JiraDayIssues.Model
 {
@@ -11,5 +9,11 @@ namespace JiraDayIssues.Model
     {
         [JsonProperty("fields")]
         public Field Field { get; set; }
+
+        [JsonProperty("key")]
+        public string Key { get; set; }
+
+        [JsonProperty("id")]
+        public string Id { get; set; }
     }
 }

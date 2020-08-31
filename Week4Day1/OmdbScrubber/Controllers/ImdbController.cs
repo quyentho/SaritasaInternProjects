@@ -11,13 +11,13 @@ namespace OmdbScrubber.Controllers
 {
     public class ImdbController : Controller
     {
-        private readonly IMovieServices _movieServices;
+        private readonly IMovieService _movieServices;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ImdbController"/> class.
         /// </summary>
         /// <param name="movieServices">Movie service inject in constructor.</param>
-        public ImdbController(IMovieServices movieServices)
+        public ImdbController(IMovieService movieServices)
         {
             this._movieServices = movieServices;
         }

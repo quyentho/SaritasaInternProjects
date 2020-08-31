@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace ServicesLayer
 {
-    public interface IMovieServices
+    public interface IMovieService
     {
         /// <summary>
         /// Gets movies according to imdb ids input . If not found movies in database, make api call to gets from network.

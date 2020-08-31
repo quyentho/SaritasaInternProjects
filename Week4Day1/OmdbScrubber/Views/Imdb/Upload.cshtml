@@ -1,0 +1,15 @@
+﻿@model OmdbScrubber.Models.ViewModels.UploadViewModel
+
+<h1>Search for movie information</h1>
+
+<form asp-controller="Imdb" asp-action="Upload" method="post">
+    <div class="form-group">
+        <label>Imdb Ids:</label>
+        <textarea id="myTextarea" class="form-control" asp-for="Input" rows="3" ></textarea>
+    </div>
+    <button type="submit" class="btn btn-outline-success">Search</button>
+</form>
+
+<script type="text/javascript">
+    document.getElementById("myTextarea").value = "tt0149460,tt2861424,tt0120735,tt0183790,tt0078788";
+</script>

@@ -1,0 +1,83 @@
+﻿@model List<Movie>
+<form asp-controller="Imdb" asp-action="List" method="get">
+    <div class="row">
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" id="btnruntime" aria-haspopup="true" aria-expanded="false">Runtime filter</button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" id="above">Runtime minute above</a>
+                    <a class="dropdown-item" id="below">Runtime minute below</a>
+                </div>
+            </div>
+            <input type="text" class="form-control" id="runtime">
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Has actor</span>
+                </div>
+                <input name="hasActor" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            </div>
+        </div>
+        <div class="col">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Rating above</span>
+                </div>
+                <input name="ratingAbove" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            </div>
+        </div>
+    </div>
+
+    <div class="row float-right mr-1 mb-1">
+        <button asp-action="List" asp-controller="Imdb" type="submit" class="btn btn-success float-right">Filter</button>
+    </div>
+</form>
+<table class="table table-striped">
+
+    <thead>
+        <tr>
+            <th scope="col">Imdb Id</th>
+            <th scope="col">Title</th>
+            <th scope="col">Year</th>
+            <th scope="col">Runtime Minute</th>
+            <th scope="col">Genre</th>
+            <th scope="col">Actors</th>
+            <th scope="col">Rating</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th scope="row">@item.ImdbId</th>
+                <td>@item.Title</td>
+                <td>@item.CreateAt.Year</td>
+                <td>@item.RuntimeMins</td>
+                <td>@item.Genre</td>
+                <td>@string.Join(", ", item.MovieActors.Select(ma => ma.Actor.Name))</td>
+                <td>@item.ImdbRating</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+
+    $('#above').click(function () {
+        document.getElementById("btnruntime").innerHTML = "Runtime minute above";
+        var field = document.getElementById("runtime");
+        field.setAttribute("name", "runtimeMinsAbove");
+    });
+
+    $('#below').click(function () {
+        document.getElementById("btnruntime").innerHTML = "Runtime minute below";
+        var field = document.getElementById("runtime");
+        field.setAttribute("name", "runtimeMinsBelow");
+    });
+</script>

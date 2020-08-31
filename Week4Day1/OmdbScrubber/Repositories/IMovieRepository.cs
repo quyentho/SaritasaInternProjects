@@ -15,10 +15,16 @@ namespace OmdbScrubber.Repositories
 
 
         /// <summary>
-        /// Save Movie.
+        /// Save changes to database.
         /// </summary>
-        /// <param name="movie">Movie to save.</param>
+        /// <param name="movie">Movies to save.</param>
         /// <returns>Task represent save action.</returns>
-        Task SaveMovie(Movie movie);
+        Task<int> Save();
+
+        /// <summary>
+        /// Add movie to context change tracker.
+        /// </summary>
+        /// <param name="movie">Movie to add.</param>
+        void AddMovieToContext(Movie movie);
     }
 }

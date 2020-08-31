@@ -45,7 +45,7 @@ namespace OmdbScrubber.Controllers
                 return RedirectToAction();
             }
 
-            List<Movie> movies = await _movieServices.GetMovies(uploadVm.Input);
+            List<Movie> movies = await _movieServices.GetMovies(uploadVm.Input).ConfigureAwait(false);
             if (movies.Count > 0)
             {
                 HttpContext.Session.SetSession("movies", movies);
@@ -56,7 +56,7 @@ namespace OmdbScrubber.Controllers
             return Json($"Not found movie with imdb id: {uploadVm.Input}.");
         }
 
-        public IActionResult List(decimal? ratingAbove, int? runtimeMinsAbove, int? runtimeMinsBelow, string? hasActor)
+        public IActionResult List(decimal? ratingAbove, int? runtimeMinsAbove, int? runtimeMinsBelow, string hasActor)
         {
             List<Movie> movies = HttpContext.Session.GetSession<List<Movie>>("movies");
 

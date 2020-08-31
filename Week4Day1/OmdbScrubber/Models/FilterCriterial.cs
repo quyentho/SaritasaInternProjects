@@ -1,6 +1,6 @@
 ﻿namespace OmdbScrubber.Models
 {
-    public class FilterCriterial
+    public class FilterCriteria
     {
         public decimal? RatingAbove { get; set; }
 

@@ -56,11 +56,18 @@ namespace OmdbScrubber.Controllers
             return Json($"Not found movie with imdb id: {uploadVm.Input}.");
         }
 
+        /// <summary>
+        /// Renders view to display movies.
+        /// </summary>
+        /// <param name="ratingAbove">Filter movies by rating above.</param>
+        /// <param name="runtimeMinsAbove">Filter movies by runtime minute above.</param>
+        /// <param name="runtimeMinsBelow">Filter movies by runtime minute below.</param>
+        /// <param name="hasActor">Filter movies by actor.</param>
+        /// <returns></returns>
+        [HttpGet]
         public IActionResult List(decimal? ratingAbove, int? runtimeMinsAbove, int? runtimeMinsBelow, string hasActor)
         {
-            List<Movie> movies = HttpContext.Session.GetSession<List<Movie>>("movies");
-
-            FilterCriterial filterCriterials = new FilterCriterial()
+            var filterCriteria = new FilterCriteria()
             {
                 RatingAbove = ratingAbove,
                 RuntimeMinsBelow = runtimeMinsBelow,
@@ -68,7 +75,8 @@ namespace OmdbScrubber.Controllers
                 ActorName = hasActor
             };
 
-            movies = _movieServices.GetMoviesFiltered(movies, filterCriterials);
+            List<Movie> movies = HttpContext.Session.GetSession<List<Movie>>("movies");
+            movies = movies.Filter(filterCriteria);
 
             return View(movies);
         }

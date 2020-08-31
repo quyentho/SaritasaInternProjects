@@ -38,7 +38,7 @@ namespace OmdbScrubber
             services.AddSession();
 
             services.AddTransient<IMovieRepository, MovieRepository>()
-                    .AddTransient<IMovieServices, MovieService>()
+                    .AddTransient<IMovieService, MovieService>()
                     .AddTransient<IApiClient, ImdbApiClient>();
         }
 

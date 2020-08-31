@@ -7,7 +7,7 @@ namespace OmdbScrubber.Repositories
     public interface IMovieRepository
     {
         /// <summary>
-        /// Gets Movies from database, query from api if not exist and save to database.
+        /// Gets Movies exist in database.
         /// </summary>
         /// <param name="input">ids input by user.</param>
         /// <returns>List of movies found.</returns>
@@ -17,7 +17,6 @@ namespace OmdbScrubber.Repositories
         /// <summary>
         /// Save changes to database.
         /// </summary>
-        /// <param name="movie">Movies to save.</param>
         /// <returns>Task represent save action.</returns>
         Task<int> Save();
 

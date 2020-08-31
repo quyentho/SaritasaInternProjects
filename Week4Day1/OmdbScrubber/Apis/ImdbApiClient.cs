@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using OmdbScrubber.ApiClient;
 using OmdbScrubber.Models;

@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OmdbScrubber.Extensions
 {
@@ -17,7 +13,7 @@ namespace OmdbScrubber.Extensions
         /// <param name="value"></param>
         public static void SetSession(this ISession session, string key, object value)
         {
-            session.SetString(key, JsonConvert.SerializeObject(value, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore}));
+            session.SetString(key, JsonConvert.SerializeObject(value, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }));
         }
 
         /// <summary>

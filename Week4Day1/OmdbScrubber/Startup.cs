@@ -29,7 +29,7 @@ namespace OmdbScrubber
             services.AddDbContext<OmdbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddControllersWithViews();
-            
+
             services.AddAutoMapper(typeof(Startup));
 
             services.AddMvc();

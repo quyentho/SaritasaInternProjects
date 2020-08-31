@@ -1,5 +1,3 @@
-using System;
-
 namespace OmdbScrubber.Models
 {
     public class ErrorViewModel

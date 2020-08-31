@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace OmdbScrubber
 {
@@ -44,17 +43,17 @@ namespace OmdbScrubber
     {
         public IList<MovieActor> Convert(string sourceMember, ResolutionContext context)
         {
-            var actorNames = sourceMember.Split(",", StringSplitOptions.RemoveEmptyEntries).Select(a=>a.Trim());
-            
+            var actorNames = sourceMember.Split(",", StringSplitOptions.RemoveEmptyEntries).Select(a => a.Trim());
+
             var movieActors = new List<MovieActor>();
-            
+
             foreach (var actorName in actorNames)
             {
                 movieActors.Add(new MovieActor() { Actor = new Actor() { Name = actorName } });
             }
 
             return movieActors;
-            
+
         }
     }
 

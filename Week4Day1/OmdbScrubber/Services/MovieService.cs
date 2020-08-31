@@ -1,9 +1,6 @@
-﻿using DataAccessLayer.ApiClient;
-using Microsoft.AspNetCore.Mvc;
-using OmdbScrubber.ApiClient;
+﻿using OmdbScrubber.ApiClient;
 using OmdbScrubber.Models;
 using OmdbScrubber.Repositories;
-using RestSharp.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,6 +52,6 @@ namespace ServicesLayer
             await _movieRepository.Save().ConfigureAwait(false);
         }
 
-       
+
     }
 }

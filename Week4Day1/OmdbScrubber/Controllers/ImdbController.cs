@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using OmdbScrubber.Extensions;
 using OmdbScrubber.Models;
 using OmdbScrubber.Models.ViewModels;
 using ServicesLayer;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace OmdbScrubber.Controllers
 {

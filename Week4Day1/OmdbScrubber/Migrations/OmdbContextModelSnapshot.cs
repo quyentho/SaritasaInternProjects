@@ -80,7 +80,7 @@ namespace OmdbScrubber.Migrations
                     b.ToTable("MovieActors");
                 });
 
-            modelBuilder.Entity("OmdbScrubber.Models.MovieActor", b =>
+            modelBuilder.Entity("OmdbScrubber.Models.MovideActor", b =>
                 {
                     b.HasOne("OmdbScrubber.Models.Actor", "Actor")
                         .WithMany("MovieActors")

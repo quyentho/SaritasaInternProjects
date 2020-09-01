@@ -29,17 +29,16 @@ namespace UnrealEstate
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseRouting();
-
-
             app.UseSwagger();
 
             app.UseSwaggerUI(c => {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Unreal Estate V1");
             });
 
-          //  app.UseMvc();
+            app.UseRouting();
 
+
+            
 
             app.UseEndpoints(endpoints =>
             {

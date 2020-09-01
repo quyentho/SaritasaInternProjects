@@ -40,8 +40,7 @@ namespace OmdbScrubber.Extensions
             {
                 searchConditions.And(m => m.MovieActors.Select(ma => ma.Actor.Name).Contains(filterCriteria.ActorName));
             }
-
-
+            
             return searchConditions;
         }
     }

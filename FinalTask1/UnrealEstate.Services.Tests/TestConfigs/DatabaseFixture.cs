@@ -1,13 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Moq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnrealEstate.Models;
 using UnrealEstate.Models.Repositories;
-using UnRealEstate.Services;
 
 namespace UnrealEstate.Services.Tests
 {

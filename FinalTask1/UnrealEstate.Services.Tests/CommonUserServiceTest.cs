@@ -1,15 +1,13 @@
-using System.Collections.Generic;
-using UnrealEstate.Models;
-using UnRealEstate.Services;
-using Xunit;
+using Autofac;
+using Autofac.Extras.Moq;
 using FluentAssertions;
 using Moq;
-using UnrealEstate.Models.Repositories;
+using System.Collections.Generic;
+using UnrealEstate.Models;
 using UnrealEstate.Models.Models;
-using Microsoft.EntityFrameworkCore;
-using Autofac.Extras.Moq;
-using Autofac;
-using System;
+using UnrealEstate.Models.Repositories;
+using UnRealEstate.Services;
+using Xunit;
 
 namespace UnrealEstate.Services.Tests
 {

@@ -6,11 +6,11 @@ namespace UnrealEstate.Models
     {
         List<UnrealEstateUser> GetUsers();
 
-        bool AddUser(UnrealEstateUser user);
+        void AddUser(UnrealEstateUser user);
 
-        bool UpdateUser(int userId, UnrealEstateUser updatedUser);
+        void UpdateUser(int userId, UnrealEstateUser updatedUser);
 
         UnrealEstateUser GetUser(int id);
-        bool RemoveUser(int id);
+        void RemoveUser(int id);
     }
 }

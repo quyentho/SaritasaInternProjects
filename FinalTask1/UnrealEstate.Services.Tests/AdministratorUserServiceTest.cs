@@ -1,15 +1,12 @@
 ﻿using FluentAssertions;
 using Moq;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnrealEstate.Models;
 using Xunit;
 
 namespace UnrealEstate.Services.Tests
 {
+    [Collection("Database collection")]
     public class AdministratorUserServiceTest
     {
         Mock<IUserRepository> _mockUserRepository = new Mock<IUserRepository>();

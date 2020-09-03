@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using UnrealEstate.Models.Repositories;
+﻿using UnrealEstate.Models.Repositories;
 using UnRealEstate.Services;
 
 namespace UnrealEstate.Services

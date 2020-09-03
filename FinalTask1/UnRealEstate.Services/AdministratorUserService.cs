@@ -1,15 +1,23 @@
 ﻿using System.Collections.Generic;
 using UnrealEstate.Models;
+using UnrealEstate.Models.Repositories;
 
 namespace UnrealEstate.Services
 {
     public class AdministratorUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IListingRepository _listingRepository;
 
         public AdministratorUserService(IUserRepository userRepository)
         {
             _userRepository = userRepository;
+        }
+
+        public AdministratorUserService(IUserRepository userRepository, IListingRepository listingRepository)
+        {
+            _userRepository = userRepository;
+            _listingRepository = listingRepository;
         }
 
         public List<UnrealEstateUser> GetUsers()
@@ -36,5 +44,11 @@ namespace UnrealEstate.Services
         {
             _userRepository.RemoveUser(id);
         }
+
+        public void DisableListing(int listingId)
+        {
+            _listingRepository.Disable(listingId);
+        }
+
     }
 }

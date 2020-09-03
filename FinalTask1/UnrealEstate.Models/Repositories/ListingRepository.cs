@@ -45,5 +45,10 @@ namespace UnrealEstate.Models.Repositories
 
             _context.SaveChanges();
         }
+
+        public void Disable(int listingId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

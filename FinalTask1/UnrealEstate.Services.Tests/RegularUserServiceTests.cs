@@ -39,17 +39,16 @@ namespace UnrealEstate.Services.Tests
         [InlineData(3)]
         public void EditListing_ExistingListing_ShouldNotThrowException(int id)
         {
-            using (var mock = AutoMock.GetLoose(cfg => cfg
-                .RegisterInstance(_databaseFixture.FakeListingRepository)
-                .As<IListingRepository>()))
+            using (var mock = AutoMock.GetLoose())
             {
                 var sut = mock.Create<RegularUserService>();
 
-                Action result = () => sut.EditListing(new Listing() { Id = id });
+                sut.EditListing(new Listing() { Id = id });
 
-                result.Should().NotThrow();
+                mock.Mock<IListingRepository>().Verify(l => l.UpdateListing(It.IsAny<Listing>()), Times.Once);
             }
         }
+    
 
         [Theory]
         [InlineData(-1)]

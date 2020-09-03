@@ -34,10 +34,17 @@ namespace UnRealEstate.Services
 
         public Listing GetListing(int listingId)
         {
-            return _listingRepository.GetListing(listingId);
+            return _listingRepository.GetListingById(listingId);
         }
 
         public List<Listing> GetActiveListingWithFilter(FilterCriteria filterCriteria)
+        {
+            ExpressionStarter<Listing> filterConditions = BuildConditions(filterCriteria);
+
+            return _listingRepository.GetListingsWithFilter(filterConditions);
+        }
+
+        private static ExpressionStarter<Listing> BuildConditions(FilterCriteria filterCriteria)
         {
             var filterConditions = PredicateBuilder.New<Listing>(true);
 
@@ -72,7 +79,7 @@ namespace UnRealEstate.Services
                 filterConditions.And(l => l.Size >= filterCriteria.MinSize);
             }
 
-            return _listingRepository.GetListingsWithFilter(filterConditions);
+            return filterConditions;
         }
     }
 }

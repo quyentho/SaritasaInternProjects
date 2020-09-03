@@ -6,7 +6,7 @@ using System.Text;
 
 namespace UnrealEstate.Models.Repositories
 {
-    class ListingRepository : IListingRepository
+    public class ListingRepository : IListingRepository
     {
         private readonly UnrealEstateDbContext _context;
 
@@ -20,7 +20,7 @@ namespace UnrealEstate.Models.Repositories
             return _context.Listings.Where(filterConditions).ToList();
         }
 
-        public Listing GetListing(int listingId)
+        public Listing GetListingById(int listingId)
         {
             return _context.Listings.Find(listingId);
         }
@@ -28,6 +28,16 @@ namespace UnrealEstate.Models.Repositories
         public List<Listing> GetListings()
         {
             return _context.Listings.ToList();
+        }
+
+        public void AddListing(Listing listing)
+        {
+            _context.Listings.Add(listing);
+        }
+
+        public void UpdateListing(int id)
+        {
+            throw new ArgumentOutOfRangeException();
         }
     }
 }

@@ -96,19 +96,16 @@ namespace UnrealEstate.Services.Tests
             }
         }
 
-        [Theory()]
-        [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(3)]
-        public void RemoveUser_WhenCall_CallToRemoveUserFunctionOfUserRepository(int id)
+        [Fact]
+        public void RemoveUser_WhenCall_CallToRemoveUserFunctionOfUserRepository()
         {
             using (var mock = AutoMock.GetLoose())
             {
                 _sut = mock.Create<AdministratorUserService>();
 
-                _sut.RemoveUser(id);
+                _sut.RemoveUser(It.IsAny<int>());
 
-                mock.Mock<IUserRepository>().Verify(u => u.RemoveUser(id), Times.Once);
+                mock.Mock<IUserRepository>().Verify(u => u.RemoveUser(It.IsAny<int>()), Times.Once);
             }
         }
 
@@ -128,9 +125,50 @@ namespace UnrealEstate.Services.Tests
             }
         }
 
+        [Fact]
         public void DisableListing_WhenCall_CallToDisableFunctionOfListingRepository()
         {
+            using (var mock = AutoMock.GetLoose())
+            {
+                _sut = mock.Create<AdministratorUserService>();
 
+                _sut.DisableListing(It.IsAny<int>());
+
+                mock.Mock<IListingRepository>().Verify(u => u.Disable(It.IsAny<int>()), Times.Once);
+            }
         }
+
+        [Theory()]
+        [InlineData(-1)]
+        [InlineData(5)]
+        [InlineData(6)]
+        public void DisableListing_NoneExistingListing_ThrowArgumentOutOfRangeException(int id)
+        {
+            using (var mock = AutoMock.GetLoose(cfg => cfg.RegisterInstance(_databaseFixture.FakeListingRepository).As<IListingRepository>()))
+            {
+                _sut = mock.Create<AdministratorUserService>();
+
+                Action result = () => _sut.DisableListing(id);
+
+                result.Should().Throw<ArgumentOutOfRangeException>();
+            }
+        }
+
+        [Theory()]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        public void DisableListing_ExistingListing_NotException(int id)
+        {
+            using (var mock = AutoMock.GetLoose(cfg => cfg.RegisterInstance(_databaseFixture.FakeListingRepository).As<IListingRepository>()))
+            {
+                _sut = mock.Create<AdministratorUserService>();
+
+                Action result = () => _sut.DisableListing(id);
+
+                result.Should().NotThrow<ArgumentOutOfRangeException>();
+            }
+        }
+
     }
 }

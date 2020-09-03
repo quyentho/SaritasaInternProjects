@@ -45,10 +45,10 @@ namespace UnrealEstate.Services.Tests
 
                 sut.EditListing(new Listing() { Id = id });
 
-                mock.Mock<IListingRepository>().Verify(l => l.UpdateListing(It.IsAny<Listing>()), Times.Once);
+                mock.Mock<IListingRepository>().Verify(l => l.UpdateListing(It.Is<Listing>(l => l.Id == id)), Times.Once);
             }
         }
-    
+
 
         [Theory]
         [InlineData(-1)]

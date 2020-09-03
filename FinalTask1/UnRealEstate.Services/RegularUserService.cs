@@ -17,9 +17,9 @@ namespace UnrealEstate.Services
             _listingRepository.AddListing(listing);
         }
 
-        public void EditListing(int id)
+        public void EditListing(Listing editedListing)
         {
-            _listingRepository.UpdateListing(id);
+            _listingRepository.UpdateListing(editedListing);
         }
     }
 }

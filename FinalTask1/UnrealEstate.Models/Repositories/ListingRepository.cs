@@ -32,11 +32,18 @@ namespace UnrealEstate.Models.Repositories
         public void AddListing(Listing listing)
         {
             _context.Listings.Add(listing);
+            _context.SaveChanges();
         }
 
-        public void UpdateListing(int id)
+        public void UpdateListing(Listing listing)
         {
-            throw new ArgumentOutOfRangeException();
+            var listingFromDb = _context.Listings.Find(listing.Id);
+
+            _ = listingFromDb ?? throw new ArgumentOutOfRangeException(paramName: "listing id", message: $"Not found listing with id:{listing.Id}");
+
+            _context.Entry<Listing>(listingFromDb).CurrentValues.SetValues(listing);
+
+            _context.SaveChanges();
         }
     }
 }

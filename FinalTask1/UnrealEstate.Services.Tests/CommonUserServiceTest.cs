@@ -55,7 +55,7 @@ namespace UnrealEstate.Services.Tests
         [InlineData(1)]
         [InlineData(2)]
         [InlineData(3)]
-        public void GetListing_ExistingListing_ReturnsExactListing(int listingId)
+        public void GetListing_WhenCall_ReturnsExactListing(int listingId)
         {
             Listing listingResult = _sut.GetListing(listingId);
 

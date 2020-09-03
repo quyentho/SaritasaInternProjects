@@ -68,7 +68,7 @@ namespace UnrealEstate.Services.Tests
         [InlineData(1)]
         [InlineData(2)]
         [InlineData(3)]
-        public void UpdateUser_ExistingUser_CallToUpdateUserFunctionOfUserRepository(int id)
+        public void UpdateUser_WhenCall_CallToUpdateUserFunctionOfUserRepository(int id)
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -100,7 +100,7 @@ namespace UnrealEstate.Services.Tests
         [InlineData(1)]
         [InlineData(2)]
         [InlineData(3)]
-        public void RemoveUser_ExistingUser_CallToRemoveUserFunctionOfUserRepository(int id)
+        public void RemoveUser_WhenCall_CallToRemoveUserFunctionOfUserRepository(int id)
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -128,6 +128,9 @@ namespace UnrealEstate.Services.Tests
             }
         }
 
-        //public void DisableListing_ExistingListing_CallTo
+        public void DisableListing_WhenCall_CallToDisableFunctionOfListingRepository()
+        {
+
+        }
     }
 }

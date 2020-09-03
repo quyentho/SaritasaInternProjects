@@ -37,7 +37,7 @@ namespace UnrealEstate.Services.Tests
         [InlineData(1)]
         [InlineData(2)]
         [InlineData(3)]
-        public void EditListing_ExistingListing_ShouldNotThrowException(int id)
+        public void EditListing_WhenCall_CallsToUpdateListingOfListingRepositoryOneTime(int id)
         {
             using (var mock = AutoMock.GetLoose())
             {

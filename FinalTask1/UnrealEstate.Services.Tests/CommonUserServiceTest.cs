@@ -13,48 +13,23 @@ using System;
 
 namespace UnrealEstate.Services.Tests
 {
-    public class CommonUserServiceTest : IDisposable
+    [Collection("Database collection")]
+    public class CommonUserServiceTest
     {
-
-        UnrealEstateDbContext _testContext;
-        IListingRepository _fakeListingRepository;
         Mock<IUserManager> _mockUserManager = new Mock<IUserManager>();
-        List<Listing> _fakeListings;
         CommonUserSerive _sut;
-        public CommonUserServiceTest()
+        private readonly DatabaseFixture _databaseFixture;
+
+        public CommonUserServiceTest(DatabaseFixture databaseFixture)
         {
-            // fake data to test
-            _fakeListings = new List<Listing>();
-            _fakeListings.Add(new Listing() { Id = 1, StatusId = 1, UserId = 1, Zip = "aaaaa", AddressLine1 = "address1", City = "city1" });
-            _fakeListings.Add(new Listing() { Id = 2, StatusId = 1, UserId = 2, Zip = "aaaaa", AddressLine1 = "address2", City = "city2" });
-            _fakeListings.Add(new Listing() { Id = 3, StatusId = 1, UserId = 3, Zip = "bbbbb", AddressLine1 = "address3", City = "city3" });
-            _fakeListings.Add(new Listing() { Id = 4, StatusId = 1, UserId = 3, Zip = "bbbbb", AddressLine1 = "address4", City = "city4" });
-            _fakeListings.Add(new Listing() { Id = 5, StatusId = 2, UserId = 3, Zip = "bbbbb", AddressLine1 = "address4", City = "city4" });
-
-            // create in memory database to test.
-            var options = new DbContextOptionsBuilder<UnrealEstateDbContext>()
-                         .UseInMemoryDatabase(databaseName: "TestDb")
-                         .Options;
-
-            _testContext = new UnrealEstateDbContext(options);
-            _testContext.Listings.AddRange(_fakeListings);
-            _testContext.SaveChanges();
-
-            _fakeListingRepository = new ListingRepository(_testContext);
-
-
-            // add data to in memory db.
-
-
-            // Create system under test.
-            _sut = new CommonUserSerive(_fakeListingRepository, _mockUserManager.Object);
+            _databaseFixture = databaseFixture;
+            _sut = new CommonUserSerive(_databaseFixture.FakeListingRepository, _mockUserManager.Object);
         }
-
 
         [Fact]
         public void GetListings_ValidRequest_ReturnsListings()
         {
-            var expectedListings = _fakeListings;
+            var expectedListings = _databaseFixture.FakeListings;
 
             List<Listing> resultListings = _sut.GetListings();
 
@@ -86,7 +61,7 @@ namespace UnrealEstate.Services.Tests
         {
             Listing listingResult = _sut.GetListing(listingId);
 
-            listingResult.Should().Be(_fakeListings[listingId - 1]);
+            listingResult.Should().Be(_databaseFixture.FakeListings[listingId - 1]);
         }
 
         [Theory()]
@@ -108,22 +83,15 @@ namespace UnrealEstate.Services.Tests
         public void GetActiveListingWithFilter_FilterByAddress_ReturnsExactListings(string address, int startIndex, int count)
         {
 
-            using (var mock = AutoMock.GetLoose(cfg => cfg.RegisterInstance(_fakeListingRepository).As<IListingRepository>()))
+            using (var mock = AutoMock.GetLoose(cfg => cfg.RegisterInstance(_databaseFixture.FakeListingRepository).As<IListingRepository>()))
             {
                 _sut = mock.Create<CommonUserSerive>();
-                var expectedListings = _fakeListings.GetRange(startIndex, count);
+                var expectedListings = _databaseFixture.FakeListings.GetRange(startIndex, count);
 
                 var listingsResult = _sut.GetActiveListingWithFilter(new FilterCriteria() { Address = address });
 
                 listingsResult.Should().BeEquivalentTo(expectedListings);
             }
-        }
-
-        public void Dispose()
-        {
-            _fakeListings.Clear();
-            _testContext.Database.EnsureDeleted();
-            _testContext.Dispose();
         }
     }
 }

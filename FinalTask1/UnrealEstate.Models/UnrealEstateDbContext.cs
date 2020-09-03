@@ -10,5 +10,7 @@ namespace UnrealEstate.Models
         }
 
         public DbSet<Listing> Listings { get; set; }
+
+        public DbSet<UnrealEstateUser> Users { get; set; }
     }
 }

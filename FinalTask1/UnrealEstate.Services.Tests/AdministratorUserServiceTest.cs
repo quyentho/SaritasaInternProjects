@@ -1,7 +1,11 @@
-﻿using FluentAssertions;
+﻿using Autofac;
+using Autofac.Extras.Moq;
+using FluentAssertions;
 using Moq;
+using System;
 using System.Collections.Generic;
 using UnrealEstate.Models;
+using UnrealEstate.Models.Repositories;
 using Xunit;
 
 namespace UnrealEstate.Services.Tests
@@ -9,28 +13,26 @@ namespace UnrealEstate.Services.Tests
     [Collection("Database collection")]
     public class AdministratorUserServiceTest
     {
-        Mock<IUserRepository> _mockUserRepository = new Mock<IUserRepository>();
-        List<UnrealEstateUser> _fakeUsers;
         AdministratorUserService _sut;
-        public AdministratorUserServiceTest()
+        private readonly DatabaseFixture _databaseFixture;
+
+        public AdministratorUserServiceTest(DatabaseFixture databaseFixture)
         {
-            _fakeUsers = new List<UnrealEstateUser>();
-            _fakeUsers.Add(new UnrealEstateUser() { Id = 1, Email = "user@test.com", Status = true });
-            _fakeUsers.Add(new UnrealEstateUser() { Id = 2, Email = "user@test.com", Status = true });
-            _fakeUsers.Add(new UnrealEstateUser() { Id = 3, Email = "user@test.com", Status = true });
-            _sut = new AdministratorUserService(_mockUserRepository.Object);
+            _databaseFixture = databaseFixture;
         }
 
         [Fact]
         public void GetUsers_WhenCall_ReturnsListUsers()
         {
+            using (var mock = AutoMock
+                .GetLoose(cfg => cfg.RegisterInstance(_databaseFixture.FakeUserRepository).As<IUserRepository>()))
+            {
+                _sut = mock.Create<AdministratorUserService>();
+                List<UnrealEstateUser> result = _sut.GetUsers();
 
+                result.Should().BeEquivalentTo(_databaseFixture.FakeUsers);
+            }
 
-            _mockUserRepository.Setup(u => u.GetUsers()).Returns(_fakeUsers);
-
-            List<UnrealEstateUser> result = _sut.GetUsers();
-
-            result.Should().BeEquivalentTo(_fakeUsers);
         }
 
         [Theory()]
@@ -39,73 +41,91 @@ namespace UnrealEstate.Services.Tests
         [InlineData(3)]
         public void GetUser_ValidUserId_ReturnsExactUser(int validId)
         {
-            _mockUserRepository.Setup(u => u.GetUser(validId)).Returns(_fakeUsers[validId - 1]);
+            using (var mock = AutoMock
+                .GetLoose(cfg => cfg.RegisterInstance(_databaseFixture.FakeUserRepository).As<IUserRepository>()))
+            {
+                _sut = mock.Create<AdministratorUserService>();
+                UnrealEstateUser user = _sut.GetUser(validId);
 
-            UnrealEstateUser user = _sut.GetUser(validId);
+                user.Should().Be(_databaseFixture.FakeUsers[validId - 1]);
+            }
 
-            user.Should().Be(_fakeUsers[validId - 1]);
         }
 
         [Fact]
-        public void AddUser_ValidNewUser_ReturnsTrue()
+        public void AddUser_ValidNewUser_CallsToAddUserFunctionOfUserRepository()
         {
-            _mockUserRepository.Setup(m => m.AddUser(It.IsAny<UnrealEstateUser>())).Returns(true);
+            using (var mock = AutoMock.GetLoose())
+            {
+                _sut = mock.Create<AdministratorUserService>();
+                _sut.AddUser(new UnrealEstateUser());
 
-            bool addResult = _sut.AddUser(new UnrealEstateUser());
-
-            addResult.Should().BeTrue();
+                mock.Mock<IUserRepository>().Verify(u => u.AddUser(It.IsAny<UnrealEstateUser>()), Times.Once);
+            }
         }
 
         [Theory()]
         [InlineData(1)]
         [InlineData(2)]
         [InlineData(3)]
-        public void UpdateUser_ExistingUser_ReturnsTrue(int id)
+        public void UpdateUser_ExistingUser_CallToUpdateUserFunctionOfUserRepository(int id)
         {
-            _mockUserRepository.Setup(m => m.UpdateUser(id, It.IsAny<UnrealEstateUser>())).Returns(true);
+            using (var mock = AutoMock.GetLoose())
+            {
+                _sut = mock.Create<AdministratorUserService>();
 
-            bool updateResult = _sut.UpdateUser(id, new UnrealEstateUser());
+                _sut.UpdateUser(new UnrealEstateUser() { Id = id });
 
-            updateResult.Should().BeTrue();
+                mock.Mock<IUserRepository>().Verify(u => u.UpdateUser(It.Is<UnrealEstateUser>(u => u.Id == id)), Times.Once);
+            }
         }
 
         [Theory()]
         [InlineData(-1)]
         [InlineData(5)]
         [InlineData(6)]
-        public void UpdateUser_NoneExistingUser_ReturnsFalse(int id)
+        public void UpdateUser_NoneExistingUser_ThrowArgumentOutOfRangeException(int id)
         {
-            _mockUserRepository.Setup(m => m.UpdateUser(id, It.IsAny<UnrealEstateUser>())).Returns(false);
+            using (var mock = AutoMock.GetLoose(cfg => cfg.RegisterInstance(_databaseFixture.FakeUserRepository).As<IUserRepository>()))
+            {
+                _sut = mock.Create<AdministratorUserService>();
 
-            bool updateResult = _sut.UpdateUser(id, new UnrealEstateUser());
+                Action result = () => _sut.UpdateUser(new UnrealEstateUser() { Id = id });
 
-            updateResult.Should().BeFalse();
+                result.Should().Throw<ArgumentOutOfRangeException>();
+            }
         }
 
         [Theory()]
         [InlineData(1)]
         [InlineData(2)]
         [InlineData(3)]
-        public void RemoveUser_ExistingUser_ReturnsTrue(int id)
+        public void RemoveUser_ExistingUser_CallToRemoveUserFunctionOfUserRepository(int id)
         {
-            _mockUserRepository.Setup(m => m.RemoveUser(id)).Returns(true);
+            using (var mock = AutoMock.GetLoose())
+            {
+                _sut = mock.Create<AdministratorUserService>();
 
-            bool removeResult = _sut.RemoveUser(id);
+                _sut.RemoveUser(id);
 
-            removeResult.Should().BeTrue();
+                mock.Mock<IUserRepository>().Verify(u => u.RemoveUser(id), Times.Once);
+            }
         }
 
         [Theory()]
         [InlineData(-1)]
         [InlineData(5)]
         [InlineData(6)]
-        public void RemoveUser_NoneExistingUser_ReturnsTrue(int id)
+        public void RemoveUser_NoneExistingUser_ThrowArgumentOutOfRangeException(int id)
         {
-            _mockUserRepository.Setup(m => m.RemoveUser(id)).Returns(false);
+            using (var mock = AutoMock.GetLoose(cfg => cfg.RegisterInstance(_databaseFixture.FakeUserRepository).As<IUserRepository>()))
+            {
+                _sut = mock.Create<AdministratorUserService>();
 
-            bool removeResult = _sut.RemoveUser(id);
+                Action result = () => _sut.RemoveUser(id);
 
-            removeResult.Should().BeFalse();
+                result.Should().Throw<ArgumentOutOfRangeException>();
+            }
         }
     }
 }

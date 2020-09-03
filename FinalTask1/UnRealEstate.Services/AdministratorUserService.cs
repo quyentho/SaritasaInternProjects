@@ -19,22 +19,22 @@ namespace UnrealEstate.Services
 
         public UnrealEstateUser GetUser(int id)
         {
-            return _userRepository.GetUser(id);
+            return _userRepository.GetUserById(id);
         }
 
-        public bool AddUser(UnrealEstateUser newUser)
+        public void AddUser(UnrealEstateUser newUser)
         {
-            return _userRepository.AddUser(newUser);
+            _userRepository.AddUser(newUser);
         }
 
-        public bool UpdateUser(int id, UnrealEstateUser unrealEstateUser)
+        public void UpdateUser(UnrealEstateUser unrealEstateUser)
         {
-            return _userRepository.UpdateUser(id, unrealEstateUser);
+            _userRepository.UpdateUser(unrealEstateUser);
         }
 
-        public bool RemoveUser(int id)
+        public void RemoveUser(int id)
         {
-            return _userRepository.RemoveUser(id);
+            _userRepository.RemoveUser(id);
         }
     }
 }

@@ -1,23 +1,37 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using UnrealEstate.Models;
 using UnrealEstate.Models.Repositories;
 
 namespace UnrealEstate.Services
 {
-    public class AdministratorUserService
+    public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
-        private readonly IListingRepository _listingRepository;
+        private readonly IUserManager _userManager;
 
-        public AdministratorUserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, IUserManager userManager)
         {
             _userRepository = userRepository;
+            _userManager = userManager;
         }
 
-        public AdministratorUserService(IUserRepository userRepository, IListingRepository listingRepository)
+        public UnrealEstateUser Validate(string loginTypeCode, string email, string password) 
         {
-            _userRepository = userRepository;
-            _listingRepository = listingRepository;
+            throw new NotImplementedException();
+        }
+
+        public void Login(UnrealEstateUser user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Logout()
+        {
+            throw new NotImplementedException();
         }
 
         public List<UnrealEstateUser> GetUsers()
@@ -44,11 +58,5 @@ namespace UnrealEstate.Services
         {
             _userRepository.RemoveUser(id);
         }
-
-        public void DisableListing(int listingId)
-        {
-            _listingRepository.Disable(listingId);
-        }
-
     }
 }

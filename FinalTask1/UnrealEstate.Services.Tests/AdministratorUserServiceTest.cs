@@ -13,7 +13,7 @@ namespace UnrealEstate.Services.Tests
     [Collection("Database collection")]
     public class AdministratorUserServiceTest
     {
-        AdministratorUserService _sut;
+        ListingService _sut;
         private readonly DatabaseFixture _databaseFixture;
 
         public AdministratorUserServiceTest(DatabaseFixture databaseFixture)
@@ -27,7 +27,7 @@ namespace UnrealEstate.Services.Tests
             using (var mock = AutoMock
                 .GetLoose(cfg => cfg.RegisterInstance(_databaseFixture.FakeUserRepository).As<IUserRepository>()))
             {
-                _sut = mock.Create<AdministratorUserService>();
+                _sut = mock.Create<ListingService>();
                 List<UnrealEstateUser> result = _sut.GetUsers();
 
                 result.Should().BeEquivalentTo(_databaseFixture.FakeUsers);
@@ -44,7 +44,7 @@ namespace UnrealEstate.Services.Tests
             using (var mock = AutoMock
                 .GetLoose(cfg => cfg.RegisterInstance(_databaseFixture.FakeUserRepository).As<IUserRepository>()))
             {
-                _sut = mock.Create<AdministratorUserService>();
+                _sut = mock.Create<ListingService>();
                 UnrealEstateUser user = _sut.GetUser(validId);
 
                 user.Should().Be(_databaseFixture.FakeUsers[validId - 1]);
@@ -57,7 +57,7 @@ namespace UnrealEstate.Services.Tests
         {
             using (var mock = AutoMock.GetLoose())
             {
-                _sut = mock.Create<AdministratorUserService>();
+                _sut = mock.Create<ListingService>();
                 _sut.AddUser(new UnrealEstateUser());
 
                 mock.Mock<IUserRepository>().Verify(u => u.AddUser(It.IsAny<UnrealEstateUser>()), Times.Once);
@@ -72,7 +72,7 @@ namespace UnrealEstate.Services.Tests
         {
             using (var mock = AutoMock.GetLoose())
             {
-                _sut = mock.Create<AdministratorUserService>();
+                _sut = mock.Create<ListingService>();
 
                 _sut.UpdateUser(new UnrealEstateUser() { Id = id });
 
@@ -88,7 +88,7 @@ namespace UnrealEstate.Services.Tests
         {
             using (var mock = AutoMock.GetLoose(cfg => cfg.RegisterInstance(_databaseFixture.FakeUserRepository).As<IUserRepository>()))
             {
-                _sut = mock.Create<AdministratorUserService>();
+                _sut = mock.Create<ListingService>();
 
                 Action result = () => _sut.UpdateUser(new UnrealEstateUser() { Id = id });
 
@@ -101,7 +101,7 @@ namespace UnrealEstate.Services.Tests
         {
             using (var mock = AutoMock.GetLoose())
             {
-                _sut = mock.Create<AdministratorUserService>();
+                _sut = mock.Create<ListingService>();
 
                 _sut.RemoveUser(It.IsAny<int>());
 
@@ -117,7 +117,7 @@ namespace UnrealEstate.Services.Tests
         {
             using (var mock = AutoMock.GetLoose(cfg => cfg.RegisterInstance(_databaseFixture.FakeUserRepository).As<IUserRepository>()))
             {
-                _sut = mock.Create<AdministratorUserService>();
+                _sut = mock.Create<ListingService>();
 
                 Action result = () => _sut.RemoveUser(id);
 
@@ -125,28 +125,15 @@ namespace UnrealEstate.Services.Tests
             }
         }
 
-        [Fact]
-        public void DisableListing_WhenCall_CallToDisableFunctionOfListingRepository()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                _sut = mock.Create<AdministratorUserService>();
-
-                _sut.DisableListing(It.IsAny<int>());
-
-                mock.Mock<IListingRepository>().Verify(u => u.Disable(It.IsAny<int>()), Times.Once);
-            }
-        }
-
         [Theory()]
         [InlineData(-1)]
-        [InlineData(5)]
+        [InlineData(-5)]
         [InlineData(6)]
         public void DisableListing_NoneExistingListing_ThrowArgumentOutOfRangeException(int id)
         {
             using (var mock = AutoMock.GetLoose(cfg => cfg.RegisterInstance(_databaseFixture.FakeListingRepository).As<IListingRepository>()))
             {
-                _sut = mock.Create<AdministratorUserService>();
+                _sut = mock.Create<ListingService>();
 
                 Action result = () => _sut.DisableListing(id);
 
@@ -158,11 +145,12 @@ namespace UnrealEstate.Services.Tests
         [InlineData(1)]
         [InlineData(2)]
         [InlineData(3)]
-        public void DisableListing_ExistingListing_NotException(int id)
+
+        public void DisableListing_ExistingListing_ShouldNotThrowException(int id)
         {
             using (var mock = AutoMock.GetLoose(cfg => cfg.RegisterInstance(_databaseFixture.FakeListingRepository).As<IListingRepository>()))
             {
-                _sut = mock.Create<AdministratorUserService>();
+                _sut = mock.Create<ListingService>();
 
                 Action result = () => _sut.DisableListing(id);
 

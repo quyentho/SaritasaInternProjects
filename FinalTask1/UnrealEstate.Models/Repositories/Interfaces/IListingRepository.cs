@@ -15,6 +15,5 @@ namespace UnrealEstate.Models.Repositories
         void AddListing(Listing listing);
 
         void UpdateListing(Listing listing);
-        void Disable(int listingId);
     }
 }

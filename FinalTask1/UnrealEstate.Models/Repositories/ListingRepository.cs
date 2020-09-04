@@ -45,17 +45,5 @@ namespace UnrealEstate.Models.Repositories
 
             _context.SaveChanges();
         }
-
-        public void Disable(int listingId)
-        {
-            // TODO: Make Guard clauses.
-            var listingFromDb = _context.Listings.Find(listingId);
-
-            _ = listingFromDb ?? throw new ArgumentOutOfRangeException(paramName: "listing id", message: $"Not found Listing with id {listingId}");
-
-            listingFromDb.StatusId = 3; // respresents cancel status.
-
-            _context.SaveChanges();
-        }
     }
 }

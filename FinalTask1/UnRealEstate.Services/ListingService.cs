@@ -5,32 +5,34 @@ using UnrealEstate.Models;
 using UnrealEstate.Models.Models;
 using UnrealEstate.Models.Repositories;
 
-namespace UnRealEstate.Services
+namespace UnrealEstate.Services
 {
-    public class CommonUserSerive
+    public class ListingService : IListingService
     {
+        private readonly IUserRepository _userRepository;
         private readonly IListingRepository _listingRepository;
-        private readonly IUserManager _userManager;
 
-        public CommonUserSerive(IListingRepository listingRepository, IUserManager userManager)
+        public ListingService(IListingRepository listingRepository)
         {
             _listingRepository = listingRepository;
-            _userManager = userManager;
+        }
+
+        public void DisableListing(int listingId)
+        {
+            var listingFromDb = _listingRepository.GetListingById(listingId);
+
+            _ = listingFromDb ?? throw new ArgumentOutOfRangeException(paramName: "listing id", message: $"Not found Listing with id {listingId}");
+
+            listingFromDb.StatusId = 3; // respresents cancel status.
+
+            _listingRepository.UpdateListing(listingFromDb);
         }
 
         /// <summary>
         /// Gets list of listings.
         /// </summary>
         /// <returns>List of listing</returns>
-        public List<Listing> GetListings()
-        {
-            return _listingRepository.GetListings();
-        }
-
-        public bool Login(string email, string password)
-        {
-            return _userManager.VerifyLogin(email, password);
-        }
+        public List<Listing> GetListings() => _listingRepository.GetListings();
 
         public Listing GetListing(int listingId)
         {
@@ -43,6 +45,17 @@ namespace UnRealEstate.Services
 
             return _listingRepository.GetListingsWithFilter(filterConditions);
         }
+
+        public void CreateListing(Listing listing)
+        {
+            _listingRepository.AddListing(listing);
+        }
+
+        public void EditListing(Listing editedListing)
+        {
+            _listingRepository.UpdateListing(editedListing);
+        }
+
 
         private static ExpressionStarter<Listing> BuildConditions(FilterCriteria filterCriteria)
         {
@@ -81,5 +94,6 @@ namespace UnRealEstate.Services
 
             return filterConditions;
         }
+
     }
 }

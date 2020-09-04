@@ -17,22 +17,22 @@ namespace UnrealEstate.Services
             _userRepository = userRepository;
         }
 
-        public List<UnrealEstateUser> GetUsers()
+        public List<User> GetUsers()
         {
             return _userRepository.GetUsers();
         }
 
-        public UnrealEstateUser GetUser(int id)
+        public User GetUser(int id)
         {
             return _userRepository.GetUserById(id);
         }
 
-        public void AddUser(UnrealEstateUser newUser)
+        public void AddUser(User newUser)
         {
             _userRepository.AddUser(newUser);
         }
 
-        public void UpdateUser(UnrealEstateUser unrealEstateUser)
+        public void UpdateUser(User unrealEstateUser)
         {
             _userRepository.UpdateUser(unrealEstateUser);
         }

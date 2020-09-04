@@ -4,13 +4,13 @@ namespace UnrealEstate.Models
 {
     public interface IUserRepository
     {
-        List<UnrealEstateUser> GetUsers();
+        List<User> GetUsers();
 
-        void AddUser(UnrealEstateUser user);
+        void AddUser(User user);
 
-        void UpdateUser(UnrealEstateUser updatedUser);
+        void UpdateUser(User updatedUser);
 
-        UnrealEstateUser GetUserById(int id);
+        User GetUserById(int id);
         void RemoveUser(int id);
     }
 }

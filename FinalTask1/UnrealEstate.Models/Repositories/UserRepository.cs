@@ -12,18 +12,18 @@ namespace UnrealEstate.Models.Repositories
         {
             _context = context;
         }
-        public void AddUser(UnrealEstateUser user)
+        public void AddUser(User user)
         {
             _context.Users.Add(user);
             _context.SaveChanges();
         }
 
-        public UnrealEstateUser GetUserById(int id)
+        public User GetUserById(int id)
         {
             return _context.Users.Find(id);
         }
 
-        public List<UnrealEstateUser> GetUsers()
+        public List<User> GetUsers()
         {
             return _context.Users.ToList();
         }
@@ -40,7 +40,7 @@ namespace UnrealEstate.Models.Repositories
             _context.SaveChanges();
         }
 
-        public void UpdateUser(UnrealEstateUser updatedUser)
+        public void UpdateUser(User updatedUser)
         {
             var userFromDb = _context.Users.Find(updatedUser.Id);
 

@@ -5,11 +5,13 @@ VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnrealEstate", "UnrealEstate\UnrealEstate.csproj", "{9C31AAFD-549A-49F2-82EA-77347C9381E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnrealEstate.Services", "UnRealEstate.Services\UnrealEstate.Services.csproj", "{31939AE5-003B-4A8A-8109-D14FF9CA860D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnrealEstate.Services", "UnRealEstate.Services\UnrealEstate.Services.csproj", "{31939AE5-003B-4A8A-8109-D14FF9CA860D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnrealEstate.Services.Tests", "UnrealEstate.Services.Tests\UnrealEstate.Services.Tests.csproj", "{78B73785-5952-4E0B-8777-3B48C1770E08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnrealEstate.Services.Tests", "UnrealEstate.Services.Tests\UnrealEstate.Services.Tests.csproj", "{78B73785-5952-4E0B-8777-3B48C1770E08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnrealEstate.Models", "UnrealEstate.Models\UnrealEstate.Models.csproj", "{6E71F8E4-C2CB-4F7A-AB32-69FC5CAA2FC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnrealEstate.Models", "UnrealEstate.Models\UnrealEstate.Models.csproj", "{6E71F8E4-C2CB-4F7A-AB32-69FC5CAA2FC0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnrealEstateApi", "UnrealEstateApi\UnrealEstateApi.csproj", "{0EDD117C-4D68-4295-BC31-484AB96024B2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{6E71F8E4-C2CB-4F7A-AB32-69FC5CAA2FC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E71F8E4-C2CB-4F7A-AB32-69FC5CAA2FC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E71F8E4-C2CB-4F7A-AB32-69FC5CAA2FC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EDD117C-4D68-4295-BC31-484AB96024B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EDD117C-4D68-4295-BC31-484AB96024B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EDD117C-4D68-4295-BC31-484AB96024B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EDD117C-4D68-4295-BC31-484AB96024B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

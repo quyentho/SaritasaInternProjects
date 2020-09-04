@@ -9,7 +9,6 @@ namespace UnrealEstate.Services
 {
     public class ListingService : IListingService
     {
-        private readonly IUserRepository _userRepository;
         private readonly IListingRepository _listingRepository;
 
         public ListingService(IListingRepository listingRepository)

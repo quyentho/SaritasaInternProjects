@@ -31,7 +31,7 @@ namespace UnrealEstate.Services.Tests
                 .GetLoose(cfg => cfg.RegisterInstance(_databaseFixture.FakeUserRepository).As<IUserRepository>()))
             {
                 _sut = mock.Create<UserService>();
-                List<UnrealEstateUser> result = _sut.GetUsers();
+                List<User> result = _sut.GetUsers();
 
                 result.Should().BeEquivalentTo(_databaseFixture.FakeUsers);
             }
@@ -48,7 +48,7 @@ namespace UnrealEstate.Services.Tests
                 .GetLoose(cfg => cfg.RegisterInstance(_databaseFixture.FakeUserRepository).As<IUserRepository>()))
             {
                 _sut = mock.Create<UserService>();
-                UnrealEstateUser user = _sut.GetUser(validId);
+                User user = _sut.GetUser(validId);
 
                 user.Should().Be(_databaseFixture.FakeUsers[validId - 1]);
             }
@@ -61,9 +61,9 @@ namespace UnrealEstate.Services.Tests
             using (var mock = AutoMock.GetLoose())
             {
                 _sut = mock.Create<UserService>();
-                _sut.AddUser(new UnrealEstateUser());
+                _sut.AddUser(new User());
 
-                mock.Mock<IUserRepository>().Verify(u => u.AddUser(It.IsAny<UnrealEstateUser>()), Times.Once);
+                mock.Mock<IUserRepository>().Verify(u => u.AddUser(It.IsAny<User>()), Times.Once);
             }
         }
 
@@ -77,9 +77,9 @@ namespace UnrealEstate.Services.Tests
             {
                 _sut = mock.Create<UserService>();
 
-                _sut.UpdateUser(new UnrealEstateUser() { Id = id });
+                _sut.UpdateUser(new User() { Id = id });
 
-                mock.Mock<IUserRepository>().Verify(u => u.UpdateUser(It.Is<UnrealEstateUser>(u => u.Id == id)), Times.Once);
+                mock.Mock<IUserRepository>().Verify(u => u.UpdateUser(It.Is<User>(u => u.Id == id)), Times.Once);
             }
         }
 
@@ -93,7 +93,7 @@ namespace UnrealEstate.Services.Tests
             {
                 _sut = mock.Create<UserService>();
 
-                Action result = () => _sut.UpdateUser(new UnrealEstateUser() { Id = id });
+                Action result = () => _sut.UpdateUser(new User() { Id = id });
 
                 result.Should().Throw<ArgumentOutOfRangeException>();
             }

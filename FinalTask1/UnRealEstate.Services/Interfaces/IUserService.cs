@@ -5,10 +5,10 @@ namespace UnrealEstate.Services
 {
     public interface IUserService
     {
-        void AddUser(UnrealEstateUser newUser);
-        UnrealEstateUser GetUser(int id);
-        List<UnrealEstateUser> GetUsers();
+        void AddUser(User newUser);
+        User GetUser(int id);
+        List<User> GetUsers();
         void RemoveUser(int id);
-        void UpdateUser(UnrealEstateUser unrealEstateUser);
+        void UpdateUser(User unrealEstateUser);
     }
 }

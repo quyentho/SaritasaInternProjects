@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using UnrealEstate.Models.Models;
 
 namespace UnrealEstate.Models
 {
@@ -8,7 +10,7 @@ namespace UnrealEstate.Models
 
         public int StatusId { get; set; }
 
-        public int UserId { get; set; }
+        public string UserId { get; set; }
 
         public string Zip { get; set; }
 
@@ -30,5 +32,16 @@ namespace UnrealEstate.Models
 
         public string Description { get; set; }
 
+        public User User { get; set; }
+
+        public ListingStatus Status { get; set; }
+
+        public List<ListingPhoTo> ListingPhoTos { get; set; }
+
+        public List<ListingNote> ListingNotes { get; set; }
+
+        public List<Comment> Comments { get; set; }
+
+        public List<Favorite> Favorites { get; set; }
     }
 }

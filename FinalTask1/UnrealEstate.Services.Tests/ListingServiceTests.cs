@@ -12,119 +12,16 @@ using Xunit;
 namespace UnrealEstate.Services.Tests
 {
     [Collection("Database collection")]
-    public class ListingServiceTest
+    public class ListingServiceTests
     {
         ListingService _sut;
         private readonly DatabaseFixture _databaseFixture;
 
-        public ListingServiceTest(DatabaseFixture databaseFixture)
+        public ListingServiceTests(DatabaseFixture databaseFixture)
         {
             _databaseFixture = databaseFixture;
         }
 
-        //[Fact]
-        //public void GetUsers_WhenCall_ReturnsListUsers()
-        //{
-        //    using (var mock = AutoMock
-        //        .GetLoose(cfg => cfg.RegisterInstance(_databaseFixture.FakeUserRepository).As<IUserRepository>()))
-        //    {
-        //        _sut = mock.Create<ListingService>();
-        //        List<UnrealEstateUser> result = _sut.GetUsers();
-
-        //        result.Should().BeEquivalentTo(_databaseFixture.FakeUsers);
-        //    }
-
-        //}
-
-        //[Theory()]
-        //[InlineData(1)]
-        //[InlineData(2)]
-        //[InlineData(3)]
-        //public void GetUser_ValidUserId_ReturnsExactUser(int validId)
-        //{
-        //    using (var mock = AutoMock
-        //        .GetLoose(cfg => cfg.RegisterInstance(_databaseFixture.FakeUserRepository).As<IUserRepository>()))
-        //    {
-        //        _sut = mock.Create<ListingService>();
-        //        UnrealEstateUser user = _sut.GetUser(validId);
-
-        //        user.Should().Be(_databaseFixture.FakeUsers[validId - 1]);
-        //    }
-
-        //}
-
-        //[Fact]
-        //public void AddUser_ValidNewUser_CallsToAddUserFunctionOfUserRepository()
-        //{
-        //    using (var mock = AutoMock.GetLoose())
-        //    {
-        //        _sut = mock.Create<ListingService>();
-        //        _sut.AddUser(new UnrealEstateUser());
-
-        //        mock.Mock<IUserRepository>().Verify(u => u.AddUser(It.IsAny<UnrealEstateUser>()), Times.Once);
-        //    }
-        //}
-
-        //[Theory()]
-        //[InlineData(1)]
-        //[InlineData(2)]
-        //[InlineData(3)]
-        //public void UpdateUser_WhenCall_CallToUpdateUserFunctionOfUserRepository(int id)
-        //{
-        //    using (var mock = AutoMock.GetLoose())
-        //    {
-        //        _sut = mock.Create<ListingService>();
-
-        //        _sut.UpdateUser(new UnrealEstateUser() { Id = id });
-
-        //        mock.Mock<IUserRepository>().Verify(u => u.UpdateUser(It.Is<UnrealEstateUser>(u => u.Id == id)), Times.Once);
-        //    }
-        //}
-
-        //[Theory()]
-        //[InlineData(-1)]
-        //[InlineData(5)]
-        //[InlineData(6)]
-        //public void UpdateUser_NoneExistingUser_ThrowArgumentOutOfRangeException(int id)
-        //{
-        //    using (var mock = AutoMock.GetLoose(cfg => cfg.RegisterInstance(_databaseFixture.FakeUserRepository).As<IUserRepository>()))
-        //    {
-        //        _sut = mock.Create<ListingService>();
-
-        //        Action result = () => _sut.UpdateUser(new UnrealEstateUser() { Id = id });
-
-        //        result.Should().Throw<ArgumentOutOfRangeException>();
-        //    }
-        //}
-
-        //[Fact]
-        //public void RemoveUser_WhenCall_CallToRemoveUserFunctionOfUserRepository()
-        //{
-        //    using (var mock = AutoMock.GetLoose())
-        //    {
-        //        _sut = mock.Create<ListingService>();
-
-        //        _sut.RemoveUser(It.IsAny<int>());
-
-        //        mock.Mock<IUserRepository>().Verify(u => u.RemoveUser(It.IsAny<int>()), Times.Once);
-        //    }
-        //}
-
-        //[Theory()]
-        //[InlineData(-1)]
-        //[InlineData(5)]
-        //[InlineData(6)]
-        //public void RemoveUser_NoneExistingUser_ThrowArgumentOutOfRangeException(int id)
-        //{
-        //    using (var mock = AutoMock.GetLoose(cfg => cfg.RegisterInstance(_databaseFixture.FakeUserRepository).As<IUserRepository>()))
-        //    {
-        //        _sut = mock.Create<ListingService>();
-
-        //        Action result = () => _sut.RemoveUser(id);
-
-        //        result.Should().Throw<ArgumentOutOfRangeException>();
-        //    }
-        //}
 
         [Theory()]
         [InlineData(-1)]
@@ -205,6 +102,8 @@ namespace UnrealEstate.Services.Tests
             }
         }
 
+
+        // This test will be failed if run all tests at once
         [Theory]
         [InlineData("aaaaa", 0, 2)]
         [InlineData("bbbbb", 2, 2)]

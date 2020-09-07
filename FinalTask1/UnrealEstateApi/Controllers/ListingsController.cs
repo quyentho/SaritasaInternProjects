@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UnrealEstate.Models;
@@ -15,10 +16,14 @@ namespace UnrealEstateApi.Controllers
     public class ListingsController : ControllerBase
     {
         private readonly IListingService _listingService;
+        private readonly ICommentService _commentService;
+        private readonly UserManager<User> _userManager;
 
-        public ListingsController(IListingService listingService)
+        public ListingsController(IListingService listingService,ICommentService commentService, UserManager<User> userManager)
         {
-            this._listingService = listingService;
+            _listingService = listingService;
+            _commentService = commentService;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -29,7 +34,7 @@ namespace UnrealEstateApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Listing>>> GetListings()
         {
-            return await _listingService.GetListings();
+            return await _listingService.GetListingsAsync();
         }
 
         /// <summary>
@@ -41,7 +46,7 @@ namespace UnrealEstateApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Listing>> GetListing(int id)
         {
-            var listing = await _listingService.GetListing(id);
+            var listing = await _listingService.GetListingAsync(id);
 
             if (listing == null)
             {
@@ -69,7 +74,9 @@ namespace UnrealEstateApi.Controllers
 
             try
             {
-                await _listingService.EditListing(listing);
+                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+
+                await _listingService.EditListingAsync(currentUser, listing);
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -92,7 +99,7 @@ namespace UnrealEstateApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Listing>> CreateListing(Listing listing)
         {
-            await _listingService.CreateListing(listing);
+            await _listingService.CreateListingAsync(listing);
 
             return CreatedAtAction("GetListing", new { id = listing.Id }, listing);
         }
@@ -108,7 +115,8 @@ namespace UnrealEstateApi.Controllers
         {
             try
             {
-                await _listingService.DisableListing(id);
+                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                await _listingService.DisableListingAsync(currentUser, id);
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -119,7 +127,7 @@ namespace UnrealEstateApi.Controllers
                 throw;
             }
 
-            var listing = await _listingService.GetListing(id);
+            var listing = await _listingService.GetListingAsync(id);
 
             return listing;
         }
@@ -134,7 +142,7 @@ namespace UnrealEstateApi.Controllers
         {
             try
             {
-                await _listingService.EnableListing(id);
+                await _listingService.EnableListingAsync(id);
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -149,15 +157,22 @@ namespace UnrealEstateApi.Controllers
                 throw;
             }
 
-            var listing = await _listingService.GetListing(id);
+            var listing = await _listingService.GetListingAsync(id);
 
             return listing;
         }
 
-        [HttpGet()]
-        public async Task<ActionResult<Comment>> GetComments(int listingId)
+        [HttpGet("{id}/comments")]
+        public async Task<ActionResult<IEnumerable<Comment>>> GetComments(int listingId)
         {
+            var comments = await _commentService.GetCommentsByListingAsync(listingId);
 
+            if (comments == null)
+            {
+                return NotFound();
+            }
+
+            return comments;
         }
 
     }

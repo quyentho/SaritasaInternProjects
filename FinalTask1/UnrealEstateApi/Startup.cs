@@ -1,15 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using UnrealEstate.Models;
 using UnrealEstate.Models.ModelConfigs;
 using UnrealEstate.Models.Repositories;
@@ -31,9 +26,28 @@ namespace UnrealEstateApi
         {
             services.AddDbContext<UnrealEstateDbContext>();
 
+            services.AddIdentity<User, IdentityRole>(options => {
+                
+                options.User.AllowedUserNameCharacters =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+"; 
+
+                options.User.RequireUniqueEmail = true;
+            })
+                    .AddEntityFrameworkStores<UnrealEstateDbContext>();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 0;
+            });
+
             services.AddTransient<IListingRepository, ListingRepository>();
             services.AddTransient<IListingService, ListingService>();
-            
+
             services.AddSwaggerGen();
 
             services.AddControllers();
@@ -45,10 +59,12 @@ namespace UnrealEstateApi
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetRequiredService<UnrealEstateDbContext>();
-                
+
                 context.Database.Migrate();
 
-                DatabaseInitializer.InitializeSeedData(context);
+                var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<User>>();
+                var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                DatabaseInitializer.InitializeSeedData(context, userManager, roleManager);
             }
 
             if (env.IsDevelopment())

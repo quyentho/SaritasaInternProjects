@@ -1,6 +1,8 @@
 ﻿using LinqKit;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnrealEstate.Models;
 using UnrealEstate.Models.Models;
@@ -11,87 +13,96 @@ namespace UnrealEstate.Services
     public class ListingService : IListingService
     {
         private readonly IListingRepository _listingRepository;
+        private readonly UserManager<User> _userManager;
 
-        public ListingService(IListingRepository listingRepository)
+        public ListingService(IListingRepository listingRepository, UserManager<User> userManager)
         {
             _listingRepository = listingRepository;
+            _userManager = userManager;
+            
         }
 
-        public async Task AddFavoriteUser(int listingId, string userId)
+        public async Task AddFavoriteUserAsync(int listingId, string userId)
         {
-            _ = userId ?? throw new ArgumentNullException(paramName: "user id", message: "User id cannot be null");
+            var listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
 
-            var listingFromDb = await _listingRepository.GetListingById(listingId);
+            GuardClauses.IsNotNull(userId, "user id");
 
-            _ = listingFromDb ?? throw new ArgumentOutOfRangeException(paramName: "listing id", message: "Listing is not exists");
+            GuardClauses.HasValue(listingFromDb, "listing id");
 
-            await _listingRepository.AddFavoriteUser(listingId, userId);
+            await _listingRepository.AddFavoriteUserAsync(listingId, userId);
         }
 
-        public async Task EnableListing(int listingId)
+        public async Task EnableListingAsync(int listingId)
         {
-            var listingFromDb = await _listingRepository.GetListingById(listingId);
+            var listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
 
-            // TODO: Introduce Guard clause.
-            _ = listingFromDb ?? throw new ArgumentOutOfRangeException(paramName: "listing id", message: $"Not found Listing with id {listingId}");
+            GuardClauses.HasValue(listingFromDb, "listing id");
 
-            if (listingFromDb.StatusId != (int)Status.Disable)
-            {
-                throw new InvalidOperationException("Listing status is not valid to enable.");
-            }
+            GuardClauses.IsValidStatus(listingFromDb.StatusId, (int)Status.Disable);
 
             listingFromDb.StatusId = (int)Status.Active; // respresents Actived status.
 
-            await _listingRepository.UpdateListing(listingFromDb);
+            await _listingRepository.UpdateListingAsync(listingFromDb);
         }
 
         // TODO: Add comments
-        public async Task DisableListing(int listingId)
+        public async Task DisableListingAsync(User currentUser,int listingId)
         {
-            var listingFromDb = await _listingRepository.GetListingById(listingId);
+            IList<string> userRole = await GetUserRole(currentUser);
+            
+            var listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
 
-            _ = listingFromDb ?? throw new ArgumentOutOfRangeException(paramName: "listing id", message: $"Not found Listing with id {listingId}");
+            GuardClauses.IsAdmin(userRole.First());
 
-            if (listingFromDb.StatusId != (int)Status.Active)
-            {
-                throw new InvalidOperationException("Listing status is not valid to disable.");
-            }
+            GuardClauses.HasValue(listingFromDb, "listing id");
+
+            GuardClauses.IsValidStatus(listingFromDb.StatusId, (int)Status.Active);
 
             listingFromDb.StatusId = (int)Status.Disable; // respresents canceled status.
 
-            await _listingRepository.UpdateListing(listingFromDb);
+            await _listingRepository.UpdateListingAsync(listingFromDb);
         }
 
         /// <summary>
         /// Gets list of listings.
         /// </summary>
         /// <returns>List of listing</returns>
-        public Task<List<Listing>> GetListings() => _listingRepository.GetListings();
+        public Task<List<Listing>> GetListingsAsync() => _listingRepository.GetListingsAsync();
 
-        public Task<Listing> GetListing(int listingId)
+        public Task<Listing> GetListingAsync(int listingId)
         {
-            return _listingRepository.GetListingById(listingId);
+            return _listingRepository.GetListingByIdAsync(listingId);
         }
 
-        public Task<List<Listing>> GetActiveListingWithFilter(FilterCriteria filterCriteria)
+        public Task<List<Listing>> GetActiveListingWithFilterAsync(FilterCriteria filterCriteria)
         {
             ExpressionStarter<Listing> filterConditions = BuildConditions(filterCriteria);
 
-            return _listingRepository.GetListingsWithFilter(filterConditions);
+            return _listingRepository.GetListingsWithFilterAsync(filterConditions);
         }
 
-        public async Task CreateListing(Listing listing)
+        public async Task CreateListingAsync(Listing listing)
         {
-            await _listingRepository.AddListing(listing);
+            await _listingRepository.AddListingAsync(listing);
         }
 
-        public async Task EditListing(Listing listing)
+        public async Task EditListingAsync(User currentUser,Listing listing)
         {
-            var listingFromDb = _listingRepository.GetListingById(listing.Id);
+            var listingFromDb = await _listingRepository.GetListingByIdAsync(listing.Id);
+            
+            IList<string> userRole = await GetUserRole(currentUser);
 
-            _ = listingFromDb ?? throw new ArgumentOutOfRangeException(paramName: "listing id", message: $"Not found listing with id:{listing.Id}");
+            GuardClauses.HasValue(listingFromDb, "listing");
 
-            await _listingRepository.UpdateListing(listing);
+            GuardClauses.IsAuthorOrAdmin(currentUser.Id, listingFromDb.UserId, userRole.First());
+
+            await _listingRepository.UpdateListingAsync(listing);
+        }
+
+        private async Task<IList<string>> GetUserRole(User currentUser)
+        {
+            return await _userManager.GetRolesAsync(currentUser);
         }
 
         private static ExpressionStarter<Listing> BuildConditions(FilterCriteria filterCriteria)

@@ -16,36 +16,36 @@ namespace UnrealEstate.Models.Repositories
             _context = context;
         }
 
-        public Task<List<Listing>> GetListingsWithFilter(Expression<Func<Listing, bool>> filterConditions)
+        public Task<List<Listing>> GetListingsWithFilterAsync(Expression<Func<Listing, bool>> filterConditions)
         {
             // TODO: Include Comments.
             return  _context.Listings.Where(filterConditions).ToListAsync();
         }
 
-        public async Task<Listing> GetListingById(int listingId)
+        public async Task<Listing> GetListingByIdAsync(int listingId)
         {
             return await _context.Listings.FindAsync(listingId);
         }
 
-        public Task<List<Listing>> GetListings()
+        public Task<List<Listing>> GetListingsAsync()
         {
             return _context.Listings.ToListAsync();
         }
 
-        public async Task AddListing(Listing listing)
+        public async Task AddListingAsync(Listing listing)
         {
             _context.Listings.Add(listing);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateListing(Listing listing)
+        public async Task UpdateListingAsync(Listing listing)
         {
             _context.Entry<Listing>(listing).CurrentValues.SetValues(listing);
 
             await _context.SaveChangesAsync();
         }
 
-        public async Task AddFavoriteUser(int listingId, string userId)
+        public async Task AddFavoriteUserAsync(int listingId, string userId)
         {
             var listingFromDb = _context.Listings.Find(listingId);
 

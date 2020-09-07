@@ -7,13 +7,13 @@ namespace UnrealEstate.Services
 {
     public interface IListingService
     {
-        Task AddFavoriteUser(int listingId, string userId);
-        Task CreateListing(Listing listing);
-        Task DisableListing(int listingId);
-        Task EditListing(Listing editedListing);
-        Task EnableListing(int listingId);
-        Task<List<Listing>> GetActiveListingWithFilter(FilterCriteria filterCriteria);
-        Task<Listing> GetListing(int listingId);
-        Task<List<Listing>> GetListings();
+        Task AddFavoriteUserAsync(int listingId, string userId);
+        Task CreateListingAsync(Listing listing);
+        Task DisableListingAsync(User currentUser,int listingId);
+        Task EditListingAsync(User currentUser, Listing listing);
+        Task EnableListingAsync(int listingId);
+        Task<List<Listing>> GetActiveListingWithFilterAsync(FilterCriteria filterCriteria);
+        Task<Listing> GetListingAsync(int listingId);
+        Task<List<Listing>> GetListingsAsync();
     }
 }

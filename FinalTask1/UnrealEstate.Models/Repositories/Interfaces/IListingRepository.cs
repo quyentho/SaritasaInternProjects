@@ -7,15 +7,16 @@ namespace UnrealEstate.Models.Repositories
 {
     public interface IListingRepository
     {
-        Task<List<Listing>> GetListings();
+        Task<List<Listing>> GetListingsAsync();
         
-        Task<Listing> GetListingById(int listingId);
+        Task<Listing> GetListingByIdAsync(int listingId);
 
-        Task<List<Listing>> GetListingsWithFilter(Expression<Func<Listing, bool>> filterConditions);
+        Task<List<Listing>> GetListingsWithFilterAsync(Expression<Func<Listing, bool>> filterConditions);
         
-        Task AddListing(Listing listing);
+        Task AddListingAsync(Listing listing);
 
-        Task UpdateListing(Listing listing);
-        Task AddFavoriteUser(int listingId, string userId);
+        Task UpdateListingAsync(Listing listing);
+
+        Task AddFavoriteUserAsync(int listingId, string userId);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using LinqKit;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnrealEstate.Models;
 using UnrealEstate.Models.Models;
 using UnrealEstate.Models.Repositories;
@@ -16,45 +17,82 @@ namespace UnrealEstate.Services
             _listingRepository = listingRepository;
         }
 
-        public void DisableListing(int listingId)
+        public async Task AddFavoriteUser(int listingId, string userId)
         {
-            var listingFromDb = _listingRepository.GetListingById(listingId);
+            _ = userId ?? throw new ArgumentNullException(paramName: "user id", message: "User id cannot be null");
+
+            var listingFromDb = await _listingRepository.GetListingById(listingId);
+
+            _ = listingFromDb ?? throw new ArgumentOutOfRangeException(paramName: "listing id", message: "Listing is not exists");
+
+            await _listingRepository.AddFavoriteUser(listingId, userId);
+        }
+
+        public async Task EnableListing(int listingId)
+        {
+            var listingFromDb = await _listingRepository.GetListingById(listingId);
+
+            // TODO: Introduce Guard clause.
+            _ = listingFromDb ?? throw new ArgumentOutOfRangeException(paramName: "listing id", message: $"Not found Listing with id {listingId}");
+
+            if (listingFromDb.StatusId != (int)Status.Disable)
+            {
+                throw new InvalidOperationException("Listing status is not valid to enable.");
+            }
+
+            listingFromDb.StatusId = (int)Status.Active; // respresents Actived status.
+
+            await _listingRepository.UpdateListing(listingFromDb);
+        }
+
+        // TODO: Add comments
+        public async Task DisableListing(int listingId)
+        {
+            var listingFromDb = await _listingRepository.GetListingById(listingId);
 
             _ = listingFromDb ?? throw new ArgumentOutOfRangeException(paramName: "listing id", message: $"Not found Listing with id {listingId}");
 
-            listingFromDb.StatusId = 3; // respresents cancel status.
+            if (listingFromDb.StatusId != (int)Status.Active)
+            {
+                throw new InvalidOperationException("Listing status is not valid to disable.");
+            }
 
-            _listingRepository.UpdateListing(listingFromDb);
+            listingFromDb.StatusId = (int)Status.Disable; // respresents canceled status.
+
+            await _listingRepository.UpdateListing(listingFromDb);
         }
 
         /// <summary>
         /// Gets list of listings.
         /// </summary>
         /// <returns>List of listing</returns>
-        public List<Listing> GetListings() => _listingRepository.GetListings();
+        public Task<List<Listing>> GetListings() => _listingRepository.GetListings();
 
-        public Listing GetListing(int listingId)
+        public Task<Listing> GetListing(int listingId)
         {
             return _listingRepository.GetListingById(listingId);
         }
 
-        public List<Listing> GetActiveListingWithFilter(FilterCriteria filterCriteria)
+        public Task<List<Listing>> GetActiveListingWithFilter(FilterCriteria filterCriteria)
         {
             ExpressionStarter<Listing> filterConditions = BuildConditions(filterCriteria);
 
             return _listingRepository.GetListingsWithFilter(filterConditions);
         }
 
-        public void CreateListing(Listing listing)
+        public async Task CreateListing(Listing listing)
         {
-            _listingRepository.AddListing(listing);
+            await _listingRepository.AddListing(listing);
         }
 
-        public void EditListing(Listing editedListing)
+        public async Task EditListing(Listing listing)
         {
-            _listingRepository.UpdateListing(editedListing);
-        }
+            var listingFromDb = _listingRepository.GetListingById(listing.Id);
 
+            _ = listingFromDb ?? throw new ArgumentOutOfRangeException(paramName: "listing id", message: $"Not found listing with id:{listing.Id}");
+
+            await _listingRepository.UpdateListing(listing);
+        }
 
         private static ExpressionStarter<Listing> BuildConditions(FilterCriteria filterCriteria)
         {

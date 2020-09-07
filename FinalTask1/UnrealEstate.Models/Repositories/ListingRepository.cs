@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace UnrealEstate.Models.Repositories
 {
@@ -14,36 +16,42 @@ namespace UnrealEstate.Models.Repositories
             _context = context;
         }
 
-        public List<Listing> GetListingsWithFilter(Expression<Func<Listing, bool>> filterConditions)
+        public Task<List<Listing>> GetListingsWithFilter(Expression<Func<Listing, bool>> filterConditions)
         {
-            return _context.Listings.Where(filterConditions).ToList();
+            // TODO: Include Comments.
+            return  _context.Listings.Where(filterConditions).ToListAsync();
         }
 
-        public Listing GetListingById(int listingId)
+        public async Task<Listing> GetListingById(int listingId)
         {
-            return _context.Listings.Find(listingId);
+            return await _context.Listings.FindAsync(listingId);
         }
 
-        public List<Listing> GetListings()
+        public Task<List<Listing>> GetListings()
         {
-            return _context.Listings.ToList();
+            return _context.Listings.ToListAsync();
         }
 
-        public void AddListing(Listing listing)
+        public async Task AddListing(Listing listing)
         {
             _context.Listings.Add(listing);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void UpdateListing(Listing listing)
+        public async Task UpdateListing(Listing listing)
         {
-            var listingFromDb = _context.Listings.Find(listing.Id);
+            _context.Entry<Listing>(listing).CurrentValues.SetValues(listing);
 
-            _ = listingFromDb ?? throw new ArgumentOutOfRangeException(paramName: "listing id", message: $"Not found listing with id:{listing.Id}");
+            await _context.SaveChangesAsync();
+        }
 
-            _context.Entry<Listing>(listingFromDb).CurrentValues.SetValues(listing);
+        public async Task AddFavoriteUser(int listingId, string userId)
+        {
+            var listingFromDb = _context.Listings.Find(listingId);
 
-            _context.SaveChanges();
+            listingFromDb.Favorites.Add(new Favorite() { ListingId = listingId, UserId = userId });
+
+            await _context.SaveChangesAsync();
         }
     }
 }

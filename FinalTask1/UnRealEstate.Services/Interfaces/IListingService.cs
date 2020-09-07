@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnrealEstate.Models;
 using UnrealEstate.Models.Models;
 
@@ -6,11 +7,13 @@ namespace UnrealEstate.Services
 {
     public interface IListingService
     {
-        void CreateListing(Listing listing);
-        void DisableListing(int listingId);
-        void EditListing(Listing editedListing);
-        List<Listing> GetActiveListingWithFilter(FilterCriteria filterCriteria);
-        Listing GetListing(int listingId);
-        List<Listing> GetListings();
+        Task AddFavoriteUser(int listingId, string userId);
+        Task CreateListing(Listing listing);
+        Task DisableListing(int listingId);
+        Task EditListing(Listing editedListing);
+        Task EnableListing(int listingId);
+        Task<List<Listing>> GetActiveListingWithFilter(FilterCriteria filterCriteria);
+        Task<Listing> GetListing(int listingId);
+        Task<List<Listing>> GetListings();
     }
 }

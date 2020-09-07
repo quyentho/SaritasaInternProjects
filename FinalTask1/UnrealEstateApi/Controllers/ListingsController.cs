@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Security.Permissions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using UnrealEstate.Models;
 using UnrealEstate.Services;
 
@@ -19,7 +18,7 @@ namespace UnrealEstateApi.Controllers
         private readonly ICommentService _commentService;
         private readonly UserManager<User> _userManager;
 
-        public ListingsController(IListingService listingService,ICommentService commentService, UserManager<User> userManager)
+        public ListingsController(IListingService listingService, ICommentService commentService, UserManager<User> userManager)
         {
             _listingService = listingService;
             _commentService = commentService;
@@ -74,7 +73,7 @@ namespace UnrealEstateApi.Controllers
 
             try
             {
-                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                User currentUser = await GetCurrentUser();
 
                 await _listingService.EditListingAsync(currentUser, listing);
             }
@@ -91,11 +90,11 @@ namespace UnrealEstateApi.Controllers
         }
 
         // POST: api/Listings
-       /// <summary>
-       /// Create new listing.
-       /// </summary>
-       /// <param name="listing">Listing created.</param>
-       /// <returns></returns>
+        /// <summary>
+        /// Create new listing.
+        /// </summary>
+        /// <param name="listing">Listing created.</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<Listing>> CreateListing(Listing listing)
         {
@@ -115,7 +114,7 @@ namespace UnrealEstateApi.Controllers
         {
             try
             {
-                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                User currentUser = await GetCurrentUser();
                 await _listingService.DisableListingAsync(currentUser, id);
             }
             catch (ArgumentOutOfRangeException)
@@ -162,10 +161,16 @@ namespace UnrealEstateApi.Controllers
             return listing;
         }
 
+        // api/1/comments
+        /// <summary>
+        /// Gets list comments in listing has id.
+        /// </summary>
+        /// <param name="id">Listing id.</param>
+        /// <returns>List comments if found, otherwise return not found.</returns>
         [HttpGet("{id}/comments")]
-        public async Task<ActionResult<IEnumerable<Comment>>> GetComments(int listingId)
+        public async Task<ActionResult<IEnumerable<Comment>>> GetComments(int id)
         {
-            var comments = await _commentService.GetCommentsByListingAsync(listingId);
+            var comments = await _commentService.GetCommentsByListingAsync(id);
 
             if (comments == null)
             {
@@ -175,5 +180,34 @@ namespace UnrealEstateApi.Controllers
             return comments;
         }
 
+        // api/1/favorite
+        /// <summary>
+        /// Add listing to favorite for current user, Remove listing from favorite if user already favorited.
+        /// </summary>
+        /// <param name="id">listing id.</param>
+        /// <returns></returns>
+        [HttpPost("{id}/favorite")]
+        public async Task<ActionResult> SetFavorite(int id)
+        {
+            bool isFavorite;
+            try
+            {
+                User currentUser = await GetCurrentUser();
+                
+                // HACK: Hard code user id to test.
+                isFavorite = await _listingService.AddOrRemoveFavoriteUserAsync(id, "2b3bffa2-d5b4-4bac-8a9b-8afa65ec5e85");
+            }
+            catch (ArgumentNullException)
+            {
+                return BadRequest();
+            }
+
+            return Ok(isFavorite);
+        }
+
+        private async Task<User> GetCurrentUser()
+        {
+            return await _userManager.GetUserAsync(HttpContext.User);
+        }
     }
 }

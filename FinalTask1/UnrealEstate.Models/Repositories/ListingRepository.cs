@@ -18,8 +18,10 @@ namespace UnrealEstate.Models.Repositories
 
         public Task<List<Listing>> GetListingsWithFilterAsync(Expression<Func<Listing, bool>> filterConditions)
         {
-            // TODO: Include Comments.
-            return  _context.Listings.Where(filterConditions).ToListAsync();
+            return  _context.Listings
+                                    .Include(l=>l.Comments)
+                                    .Where(filterConditions)
+                                    .ToListAsync();
         }
 
         public async Task<Listing> GetListingByIdAsync(int listingId)
@@ -41,15 +43,6 @@ namespace UnrealEstate.Models.Repositories
         public async Task UpdateListingAsync(Listing listing)
         {
             _context.Entry<Listing>(listing).CurrentValues.SetValues(listing);
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task AddFavoriteUserAsync(int listingId, string userId)
-        {
-            var listingFromDb = _context.Listings.Find(listingId);
-
-            listingFromDb.Favorites.Add(new Favorite() { ListingId = listingId, UserId = userId });
 
             await _context.SaveChangesAsync();
         }

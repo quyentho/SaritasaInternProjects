@@ -16,7 +16,5 @@ namespace UnrealEstate.Models.Repositories
         Task AddListingAsync(Listing listing);
 
         Task UpdateListingAsync(Listing listing);
-
-        Task AddFavoriteUserAsync(int listingId, string userId);
     }
 }

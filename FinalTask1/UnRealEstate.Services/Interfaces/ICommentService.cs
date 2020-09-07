@@ -6,9 +6,33 @@ namespace UnrealEstate.Services
 {
     public interface ICommentService
     {
+        /// <summary>
+        /// Creates new comment.
+        /// </summary>
+        /// <param name="comment">new comment.</param>
+        /// <returns></returns>
         Task CreateCommentAsync(Comment comment);
+
+        /// <summary>
+        /// Edits comment, only available for author.
+        /// </summary>
+        /// <param name="currentUserId">current logged in user id.</param>
+        /// <param name="comment">comment edited.</param>
+        /// <returns></returns>
         Task EditCommentAsync(string currentUserId, Comment comment);
+
+        /// <summary>
+        /// Gets comment by id.
+        /// </summary>
+        /// <param name="commentId">comment id.</param>
+        /// <returns>comment found.</returns>
         Task<Comment> GetCommentAsync(int commentId);
-        Task<List<Comment>> GetCommentsByListingAsync(int commentId);
+
+        /// <summary>
+        /// Gets all comment in listing.
+        /// </summary>
+        /// <param name="listingId">listing id.</param>
+        /// <returns>List comments found.</returns>
+        Task<List<Comment>> GetCommentsByListingAsync(int listingId);
     }
 }

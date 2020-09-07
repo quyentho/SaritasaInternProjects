@@ -47,6 +47,8 @@ namespace UnrealEstateApi
 
             services.AddTransient<IListingRepository, ListingRepository>();
             services.AddTransient<IListingService, ListingService>();
+            services.AddTransient<ICommentRepository, CommentRepository>();
+            services.AddTransient<ICommentService, CommentService>();
 
             services.AddSwaggerGen();
 

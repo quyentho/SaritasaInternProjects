@@ -22,17 +22,36 @@ namespace UnrealEstate.Services
             
         }
 
-        public async Task AddFavoriteUserAsync(int listingId, string userId)
+        /// <inheritdoc/>
+        public async Task<bool> AddOrRemoveFavoriteUserAsync(int listingId, string userId)
         {
-            var listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
-
             GuardClauses.IsNotNull(userId, "user id");
+            GuardClauses.IsNotNull(listingId, "user id");
 
+            var listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
+            
             GuardClauses.HasValue(listingFromDb, "listing id");
 
-            await _listingRepository.AddFavoriteUserAsync(listingId, userId);
+            var favorite = listingFromDb.Favorites.Where(f => f.UserId == userId).FirstOrDefault();
+
+            bool isFavorite;
+            if (favorite is null)
+            {
+                isFavorite = true;
+                listingFromDb.Favorites.Add(new Favorite() { ListingId = listingId, UserId = userId });
+            }
+            else // User already favorited this listing.
+            {
+                isFavorite = false;
+                listingFromDb.Favorites.Remove(favorite);
+            }
+
+            await _listingRepository.UpdateListingAsync(listingFromDb);
+
+            return isFavorite;
         }
 
+        /// <inheritdoc/>
         public async Task EnableListingAsync(int listingId)
         {
             var listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
@@ -41,12 +60,12 @@ namespace UnrealEstate.Services
 
             GuardClauses.IsValidStatus(listingFromDb.StatusId, (int)Status.Disable);
 
-            listingFromDb.StatusId = (int)Status.Active; // respresents Actived status.
+            listingFromDb.StatusId = (int)Status.Active;
 
             await _listingRepository.UpdateListingAsync(listingFromDb);
         }
 
-        // TODO: Add comments
+        /// <inheritdoc/>
         public async Task DisableListingAsync(User currentUser,int listingId)
         {
             IList<string> userRole = await GetUserRole(currentUser);
@@ -59,15 +78,12 @@ namespace UnrealEstate.Services
 
             GuardClauses.IsValidStatus(listingFromDb.StatusId, (int)Status.Active);
 
-            listingFromDb.StatusId = (int)Status.Disable; // respresents canceled status.
+            listingFromDb.StatusId = (int)Status.Disable;
 
             await _listingRepository.UpdateListingAsync(listingFromDb);
         }
 
-        /// <summary>
-        /// Gets list of listings.
-        /// </summary>
-        /// <returns>List of listing</returns>
+        /// <inheritdoc/>
         public Task<List<Listing>> GetListingsAsync() => _listingRepository.GetListingsAsync();
 
         public Task<Listing> GetListingAsync(int listingId)
@@ -75,6 +91,7 @@ namespace UnrealEstate.Services
             return _listingRepository.GetListingByIdAsync(listingId);
         }
 
+        /// <inheritdoc/>
         public Task<List<Listing>> GetActiveListingWithFilterAsync(FilterCriteria filterCriteria)
         {
             ExpressionStarter<Listing> filterConditions = BuildConditions(filterCriteria);
@@ -82,11 +99,13 @@ namespace UnrealEstate.Services
             return _listingRepository.GetListingsWithFilterAsync(filterConditions);
         }
 
+        /// <inheritdoc/>
         public async Task CreateListingAsync(Listing listing)
         {
             await _listingRepository.AddListingAsync(listing);
         }
 
+        /// <inheritdoc/>
         public async Task EditListingAsync(User currentUser,Listing listing)
         {
             var listingFromDb = await _listingRepository.GetListingByIdAsync(listing.Id);

@@ -27,12 +27,12 @@ namespace UnrealEstate.Models.ModelConfigs
             {
                 context.Comments.AddRange(new List<Comment>()
                 {
-                    new Comment {  ListingId = 1, Text = "comment 1", UserId = "4c79e6d0-311c-4004-a9d0-c88e1e83de8d"}, // comment of user 1
-                    new Comment {  ListingId = 1, Text = "comment 2", UserId = "4c79e6d0-311c-4004-a9d0-c88e1e83de8d"},// comment of user 1
-                    new Comment {  ListingId = 1, Text = "comment 3", UserId = "b7364c11-a384-4fdc-a98b-cad1dd8c36b9"},// comment of user 2
-                    new Comment {  ListingId = 10, Text = "comment 4", UserId = "c2ebf714-0538-4b33-a999-ed3606548cb3"},// comment of user 3
-                    new Comment {  ListingId = 10, Text = "comment 4", UserId = "c2ebf714-0538-4b33-a999-ed3606548cb3"},// comment of user 3
-                    new Comment {  ListingId = 10, Text = "comment 4", UserId = "ca079fa8-3fe9-482a-ac55-652257844bba"},// comment of user 4
+                    new Comment {  ListingId = 1, Text = "comment 1", UserId = "2b3bffa2-d5b4-4bac-8a9b-8afa65ec5e85"}, // comment of user 1
+                    new Comment {  ListingId = 1, Text = "comment 2", UserId = "2b3bffa2-d5b4-4bac-8a9b-8afa65ec5e85"},// comment of user 1
+                    new Comment {  ListingId = 1, Text = "comment 3", UserId = "be26f642-e3b7-46bc-bd68-69f0d574548d"},// comment of user 2
+                    new Comment {  ListingId = 2, Text = "comment 4", UserId = "d35fd6ad-832f-44b4-9e9d-4e113f4ceeaa"},// comment of user 3
+                    new Comment {  ListingId = 2, Text = "comment 4", UserId = "d35fd6ad-832f-44b4-9e9d-4e113f4ceeaa"},// comment of user 3
+                    new Comment {  ListingId = 2, Text = "comment 4", UserId = "eb8d4298-d079-495d-9dbc-ed36fae2a66f"},// comment of user 4
                 });
 
                 context.SaveChanges();

@@ -19,7 +19,7 @@ namespace UnrealEstate.Services
         /// <param name="currentUserId">current logged in user id.</param>
         /// <param name="comment">comment edited.</param>
         /// <returns></returns>
-        Task EditCommentAsync(string currentUserId, Comment comment);
+        Task EditCommentAsync(string currentUserId, int commentId);
 
         /// <summary>
         /// Gets comment by id.
@@ -34,5 +34,11 @@ namespace UnrealEstate.Services
         /// <param name="listingId">listing id.</param>
         /// <returns>List comments found.</returns>
         Task<List<Comment>> GetCommentsByListingAsync(int listingId);
+
+        /// <summary>
+        /// Deletes comment by by comment id.
+        /// </summary>
+        /// <returns></returns>
+        Task DeleteCommentAsync(User currentUser, Comment comment);
     }
 }

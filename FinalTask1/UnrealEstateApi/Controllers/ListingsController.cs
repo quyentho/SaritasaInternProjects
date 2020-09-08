@@ -19,13 +19,13 @@ namespace UnrealEstateApi.Controllers
     {
         private readonly IListingService _listingService;
         private readonly ICommentService _commentService;
-        private readonly UserManager<User> _userManager;
+        private readonly IUserService _userManager;
 
-        public ListingsController(IListingService listingService, ICommentService commentService, UserManager<User> userManager)
+        public ListingsController(IListingService listingService, ICommentService commentService, IUserService _userService)
         {
             _listingService = listingService;
             _commentService = commentService;
-            _userManager = userManager;
+            _userManager = _userService;
         }
 
         /// <summary>
@@ -241,9 +241,9 @@ namespace UnrealEstateApi.Controllers
 
         private async Task<User> GetCurrentUser()
         {
-            var email = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+            var email = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
 
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.GetUserByEmailAsync(email);
             return user;
         }
     }

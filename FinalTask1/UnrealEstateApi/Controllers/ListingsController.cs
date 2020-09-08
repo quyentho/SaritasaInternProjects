@@ -50,6 +50,11 @@ namespace UnrealEstateApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Listing>> GetListing(int id)
         {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
             try
             {
                 var listing = await _listingService.GetListingAsync(id);
@@ -61,15 +66,11 @@ namespace UnrealEstateApi.Controllers
 
                 return Ok(listing);
             }
-            catch (ArgumentNullException ex)
-            {
-                return BadRequest(ex.Message);
-            }
             catch (Exception)
             {
                 throw;
             }
-          
+
         }
 
         // PUT: api/Listings/5
@@ -83,7 +84,7 @@ namespace UnrealEstateApi.Controllers
         public async Task<IActionResult> UpdateListing(int id, Listing listing)
         {
             // TODO: Introduce listing DTO to prevent update status field.
-            if (id != listing.Id)
+            if (!ModelState.IsValid || id != listing.Id)
             {
                 return BadRequest();
             }
@@ -94,17 +95,9 @@ namespace UnrealEstateApi.Controllers
 
                 await _listingService.EditListingAsync(currentUser, listing);
             }
-            catch(ArgumentNullException ex)
-            {
-                return BadRequest(ex.Message);
-            }
             catch (ArgumentOutOfRangeException ex)
             {
                 return NotFound(ex.Message);
-            }
-            catch (Exception)
-            {
-                throw;
             }
 
             return NoContent();
@@ -119,17 +112,14 @@ namespace UnrealEstateApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Listing>> CreateListing(Listing listing)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                await _listingService.CreateListingAsync(listing);
+                return BadRequest();
+            }
 
-                return CreatedAtAction("GetListing", new { id = listing.Id }, listing);
-            }
-            catch (ArgumentNullException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-           
+            await _listingService.CreateListingAsync(listing);
+
+            return CreatedAtAction("GetListing", new { id = listing.Id }, listing);
         }
 
         // DELETE: api/Listings/5
@@ -141,14 +131,15 @@ namespace UnrealEstateApi.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Listing>> DeleteListing(int id)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
             try
             {
                 User currentUser = await GetCurrentUser();
                 await _listingService.DisableListingAsync(currentUser, id);
-            }
-            catch(ArgumentNullException ex)
-            {
-                return BadRequest(ex.Message);
             }
             catch (ArgumentOutOfRangeException ex)
             {
@@ -160,11 +151,7 @@ namespace UnrealEstateApi.Controllers
             }
             catch (InvalidOperationException ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message); 
-            }
-            catch (Exception)
-            {
-                throw;
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
 
             var listing = await _listingService.GetListingAsync(id);
@@ -180,13 +167,14 @@ namespace UnrealEstateApi.Controllers
         [HttpPost("{id}/enable")]
         public async Task<ActionResult<Listing>> EnableListing(int id)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
             try
             {
                 await _listingService.EnableListingAsync(id);
-            }
-            catch (ArgumentNullException ex)
-            {
-                return BadRequest(ex.Message);
             }
             catch (ArgumentOutOfRangeException ex)
             {
@@ -195,10 +183,6 @@ namespace UnrealEstateApi.Controllers
             catch (InvalidOperationException ex)
             {
                 return BadRequest(ex.Message);
-            }
-            catch (Exception)
-            {
-                throw;
             }
 
             var listing = await _listingService.GetListingAsync(id);
@@ -216,26 +200,19 @@ namespace UnrealEstateApi.Controllers
         [HttpGet("{listingId}/comments")]
         public async Task<ActionResult<IEnumerable<Comment>>> GetComments(int listingId)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                var comments = await _commentService.GetCommentsByListingAsync(listingId);
+                return BadRequest();
+            }
 
-                if (comments == null)
-                {
-                    return NotFound();
-                }
+            var comments = await _commentService.GetCommentsByListingAsync(listingId);
 
-                return comments;
-            }
-            catch (ArgumentNullException ex)
+            if (comments == null)
             {
-                return BadRequest(ex.Message);
+                return NotFound();
             }
-            catch (Exception)
-            {
-                throw;
-            }
-         
+
+            return comments;
         }
 
         // api/1/favorite
@@ -247,20 +224,19 @@ namespace UnrealEstateApi.Controllers
         [HttpPost("{listingId}/favorite")]
         public async Task<ActionResult> SetFavorite(int listingId)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
             bool isFavorite;
-            try
-            {
-                User currentUser = await GetCurrentUser();
-                
-                // HACK: Hard code user id to test.
-                isFavorite = await _listingService.AddOrRemoveFavoriteUserAsync(listingId, "4c79e6d0-311c-4004-a9d0-c88e1e83de8d");
-                
-                return Ok(isFavorite);
-            }
-            catch (ArgumentNullException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+
+            User currentUser = await GetCurrentUser();
+
+
+            isFavorite = await _listingService.AddOrRemoveFavoriteUserAsync(listingId, currentUser.Id);
+
+            return Ok(isFavorite);
         }
 
         private async Task<User> GetCurrentUser()

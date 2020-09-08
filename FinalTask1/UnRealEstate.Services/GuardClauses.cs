@@ -17,12 +17,6 @@ namespace UnrealEstate.Services
             }
         }
 
-        public static void IsNotNull(object argumentValue, string argumentName)
-        {
-            if (argumentValue == null)
-                throw new ArgumentNullException(argumentName);
-        }
-
         public static void IsAuthorOrAdmin(string currentUserId, string authorId, string currentUserRole)
         {
             if (!currentUserRole.Equals("Admin") && !currentUserId.Equals(authorId))

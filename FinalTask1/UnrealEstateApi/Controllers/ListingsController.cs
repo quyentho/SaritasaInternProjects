@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Permissions;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +10,7 @@ using UnrealEstate.Services;
 
 namespace UnrealEstateApi.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ListingsController : ControllerBase
@@ -30,12 +31,14 @@ namespace UnrealEstateApi.Controllers
         /// </summary>
         /// <returns>List of Listing.</returns>
         // GET: api/Listings
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Listing>>> GetListings()
         {
             return await _listingService.GetListingsAsync();
         }
 
+        [AllowAnonymous]
         /// <summary>
         /// Get listing by id.
         /// </summary>
@@ -152,7 +155,7 @@ namespace UnrealEstateApi.Controllers
         }
 
         /// <summary>
-        /// Enable the disabled listing.
+        /// Enable the disabled listing, only available for admin user.
         /// </summary>
         /// <param name="id">Id to enable.</param>
         /// <returns>404 if not found listing, 400 if listing status is not disabled, otherwise return listing be enabled.</returns>

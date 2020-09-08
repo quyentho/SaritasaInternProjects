@@ -8,7 +8,10 @@ using Microsoft.Extensions.Hosting;
 using UnrealEstate.Models;
 using UnrealEstate.Models.ModelConfigs;
 using UnrealEstate.Models.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using UnrealEstate.Services;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace UnrealEstateApi
 {
@@ -26,14 +29,36 @@ namespace UnrealEstateApi
         {
             services.AddDbContext<UnrealEstateDbContext>();
 
-            services.AddIdentity<User, IdentityRole>(options => {
-                
+            services.AddIdentity<User, IdentityRole>(options =>
+            {
+
                 options.User.AllowedUserNameCharacters =
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+"; 
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
 
                 options.User.RequireUniqueEmail = true;
             })
-                    .AddEntityFrameworkStores<UnrealEstateDbContext>();
+                    .AddEntityFrameworkStores<UnrealEstateDbContext>()
+                    .AddDefaultTokenProviders();
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidAudience = Configuration["JWT:ValidAudience"],
+                    ValidIssuer = Configuration["JWT:ValidIssuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
+                };
+            });
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -47,6 +72,7 @@ namespace UnrealEstateApi
 
             services.AddTransient<IListingRepository, ListingRepository>();
             services.AddTransient<IListingService, ListingService>();
+            services.AddTransient<IUserService, UserService>();
             services.AddTransient<ICommentRepository, CommentRepository>();
             services.AddTransient<ICommentService, CommentService>();
 
@@ -78,6 +104,7 @@ namespace UnrealEstateApi
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

@@ -26,7 +26,7 @@ namespace UnrealEstate.Models
 
         public double Size { get; set; }
 
-        public double StatingPrice { get; set; }
+        public decimal StatingPrice { get; set; }
 
         public DateTimeOffset DueDate { get; set; }
 

@@ -38,20 +38,15 @@ namespace UnrealEstate
 
             app.UseSwagger();
 
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Unreal Estate V1");
-            });
 
             app.UseRouting();
 
-            app.UseEndpoints(endpoints =>
+            app.UseSwaggerUI(c =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Unreal Estate V1");
+                c.RoutePrefix = string.Empty;
             });
+
         }
     }
 }

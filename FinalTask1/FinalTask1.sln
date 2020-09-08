@@ -7,11 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnrealEstate", "UnrealEstat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnrealEstate.Services", "UnRealEstate.Services\UnrealEstate.Services.csproj", "{31939AE5-003B-4A8A-8109-D14FF9CA860D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnrealEstate.Services.Tests", "UnrealEstate.Services.Tests\UnrealEstate.Services.Tests.csproj", "{78B73785-5952-4E0B-8777-3B48C1770E08}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnrealEstate.Models", "UnrealEstate.Models\UnrealEstate.Models.csproj", "{6E71F8E4-C2CB-4F7A-AB32-69FC5CAA2FC0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnrealEstateApi", "UnrealEstateApi\UnrealEstateApi.csproj", "{0EDD117C-4D68-4295-BC31-484AB96024B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnrealEstateApi", "UnrealEstateApi\UnrealEstateApi.csproj", "{0EDD117C-4D68-4295-BC31-484AB96024B2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,10 +25,6 @@ Global
 		{31939AE5-003B-4A8A-8109-D14FF9CA860D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31939AE5-003B-4A8A-8109-D14FF9CA860D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31939AE5-003B-4A8A-8109-D14FF9CA860D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{78B73785-5952-4E0B-8777-3B48C1770E08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{78B73785-5952-4E0B-8777-3B48C1770E08}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{78B73785-5952-4E0B-8777-3B48C1770E08}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{78B73785-5952-4E0B-8777-3B48C1770E08}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6E71F8E4-C2CB-4F7A-AB32-69FC5CAA2FC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6E71F8E4-C2CB-4F7A-AB32-69FC5CAA2FC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E71F8E4-C2CB-4F7A-AB32-69FC5CAA2FC0}.Release|Any CPU.ActiveCfg = Release|Any CPU

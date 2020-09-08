@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -30,7 +32,7 @@ namespace UnrealEstateApi.Controllers
         /// Get all Listings.
         /// </summary>
         /// <returns>List of Listing.</returns>
-        // GET: api/Listings
+        /// GET: api/Listings
         [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Listing>>> GetListings()
@@ -48,14 +50,26 @@ namespace UnrealEstateApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Listing>> GetListing(int id)
         {
-            var listing = await _listingService.GetListingAsync(id);
-
-            if (listing == null)
+            try
             {
-                return NotFound();
-            }
+                var listing = await _listingService.GetListingAsync(id);
 
-            return listing;
+                if (listing == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(listing);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+          
         }
 
         // PUT: api/Listings/5
@@ -142,7 +156,11 @@ namespace UnrealEstateApi.Controllers
             }
             catch (NotSupportedException ex)
             {
-                return StatusCode(StatusCodes.Status403Forbidden, ex.Message);
+                return Forbid(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message); 
             }
             catch (Exception)
             {
@@ -188,12 +206,13 @@ namespace UnrealEstateApi.Controllers
             return listing;
         }
 
-        // api/1/comments
+        // api/listings/1/comments
         /// <summary>
         /// Gets list comments in listing by listingId.
         /// </summary>
         /// <param name="listingId">Listing id.</param>
         /// <returns>List comments if found, otherwise return not found.</returns>
+        //[AllowAnonymous]
         [HttpGet("{listingId}/comments")]
         public async Task<ActionResult<IEnumerable<Comment>>> GetComments(int listingId)
         {
@@ -242,12 +261,14 @@ namespace UnrealEstateApi.Controllers
             {
                 return BadRequest(ex.Message);
             }
-
         }
 
         private async Task<User> GetCurrentUser()
         {
-            return await _userManager.GetUserAsync(HttpContext.User);
+            var email = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+
+            var user = await _userManager.FindByEmailAsync(email);
+            return user;
         }
     }
 }

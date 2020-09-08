@@ -100,7 +100,7 @@ namespace UnrealEstate.Services
         }
 
         /// <inheritdoc/>
-        public Task<List<Listing>> GetActiveListingWithFilterAsync(FilterCriteria filterCriteria)
+        public Task<List<Listing>> GetActiveListingWithFilterAsync(FilterCriteriaModel filterCriteria)
         {
             ExpressionStarter<Listing> filterConditions = BuildConditions(filterCriteria);
 
@@ -138,7 +138,7 @@ namespace UnrealEstate.Services
             return await _userManager.GetRolesAsync(currentUser);
         }
 
-        private static ExpressionStarter<Listing> BuildConditions(FilterCriteria filterCriteria)
+        private static ExpressionStarter<Listing> BuildConditions(FilterCriteriaModel filterCriteria)
         {
             var filterConditions = PredicateBuilder.New<Listing>(true);
 

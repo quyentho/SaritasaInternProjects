@@ -6,9 +6,11 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using UnrealEstate.Models;
+using UnrealEstate.Services.EmailService;
 
 namespace UnrealEstate.Services
 {
@@ -17,12 +19,14 @@ namespace UnrealEstate.Services
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
+        private readonly IEmailSender _emailSender;
 
-        public UserService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        public UserService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IEmailSender emailSender)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
+            _emailSender = emailSender;
         }
 
         public async Task<IdentityResult> AddToAdminRole(User user)
@@ -39,9 +43,9 @@ namespace UnrealEstate.Services
             return IdentityResult.Failed();
         }
 
-        public async Task<User> GetUserByNameAsync(string username) 
+        public async Task<User> GetUserByEmailAsync(string email) 
         {
-            return await _userManager.FindByNameAsync(username);
+            return await _userManager.FindByEmailAsync(email);
         }
 
         public async Task<JwtSecurityToken> Login(AuthenticationModel model)
@@ -104,5 +108,32 @@ namespace UnrealEstate.Services
             return new AuthenticationResponse() { Status = "Success", Message = "User created successfully!" };
         }
 
+        public async Task<AuthenticationResponse> ResetPassword(ResetPasswordModel model)
+        {
+
+            if (!model.NewPassword.Equals(model.ConfirmPassword))
+            {
+                return new AuthenticationResponse() { Status = "Fail", Message = "Password and confirm password does not match." };
+            }
+            
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            IdentityResult result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+            if (!result.Succeeded)
+            {
+                return new AuthenticationResponse() { Status = "Fail", Message = "Wrong token" };
+            }
+
+            return new AuthenticationResponse() { Status = "Success", Message = "Password reset successfully" };
+        }
+
+        public async Task SendResetPasswordEmail(User user)
+        {
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            Message resetPasswordMessage = new Message(new string[] { user.Email }
+            , "Reset password token", $"Your token is: {token}\nPlease use this end point to reset your password 'api/auth/reset-password'");
+
+            await _emailSender.SendEmailAsync(resetPasswordMessage);
+        }
     }
 }

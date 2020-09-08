@@ -1,6 +1,6 @@
 ﻿namespace UnrealEstate.Models.Models
 {
-    public class FilterCriteria
+    public class FilterCriteriaModel
     {
         public string Address { get; set; }
 

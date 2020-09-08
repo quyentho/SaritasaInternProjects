@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using UnrealEstate.Services;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using UnrealEstate.Services.EmailService;
 
 namespace UnrealEstateApi
 {
@@ -60,6 +61,10 @@ namespace UnrealEstateApi
                 };
             });
 
+            var emailConfig = Configuration.GetSection("EmailConfiguration")
+                .Get<EmailConfiguration>();
+            services.AddSingleton(emailConfig);
+
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireDigit = false;
@@ -70,11 +75,15 @@ namespace UnrealEstateApi
                 options.Password.RequiredUniqueChars = 0;
             });
 
+            services.AddControllers().AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
             services.AddTransient<IListingRepository, ListingRepository>();
             services.AddTransient<IListingService, ListingService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ICommentRepository, CommentRepository>();
             services.AddTransient<ICommentService, CommentService>();
+            services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddSwaggerGen();
 

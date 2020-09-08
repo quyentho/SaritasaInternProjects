@@ -1,28 +1,24 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using UnrealEstate.Models;
 using UnrealEstate.Services;
+using UnrealEstate.Services.EmailService;
 
 namespace UnrealEstateApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     [ApiController]
     public class AuthenticateController : ControllerBase
     {
         private readonly IUserService _userService;
-
-        public AuthenticateController(IUserService userSerive)
+        private readonly IEmailSender _emailSender;
+        public AuthenticateController(IUserService userSerive, IEmailSender emailSender)
         {
             _userService = userSerive;
+            _emailSender = emailSender;
         }
 
         [HttpPost]
@@ -60,7 +56,7 @@ namespace UnrealEstateApi.Controllers
         [Route("register-admin")]
         public async Task<IActionResult> RegisterAdmin([FromBody] User user)
         {
-            var userExists = await _userService.GetUserByNameAsync(user.UserName);
+            var userExists = await _userService.GetUserByEmailAsync(user.Email);
 
             if (userExists != null)
             {
@@ -72,6 +68,41 @@ namespace UnrealEstateApi.Controllers
             }
             return StatusCode(StatusCodes.Status500InternalServerError
                         , new AuthenticationResponse() { Status = "Error", Message = "Add role to user failed! Please check user details and try again." });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var user = await _userService.GetUserByEmailAsync(model.Email);
+            if (user is null)
+            {
+                return BadRequest("Email not exists");
+            }
+
+           
+            await _userService.SendResetPasswordEmail(user);
+            return Ok("Please check your email to get reset link");
+        }
+
+        public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            AuthenticationResponse resetPasswordResult = await _userService.ResetPassword(model);
+
+            if (resetPasswordResult.Status.Equals("Success"))
+            {
+                return Ok(resetPasswordResult.Message);
+            }
+
+            return BadRequest(resetPasswordResult.Message);
         }
     }
 }

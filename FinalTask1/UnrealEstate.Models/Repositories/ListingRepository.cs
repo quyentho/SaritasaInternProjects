@@ -46,7 +46,8 @@ namespace UnrealEstate.Models.Repositories
 
         public async Task UpdateListingAsync(Listing listing)
         {
-            _context.Entry<Listing>(listing).CurrentValues.SetValues(listing);
+           var oldListing = _context.Listings.Find(listing.Id);
+            _context.Entry<Listing>(oldListing).CurrentValues.SetValues(listing);
 
             await _context.SaveChangesAsync();
         }

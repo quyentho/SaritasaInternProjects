@@ -18,20 +18,32 @@ namespace UnrealEstate.Services
         }
 
         /// <inheritdoc/>
-        public Task<List<Comment>> GetCommentsByListingAsync(int commentId)
-            => _commentRepository.GetAllByListingAsync(commentId);
+        public Task<List<Comment>> GetCommentsByListingAsync(int listingId)
+        {
+            GuardClauses.IsNotNull(listingId, "listing id");
+            return _commentRepository.GetAllByListingAsync(listingId);
+        }
 
         /// <inheritdoc/>
         public Task<Comment> GetCommentAsync(int commentId)
-            => _commentRepository.GetCommentByIdAsync(commentId);
+        {
+            GuardClauses.IsNotNull(commentId, "comment id");
+            return _commentRepository.GetCommentByIdAsync(commentId);
+        }
 
         /// <inheritdoc/>
-        public async Task CreateCommentAsync(Comment comment) 
-            => await _commentRepository.AddCommentAsync(comment);
-        
-        /// <inheritdoc/>
-        public async Task EditCommentAsync(string currentUserId ,Comment comment)
+        public async Task CreateCommentAsync(Comment comment)
         {
+            GuardClauses.IsNotNull(comment, "comment");
+            await _commentRepository.AddCommentAsync(comment);
+        }
+
+        /// <inheritdoc/>
+        public async Task EditCommentAsync(string currentUserId, Comment comment)
+        {
+            GuardClauses.IsNotNull(currentUserId, "current user id");
+            GuardClauses.IsNotNull(comment, "comment");
+
             var commentFromDb = await _commentRepository.GetCommentByIdAsync(comment.Id);
 
             GuardClauses.HasValue(commentFromDb, "comment id");

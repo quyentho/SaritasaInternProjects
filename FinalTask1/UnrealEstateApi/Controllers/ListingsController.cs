@@ -77,9 +77,13 @@ namespace UnrealEstateApi.Controllers
 
                 await _listingService.EditListingAsync(currentUser, listing);
             }
-            catch (ArgumentOutOfRangeException)
+            catch(ArgumentNullException ex)
             {
-                return NotFound();
+                return BadRequest(ex.Message);
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception)
             {
@@ -98,9 +102,17 @@ namespace UnrealEstateApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Listing>> CreateListing(Listing listing)
         {
-            await _listingService.CreateListingAsync(listing);
+            try
+            {
+                await _listingService.CreateListingAsync(listing);
 
-            return CreatedAtAction("GetListing", new { id = listing.Id }, listing);
+                return CreatedAtAction("GetListing", new { id = listing.Id }, listing);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+           
         }
 
         // DELETE: api/Listings/5
@@ -117,9 +129,17 @@ namespace UnrealEstateApi.Controllers
                 User currentUser = await GetCurrentUser();
                 await _listingService.DisableListingAsync(currentUser, id);
             }
-            catch (ArgumentOutOfRangeException)
+            catch(ArgumentNullException ex)
             {
-                return NotFound();
+                return BadRequest(ex.Message);
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (NotSupportedException ex)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, ex.Message);
             }
             catch (Exception)
             {
@@ -143,13 +163,17 @@ namespace UnrealEstateApi.Controllers
             {
                 await _listingService.EnableListingAsync(id);
             }
-            catch (ArgumentOutOfRangeException)
+            catch (ArgumentNullException ex)
             {
-                return NotFound();
+                return BadRequest(ex.Message);
             }
-            catch (InvalidOperationException)
+            catch (ArgumentOutOfRangeException ex)
             {
-                return BadRequest();
+                return NotFound(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception)
             {
@@ -163,31 +187,43 @@ namespace UnrealEstateApi.Controllers
 
         // api/1/comments
         /// <summary>
-        /// Gets list comments in listing has id.
+        /// Gets list comments in listing by listingId.
         /// </summary>
-        /// <param name="id">Listing id.</param>
+        /// <param name="listingId">Listing id.</param>
         /// <returns>List comments if found, otherwise return not found.</returns>
-        [HttpGet("{id}/comments")]
-        public async Task<ActionResult<IEnumerable<Comment>>> GetComments(int id)
+        [HttpGet("{listingId}/comments")]
+        public async Task<ActionResult<IEnumerable<Comment>>> GetComments(int listingId)
         {
-            var comments = await _commentService.GetCommentsByListingAsync(id);
-
-            if (comments == null)
+            try
             {
-                return NotFound();
-            }
+                var comments = await _commentService.GetCommentsByListingAsync(listingId);
 
-            return comments;
+                if (comments == null)
+                {
+                    return NotFound();
+                }
+
+                return comments;
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+         
         }
 
         // api/1/favorite
         /// <summary>
         /// Add listing to favorite for current user, Remove listing from favorite if user already favorited.
         /// </summary>
-        /// <param name="id">listing id.</param>
+        /// <param name="listingId">listing id.</param>
         /// <returns></returns>
-        [HttpPost("{id}/favorite")]
-        public async Task<ActionResult> SetFavorite(int id)
+        [HttpPost("{listingId}/favorite")]
+        public async Task<ActionResult> SetFavorite(int listingId)
         {
             bool isFavorite;
             try
@@ -195,14 +231,15 @@ namespace UnrealEstateApi.Controllers
                 User currentUser = await GetCurrentUser();
                 
                 // HACK: Hard code user id to test.
-                isFavorite = await _listingService.AddOrRemoveFavoriteUserAsync(id, "2b3bffa2-d5b4-4bac-8a9b-8afa65ec5e85");
+                isFavorite = await _listingService.AddOrRemoveFavoriteUserAsync(listingId, "4c79e6d0-311c-4004-a9d0-c88e1e83de8d");
+                
+                return Ok(isFavorite);
             }
-            catch (ArgumentNullException)
+            catch (ArgumentNullException ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
 
-            return Ok(isFavorite);
         }
 
         private async Task<User> GetCurrentUser()

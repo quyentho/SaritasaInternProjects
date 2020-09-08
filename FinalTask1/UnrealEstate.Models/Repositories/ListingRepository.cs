@@ -26,7 +26,11 @@ namespace UnrealEstate.Models.Repositories
 
         public async Task<Listing> GetListingByIdAsync(int listingId)
         {
-            return await _context.Listings.FindAsync(listingId);
+            return await _context
+                .Listings
+                .Include(l=>l.Comments)
+                .Include(l=>l.Favorites)
+                .FirstOrDefaultAsync(l=>l.Id == listingId);
         }
 
         public Task<List<Listing>> GetListingsAsync()

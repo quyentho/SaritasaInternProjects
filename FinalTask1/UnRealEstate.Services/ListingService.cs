@@ -54,6 +54,8 @@ namespace UnrealEstate.Services
         /// <inheritdoc/>
         public async Task EnableListingAsync(int listingId)
         {
+            GuardClauses.IsNotNull(listingId, "listing id");
+
             var listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
 
             GuardClauses.HasValue(listingFromDb, "listing id");
@@ -68,6 +70,9 @@ namespace UnrealEstate.Services
         /// <inheritdoc/>
         public async Task DisableListingAsync(User currentUser,int listingId)
         {
+            GuardClauses.IsNotNull(currentUser, "current user");
+            GuardClauses.IsNotNull(listingId, "listing id");
+
             IList<string> userRole = await GetUserRole(currentUser);
             
             var listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
@@ -88,6 +93,8 @@ namespace UnrealEstate.Services
 
         public Task<Listing> GetListingAsync(int listingId)
         {
+            GuardClauses.IsNotNull(listingId, "listing id");
+
             return _listingRepository.GetListingByIdAsync(listingId);
         }
 
@@ -102,12 +109,18 @@ namespace UnrealEstate.Services
         /// <inheritdoc/>
         public async Task CreateListingAsync(Listing listing)
         {
+            GuardClauses.IsNotNull(listing, "listing");
+
             await _listingRepository.AddListingAsync(listing);
         }
 
         /// <inheritdoc/>
         public async Task EditListingAsync(User currentUser,Listing listing)
         {
+            GuardClauses.IsNotNull(currentUser, "current user");
+            GuardClauses.IsNotNull(listing, "listing");
+
+
             var listingFromDb = await _listingRepository.GetListingByIdAsync(listing.Id);
             
             IList<string> userRole = await GetUserRole(currentUser);

@@ -14,11 +14,9 @@ namespace UnrealEstateApi.Controllers
     public class AuthenticateController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly IEmailSender _emailSender;
-        public AuthenticateController(IUserService userSerive, IEmailSender emailSender)
+        public AuthenticateController(IUserService userSerive)
         {
             _userService = userSerive;
-            _emailSender = emailSender;
         }
 
         [HttpPost]
@@ -42,7 +40,7 @@ namespace UnrealEstateApi.Controllers
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] AuthenticationModel model)
         {
-            AuthenticationResponse response = await _userService.Register(model);
+            AuthenticationResponseModel response = await _userService.Register(model);
 
             if (response.Status.Equals("Error"))
             {
@@ -63,14 +61,15 @@ namespace UnrealEstateApi.Controllers
                 var result = await _userService.AddToAdminRole(userExists);
                 if (result.Succeeded)
                 {
-                    return Ok(new AuthenticationResponse() { Status = "Success", Message = "User created successfully!" });
+                    return Ok(new AuthenticationResponseModel() { Status = "Success", Message = "User created successfully!" });
                 }
             }
             return StatusCode(StatusCodes.Status500InternalServerError
-                        , new AuthenticationResponse() { Status = "Error", Message = "Add role to user failed! Please check user details and try again." });
+                        , new AuthenticationResponseModel() { Status = "Error", Message = "Add role to user failed! Please check user details and try again." });
         }
 
         [HttpPost]
+        [Route("forgot-password")]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordModel model)
         {
             if (!ModelState.IsValid)
@@ -88,6 +87,8 @@ namespace UnrealEstateApi.Controllers
             return Ok("Please check your email to get reset link");
         }
 
+        [HttpPost]
+        [Route("reset-password")]
         public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
         {
             if (!ModelState.IsValid)
@@ -95,7 +96,7 @@ namespace UnrealEstateApi.Controllers
                 return BadRequest();
             }
 
-            AuthenticationResponse resetPasswordResult = await _userService.ResetPassword(model);
+            AuthenticationResponseModel resetPasswordResult = await _userService.ResetPassword(model);
 
             if (resetPasswordResult.Status.Equals("Success"))
             {

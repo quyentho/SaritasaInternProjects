@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UnrealEstate.Models
 {
-    public class AuthenticationResponse
+    public class AuthenticationResponseModel
     {
         public string Status { get; set; }
         public string Message { get; set; }

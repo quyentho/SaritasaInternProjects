@@ -83,7 +83,7 @@ namespace UnrealEstateApi
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ICommentRepository, CommentRepository>();
             services.AddTransient<ICommentService, CommentService>();
-            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<IEmailSenderService, EmailSenderService>();
 
             services.AddSwaggerGen();
 

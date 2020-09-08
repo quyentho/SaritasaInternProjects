@@ -19,9 +19,9 @@ namespace UnrealEstate.Services
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
-        private readonly IEmailSender _emailSender;
+        private readonly IEmailSenderService _emailSender;
 
-        public UserService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IEmailSender emailSender)
+        public UserService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IEmailSenderService emailSender)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -83,13 +83,13 @@ namespace UnrealEstate.Services
             return null;
         }
 
-        public async Task<AuthenticationResponse> Register(AuthenticationModel model)
+        public async Task<AuthenticationResponseModel> Register(AuthenticationModel model)
         {
 
             var userExists = await _userManager.FindByNameAsync(model.Email);
             if (userExists != null)
             {
-                return new AuthenticationResponse() { Status = "Error", Message = "User creation failed! Please check user details and try again." };
+                return new AuthenticationResponseModel() { Status = "Error", Message = "User creation failed! Please check user details and try again." };
             }
 
             User user = new User()
@@ -102,28 +102,28 @@ namespace UnrealEstate.Services
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
             {
-                return new AuthenticationResponse() { Status = "Error", Message = "User creation failed! Please check user details and try again." };
+                return new AuthenticationResponseModel() { Status = "Error", Message = "User creation failed! Please check user details and try again." };
             }
 
-            return new AuthenticationResponse() { Status = "Success", Message = "User created successfully!" };
+            return new AuthenticationResponseModel() { Status = "Success", Message = "User created successfully!" };
         }
 
-        public async Task<AuthenticationResponse> ResetPassword(ResetPasswordModel model)
+        public async Task<AuthenticationResponseModel> ResetPassword(ResetPasswordModel model)
         {
 
             if (!model.NewPassword.Equals(model.ConfirmPassword))
             {
-                return new AuthenticationResponse() { Status = "Fail", Message = "Password and confirm password does not match." };
+                return new AuthenticationResponseModel() { Status = "Fail", Message = "Password and confirm password does not match." };
             }
             
             var user = await _userManager.FindByEmailAsync(model.Email);
             IdentityResult result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
             if (!result.Succeeded)
             {
-                return new AuthenticationResponse() { Status = "Fail", Message = "Wrong token" };
+                return new AuthenticationResponseModel() { Status = "Fail", Message = "Wrong token" };
             }
 
-            return new AuthenticationResponse() { Status = "Success", Message = "Password reset successfully" };
+            return new AuthenticationResponseModel() { Status = "Success", Message = "Password reset successfully" };
         }
 
         public async Task SendResetPasswordEmail(User user)

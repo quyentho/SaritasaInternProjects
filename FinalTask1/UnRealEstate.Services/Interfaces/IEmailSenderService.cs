@@ -2,7 +2,7 @@
 
 namespace UnrealEstate.Services.EmailService
 {
-    public interface IEmailSender
+    public interface IEmailSenderService
     {
         Task SendEmailAsync(Message message);
     }

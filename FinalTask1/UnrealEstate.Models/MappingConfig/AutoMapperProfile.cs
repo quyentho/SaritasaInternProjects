@@ -12,8 +12,11 @@ namespace UnrealEstate.Models.MappingConfig
     {
         public AutoMapperProfile()
         {
-            CreateMap<Listing, ListingViewModel>()
-                .ReverseMap();
+            CreateMap<Listing, ListingViewModel>();
+
+            CreateMap<ListingViewModel, Listing>()
+                .ForMember(dest=>dest.Comments,opt=>opt.Ignore());
+                
 
             CreateMap<ListingStatus, ListingStatusViewModel>();
 
@@ -26,6 +29,12 @@ namespace UnrealEstate.Models.MappingConfig
             CreateMap<User, UserViewModel>()
                 .ForMember(dest => dest.ListingsCreated, opt => opt.MapFrom(src => src.Listings))
                 .ForMember(dest => dest.FavoriteListings, opt => opt.MapFrom(src => src.Favorites.Select(f => f.Listing)));
+
+            CreateMap<UserViewModel, User>()
+                .ForMember(dest => dest.Favorites, opt => opt.Ignore())
+                .ForMember(dest => dest.ListingNotes, opt => opt.Ignore())
+                .ForMember(dest => dest.Comments, opt => opt.Ignore())
+                .ForMember(dest => dest.Listings, opt => opt.Ignore());
         }
     }
 }

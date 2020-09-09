@@ -9,7 +9,6 @@ namespace UnrealEstate.Services
 {
     public interface IAuthenticationService
     {
-        Task<User> GetUserByEmailAsync(string username);
         Task<JwtSecurityToken> Login(AuthenticationViewModel model);
         Task<AuthenticationResponseViewModel> Register(AuthenticationViewModel model);
         Task<AuthenticationResponseViewModel> SendResetPasswordEmail(string email);

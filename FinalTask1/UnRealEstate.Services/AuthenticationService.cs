@@ -28,12 +28,7 @@ namespace UnrealEstate.Services
             _emailSender = emailSender;
         }
 
-        public async Task<User> GetUserByEmailAsync(string email)
-        {
-            User user = await _userManager.FindByEmailAsync(email);
-
-            return user;
-        }
+    
 
         public async Task<JwtSecurityToken> Login(AuthenticationViewModel model)
         {

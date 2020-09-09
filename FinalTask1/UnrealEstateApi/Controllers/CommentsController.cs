@@ -16,9 +16,9 @@ namespace UnrealEstateApi.Controllers
     public class CommentsController : ControllerBase
     {
         private readonly ICommentService _commentService;
-        private readonly IAuthenticationService _userService;
+        private readonly IUserService _userService;
 
-        public CommentsController(ICommentService commentService, IAuthenticationService userService)
+        public CommentsController(ICommentService commentService, IUserService userService)
         {
             _commentService = commentService;
             _userService = userService;
@@ -61,7 +61,7 @@ namespace UnrealEstateApi.Controllers
             {
                 User currentUser = await GetCurrentUser();
 
-                await _commentService.EditCommentAsync(currentUser.Id, commentViewModel);
+                await _commentService.EditCommentAsync(currentUser.Email, commentViewModel);
             }
             catch (ArgumentOutOfRangeException ex)
             {

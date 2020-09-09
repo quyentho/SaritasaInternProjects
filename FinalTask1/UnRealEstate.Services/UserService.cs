@@ -48,7 +48,7 @@ namespace UnrealEstate.Services
             await _userManager.UpdateAsync(user);
         }
 
-        public async Task<UserViewModel> GetUserById(string userId)
+        public async Task<UserViewModel> GetUserByIdAsync(string userId)
         {
             User user = await _userManager.FindByIdAsync(userId);
 

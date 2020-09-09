@@ -59,7 +59,7 @@ namespace UnrealEstateApi.Controllers
 
             try
             {
-                User currentUser = await GetCurrentUser();
+                User currentUser = await GetCurrentUserAsync();
 
                 await _commentService.EditCommentAsync(currentUser.Email, commentViewModel);
             }
@@ -91,19 +91,19 @@ namespace UnrealEstateApi.Controllers
 
             try
             {
-                User currentUser = await GetCurrentUser();
+                User currentUser = await GetCurrentUserAsync();
 
                 await _commentService.DeleteCommentAsync(currentUser, commentId);
             }
-            catch (NotSupportedException ex)
+            catch (NotSupportedException)
             {
-                return Forbid(ex.Message);
+                return Forbid();
             }
 
             return Ok();
         }
 
-        private async Task<User> GetCurrentUser()
+        private async Task<User> GetCurrentUserAsync()
         {
             var email = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
 

@@ -14,17 +14,17 @@ namespace UnrealEstateApi.Controllers
     [ApiController]
     public class AuthenticateController : ControllerBase
     {
-        private readonly IAuthenticationService _userService;
+        private readonly IAuthenticationService _authenticationService;
         public AuthenticateController(IAuthenticationService userSerive)
         {
-            _userService = userSerive;
+            _authenticationService = userSerive;
         }
 
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] AuthenticationViewModel model)
         {
-            JwtSecurityToken token = await _userService.Login(model);
+            JwtSecurityToken token = await _authenticationService.Login(model);
             if (token is null)
             {
                 return Unauthorized();
@@ -37,19 +37,7 @@ namespace UnrealEstateApi.Controllers
             });
         }
 
-        [HttpPost]
-        [Route("register")]
-        public async Task<IActionResult> Register([FromBody] AuthenticationViewModel model)
-        {
-            AuthenticationResponseViewModel response = await _userService.Register(model);
-
-            if (response.Status.Equals("Error"))
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, response);
-            }
-
-            return Ok(response);
-        }
+      
 
         [HttpPost]
         [Route("forgot-password")]
@@ -60,7 +48,7 @@ namespace UnrealEstateApi.Controllers
                 return BadRequest();
             }
             
-            AuthenticationResponseViewModel authenticationResponseViewModel = await _userService.SendResetPasswordEmail(model.Email);
+            AuthenticationResponseViewModel authenticationResponseViewModel = await _authenticationService.SendResetPasswordEmail(model.Email);
 
             return Ok(authenticationResponseViewModel);
         }
@@ -74,7 +62,7 @@ namespace UnrealEstateApi.Controllers
                 return BadRequest();
             }
 
-            AuthenticationResponseViewModel resetPasswordResult = await _userService.ResetPassword(model);
+            AuthenticationResponseViewModel resetPasswordResult = await _authenticationService.ResetPassword(model);
 
             if (resetPasswordResult.Status.Equals("Success"))
             {

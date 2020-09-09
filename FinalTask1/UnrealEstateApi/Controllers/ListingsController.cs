@@ -20,13 +20,13 @@ namespace UnrealEstateApi.Controllers
     {
         private readonly IListingService _listingService;
         private readonly ICommentService _commentService;
-        private readonly IAuthenticationService _userManager;
+        private readonly IUserService _userService;
 
-        public ListingsController(IListingService listingService, ICommentService commentService, IAuthenticationService _userService)
+        public ListingsController(IListingService listingService, ICommentService commentService, IUserService userService)
         {
             _listingService = listingService;
             _commentService = commentService;
-            _userManager = _userService;
+            _userService = userService;
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace UnrealEstateApi.Controllers
 
             try
             {
-                User currentUser = await GetCurrentUser();
+                User currentUser = await GetCurrentUserAsync();
 
                 await _listingService.EditListingAsync(currentUser, listing);
             }
@@ -132,7 +132,7 @@ namespace UnrealEstateApi.Controllers
 
             try
             {
-                User currentUser = await GetCurrentUser();
+                User currentUser = await GetCurrentUserAsync();
                 await _listingService.DisableListingAsync(currentUser, id);
             }
             catch (ArgumentOutOfRangeException ex)
@@ -168,7 +168,7 @@ namespace UnrealEstateApi.Controllers
 
             try
             {
-                User currentUser = await GetCurrentUser();
+                User currentUser = await GetCurrentUserAsync();
                 await _listingService.EnableListingAsync(currentUser, id);
             }
             catch (ArgumentOutOfRangeException ex)
@@ -224,21 +224,28 @@ namespace UnrealEstateApi.Controllers
                 return BadRequest();
             }
 
-            bool isFavorite;
+            try
+            {
+                bool isFavorite;
 
-            User currentUser = await GetCurrentUser();
+                User currentUser = await GetCurrentUserAsync();
 
+                isFavorite = await _listingService.AddOrRemoveFavoriteUserAsync(listingId, currentUser.Id);
 
-            isFavorite = await _listingService.AddOrRemoveFavoriteUserAsync(listingId, currentUser.Id);
-
-            return Ok(isFavorite);
+                return Ok(isFavorite);
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+          
         }
 
-        private async Task<User> GetCurrentUser()
+        private async Task<User> GetCurrentUserAsync()
         {
             var email = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
 
-            var user = await _userManager.GetUserByEmailAsync(email);
+            var user = await _userService.GetUserByEmailAsync(email);
             return user;
         }
     }

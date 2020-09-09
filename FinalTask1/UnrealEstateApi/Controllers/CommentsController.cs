@@ -21,6 +21,11 @@ namespace UnrealEstateApi.Controllers
             _userService = userService;
         }
 
+        /// <summary>
+        /// Create new comment.
+        /// </summary>
+        /// <param name="comment"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("api/comments")]
         public async Task<IActionResult> CreateNewComment(Comment comment)
@@ -35,6 +40,11 @@ namespace UnrealEstateApi.Controllers
             return StatusCode(StatusCodes.Status201Created);
         }
 
+        /// <summary>
+        /// Update comment, only available for comment's author.
+        /// </summary>
+        /// <param name="commentId">comment id.</param>
+        /// <returns></returns>
         [HttpPut]
         [Route("api/comments/{commentId}")]
         public async Task<IActionResult> UpdateComment(int commentId)
@@ -62,13 +72,11 @@ namespace UnrealEstateApi.Controllers
             return NoContent();
         }
 
-        private async Task<User> GetCurrentUser()
-        {
-            var email = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            User currentUser = await _userService.GetUserByEmailAsync(email);
-            return currentUser;
-        }
-
+        /// <summary>
+        /// Delete comment by id, only available for admin.
+        /// </summary>
+        /// <param name="commentId">comment id.</param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("api/comments/{commentId}")]
         public async Task<IActionResult> DeleteComment(int commentId)
@@ -81,7 +89,9 @@ namespace UnrealEstateApi.Controllers
             try
             {
                 User currentUser = await GetCurrentUser();
+
                 var comment = await _commentService.GetCommentAsync(commentId);
+
                 await _commentService.DeleteCommentAsync(currentUser, comment);
             }
             catch (NotSupportedException ex)
@@ -90,7 +100,15 @@ namespace UnrealEstateApi.Controllers
             }
 
             return Ok();
+        }
 
+        private async Task<User> GetCurrentUser()
+        {
+            var email = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+
+            User currentUser = await _userService.GetUserByEmailAsync(email);
+
+            return currentUser;
         }
     }
 }

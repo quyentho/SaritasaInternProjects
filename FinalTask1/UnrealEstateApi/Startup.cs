@@ -13,6 +13,7 @@ using UnrealEstate.Services;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using UnrealEstate.Services.EmailService;
+using UnrealEstateApi.Configurations;
 
 namespace UnrealEstateApi
 {
@@ -85,8 +86,11 @@ namespace UnrealEstateApi
             services.AddTransient<ICommentService, CommentService>();
             services.AddTransient<IEmailSenderService, EmailSenderService>();
 
-            services.AddSwaggerGen();
-
+            services.AddSwaggerGen(x=> 
+            {
+                x.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo() { Title = "Unreal Estate API", Version = "v1" });
+            });
+             
             services.AddControllers();
         }
 
@@ -109,7 +113,16 @@ namespace UnrealEstateApi
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseSwagger();
+            var swaggerOptions = Configuration.GetSection("SwaggerOptions").Get<SwaggerOptions>();
+
+            app.UseSwagger(option => 
+            {
+                option.RouteTemplate = swaggerOptions.JsonRoute;
+            });
+            app.UseSwaggerUI(option =>
+             {
+                 option.SwaggerEndpoint(swaggerOptions.UIEndpoint, swaggerOptions.Description);
+             });
 
             app.UseRouting();
 

@@ -2,6 +2,7 @@
 using System.Linq;
 using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
+using UnrealEstate.Models.ViewModels.ResponseViewModels;
 
 namespace UnrealEstate.Models.MappingConfig
 {
@@ -17,9 +18,9 @@ namespace UnrealEstate.Models.MappingConfig
 
             CreateMap<ListingStatus, ListingStatusViewModel>();
 
-            CreateMap<ListingNote, ListingNoteViewModel>();
+            CreateMap<ListingNote, ListingNoteResponseViewModel>();
 
-            CreateMap<ListingPhoto, ListingPhotoViewModel>();
+            CreateMap<ListingPhoto, ListingPhotoResponseViewModel>();
 
             #region comment mapping
             CreateMap<Comment, CommentResponseViewModel>();

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnrealEstate.Models;
 using UnrealEstate.Models.ViewModels;
+using UnrealEstate.Models.ViewModels.ResponseViewModels;
 using Xunit;
 
 namespace TestAutomapperConfiguration

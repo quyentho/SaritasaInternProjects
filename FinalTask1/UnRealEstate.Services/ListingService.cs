@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using UnrealEstate.Models;
 using UnrealEstate.Models.Repositories;
 using UnrealEstate.Models.ViewModels;
+using UnrealEstate.Models.ViewModels.RequestViewModels;
+using UnrealEstate.Models.ViewModels.ResponseViewModels;
 
 namespace UnrealEstate.Services
 {

@@ -2,6 +2,8 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 using UnrealEstate.Models;
+using UnrealEstate.Models.ViewModels.RequestViewModels;
+using UnrealEstate.Models.ViewModels.ResponseViewModels;
 using UnrealEstate.Services;
 
 namespace UnrealEstateApi.Controllers

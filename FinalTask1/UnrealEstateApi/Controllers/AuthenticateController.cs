@@ -41,7 +41,7 @@ namespace UnrealEstateApi.Controllers
 
         [HttpPost]
         [Route("forgot-password")]
-        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordRequestViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -55,7 +55,7 @@ namespace UnrealEstateApi.Controllers
 
         [HttpPost]
         [Route("reset-password")]
-        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        public async Task<IActionResult> ResetPassword(ResetPasswordRequestViewModel model)
         {
             if (!ModelState.IsValid)
             {

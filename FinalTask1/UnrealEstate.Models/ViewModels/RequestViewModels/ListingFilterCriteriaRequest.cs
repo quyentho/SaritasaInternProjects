@@ -1,6 +1,6 @@
 ﻿namespace UnrealEstate.Models.Models
 {
-    public class FilterCriteriaViewModel
+    public class ListingFilterCriteriaRequestViewModel
     {
         public string Address { get; set; }
 

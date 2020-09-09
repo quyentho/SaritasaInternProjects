@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace UnrealEstate.Models
 {
-    public class AuthenticationRequestViewModel
+    public class AuthenticationRequest
     {
         [EmailAddress]
         [Required(ErrorMessage = "Email is required")]

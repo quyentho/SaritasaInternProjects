@@ -19,11 +19,11 @@ namespace UnrealEstate.Models.MappingConfig
                 .ForMember(dest=>dest.Comments,opt=>opt.Ignore());
                 
 
-            CreateMap<ListingStatus, ListingStatusViewModel>();
+            CreateMap<ListingStatus, ListingStatusResponseViewModel>();
 
-            CreateMap<ListingNote, ListingNoteViewModel>();
+            CreateMap<ListingNote, ListingNoteRequestViewModel>();
 
-            CreateMap<ListingPhoto, ListingPhotoViewModel>();
+            CreateMap<ListingPhoto, ListingPhotoResponseViewModel>();
 
             #region comment mapping
             CreateMap<Comment, CommentResponseViewModel>();

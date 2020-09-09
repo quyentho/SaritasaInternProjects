@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UnrealEstate.Models.ViewModels
 {
-    public class ListingNoteViewModel
+    public class ListingNoteRequestViewModel
     {
         public string Text { get; set; }
     }

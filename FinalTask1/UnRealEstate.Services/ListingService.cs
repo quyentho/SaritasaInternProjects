@@ -1,13 +1,11 @@
 ﻿using AutoMapper;
 using LinqKit;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnrealEstate.Models;
-using UnrealEstate.Models.Models;
 using UnrealEstate.Models.Repositories;
 using UnrealEstate.Models.ViewModels;
 
@@ -45,14 +43,14 @@ namespace UnrealEstate.Services
         public async Task EnableListingAsync(User currentUser, int listingId)
         {
             Listing listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
-            
+
             await ValidateForAdminAction(currentUser, listingFromDb, (int)Status.Disable);
 
             await Enable(listingFromDb);
         }
 
         /// <inheritdoc/>
-        public async Task DisableListingAsync(User currentUser,int listingId)
+        public async Task DisableListingAsync(User currentUser, int listingId)
         {
             Listing listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
 
@@ -61,44 +59,44 @@ namespace UnrealEstate.Services
             await Disable(listingFromDb);
         }
 
-  
+
 
         /// <inheritdoc/>
-        public async Task<List<ListingViewModel>> GetListingsAsync()
+        public async Task<List<ListingResponseViewModel>> GetListingsAsync()
         {
             List<Listing> listings = await _listingRepository.GetListingsAsync();
 
-            List<ListingViewModel> listingViewModels = MapListingsToViewModels(listings);
+            List<ListingResponseViewModel> listingViewModels = MapListingsToViewModels(listings);
 
             return listingViewModels;
         }
 
-       
+
 
         /// <inheritdoc/>
-        public async Task<ListingViewModel> GetListingAsync(int listingId)
+        public async Task<ListingResponseViewModel> GetListingAsync(int listingId)
         {
             Listing listing = await _listingRepository.GetListingByIdAsync(listingId);
 
-            ListingViewModel listingViewModel = _mapper.Map<ListingViewModel>(listing);
+            ListingResponseViewModel listingViewModel = _mapper.Map<ListingResponseViewModel>(listing);
 
             return listingViewModel;
         }
 
         /// <inheritdoc/>
-        public async Task<List<ListingViewModel>> GetActiveListingWithFilterAsync(ListingFilterCriteriaRequestViewModel filterCriteria)
+        public async Task<List<ListingResponseViewModel>> GetActiveListingWithFilterAsync(ListingFilterCriteriaRequestViewModel filterCriteria)
         {
             ExpressionStarter<Listing> filterConditions = BuildConditions(filterCriteria);
 
             List<Listing> listingsFiltered = await _listingRepository.GetListingsWithFilterAsync(filterConditions);
 
-            List<ListingViewModel> listingViewModels = MapListingsToViewModels(listingsFiltered);
+            List<ListingResponseViewModel> listingViewModels = MapListingsToViewModels(listingsFiltered);
 
             return listingViewModels;
         }
 
         /// <inheritdoc/>
-        public async Task CreateListingAsync(ListingViewModel listingViewModel)
+        public async Task CreateListingAsync(ListingResponseViewModel listingViewModel)
         {
             Listing listing = _mapper.Map<Listing>(listingViewModel);
 
@@ -106,13 +104,13 @@ namespace UnrealEstate.Services
         }
 
         /// <inheritdoc/>
-        public async Task EditListingAsync(User currentUser,ListingViewModel listingViewModel)
+        public async Task EditListingAsync(User currentUser, ListingResponseViewModel listingViewModel)
         {
             var listingFromDb = await _listingRepository.GetListingByIdAsync(listingViewModel.Id);
 
             await ValidateForAdminOrAuthorAction(currentUser, listingFromDb);
 
-            _mapper.Map(listingViewModel,listingFromDb);
+            _mapper.Map(listingViewModel, listingFromDb);
 
             await _listingRepository.UpdateListingAsync(listingFromDb);
         }
@@ -209,9 +207,9 @@ namespace UnrealEstate.Services
             GuardClauses.IsValidStatus(listingFromDb.StatusId, statusId);
         }
 
-        private List<ListingViewModel> MapListingsToViewModels(List<Listing> listings)
+        private List<ListingResponseViewModel> MapListingsToViewModels(List<Listing> listings)
         {
-            return _mapper.Map<List<ListingViewModel>>(listings);
+            return _mapper.Map<List<ListingResponseViewModel>>(listings);
         }
     }
 }

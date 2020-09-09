@@ -10,7 +10,7 @@ namespace UnrealEstate.Models
 
         public string LastName { get; set; }
 
-        public DateTimeOffset BirthDay{ get; set; }
+        public DateTimeOffset BirthDay { get; set; }
 
         public bool Status { get; set; } = true;
 

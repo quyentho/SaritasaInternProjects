@@ -1,9 +1,5 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 
@@ -13,11 +9,11 @@ namespace UnrealEstate.Models.MappingConfig
     {
         public AutoMapperProfile()
         {
-            CreateMap<Listing, ListingViewModel>();
+            CreateMap<Listing, ListingResponseViewModel>();
 
-            CreateMap<ListingViewModel, Listing>()
-                .ForMember(dest=>dest.Comments,opt=>opt.Ignore());
-                
+            CreateMap<ListingResponseViewModel, Listing>()
+                .ForMember(dest => dest.Comments, opt => opt.Ignore());
+
 
             CreateMap<ListingStatus, ListingStatusViewModel>();
 

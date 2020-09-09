@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace UnrealEstate.Services.EmailService
+﻿namespace UnrealEstate.Services.EmailService
 {
     public class EmailConfiguration
     {

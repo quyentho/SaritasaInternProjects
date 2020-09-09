@@ -6,8 +6,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using UnrealEstate.Models;
-using UnrealEstate.Models.ViewModels;
-using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Services;
 
 namespace UnrealEstateApi.Controllers
@@ -32,7 +30,7 @@ namespace UnrealEstateApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("api/comments")]
-        public async Task<IActionResult> CreateNewComment(CommentRequestViewModel commentViewModel)
+        public async Task<IActionResult> CreateNewComment(CommentRequestl commentViewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -41,7 +39,7 @@ namespace UnrealEstateApi.Controllers
 
             User currentUser = await GetCurrentUserAsync();
 
-            await _commentService.CreateCommentAsync(currentUser.Id,commentViewModel);
+            await _commentService.CreateCommentAsync(currentUser.Id, commentViewModel);
 
             return StatusCode(StatusCodes.Status201Created);
         }
@@ -53,9 +51,9 @@ namespace UnrealEstateApi.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("api/comments/{commentId}")]
-        public async Task<IActionResult> UpdateComment(int commentId, CommentRequestViewModel commentViewModel)
+        public async Task<IActionResult> UpdateComment(int commentId, CommentRequestl commentViewModel)
         {
-            if (!ModelState.IsValid || commentId != commentViewModel.Id )
+            if (!ModelState.IsValid || commentId != commentViewModel.Id)
             {
                 return BadRequest();
             }

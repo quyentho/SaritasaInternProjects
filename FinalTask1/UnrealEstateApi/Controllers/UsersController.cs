@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using UnrealEstate.Models;
 using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Services;
@@ -58,14 +58,14 @@ namespace UnrealEstateApi.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] AuthenticationRequestViewModel model)
+        public async Task<IActionResult> Register([FromBody] AuthenticationRequest model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            AuthenticationResponseViewModel response = await _authenticationService.Register(model);
+            AuthenticationResponse response = await _authenticationService.Register(model);
 
             if (response.Status.Equals("Error"))
             {

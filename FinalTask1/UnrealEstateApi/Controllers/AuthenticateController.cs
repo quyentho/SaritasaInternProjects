@@ -1,12 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 using UnrealEstate.Models;
-using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Services;
-using UnrealEstate.Services.EmailService;
 
 namespace UnrealEstateApi.Controllers
 {
@@ -37,7 +33,7 @@ namespace UnrealEstateApi.Controllers
             });
         }
 
-      
+
 
         [HttpPost]
         [Route("forgot-password")]
@@ -47,7 +43,7 @@ namespace UnrealEstateApi.Controllers
             {
                 return BadRequest();
             }
-            
+
             AuthenticationResponseViewModel authenticationResponseViewModel = await _authenticationService.SendResetPasswordEmail(model.Email);
 
             return Ok(authenticationResponseViewModel);
@@ -55,7 +51,7 @@ namespace UnrealEstateApi.Controllers
 
         [HttpPost]
         [Route("reset-password")]
-        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        public async Task<IActionResult> ResetPassword(ResetPasswordRequestViewModel model)
         {
             if (!ModelState.IsValid)
             {

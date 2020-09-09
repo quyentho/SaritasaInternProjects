@@ -1,6 +1,5 @@
 using AutoMapper;
 using FluentAssertions;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnrealEstate.Models;
@@ -22,11 +21,11 @@ namespace TestAutomapperConfiguration
                 User = user
             };
 
-            var configuration = new MapperConfiguration(cfg => cfg.CreateMap<Listing, ListingViewModel>());
+            var configuration = new MapperConfiguration(cfg => cfg.CreateMap<Listing, ListingResponseViewModel>());
 
             var mapper = configuration.CreateMapper();
 
-            ListingViewModel result = mapper.Map<ListingViewModel>(listing);
+            ListingResponseViewModel result = mapper.Map<ListingResponseViewModel>(listing);
 
             result.UserEmail.Should().Be("test@test.com");
             result.StatusName.Should().Be("Active");
@@ -40,11 +39,11 @@ namespace TestAutomapperConfiguration
                 UserId = "1"
             };
 
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<Listing, ListingViewModel>().ForMember(dest => dest.UserId, opt => opt.Ignore()));
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<Listing, ListingResponseViewModel>().ForMember(dest => dest.UserId, opt => opt.Ignore()));
 
             var mapper = config.CreateMapper();
 
-            ListingViewModel result = mapper.Map<ListingViewModel>(listing);
+            ListingResponseViewModel result = mapper.Map<ListingResponseViewModel>(listing);
 
             result.UserId.Should().BeNull();
         }
@@ -55,20 +54,20 @@ namespace TestAutomapperConfiguration
         {
             var userViewModel = new UserViewModel()
             {
-                FavoriteListings = new List<Listing>() { new Listing() { Id=1} },
+                FavoriteListings = new List<Listing>() { new Listing() { Id = 1 } },
 
-                ListingNotes = new List<ListingNote>() { new ListingNote() { Id = 1} },
+                ListingNotes = new List<ListingNote>() { new ListingNote() { Id = 1 } },
 
-                Comments = new List<Comment>() { new Comment() { Id = 1} }
+                Comments = new List<Comment>() { new Comment() { Id = 1 } }
             };
 
             var user = new User()
             {
-                Favorites = new List<Favorite>() { new Favorite() { ListingId = 10} },
+                Favorites = new List<Favorite>() { new Favorite() { ListingId = 10 } },
 
-                ListingNotes = new List<ListingNote>() { new ListingNote() { Id = 10} },
+                ListingNotes = new List<ListingNote>() { new ListingNote() { Id = 10 } },
 
-                Comments = new List<Comment>() { new Comment() { Id = 10} },
+                Comments = new List<Comment>() { new Comment() { Id = 10 } },
 
                 Listings = new List<Listing>() { new Listing() { Id = 10 } }
             };

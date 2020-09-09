@@ -1,4 +1,4 @@
-﻿namespace UnrealEstate.Models.Models
+﻿namespace UnrealEstate.Models.ViewModels.RequestViewModels
 {
     public class FilterCriteriaViewModel
     {

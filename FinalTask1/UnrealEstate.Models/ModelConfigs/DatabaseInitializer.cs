@@ -41,7 +41,7 @@ namespace UnrealEstate.Models.ModelConfigs
 
         private static void SeedUsers(UnrealEstateDbContext context, Microsoft.AspNetCore.Identity.UserManager<User> userManager)
         {
-           
+
             if (!context.Users.Any())
             {
                 var user = new User() { Email = "user1@test.com", UserName = "user1@test.com" };

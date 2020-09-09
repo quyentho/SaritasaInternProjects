@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using UnrealEstate.Models;
 using UnrealEstate.Models.ViewModels;
@@ -37,7 +34,7 @@ namespace UnrealEstate.Services
             return user;
         }
 
-        public async Task UpdateUser(User currentUser,UserViewModel userViewModel)
+        public async Task UpdateUser(User currentUser, UserViewModel userViewModel)
         {
             var user = await _userManager.FindByEmailAsync(userViewModel.Email);
 

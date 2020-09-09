@@ -25,7 +25,7 @@ namespace UnrealEstate.Services
         /// <inheritdoc/>
         public async Task<List<CommentResponseViewModel>> GetCommentsByListingAsync(int listingId)
         {
-            var comments =  await _commentRepository.GetAllByListingAsync(listingId);
+            var comments = await _commentRepository.GetAllByListingAsync(listingId);
 
             List<CommentResponseViewModel> commentViewModels = _mapper.Map<List<CommentResponseViewModel>>(comments);
 
@@ -43,7 +43,7 @@ namespace UnrealEstate.Services
         }
 
         /// <inheritdoc/>
-        public async Task CreateCommentAsync(string userId,CommentRequestViewModel commentViewModel)
+        public async Task CreateCommentAsync(string userId, CommentRequestViewModel commentViewModel)
         {
             var comment = _mapper.Map<Comment>(commentViewModel);
             comment.UserId = userId;

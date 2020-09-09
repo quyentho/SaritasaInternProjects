@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnrealEstate.Models;
-using UnrealEstate.Models.Models;
 using UnrealEstate.Models.ViewModels;
+using UnrealEstate.Models.ViewModels.RequestViewModels;
 
 namespace UnrealEstate.Services
 {
@@ -21,7 +21,7 @@ namespace UnrealEstate.Services
         /// </summary>
         /// <param name="listing">New listing.</param>
         /// <returns></returns>
-        Task CreateListingAsync(ListingViewModel listing);
+        Task CreateListingAsync(ListingRequestViewModel listing);
 
         /// <summary>
         /// Disable listing if listing status is active, only available for admin user.
@@ -29,7 +29,7 @@ namespace UnrealEstate.Services
         /// <param name="currentUser">current logged in user.</param>
         /// <param name="listingId">listing id.</param>
         /// <returns></returns>
-        Task DisableListingAsync(User currentUser,int listingId);
+        Task DisableListingAsync(User currentUser, int listingId);
 
         /// <summary>
         /// Edits listing, only available for admin user or listing author.
@@ -37,7 +37,7 @@ namespace UnrealEstate.Services
         /// <param name="currentUser">current logged in user.</param>
         /// <param name="listing">listing updated.</param>
         /// <returns></returns>
-        Task EditListingAsync(User currentUser, ListingViewModel listing);
+        Task EditListingAsync(User currentUser, ListingRequestViewModel listing);
 
         /// <summary>
         /// Enables listing if listing status is active, only available for admin user.
@@ -52,19 +52,19 @@ namespace UnrealEstate.Services
         /// </summary>
         /// <param name="filterCriteria">filter criteria.</param>
         /// <returns>Listing after filtered.</returns>
-        Task<List<ListingViewModel>> GetActiveListingWithFilterAsync(ListingFilterCriteriaRequestViewModel filterCriteria);
-        
+        Task<List<ListingResponseViewModel>> GetActiveListingWithFilterAsync(ListingFilterCriteriaRequestViewModel filterCriteria);
+
         /// <summary>
         /// Gets listing by id.
         /// </summary>
         /// <param name="listingId">listing id.</param>
         /// <returns></returns>
-        Task<ListingViewModel> GetListingAsync(int listingId);
+        Task<ListingResponseViewModel> GetListingAsync(int listingId);
 
         /// <summary>
         /// Gets all listing.
         /// </summary>
         /// <returns>list of listings.</returns>
-        Task<List<ListingViewModel>> GetListingsAsync();
+        Task<List<ListingResponseViewModel>> GetListingsAsync();
     }
 }

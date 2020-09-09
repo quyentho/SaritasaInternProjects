@@ -1,13 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace UnrealEstate.Models.Repositories
 {
-    public class CommentRepository :ICommentRepository
+    public class CommentRepository : ICommentRepository
     {
         private readonly UnrealEstateDbContext _context;
 
@@ -35,7 +33,7 @@ namespace UnrealEstate.Models.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteCommentAsync(Comment comment )
+        public async Task DeleteCommentAsync(Comment comment)
         {
             _context.Comments.Remove(comment);
 

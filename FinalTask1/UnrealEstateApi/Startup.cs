@@ -1,3 +1,5 @@
+using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -5,18 +7,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
+using System.Reflection;
+using System.Text;
 using UnrealEstate.Models;
+using UnrealEstate.Models.MappingConfig;
 using UnrealEstate.Models.ModelConfigs;
 using UnrealEstate.Models.Repositories;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using UnrealEstate.Services;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using UnrealEstate.Services.EmailService;
 using UnrealEstateApi.Configurations;
-using AutoMapper;
-using System.Reflection;
-using UnrealEstate.Models.MappingConfig;
 
 namespace UnrealEstateApi
 {
@@ -89,7 +89,7 @@ namespace UnrealEstateApi
             services.AddTransient<ICommentService, CommentService>();
             services.AddTransient<IEmailSenderService, EmailSenderService>();
 
-            services.AddSwaggerGen(x=> 
+            services.AddSwaggerGen(x =>
             {
                 x.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo() { Title = "Unreal Estate API", Version = "v1" });
             });
@@ -120,7 +120,7 @@ namespace UnrealEstateApi
 
             var swaggerOptions = Configuration.GetSection("SwaggerOptions").Get<SwaggerOptions>();
 
-            app.UseSwagger(option => 
+            app.UseSwagger(option =>
             {
                 option.RouteTemplate = swaggerOptions.JsonRoute;
             });

@@ -1,17 +1,13 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
-using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using UnrealEstate.Models;
-using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Services.EmailService;
 
 namespace UnrealEstate.Services
@@ -28,7 +24,7 @@ namespace UnrealEstate.Services
             _emailSender = emailSender;
         }
 
-    
+
 
         public async Task<JwtSecurityToken> Login(AuthenticationRequestViewModel model)
         {
@@ -48,7 +44,7 @@ namespace UnrealEstate.Services
         {
 
             var userExists = await _userManager.FindByNameAsync(model.Email);
-            
+
             if (userExists != null)
             {
                 return new AuthenticationResponseViewModel() { Status = "Error", Message = "User creation failed! Please check user details and try again." };
@@ -62,7 +58,7 @@ namespace UnrealEstate.Services
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
-            
+
             if (!result.Succeeded)
             {
                 return new AuthenticationResponseViewModel() { Status = "Error", Message = "User creation failed! Please check user details and try again." };
@@ -82,7 +78,7 @@ namespace UnrealEstate.Services
             }
 
             var user = await _userManager.FindByEmailAsync(model.Email);
-            
+
             IdentityResult result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
 
             if (result.Succeeded)

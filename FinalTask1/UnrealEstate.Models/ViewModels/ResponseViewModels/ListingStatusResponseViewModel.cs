@@ -1,6 +1,6 @@
 ﻿namespace UnrealEstate.Models.ViewModels
 {
-    public class ListingStatusResponseViewModel
+    public class ListingStatusViewModel
     {
         public string Name { get; set; }
     }

@@ -30,7 +30,7 @@ namespace UnrealEstate.Services
 
     
 
-        public async Task<JwtSecurityToken> Login(AuthenticationRequest model)
+        public async Task<JwtSecurityToken> Login(AuthenticationRequestViewModel model)
         {
             var user = await _userManager.FindByNameAsync(model.Email);
 
@@ -44,14 +44,14 @@ namespace UnrealEstate.Services
             return null;
         }
 
-        public async Task<AuthenticationResponse> Register(AuthenticationRequest model)
+        public async Task<AuthenticationResponseViewModel> Register(AuthenticationRequestViewModel model)
         {
 
             var userExists = await _userManager.FindByNameAsync(model.Email);
             
             if (userExists != null)
             {
-                return new AuthenticationResponse() { Status = "Error", Message = "User creation failed! Please check user details and try again." };
+                return new AuthenticationResponseViewModel() { Status = "Error", Message = "User creation failed! Please check user details and try again." };
             }
 
             User user = new User()
@@ -65,20 +65,20 @@ namespace UnrealEstate.Services
             
             if (!result.Succeeded)
             {
-                return new AuthenticationResponse() { Status = "Error", Message = "User creation failed! Please check user details and try again." };
+                return new AuthenticationResponseViewModel() { Status = "Error", Message = "User creation failed! Please check user details and try again." };
             }
 
-            return new AuthenticationResponse() { Status = "Success", Message = "User created successfully!" };
+            return new AuthenticationResponseViewModel() { Status = "Success", Message = "User created successfully!" };
         }
 
-        public async Task<AuthenticationResponse> ResetPassword(ResetPasswordRequest model)
+        public async Task<AuthenticationResponseViewModel> ResetPassword(ResetPasswordRequestViewModel model)
         {
 
             bool isPasswordConfirmNotMatched = !model.NewPassword.Equals(model.ConfirmPassword);
 
             if (isPasswordConfirmNotMatched)
             {
-                return new AuthenticationResponse() { Status = "Fail", Message = "Password and confirm password does not match." };
+                return new AuthenticationResponseViewModel() { Status = "Fail", Message = "Password and confirm password does not match." };
             }
 
             var user = await _userManager.FindByEmailAsync(model.Email);
@@ -87,25 +87,25 @@ namespace UnrealEstate.Services
 
             if (result.Succeeded)
             {
-                return new AuthenticationResponse() { Status = "Success", Message = "Password reset successfully" };
+                return new AuthenticationResponseViewModel() { Status = "Success", Message = "Password reset successfully" };
             }
 
-            return new AuthenticationResponse() { Status = "Fail", Message = "Wrong token" };
+            return new AuthenticationResponseViewModel() { Status = "Fail", Message = "Wrong token" };
 
         }
 
-        public async Task<AuthenticationResponse> SendResetPasswordEmail(string email)
+        public async Task<AuthenticationResponseViewModel> SendResetPasswordEmail(string email)
         {
             User user = await _userManager.FindByEmailAsync(email);
 
             if (user is null)
             {
-                return new AuthenticationResponse() { Status = "Fail", Message = "Email is not correct." };
+                return new AuthenticationResponseViewModel() { Status = "Fail", Message = "Email is not correct." };
             }
 
             await SendEmail(user);
 
-            return new AuthenticationResponse() { Status = "Success", Message = "Please check your email to get reset link" };
+            return new AuthenticationResponseViewModel() { Status = "Success", Message = "Please check your email to get reset link" };
         }
 
         private async Task SendEmail(User user)

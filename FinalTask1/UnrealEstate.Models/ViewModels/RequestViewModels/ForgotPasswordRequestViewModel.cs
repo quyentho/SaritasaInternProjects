@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace UnrealEstate.Models
 {
-    public class ForgotPasswordRequestViewModel
+    public class ForgotPasswordViewModel
     {
         [Required]
         [EmailAddress]

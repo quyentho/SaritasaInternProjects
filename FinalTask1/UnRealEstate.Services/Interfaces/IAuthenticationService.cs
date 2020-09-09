@@ -9,9 +9,9 @@ namespace UnrealEstate.Services
 {
     public interface IAuthenticationService
     {
-        Task<JwtSecurityToken> Login(AuthenticationRequest model);
-        Task<AuthenticationResponse> Register(AuthenticationRequest model);
-        Task<AuthenticationResponse> SendResetPasswordEmail(string email);
-        Task<AuthenticationResponse> ResetPassword(ResetPasswordRequest model);
+        Task<JwtSecurityToken> Login(AuthenticationRequestViewModel model);
+        Task<AuthenticationResponseViewModel> Register(AuthenticationRequestViewModel model);
+        Task<AuthenticationResponseViewModel> SendResetPasswordEmail(string email);
+        Task<AuthenticationResponseViewModel> ResetPassword(ResetPasswordRequestViewModel model);
     }
 }

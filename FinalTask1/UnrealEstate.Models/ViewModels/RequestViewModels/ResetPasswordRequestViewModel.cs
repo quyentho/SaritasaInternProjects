@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace UnrealEstate.Models
+namespace UnrealEstate.Models.ViewModels.RequestViewModels
 {
     public class ResetPasswordRequestViewModel
     {

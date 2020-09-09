@@ -2,6 +2,6 @@
 {
     public class ListingRequestViewModel
     {
-
+        public int Id { get; set; }
     }
 }

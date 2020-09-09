@@ -8,6 +8,8 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using UnrealEstate.Models;
 using UnrealEstate.Models.ViewModels;
+using UnrealEstate.Models.ViewModels.RequestViewModels;
+using UnrealEstate.Models.ViewModels.ResponseViewModels;
 using UnrealEstate.Services;
 
 namespace UnrealEstateApi.Controllers
@@ -58,14 +60,14 @@ namespace UnrealEstateApi.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] AuthenticationRequest model)
+        public async Task<IActionResult> Register([FromBody] AuthenticationRequestViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            AuthenticationResponse response = await _authenticationService.Register(model);
+            AuthenticationResponseViewModel response = await _authenticationService.Register(model);
 
             if (response.Status.Equals("Error"))
             {

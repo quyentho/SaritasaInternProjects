@@ -8,6 +8,8 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using UnrealEstate.Models;
 using UnrealEstate.Models.ViewModels;
+using UnrealEstate.Models.ViewModels.RequestViewModels;
+using UnrealEstate.Models.ViewModels.ResponseViewModels;
 using UnrealEstate.Services;
 
 namespace UnrealEstateApi.Controllers
@@ -74,7 +76,7 @@ namespace UnrealEstateApi.Controllers
         /// <param name="listing">Listing updated.</param>
         /// <returns>400 status code if url id not match updated id, 204 status code if completed update, not found if id not exists in database.</returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateListing(int id, ListingResponseViewModel listing)
+        public async Task<IActionResult> UpdateListing(int id, ListingRequestViewModel listing)
         {
             if (!ModelState.IsValid || id != listing.Id)
             {
@@ -102,7 +104,7 @@ namespace UnrealEstateApi.Controllers
         /// <param name="listing">Listing created.</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Listing>> CreateListing(ListingResponseViewModel listing)
+        public async Task<ActionResult<Listing>> CreateListing(ListingRequestViewModel listing)
         {
             if (!ModelState.IsValid)
             {
@@ -191,14 +193,14 @@ namespace UnrealEstateApi.Controllers
         /// <returns>List comments if found, otherwise return not found.</returns>
         //[AllowAnonymous]
         [HttpGet("{listingId}/comments")]
-        public async Task<ActionResult<IEnumerable<CommentResponse>>> GetComments(int listingId)
+        public async Task<ActionResult<IEnumerable<CommentResponseViewModel>>> GetComments(int listingId)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            List<CommentResponse> comments = await _commentService.GetCommentsByListingAsync(listingId);
+            List<CommentResponseViewModel> comments = await _commentService.GetCommentsByListingAsync(listingId);
 
             if (comments == null)
             {

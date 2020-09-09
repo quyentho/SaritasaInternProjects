@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using UnrealEstate.Models;
+using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Services;
 
 namespace UnrealEstateApi.Controllers
@@ -30,7 +31,7 @@ namespace UnrealEstateApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("api/comments")]
-        public async Task<IActionResult> CreateNewComment(CommentRequestl commentViewModel)
+        public async Task<IActionResult> CreateNewComment(CommentRequestViewModel commentViewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -51,7 +52,7 @@ namespace UnrealEstateApi.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("api/comments/{commentId}")]
-        public async Task<IActionResult> UpdateComment(int commentId, CommentRequestl commentViewModel)
+        public async Task<IActionResult> UpdateComment(int commentId, CommentRequestViewModel commentViewModel)
         {
             if (!ModelState.IsValid || commentId != commentViewModel.Id)
             {

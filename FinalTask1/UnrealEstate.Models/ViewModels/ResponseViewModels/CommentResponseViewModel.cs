@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UnrealEstate.Models.ViewModels
+namespace UnrealEstate.Models.ViewModels.ResponseViewModels
 {
     public class CommentResponseViewModel
     {

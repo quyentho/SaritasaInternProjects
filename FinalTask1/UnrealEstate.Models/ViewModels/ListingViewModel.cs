@@ -8,7 +8,7 @@ namespace UnrealEstate.Models.ViewModels
 {
     public class ListingViewModel
     {
-       // public int Id { get; set; }
+        public int Id { get; set; }
 
         public string StatusName { get; set; }
 
@@ -38,7 +38,7 @@ namespace UnrealEstate.Models.ViewModels
 
         public List<Comment> Comments { get; set; }
 
-        public List<ListingPhoTo> ListingPhoTos { get; set; }
+        public List<ListingPhoto> ListingPhoTos { get; set; }
 
         public List<ListingNote> ListingNotes { get; set; }
     }

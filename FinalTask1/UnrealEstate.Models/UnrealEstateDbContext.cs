@@ -30,7 +30,7 @@ namespace UnrealEstate.Models
 
         public DbSet<ListingNote> ListingNotes { get; set; }
 
-        public DbSet<ListingPhoTo> ListingPhoTos { get; set; }
+        public DbSet<ListingPhoto> ListingPhoTos { get; set; }
 
         public DbSet<ListingStatus> ListingStatuses { get; set; }
 

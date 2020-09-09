@@ -15,6 +15,8 @@ using System.Text;
 using UnrealEstate.Services.EmailService;
 using UnrealEstateApi.Configurations;
 using AutoMapper;
+using System.Reflection;
+using UnrealEstate.Models.MappingConfig;
 
 namespace UnrealEstateApi
 {
@@ -92,8 +94,7 @@ namespace UnrealEstateApi
                 x.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo() { Title = "Unreal Estate API", Version = "v1" });
             });
 
-            services.AddAutoMapper(typeof(Startup));
-
+            services.AddAutoMapper(Assembly.GetAssembly(typeof(AutoMapperProfile)));
 
             services.AddControllers();
         }

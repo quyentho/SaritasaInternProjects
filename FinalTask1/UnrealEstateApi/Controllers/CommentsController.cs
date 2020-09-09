@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using UnrealEstate.Models;
+using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Services;
 
 namespace UnrealEstateApi.Controllers
@@ -26,18 +27,18 @@ namespace UnrealEstateApi.Controllers
         /// <summary>
         /// Create new comment.
         /// </summary>
-        /// <param name="comment"></param>
+        /// <param name="commentViewModel"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("api/comments")]
-        public async Task<IActionResult> CreateNewComment(Comment comment)
+        public async Task<IActionResult> CreateNewComment(CommentViewModel commentViewModel)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            await _commentService.CreateCommentAsync(comment);
+            await _commentService.CreateCommentAsync(commentViewModel);
 
             return StatusCode(StatusCodes.Status201Created);
         }
@@ -45,11 +46,11 @@ namespace UnrealEstateApi.Controllers
         /// <summary>
         /// Update comment, only available for comment's author.
         /// </summary>
-        /// <param name="commentId">comment id.</param>
+        /// <param name="commentViewModel">comment id.</param>
         /// <returns></returns>
         [HttpPut]
         [Route("api/comments/{commentId}")]
-        public async Task<IActionResult> UpdateComment(int commentId)
+        public async Task<IActionResult> UpdateComment(CommentViewModel commentViewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -60,7 +61,7 @@ namespace UnrealEstateApi.Controllers
             {
                 User currentUser = await GetCurrentUser();
 
-                await _commentService.EditCommentAsync(currentUser.Id, commentId);
+                await _commentService.EditCommentAsync(currentUser.Id, commentViewModel);
             }
             catch (ArgumentOutOfRangeException ex)
             {
@@ -92,9 +93,7 @@ namespace UnrealEstateApi.Controllers
             {
                 User currentUser = await GetCurrentUser();
 
-                var comment = await _commentService.GetCommentAsync(commentId);
-
-                await _commentService.DeleteCommentAsync(currentUser, comment);
+                await _commentService.DeleteCommentAsync(currentUser, commentId);
             }
             catch (NotSupportedException ex)
             {

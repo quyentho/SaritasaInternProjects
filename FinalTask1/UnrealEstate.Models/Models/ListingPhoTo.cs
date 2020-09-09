@@ -1,6 +1,6 @@
 ﻿namespace UnrealEstate.Models
 {
-    public class ListingPhoTo
+    public class ListingPhoto
     {
         public int Id { get; set; }
 

@@ -36,7 +36,7 @@ namespace UnrealEstate.Models
 
         public ListingStatus Status { get; set; }
 
-        public List<ListingPhoTo> ListingPhoTos { get; set; }
+        public List<ListingPhoto> ListingPhoTos { get; set; }
 
         public List<ListingNote> ListingNotes { get; set; }
 

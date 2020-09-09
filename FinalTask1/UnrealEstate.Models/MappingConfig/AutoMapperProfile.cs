@@ -14,11 +14,14 @@ namespace UnrealEstate.Models.MappingConfig
         {
             CreateMap<Listing, ListingViewModel>()
                 .ReverseMap();
-                
-            
-            CreateMap<Comment, CommentViewModel>();
 
-            CreateMap<User, UserViewModel>();
+            CreateMap<ListingStatus, ListingStatusViewModel>();
+
+            CreateMap<ListingNote, ListingNoteViewModel>();
+
+            CreateMap<ListingPhoto, ListingPhotoViewModel>();
+            
+            CreateMap<Comment, CommentViewModel>().ReverseMap();
 
             CreateMap<User, UserViewModel>()
                 .ForMember(dest => dest.ListingsCreated, opt => opt.MapFrom(src => src.Listings))

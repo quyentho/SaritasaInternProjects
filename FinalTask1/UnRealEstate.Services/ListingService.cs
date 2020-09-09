@@ -112,7 +112,7 @@ namespace UnrealEstate.Services
 
             await ValidateForAdminOrAuthorAction(currentUser, listingFromDb);
 
-            listingFromDb = _mapper.Map<Listing>(listingViewModel);
+            _mapper.Map(listingViewModel,listingFromDb);
 
             await _listingRepository.UpdateListingAsync(listingFromDb);
         }

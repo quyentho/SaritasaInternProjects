@@ -193,14 +193,14 @@ namespace UnrealEstateApi.Controllers
         /// <returns>List comments if found, otherwise return not found.</returns>
         //[AllowAnonymous]
         [HttpGet("{listingId}/comments")]
-        public async Task<ActionResult<IEnumerable<Comment>>> GetComments(int listingId)
+        public async Task<ActionResult<IEnumerable<CommentViewModel>>> GetComments(int listingId)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            var comments = await _commentService.GetCommentsByListingAsync(listingId);
+            List<CommentViewModel> comments = await _commentService.GetCommentsByListingAsync(listingId);
 
             if (comments == null)
             {

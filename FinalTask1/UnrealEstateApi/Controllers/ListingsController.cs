@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using UnrealEstate.Models;
+using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Services;
 
 namespace UnrealEstateApi.Controllers
@@ -35,7 +36,7 @@ namespace UnrealEstateApi.Controllers
         /// GET: api/Listings
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Listing>>> GetListings()
+        public async Task<ActionResult<IEnumerable<ListingViewModel>>> GetListings()
         {
             return await _listingService.GetListingsAsync();
         }
@@ -48,29 +49,22 @@ namespace UnrealEstateApi.Controllers
         /// <returns>Listing object if found, otherwise 404 status code.</returns>
         // GET: api/Listings/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Listing>> GetListing(int id)
+        public async Task<ActionResult<ListingViewModel>> GetListing(int id)
         {
 
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
-            try
-            {
-                var listing = await _listingService.GetListingAsync(id);
 
-                if (listing == null)
-                {
-                    return NotFound();
-                }
+            ListingViewModel listing = await _listingService.GetListingAsync(id);
 
-                return Ok(listing);
-            }
-            catch (Exception)
+            if (listing == null)
             {
-                throw;
+                return NotFound();
             }
 
+            return Ok(listing);
         }
 
         // PUT: api/Listings/5
@@ -81,7 +75,7 @@ namespace UnrealEstateApi.Controllers
         /// <param name="listing">Listing updated.</param>
         /// <returns>400 status code if url id not match updated id, 204 status code if completed update, not found if id not exists in database.</returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateListing(int id, Listing listing)
+        public async Task<IActionResult> UpdateListing(int id, ListingViewModel listing)
         {
             // TODO: Introduce listing DTO to prevent update status field.
             if (!ModelState.IsValid || id != listing.Id)
@@ -110,7 +104,7 @@ namespace UnrealEstateApi.Controllers
         /// <param name="listing">Listing created.</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Listing>> CreateListing(Listing listing)
+        public async Task<ActionResult<Listing>> CreateListing(ListingViewModel listing)
         {
             if (!ModelState.IsValid)
             {
@@ -129,7 +123,7 @@ namespace UnrealEstateApi.Controllers
         /// <param name="id">Listing id to delete.</param>
         /// <returns></returns>
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Listing>> DeleteListing(int id)
+        public async Task<ActionResult<ListingViewModel>> DeleteListing(int id)
         {
             if (!ModelState.IsValid)
             {
@@ -165,7 +159,7 @@ namespace UnrealEstateApi.Controllers
         /// <param name="id">Id to enable.</param>
         /// <returns>404 if not found listing, 400 if listing status is not disabled, otherwise return listing be enabled.</returns>
         [HttpPost("{id}/enable")]
-        public async Task<ActionResult<Listing>> EnableListing(int id)
+        public async Task<ActionResult<ListingViewModel>> EnableListing(int id)
         {
             if (!ModelState.IsValid)
             {
@@ -174,7 +168,8 @@ namespace UnrealEstateApi.Controllers
 
             try
             {
-                await _listingService.EnableListingAsync(id);
+                User currentUser = await GetCurrentUser();
+                await _listingService.EnableListingAsync(currentUser, id);
             }
             catch (ArgumentOutOfRangeException ex)
             {

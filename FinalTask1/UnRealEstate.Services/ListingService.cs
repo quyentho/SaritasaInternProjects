@@ -1,4 +1,5 @@
-﻿using LinqKit;
+﻿using AutoMapper;
+using LinqKit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using UnrealEstate.Models;
 using UnrealEstate.Models.Models;
 using UnrealEstate.Models.Repositories;
+using UnrealEstate.Models.ViewModels;
 
 namespace UnrealEstate.Services
 {
@@ -15,34 +17,24 @@ namespace UnrealEstate.Services
     {
         private readonly IListingRepository _listingRepository;
         private readonly UserManager<User> _userManager;
+        private readonly IMapper _mapper;
 
-        public ListingService(IListingRepository listingRepository, UserManager<User> userManager)
+        public ListingService(IListingRepository listingRepository, UserManager<User> userManager, IMapper mapper)
         {
             _listingRepository = listingRepository;
             _userManager = userManager;
-            
+            _mapper = mapper;
         }
 
         /// <inheritdoc/>
         public async Task<bool> AddOrRemoveFavoriteUserAsync(int listingId, string userId)
         {
-            var listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
-            
-            GuardClauses.HasValue(listingFromDb, "listing id");
+            Listing listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
+            GuardClauses.HasValue(listingFromDb, "listing id"); // null check.
 
             var favorite = listingFromDb.Favorites.Where(f => f.UserId == userId).FirstOrDefault();
 
-            bool isFavorite;
-            if (favorite is null)
-            {
-                isFavorite = true;
-                listingFromDb.Favorites.Add(new Favorite() { ListingId = listingId, UserId = userId });
-            }
-            else // User already favorited this listing.
-            {
-                isFavorite = false;
-                listingFromDb.Favorites.Remove(favorite);
-            }
+            bool isFavorite = SetFavoriteState(listingId, userId, listingFromDb, favorite);
 
             await _listingRepository.UpdateListingAsync(listingFromDb);
 
@@ -50,71 +42,95 @@ namespace UnrealEstate.Services
         }
 
         /// <inheritdoc/>
-        public async Task EnableListingAsync(int listingId)
+        public async Task EnableListingAsync(User currentUser, int listingId)
         {
-            var listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
+            Listing listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
+            
+            await ValidateForAdminAction(currentUser, listingFromDb, (int)Status.Disable);
 
-            GuardClauses.HasValue(listingFromDb, "listing id");
-
-            GuardClauses.IsValidStatus(listingFromDb.StatusId, (int)Status.Disable);
-
-            listingFromDb.StatusId = (int)Status.Active;
-
-            await _listingRepository.UpdateListingAsync(listingFromDb);
+            await Enable(listingFromDb);
         }
 
         /// <inheritdoc/>
         public async Task DisableListingAsync(User currentUser,int listingId)
         {
-            IList<string> userRole = await GetUserRole(currentUser);
-            
-            var listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
+            Listing listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
 
-            GuardClauses.IsAdmin(userRole.First());
+            await ValidateForAdminAction(currentUser, listingFromDb, (int)Status.Active);
 
-            GuardClauses.HasValue(listingFromDb, "listing id");
+            await Disable(listingFromDb);
+        }
 
-            GuardClauses.IsValidStatus(listingFromDb.StatusId, (int)Status.Active);
+  
 
+        /// <inheritdoc/>
+        public async Task<List<ListingViewModel>> GetListingsAsync()
+        {
+            List<Listing> listings = await _listingRepository.GetListingsAsync();
+
+            List<ListingViewModel> listingViewModels = MapListingsToViewModels(listings);
+
+            return listingViewModels;
+        }
+
+       
+
+        /// <inheritdoc/>
+        public async Task<ListingViewModel> GetListingAsync(int listingId)
+        {
+            Listing listing = await _listingRepository.GetListingByIdAsync(listingId);
+
+            ListingViewModel listingViewModel = _mapper.Map<ListingViewModel>(listing);
+
+            return listingViewModel;
+        }
+
+        /// <inheritdoc/>
+        public async Task<List<ListingViewModel>> GetActiveListingWithFilterAsync(FilterCriteriaViewModel filterCriteria)
+        {
+            ExpressionStarter<Listing> filterConditions = BuildConditions(filterCriteria);
+
+            List<Listing> listingsFiltered = await _listingRepository.GetListingsWithFilterAsync(filterConditions);
+
+            List<ListingViewModel> listingViewModels = MapListingsToViewModels(listingsFiltered);
+
+            return listingViewModels;
+        }
+
+        /// <inheritdoc/>
+        public async Task CreateListingAsync(ListingViewModel listingViewModel)
+        {
+            Listing listing = _mapper.Map<Listing>(listingViewModel);
+
+            await _listingRepository.AddListingAsync(listing);
+        }
+
+        /// <inheritdoc/>
+        public async Task EditListingAsync(User currentUser,ListingViewModel listingViewModel)
+        {
+            var listingFromDb = await _listingRepository.GetListingByIdAsync(listingViewModel.Id);
+
+            await ValidateForAdminOrAuthorAction(currentUser, listingFromDb);
+
+            listingFromDb = _mapper.Map<Listing>(listingViewModel);
+
+            await _listingRepository.UpdateListingAsync(listingFromDb);
+        }
+
+        private async Task Disable(Listing listingFromDb)
+        {
             listingFromDb.StatusId = (int)Status.Disable;
 
             await _listingRepository.UpdateListingAsync(listingFromDb);
         }
 
-        /// <inheritdoc/>
-        public Task<List<Listing>> GetListingsAsync() => _listingRepository.GetListingsAsync();
-
-        public Task<Listing> GetListingAsync(int listingId)
+        private async Task ValidateForAdminOrAuthorAction(User currentUser, Listing listingFromDb)
         {
-            return _listingRepository.GetListingByIdAsync(listingId);
-        }
-
-        /// <inheritdoc/>
-        public Task<List<Listing>> GetActiveListingWithFilterAsync(FilterCriteriaModel filterCriteria)
-        {
-            ExpressionStarter<Listing> filterConditions = BuildConditions(filterCriteria);
-
-            return _listingRepository.GetListingsWithFilterAsync(filterConditions);
-        }
-
-        /// <inheritdoc/>
-        public async Task CreateListingAsync(Listing listing)
-        {
-            await _listingRepository.AddListingAsync(listing);
-        }
-
-        /// <inheritdoc/>
-        public async Task EditListingAsync(User currentUser,Listing listing)
-        {
-            var listingFromDb = await _listingRepository.GetListingByIdAsync(listing.Id);
-            
             IList<string> userRole = await GetUserRole(currentUser);
 
             GuardClauses.HasValue(listingFromDb, "listing");
 
             GuardClauses.IsAuthorOrAdmin(currentUser.Id, listingFromDb.UserId, userRole.First());
-
-            await _listingRepository.UpdateListingAsync(listing);
         }
 
         private async Task<IList<string>> GetUserRole(User currentUser)
@@ -122,7 +138,7 @@ namespace UnrealEstate.Services
             return await _userManager.GetRolesAsync(currentUser);
         }
 
-        private static ExpressionStarter<Listing> BuildConditions(FilterCriteriaModel filterCriteria)
+        private static ExpressionStarter<Listing> BuildConditions(FilterCriteriaViewModel filterCriteria)
         {
             var filterConditions = PredicateBuilder.New<Listing>(true);
 
@@ -158,6 +174,44 @@ namespace UnrealEstate.Services
             }
 
             return filterConditions;
+        }
+
+        private static bool SetFavoriteState(int listingId, string userId, Listing listingFromDb, Favorite favorite)
+        {
+            bool isFavorite;
+            if (favorite is null)
+            {
+                isFavorite = true;
+                listingFromDb.Favorites.Add(new Favorite() { ListingId = listingId, UserId = userId });
+            }
+            else // User already favorited this listing.
+            {
+                isFavorite = false;
+                listingFromDb.Favorites.Remove(favorite);
+            }
+
+            return isFavorite;
+        }
+
+        private async Task Enable(Listing listingFromDb)
+        {
+            listingFromDb.StatusId = (int)Status.Active;
+
+            await _listingRepository.UpdateListingAsync(listingFromDb);
+        }
+
+        private async Task ValidateForAdminAction(User currentUser, Listing listingFromDb, int statusId)
+        {
+            IList<string> userRole = await GetUserRole(currentUser);
+
+            GuardClauses.HasValue(listingFromDb, "listing id");
+            GuardClauses.IsAdmin(userRole.First());
+            GuardClauses.IsValidStatus(listingFromDb.StatusId, statusId);
+        }
+
+        private List<ListingViewModel> MapListingsToViewModels(List<Listing> listings)
+        {
+            return _mapper.Map<List<ListingViewModel>>(listings);
         }
     }
 }

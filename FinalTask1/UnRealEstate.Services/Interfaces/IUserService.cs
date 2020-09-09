@@ -10,9 +10,9 @@ namespace UnrealEstate.Services
     {
         Task<IdentityResult> AddToAdminRole(User user);
         Task<User> GetUserByEmailAsync(string username);
-        Task<JwtSecurityToken> Login(AuthenticationModel model);
-        Task<AuthenticationResponseModel> Register(AuthenticationModel model);
+        Task<JwtSecurityToken> Login(AuthenticationViewModel model);
+        Task<AuthenticationResponseViewModel> Register(AuthenticationViewModel model);
         Task SendResetPasswordEmail(User user);
-        Task<AuthenticationResponseModel> ResetPassword(ResetPasswordModel model);
+        Task<AuthenticationResponseViewModel> ResetPassword(ResetPasswordViewModel model);
     }
 }

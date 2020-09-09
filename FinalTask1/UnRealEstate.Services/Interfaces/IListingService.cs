@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using UnrealEstate.Models;
 using UnrealEstate.Models.Models;
+using UnrealEstate.Models.ViewModels;
 
 namespace UnrealEstate.Services
 {
@@ -20,7 +21,7 @@ namespace UnrealEstate.Services
         /// </summary>
         /// <param name="listing">New listing.</param>
         /// <returns></returns>
-        Task CreateListingAsync(Listing listing);
+        Task CreateListingAsync(ListingViewModel listing);
 
         /// <summary>
         /// Disable listing if listing status is active, only available for admin user.
@@ -36,7 +37,7 @@ namespace UnrealEstate.Services
         /// <param name="currentUser">current logged in user.</param>
         /// <param name="listing">listing updated.</param>
         /// <returns></returns>
-        Task EditListingAsync(User currentUser, Listing listing);
+        Task EditListingAsync(User currentUser, ListingViewModel listing);
 
         /// <summary>
         /// Enables listing if listing status is active, only available for admin user.
@@ -44,26 +45,26 @@ namespace UnrealEstate.Services
         /// <param name="currentUser">current logged in user.</param>
         /// <param name="listingId">listing id.</param>
         /// <returns></returns>
-        Task EnableListingAsync(int listingId);
+        Task EnableListingAsync(User currentUser, int listingId);
 
         /// <summary>
         /// Gets active listing with filter.
         /// </summary>
         /// <param name="filterCriteria">filter criteria.</param>
         /// <returns>Listing after filtered.</returns>
-        Task<List<Listing>> GetActiveListingWithFilterAsync(FilterCriteriaModel filterCriteria);
+        Task<List<ListingViewModel>> GetActiveListingWithFilterAsync(FilterCriteriaViewModel filterCriteria);
         
         /// <summary>
         /// Gets listing by id.
         /// </summary>
         /// <param name="listingId">listing id.</param>
         /// <returns></returns>
-        Task<Listing> GetListingAsync(int listingId);
+        Task<ListingViewModel> GetListingAsync(int listingId);
 
         /// <summary>
         /// Gets all listing.
         /// </summary>
         /// <returns>list of listings.</returns>
-        Task<List<Listing>> GetListingsAsync();
+        Task<List<ListingViewModel>> GetListingsAsync();
     }
 }

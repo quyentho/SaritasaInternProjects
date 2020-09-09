@@ -48,7 +48,7 @@ namespace UnrealEstate.Services
             return await _userManager.FindByEmailAsync(email);
         }
 
-        public async Task<JwtSecurityToken> Login(AuthenticationModel model)
+        public async Task<JwtSecurityToken> Login(AuthenticationViewModel model)
         {
             var user = await _userManager.FindByNameAsync(model.Email);
 
@@ -83,13 +83,13 @@ namespace UnrealEstate.Services
             return null;
         }
 
-        public async Task<AuthenticationResponseModel> Register(AuthenticationModel model)
+        public async Task<AuthenticationResponseViewModel> Register(AuthenticationViewModel model)
         {
 
             var userExists = await _userManager.FindByNameAsync(model.Email);
             if (userExists != null)
             {
-                return new AuthenticationResponseModel() { Status = "Error", Message = "User creation failed! Please check user details and try again." };
+                return new AuthenticationResponseViewModel() { Status = "Error", Message = "User creation failed! Please check user details and try again." };
             }
 
             User user = new User()
@@ -102,28 +102,28 @@ namespace UnrealEstate.Services
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
             {
-                return new AuthenticationResponseModel() { Status = "Error", Message = "User creation failed! Please check user details and try again." };
+                return new AuthenticationResponseViewModel() { Status = "Error", Message = "User creation failed! Please check user details and try again." };
             }
 
-            return new AuthenticationResponseModel() { Status = "Success", Message = "User created successfully!" };
+            return new AuthenticationResponseViewModel() { Status = "Success", Message = "User created successfully!" };
         }
 
-        public async Task<AuthenticationResponseModel> ResetPassword(ResetPasswordModel model)
+        public async Task<AuthenticationResponseViewModel> ResetPassword(ResetPasswordViewModel model)
         {
 
             if (!model.NewPassword.Equals(model.ConfirmPassword))
             {
-                return new AuthenticationResponseModel() { Status = "Fail", Message = "Password and confirm password does not match." };
+                return new AuthenticationResponseViewModel() { Status = "Fail", Message = "Password and confirm password does not match." };
             }
             
             var user = await _userManager.FindByEmailAsync(model.Email);
             IdentityResult result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
             if (!result.Succeeded)
             {
-                return new AuthenticationResponseModel() { Status = "Fail", Message = "Wrong token" };
+                return new AuthenticationResponseViewModel() { Status = "Fail", Message = "Wrong token" };
             }
 
-            return new AuthenticationResponseModel() { Status = "Success", Message = "Password reset successfully" };
+            return new AuthenticationResponseViewModel() { Status = "Success", Message = "Password reset successfully" };
         }
 
         public async Task SendResetPasswordEmail(User user)

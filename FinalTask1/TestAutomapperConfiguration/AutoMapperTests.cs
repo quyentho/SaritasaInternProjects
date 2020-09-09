@@ -10,7 +10,7 @@ namespace TestAutomapperConfiguration
     public class AutoMapperTests
     {
         [Fact]
-        public void ListingFlatteningMappingTest()
+        public void Listing_FlatteningMappingTest()
         {
 
             var user = new User() { Email = "test@test.com" };

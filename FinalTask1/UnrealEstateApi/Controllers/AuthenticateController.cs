@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 using UnrealEstate.Models;
+using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Services;
 using UnrealEstate.Services.EmailService;
 
@@ -13,8 +14,8 @@ namespace UnrealEstateApi.Controllers
     [ApiController]
     public class AuthenticateController : ControllerBase
     {
-        private readonly IUserService _userService;
-        public AuthenticateController(IUserService userSerive)
+        private readonly IAuthenticationService _userService;
+        public AuthenticateController(IAuthenticationService userSerive)
         {
             _userService = userSerive;
         }
@@ -51,24 +52,6 @@ namespace UnrealEstateApi.Controllers
         }
 
         [HttpPost]
-        [Route("register-admin")]
-        public async Task<IActionResult> RegisterAdmin([FromBody] User user)
-        {
-            var userExists = await _userService.GetUserByEmailAsync(user.Email);
-
-            if (userExists != null)
-            {
-                var result = await _userService.AddToAdminRole(userExists);
-                if (result.Succeeded)
-                {
-                    return Ok(new AuthenticationResponseViewModel() { Status = "Success", Message = "User created successfully!" });
-                }
-            }
-            return StatusCode(StatusCodes.Status500InternalServerError
-                        , new AuthenticationResponseViewModel() { Status = "Error", Message = "Add role to user failed! Please check user details and try again." });
-        }
-
-        [HttpPost]
         [Route("forgot-password")]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
@@ -76,15 +59,10 @@ namespace UnrealEstateApi.Controllers
             {
                 return BadRequest();
             }
-            var user = await _userService.GetUserByEmailAsync(model.Email);
-            if (user is null)
-            {
-                return BadRequest("Email not exists");
-            }
+            
+            AuthenticationResponseViewModel authenticationResponseViewModel = await _userService.SendResetPasswordEmail(model.Email);
 
-           
-            await _userService.SendResetPasswordEmail(user);
-            return Ok("Please check your email to get reset link");
+            return Ok(authenticationResponseViewModel);
         }
 
         [HttpPost]

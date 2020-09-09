@@ -20,9 +20,9 @@ namespace UnrealEstateApi.Controllers
     {
         private readonly IListingService _listingService;
         private readonly ICommentService _commentService;
-        private readonly IUserService _userManager;
+        private readonly IAuthenticationService _userManager;
 
-        public ListingsController(IListingService listingService, ICommentService commentService, IUserService _userService)
+        public ListingsController(IListingService listingService, ICommentService commentService, IAuthenticationService _userService)
         {
             _listingService = listingService;
             _commentService = commentService;

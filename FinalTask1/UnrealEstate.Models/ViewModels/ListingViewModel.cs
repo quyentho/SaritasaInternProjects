@@ -8,7 +8,7 @@ namespace UnrealEstate.Models.ViewModels
 {
     public class ListingViewModel
     {
-        public int Id { get; set; }
+       // public int Id { get; set; }
 
         public string StatusName { get; set; }
 

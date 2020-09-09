@@ -8,6 +8,8 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using UnrealEstate.Models;
+using UnrealEstate.Models.ViewModels.RequestViewModels;
+using UnrealEstate.Models.ViewModels.ResponseViewModels;
 using UnrealEstate.Services.EmailService;
 
 namespace UnrealEstate.Services

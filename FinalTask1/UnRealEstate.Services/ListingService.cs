@@ -86,7 +86,7 @@ namespace UnrealEstate.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<ListingResponseViewModel>> GetActiveListingWithFilterAsync(ListingFilterCriteriaRequestViewModel filterCriteria)
+        public async Task<List<ListingResponseViewModel>> GetActiveListingWithFilterAsync(FilterCriteriaRequestViewModel filterCriteria)
         {
             ExpressionStarter<Listing> filterConditions = BuildConditions(filterCriteria);
 
@@ -98,7 +98,7 @@ namespace UnrealEstate.Services
         }
 
         /// <inheritdoc/>
-        public async Task CreateListingAsync(ListingResponseViewModel listingViewModel)
+        public async Task CreateListingAsync(ListingRequestViewModel listingViewModel)
         {
             Listing listing = _mapper.Map<Listing>(listingViewModel);
 
@@ -106,7 +106,7 @@ namespace UnrealEstate.Services
         }
 
         /// <inheritdoc/>
-        public async Task EditListingAsync(User currentUser, ListingResponseViewModel listingViewModel)
+        public async Task EditListingAsync(User currentUser, ListingRequestViewModel listingViewModel)
         {
             var listingFromDb = await _listingRepository.GetListingByIdAsync(listingViewModel.Id);
 
@@ -138,7 +138,7 @@ namespace UnrealEstate.Services
             return await _userManager.GetRolesAsync(currentUser);
         }
 
-        private static ExpressionStarter<Listing> BuildConditions(ListingFilterCriteriaRequestViewModel filterCriteria)
+        private static ExpressionStarter<Listing> BuildConditions(FilterCriteriaRequestViewModel filterCriteria)
         {
             var filterConditions = PredicateBuilder.New<Listing>(true);
 

@@ -10,23 +10,24 @@ namespace UnrealEstate.Models.MappingConfig
     {
         public AutoMapperProfile()
         {
+            #region listing mapping
             CreateMap<Listing, ListingResponseViewModel>();
 
-            CreateMap<ListingResponseViewModel, Listing>()
-                .ForMember(dest => dest.Comments, opt => opt.Ignore());
+            CreateMap<ListingRequestViewModel, Listing>();
 
-
-            CreateMap<ListingStatus, ListingStatusViewModel>();
+            CreateMap<ListingStatus, ListingStatusResponseViewModel>();
 
             CreateMap<ListingNote, ListingNoteResponseViewModel>();
 
             CreateMap<ListingPhoto, ListingPhotoResponseViewModel>();
+            #endregion
 
             #region comment mapping
             CreateMap<Comment, CommentResponseViewModel>();
 
             CreateMap<CommentRequestViewModel, Comment>();
             #endregion
+
 
             CreateMap<User, UserViewModel>()
                 .ForMember(dest => dest.ListingsCreated, opt => opt.MapFrom(src => src.Listings))

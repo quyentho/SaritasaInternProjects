@@ -33,23 +33,6 @@ namespace TestAutomapperConfiguration
         }
 
         [Fact]
-        public void Listing_IgnoreUserIdTest()
-        {
-            var listing = new Listing()
-            {
-                UserId = "1"
-            };
-
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<Listing, ListingResponseViewModel>().ForMember(dest => dest.UserId, opt => opt.Ignore()));
-
-            var mapper = config.CreateMapper();
-
-            ListingResponseViewModel result = mapper.Map<ListingResponseViewModel>(listing);
-
-            result.UserId.Should().BeNull();
-        }
-
-        [Fact]
 
         public void UserViewModelToUser_NotMap_Favorites_ListingNotes_Comments_Listing()
         {

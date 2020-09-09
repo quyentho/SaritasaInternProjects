@@ -22,7 +22,7 @@ namespace UnrealEstateApi.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] AuthenticationViewModel model)
+        public async Task<IActionResult> Login([FromBody] AuthenticationRequestViewModel model)
         {
             JwtSecurityToken token = await _authenticationService.Login(model);
             if (token is null)

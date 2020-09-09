@@ -30,7 +30,7 @@ namespace UnrealEstate.Services
 
     
 
-        public async Task<JwtSecurityToken> Login(AuthenticationViewModel model)
+        public async Task<JwtSecurityToken> Login(AuthenticationRequestViewModel model)
         {
             var user = await _userManager.FindByNameAsync(model.Email);
 
@@ -44,7 +44,7 @@ namespace UnrealEstate.Services
             return null;
         }
 
-        public async Task<AuthenticationResponseViewModel> Register(AuthenticationViewModel model)
+        public async Task<AuthenticationResponseViewModel> Register(AuthenticationRequestViewModel model)
         {
 
             var userExists = await _userManager.FindByNameAsync(model.Email);

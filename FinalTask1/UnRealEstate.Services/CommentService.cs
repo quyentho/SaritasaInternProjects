@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using UnrealEstate.Models;
 using UnrealEstate.Models.Repositories;
 using UnrealEstate.Models.ViewModels;
+using UnrealEstate.Models.ViewModels.RequestViewModels;
 
 namespace UnrealEstate.Services
 {
@@ -22,35 +23,36 @@ namespace UnrealEstate.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<CommentViewModel>> GetCommentsByListingAsync(int listingId)
+        public async Task<List<CommentResponseViewModel>> GetCommentsByListingAsync(int listingId)
         {
             var comments =  await _commentRepository.GetAllByListingAsync(listingId);
 
-            List<CommentViewModel> commentViewModels = _mapper.Map<List<CommentViewModel>>(comments);
+            List<CommentResponseViewModel> commentViewModels = _mapper.Map<List<CommentResponseViewModel>>(comments);
 
             return commentViewModels;
         }
 
         /// <inheritdoc/>
-        public async Task<CommentViewModel> GetCommentAsync(int commentId)
+        public async Task<CommentResponseViewModel> GetCommentAsync(int commentId)
         {
             var comment = await _commentRepository.GetCommentByIdAsync(commentId);
 
-            var commentViewModel = _mapper.Map<CommentViewModel>(comment);
+            var commentViewModel = _mapper.Map<CommentResponseViewModel>(comment);
 
             return commentViewModel;
         }
 
         /// <inheritdoc/>
-        public async Task CreateCommentAsync(CommentViewModel commentViewModel)
+        public async Task CreateCommentAsync(string userId,CommentRequestViewModel commentViewModel)
         {
             var comment = _mapper.Map<Comment>(commentViewModel);
+            comment.UserId = userId;
 
             await _commentRepository.AddCommentAsync(comment);
         }
 
         /// <inheritdoc/>
-        public async Task EditCommentAsync(string currentUserId, CommentViewModel commentViewModel)
+        public async Task EditCommentAsync(string currentUserId, CommentRequestViewModel commentViewModel)
         {
             var commentFromDb = await _commentRepository.GetCommentByIdAsync(commentViewModel.Id);
 

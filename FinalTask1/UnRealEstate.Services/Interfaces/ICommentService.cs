@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using UnrealEstate.Models;
 using UnrealEstate.Models.ViewModels;
+using UnrealEstate.Models.ViewModels.RequestViewModels;
 
 namespace UnrealEstate.Services
 {
@@ -12,7 +13,7 @@ namespace UnrealEstate.Services
         /// </summary>
         /// <param name="comment">new comment.</param>
         /// <returns></returns>
-        Task CreateCommentAsync(CommentViewModel comment);
+        Task CreateCommentAsync(string id, CommentRequestViewModel comment);
 
         /// <summary>
         /// Edits comment, only available for author.
@@ -20,21 +21,21 @@ namespace UnrealEstate.Services
         /// <param name="currentUserId">current logged in user id.</param>
         /// <param name="comment">comment edited.</param>
         /// <returns></returns>
-        Task EditCommentAsync(string currentUserId, CommentViewModel commentViewModel);
+        Task EditCommentAsync(string currentUserId, CommentRequestViewModel commentViewModel);
 
         /// <summary>
         /// Gets comment by id.
         /// </summary>
         /// <param name="commentId">comment id.</param>
         /// <returns>comment found.</returns>
-        Task<CommentViewModel> GetCommentAsync(int commentId);
+        Task<CommentResponseViewModel> GetCommentAsync(int commentId);
 
         /// <summary>
         /// Gets all comment in listing.
         /// </summary>
         /// <param name="listingId">listing id.</param>
         /// <returns>List comments found.</returns>
-        Task<List<CommentViewModel>> GetCommentsByListingAsync(int listingId);
+        Task<List<CommentResponseViewModel>> GetCommentsByListingAsync(int listingId);
 
         /// <summary>
         /// Deletes comment by by comment id.

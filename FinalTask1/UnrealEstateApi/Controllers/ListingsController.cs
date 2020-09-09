@@ -77,7 +77,6 @@ namespace UnrealEstateApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateListing(int id, ListingViewModel listing)
         {
-            // TODO: Introduce listing DTO to prevent update status field.
             if (!ModelState.IsValid || id != listing.Id)
             {
                 return BadRequest();
@@ -193,14 +192,14 @@ namespace UnrealEstateApi.Controllers
         /// <returns>List comments if found, otherwise return not found.</returns>
         //[AllowAnonymous]
         [HttpGet("{listingId}/comments")]
-        public async Task<ActionResult<IEnumerable<CommentViewModel>>> GetComments(int listingId)
+        public async Task<ActionResult<IEnumerable<CommentResponseViewModel>>> GetComments(int listingId)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            List<CommentViewModel> comments = await _commentService.GetCommentsByListingAsync(listingId);
+            List<CommentResponseViewModel> comments = await _commentService.GetCommentsByListingAsync(listingId);
 
             if (comments == null)
             {

@@ -71,7 +71,7 @@ namespace UnrealEstate.Services
             return new AuthenticationResponseViewModel() { Status = "Success", Message = "User created successfully!" };
         }
 
-        public async Task<AuthenticationResponseViewModel> ResetPassword(ResetPasswordViewModel model)
+        public async Task<AuthenticationResponseViewModel> ResetPassword(ResetPasswordRequestViewModel model)
         {
 
             bool isPasswordConfirmNotMatched = !model.NewPassword.Equals(model.ConfirmPassword);

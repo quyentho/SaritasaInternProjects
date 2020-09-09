@@ -65,6 +65,7 @@ namespace UnrealEstate.Services
             await _commentRepository.UpdateCommentAsync(commentFromDb);
         }
 
+        /// <inheritdoc/>
         public async Task DeleteCommentAsync(User currentUser, int commentId)
         {
             IList<string> userRole = await _userManager.GetRolesAsync(currentUser);

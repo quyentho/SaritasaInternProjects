@@ -8,7 +8,6 @@ namespace UnrealEstate.Models.ViewModels
 {
     public class ListingNoteViewModel
     {
-        public int Id { get; set; }
         public string Text { get; set; }
     }
 }

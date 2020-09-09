@@ -30,6 +30,7 @@ namespace UnrealEstate.Models.MappingConfig
 
             CreateMap<CommentRequestViewModel, Comment>();
             #endregion
+
             CreateMap<User, UserViewModel>()
                 .ForMember(dest => dest.ListingsCreated, opt => opt.MapFrom(src => src.Listings))
                 .ForMember(dest => dest.FavoriteListings, opt => opt.MapFrom(src => src.Favorites.Select(f => f.Listing)));

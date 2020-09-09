@@ -1,6 +1,6 @@
 ﻿namespace UnrealEstate.Models.ViewModels
 {
-    public class ListingPhotoViewModel
+    public class ListingPhotoResponseViewModel
     {
         public string PhotoUrl { get; set; }
     }

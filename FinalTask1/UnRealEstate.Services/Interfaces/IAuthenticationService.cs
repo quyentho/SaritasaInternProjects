@@ -12,6 +12,6 @@ namespace UnrealEstate.Services
         Task<JwtSecurityToken> Login(AuthenticationRequestViewModel model);
         Task<AuthenticationResponseViewModel> Register(AuthenticationRequestViewModel model);
         Task<AuthenticationResponseViewModel> SendResetPasswordEmail(string email);
-        Task<AuthenticationResponseViewModel> ResetPassword(ResetPasswordViewModel model);
+        Task<AuthenticationResponseViewModel> ResetPassword(ResetPasswordRequestViewModel model);
     }
 }

@@ -22,7 +22,7 @@ namespace UnrealEstate.Services
         /// </summary>
         /// <param name="listing">New listing.</param>
         /// <returns></returns>
-        Task CreateListingAsync(ListingRequestViewModel listing);
+        Task CreateListingAsync(ListingRequestViewModel listingViewModel, string userId);
 
         /// <summary>
         /// Disable listing if listing status is active, only available for admin user.

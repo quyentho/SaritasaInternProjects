@@ -7,7 +7,7 @@ namespace UnrealEstate.Models
     {
         public int Id { get; set; }
 
-        public int StatusId { get; set; } = 1;
+        public int StatusId { get; set; }
 
         public string UserId { get; set; }
 

@@ -53,9 +53,9 @@ namespace UnrealEstate.Services
         }
 
         /// <inheritdoc/>
-        public async Task EditCommentAsync(string currentUserId, CommentRequestViewModel commentViewModel)
+        public async Task EditCommentAsync(string currentUserId, CommentRequestViewModel commentViewModel, int commentId)
         {
-            var commentFromDb = await _commentRepository.GetCommentByIdAsync(commentViewModel.Id);
+            var commentFromDb = await _commentRepository.GetCommentByIdAsync(commentId);
 
             GuardClauses.HasValue(commentFromDb, "comment id");
 

@@ -21,7 +21,7 @@ namespace UnrealEstate.Services
         /// <param name="currentUserId">current logged in user id.</param>
         /// <param name="comment">comment edited.</param>
         /// <returns></returns>
-        Task EditCommentAsync(string currentUserId, CommentRequestViewModel commentViewModel);
+        Task EditCommentAsync(string currentUserId, CommentRequestViewModel commentViewModel, int commentId);
 
         /// <summary>
         /// Gets comment by id.

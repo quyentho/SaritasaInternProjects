@@ -111,7 +111,9 @@ namespace UnrealEstateApi.Controllers
                 return BadRequest();
             }
 
-            await _listingService.CreateListingAsync(listing);
+            User user = await GetCurrentUserAsync();
+
+            await _listingService.CreateListingAsync(listing, user.Id);
 
             return CreatedAtAction("GetListing", new { id = listing.Id }, listing);
         }

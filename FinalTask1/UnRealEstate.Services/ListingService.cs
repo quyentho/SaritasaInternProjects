@@ -98,9 +98,11 @@ namespace UnrealEstate.Services
         }
 
         /// <inheritdoc/>
-        public async Task CreateListingAsync(ListingRequestViewModel listingViewModel)
+        public async Task CreateListingAsync(ListingRequestViewModel listingViewModel, string userId)
         {
             Listing listing = _mapper.Map<Listing>(listingViewModel);
+
+            listing.UserId = userId;
 
             await _listingRepository.AddListingAsync(listing);
         }

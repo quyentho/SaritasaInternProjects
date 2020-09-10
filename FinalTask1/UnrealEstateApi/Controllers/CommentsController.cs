@@ -54,7 +54,7 @@ namespace UnrealEstateApi.Controllers
         [Route("api/comments/{commentId}")]
         public async Task<IActionResult> UpdateComment(int commentId, CommentRequestViewModel commentViewModel)
         {
-            if (!ModelState.IsValid || commentId != commentViewModel.Id)
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
@@ -63,7 +63,7 @@ namespace UnrealEstateApi.Controllers
             {
                 User currentUser = await GetCurrentUserAsync();
 
-                await _commentService.EditCommentAsync(currentUser.Email, commentViewModel);
+                await _commentService.EditCommentAsync(currentUser.Email, commentViewModel, commentId);
             }
             catch (ArgumentOutOfRangeException ex)
             {

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UnrealEstate.Models;
 
 namespace UnrealEstate.Models.Migrations
 {
     [DbContext(typeof(UnrealEstateDbContext))]
-    partial class UnrealEstateDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200910100818_AddRelationshipForBidTable")]
+    partial class AddRelationshipForBidTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UnrealEstate.Models;
 
 namespace UnrealEstate.Models.Migrations
 {
     [DbContext(typeof(UnrealEstateDbContext))]
-    partial class UnrealEstateDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200910100011_AddBidTable")]
+    partial class AddBidTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -331,13 +333,9 @@ namespace UnrealEstate.Models.Migrations
                         .HasDefaultValue(0m);
 
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ListingId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Bid");
                 });
@@ -531,19 +529,6 @@ namespace UnrealEstate.Models.Migrations
                         .HasForeignKey("ListingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("UnrealEstate.Models.Models.Bid", b =>
-                {
-                    b.HasOne("UnrealEstate.Models.Listing", "Listing")
-                        .WithMany("Bids")
-                        .HasForeignKey("ListingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("UnrealEstate.Models.User", "User")
-                        .WithMany("Bids")
-                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }

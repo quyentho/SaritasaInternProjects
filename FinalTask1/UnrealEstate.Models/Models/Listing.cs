@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnrealEstate.Models.Models;
 
 namespace UnrealEstate.Models
 {
@@ -42,5 +43,7 @@ namespace UnrealEstate.Models
         public List<Comment> Comments { get; set; }
 
         public List<Favorite> Favorites { get; set; }
+
+        public List<Bid> Bids { get; set; }
     }
 }

@@ -10,6 +10,7 @@ using UnrealEstate.Models.Repositories;
 using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
+using UnrealEstate.Services.Utils;
 
 namespace UnrealEstate.Services
 {
@@ -34,7 +35,7 @@ namespace UnrealEstate.Services
 
             var favorite = listingFromDb.Favorites.Where(f => f.UserId == userId).FirstOrDefault();
 
-            bool isFavorite = SetFavoriteState(listingId, userId, listingFromDb, favorite);
+            bool isFavorite = GetFavoriteState(listingId, userId, listingFromDb, favorite);
 
             await _listingRepository.UpdateListingAsync(listingFromDb);
 
@@ -73,8 +74,6 @@ namespace UnrealEstate.Services
             return listingViewModels;
         }
 
-
-
         /// <inheritdoc/>
         public async Task<ListingResponseViewModel> GetListingAsync(int listingId)
         {
@@ -86,16 +85,19 @@ namespace UnrealEstate.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<ListingResponseViewModel>> GetActiveListingWithFilterAsync(FilterCriteriaRequestViewModel filterCriteria)
+        public async Task<List<ListingResponseViewModel>> GetActiveListingWithFilterAsync(ListingFilterCriteriaRequestViewModel filterCriteria)
         {
-            ExpressionStarter<Listing> filterConditions = BuildConditions(filterCriteria);
 
-            List<Listing> listingsFiltered = await _listingRepository.GetListingsWithFilterAsync(filterConditions);
+            List<Listing> listings = await _listingRepository.GetListingsAsync();
 
-            List<ListingResponseViewModel> listingViewModels = MapListingsToViewModels(listingsFiltered);
+            listings = GetFilteredListings(filterCriteria, listings);
+
+            List<ListingResponseViewModel> listingViewModels = MapListingsToViewModels(listings);
 
             return listingViewModels;
         }
+
+
 
         /// <inheritdoc/>
         public async Task CreateListingAsync(ListingRequestViewModel listingViewModel, string userId)
@@ -104,11 +106,12 @@ namespace UnrealEstate.Services
 
             listing.UserId = userId;
 
+
             await _listingRepository.AddListingAsync(listing);
         }
 
         /// <inheritdoc/>
-        public async Task EditListingAsync(User currentUser, ListingRequestViewModel listingViewModel,int listingId)
+        public async Task EditListingAsync(User currentUser, ListingRequestViewModel listingViewModel, int listingId)
         {
             var listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
 
@@ -140,7 +143,7 @@ namespace UnrealEstate.Services
             return await _userManager.GetRolesAsync(currentUser);
         }
 
-        private static ExpressionStarter<Listing> BuildConditions(FilterCriteriaRequestViewModel filterCriteria)
+        private static ExpressionStarter<Listing> BuildConditions(ListingFilterCriteriaRequestViewModel filterCriteria)
         {
             var filterConditions = PredicateBuilder.New<Listing>(true);
 
@@ -178,7 +181,7 @@ namespace UnrealEstate.Services
             return filterConditions;
         }
 
-        private static bool SetFavoriteState(int listingId, string userId, Listing listingFromDb, Favorite favorite)
+        private static bool GetFavoriteState(int listingId, string userId, Listing listingFromDb, Favorite favorite)
         {
             bool isFavorite;
             if (favorite is null)
@@ -214,6 +217,19 @@ namespace UnrealEstate.Services
         private List<ListingResponseViewModel> MapListingsToViewModels(List<Listing> listings)
         {
             return _mapper.Map<List<ListingResponseViewModel>>(listings);
+        }
+
+        private static List<Listing> GetFilteredListings(ListingFilterCriteriaRequestViewModel filterCriteria, List<Listing> listings)
+        {
+            ExpressionStarter<Listing> filterConditions = BuildConditions(filterCriteria);
+
+            IQueryable<Listing> result = listings.Where(filterConditions).AsQueryable();
+
+            result = result.FilterByRange((int?)filterCriteria.Offset, (int?)filterCriteria.Limit);
+
+            result = result.SortBy(filterCriteria.OrderBy);
+
+            return result.ToList();
         }
     }
 }

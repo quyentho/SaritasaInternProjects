@@ -37,9 +37,14 @@ namespace UnrealEstateApi.Controllers
         /// GET: api/Listings
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ListingResponseViewModel>>> GetListings()
+        public async Task<ActionResult<IEnumerable<ListingResponseViewModel>>> GetListings([FromQuery] ListingFilterCriteriaRequestViewModel filterCriteria)
         {
-            return await _listingService.GetListingsAsync();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            return await _listingService.GetActiveListingWithFilterAsync(filterCriteria);
         }
 
         [AllowAnonymous]
@@ -115,7 +120,6 @@ namespace UnrealEstateApi.Controllers
 
             await _listingService.CreateListingAsync(listing, user.Id);
 
-            // TODO: return route value for new created listing.
             return CreatedAtAction("GetListing", listing);
         }
 

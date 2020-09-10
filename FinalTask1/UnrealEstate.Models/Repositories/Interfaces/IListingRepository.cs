@@ -11,8 +11,6 @@ namespace UnrealEstate.Models.Repositories
 
         Task<Listing> GetListingByIdAsync(int listingId);
 
-        Task<List<Listing>> GetListingsWithFilterAsync(Expression<Func<Listing, bool>> filterConditions);
-
         Task AddListingAsync(Listing listing);
 
         Task UpdateListingAsync(Listing listing);

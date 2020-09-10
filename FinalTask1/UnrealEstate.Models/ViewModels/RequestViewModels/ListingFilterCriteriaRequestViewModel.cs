@@ -1,6 +1,6 @@
 ﻿namespace UnrealEstate.Models.ViewModels.RequestViewModels
 {
-    public class FilterCriteriaRequestViewModel
+    public class ListingFilterCriteriaRequestViewModel
     {
         public string Address { get; set; }
 
@@ -15,5 +15,7 @@
         public uint? Limit { get; set; }
 
         public double? MinSize { get; set; }
+
+        public string OrderBy { get; set; }
     }
 }

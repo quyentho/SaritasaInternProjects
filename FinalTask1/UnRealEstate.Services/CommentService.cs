@@ -15,13 +15,15 @@ namespace UnrealEstate.Services
     public class CommentService : ICommentService
     {
         private readonly ICommentRepository _commentRepository;
+        private readonly IListingRepository _listingRepository;
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
-        public CommentService(ICommentRepository repository, UserManager<User> userManager, IMapper mapper)
+        public CommentService(ICommentRepository repository, UserManager<User> userManager, IMapper mapper, IListingRepository listingRepository)
         {
             _commentRepository = repository;
             _userManager = userManager;
             _mapper = mapper;
+            _listingRepository = listingRepository;
         }
 
         /// <inheritdoc/>
@@ -47,6 +49,11 @@ namespace UnrealEstate.Services
         /// <inheritdoc/>
         public async Task CreateCommentAsync(string userId, CommentRequestViewModel commentViewModel)
         {
+            var listing = await _listingRepository.GetListingByIdAsync(commentViewModel.ListingId);
+            
+            GuardClauses.HasValue(listing, "listing id");
+            GuardClauses.IsAllowCommentStatus(listing.StatusId);
+
             var comment = _mapper.Map<Comment>(commentViewModel);
             
             comment.UserId = userId;

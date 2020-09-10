@@ -1,4 +1,5 @@
 ﻿using System;
+using UnrealEstate.Models;
 
 namespace UnrealEstate.Services
 {
@@ -18,6 +19,18 @@ namespace UnrealEstate.Services
         }
 
         /// <summary>
+        /// Throws InvalidOperationException if current listing status is not valid for comment.
+        /// </summary>
+        /// <param name="currentListingStatus"></param>
+        public static void IsAllowCommentStatus(int currentListingStatus)
+        {
+            if (currentListingStatus != (int) Status.Active && currentListingStatus != (int) Status.Canceled)
+            {
+                throw new InvalidOperationException("Listing status is not valid to perform this action.");
+            }
+        }
+
+        /// <summary>
         /// Throws NotSupportedException if user is not admin or author.
         /// </summary>
         /// <param name="currentUserId">current user id.</param>
@@ -28,6 +41,14 @@ namespace UnrealEstate.Services
             if (!currentUserRole.Equals("Admin") && !currentUserId.Equals(authorId))
             {
                 throw new NotSupportedException("User not has privilege to perform this action.");
+            }
+        }
+
+        public static void IsNotNull(object source, string paramName)
+        {
+            if (source is null)
+            {
+                throw new ArgumentNullException(paramName);
             }
         }
 

@@ -30,9 +30,9 @@ namespace UnrealEstateApi.Controllers
 
         [Authorize(Roles = UserRole.Admin)]
         [HttpGet]
-        public async Task<IActionResult> GetUsers()
+        public async Task<IActionResult> GetUsers([FromQuery]UserFilterCriteriaRequestViewModel userFilterCriteria)
         {
-            List<UserViewModel> userViewModels = await _userService.GetUsersAsync();
+            List<UserResponseViewModel> userViewModels = await _userService.GetUsersAsync();
 
             return Ok(userViewModels);
         }
@@ -48,7 +48,7 @@ namespace UnrealEstateApi.Controllers
 
             try
             {
-                UserViewModel user = await _userService.GetUserByIdAsync(userId);
+                UserResponseViewModel user = await _userService.GetUserByIdAsync(userId);
                 return Ok(user);
             }
             catch (NotSupportedException)
@@ -79,7 +79,7 @@ namespace UnrealEstateApi.Controllers
 
         [HttpPut]
         [Route("me")]
-        public async Task<IActionResult> UpdateInfomation(UserViewModel userViewModel)
+        public async Task<IActionResult> UpdateInfomation(UserResponseViewModel userViewModel)
         {
             if (!ModelState.IsValid)
             {

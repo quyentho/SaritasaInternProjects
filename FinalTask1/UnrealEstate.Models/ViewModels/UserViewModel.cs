@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace UnrealEstate.Models.ViewModels
 {
-    public class UserViewModel
+    public class UserResponseViewModel
     {
         public string FirstName { get; set; }
 

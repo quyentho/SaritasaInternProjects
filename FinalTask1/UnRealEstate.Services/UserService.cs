@@ -1,10 +1,15 @@
 ﻿using AutoMapper;
+using LinqKit;
 using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
 using UnrealEstate.Models;
 using UnrealEstate.Models.ViewModels;
+using UnrealEstate.Models.ViewModels.RequestViewModels;
+using UnrealEstate.Services.Utils;
 
 namespace UnrealEstate.Services
 {
@@ -18,11 +23,58 @@ namespace UnrealEstate.Services
             _mapper = mapper;
         }
 
-        public async Task<List<UserViewModel>> GetUsersAsync()
+        public async Task<List<UserResponseViewModel>> GetUsersWithFilterAsync(UserFilterCriteriaRequestViewModel filterCriteria)
+        {
+
+            List<User> users = await _userManager.Users.ToListAsync();
+
+            users = GetFilteredUsers(filterCriteria, users);
+
+            List<UserResponseViewModel> userViewModels = MapUsersToViewModels(users);
+
+            return userViewModels;
+        }
+
+        private List<UserResponseViewModel> MapUsersToViewModels(List<User> users)
+        {
+            return _mapper.Map<List<UserResponseViewModel>>(users);
+        }
+
+        private static ExpressionStarter<User> BuildConditions(UserFilterCriteriaRequestViewModel filterCriteria)
+        {
+            var filterConditions = PredicateBuilder.New<User>(true);
+
+            if (!string.IsNullOrEmpty(filterCriteria.Email))
+            {
+                filterConditions.And(u => u.Email.Equals(filterCriteria.Email));
+            }
+
+            if (!string.IsNullOrEmpty(filterCriteria.Name))
+            {
+                filterConditions.And(u => u.FirstName.Equals(filterCriteria.Name) || u.LastName.Equals(filterCriteria.Name));
+            }
+
+            return filterConditions;
+        }
+
+        private List<User> GetFilteredUsers(UserFilterCriteriaRequestViewModel filterCriteria, List<User> users)
+        {
+            var conditions = BuildConditions(filterCriteria);
+
+            IQueryable<User> result = users.Where(conditions).AsQueryable();
+
+            result = result.FilterByRange((int?)filterCriteria.Offset, (int?)filterCriteria.Limit);
+
+            result = result.SortBy(filterCriteria.OrderBy);
+
+            return result.ToList();
+        }
+
+        public async Task<List<UserResponseViewModel>> GetUsersAsync()
         {
             var users = await _userManager.Users.ToListAsync();
 
-            var userViewModels = _mapper.Map<List<UserViewModel>>(users);
+            var userViewModels = _mapper.Map<List<UserResponseViewModel>>(users);
 
             return userViewModels;
         }
@@ -34,7 +86,7 @@ namespace UnrealEstate.Services
             return user;
         }
 
-        public async Task UpdateUser(User currentUser, UserViewModel userViewModel)
+        public async Task UpdateUser(User currentUser, UserResponseViewModel userViewModel)
         {
             var user = await _userManager.FindByEmailAsync(userViewModel.Email);
 
@@ -45,11 +97,11 @@ namespace UnrealEstate.Services
             await _userManager.UpdateAsync(user);
         }
 
-        public async Task<UserViewModel> GetUserByIdAsync(string userId)
+        public async Task<UserResponseViewModel> GetUserByIdAsync(string userId)
         {
             User user = await _userManager.FindByIdAsync(userId);
 
-            UserViewModel userViewModel = _mapper.Map<UserViewModel>(user);
+            UserResponseViewModel userViewModel = _mapper.Map<UserResponseViewModel>(user);
 
             return userViewModel;
         }

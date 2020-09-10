@@ -17,16 +17,6 @@ namespace UnrealEstate.Models.Repositories
             _context = context;
         }
 
-        public async Task<List<Listing>> GetListingsWithFilterAsync(Expression<Func<Listing, bool>> filterConditions)
-        {
-            var listings = await _context.Listings
-                                    .Include(l => l.Comments)
-                                    .Where(filterConditions)
-                                    .ToListAsync();
-
-            return listings;
-        }
-
         public async Task<Listing> GetListingByIdAsync(int listingId)
         {
             var listing = await _context
@@ -40,7 +30,10 @@ namespace UnrealEstate.Models.Repositories
 
         public async Task<List<Listing>> GetListingsAsync()
         {
-            var listings = await _context.Listings.ToListAsync();
+            var listings = await _context.Listings
+                .Include(l => l.Comments)
+                .Include(l => l.Favorites)
+                .ToListAsync();
 
             return listings;
         }

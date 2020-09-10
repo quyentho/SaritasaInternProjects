@@ -31,11 +31,11 @@ namespace UnrealEstate.Models.MappingConfig
             #endregion
 
 
-            CreateMap<User, UserViewModel>()
+            CreateMap<User, UserResponseViewModel>()
                 .ForMember(dest => dest.ListingsCreated, opt => opt.MapFrom(src => src.Listings))
                 .ForMember(dest => dest.FavoriteListings, opt => opt.MapFrom(src => src.Favorites.Select(f => f.Listing)));
 
-            CreateMap<UserViewModel, User>()
+            CreateMap<UserResponseViewModel, User>()
                 .ForMember(dest => dest.Favorites, opt => opt.Ignore())
                 .ForMember(dest => dest.ListingNotes, opt => opt.Ignore())
                 .ForMember(dest => dest.Comments, opt => opt.Ignore())

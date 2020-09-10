@@ -8,8 +8,8 @@ namespace UnrealEstate.Services
     public interface IUserService
     {
         Task<User> GetUserByEmailAsync(string email);
-        Task<UserViewModel> GetUserByIdAsync(string userId);
-        Task<List<UserViewModel>> GetUsersAsync();
-        Task UpdateUser(User currentUser, UserViewModel userViewModel);
+        Task<UserResponseViewModel> GetUserByIdAsync(string userId);
+        Task<List<UserResponseViewModel>> GetUsersAsync();
+        Task UpdateUser(User currentUser, UserResponseViewModel userViewModel);
     }
 }

@@ -40,7 +40,18 @@ namespace UnrealEstateApi.Controllers
 
             User currentUser = await GetCurrentUserAsync();
 
-            await _commentService.CreateCommentAsync(currentUser.Id, commentViewModel);
+            try
+            {
+                await _commentService.CreateCommentAsync(currentUser.Id, commentViewModel);
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return NotFound(ex.Message);
+            }
 
             return StatusCode(StatusCodes.Status201Created);
         }
@@ -67,7 +78,7 @@ namespace UnrealEstateApi.Controllers
             }
             catch (ArgumentOutOfRangeException ex)
             {
-                return BadRequest(ex.Message);
+                return NotFound(ex.Message);
             }
             catch (NotSupportedException ex)
             {

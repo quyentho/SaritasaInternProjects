@@ -36,7 +36,7 @@ namespace TestAutomapperConfiguration
 
         public void UserViewModelToUser_NotMap_Favorites_ListingNotes_Comments_Listing()
         {
-            var userViewModel = new UserViewModel()
+            var userViewModel = new UserResponseViewModel()
             {
                 FavoriteListings = new List<Listing>() { new Listing() { Id = 1 } },
 
@@ -56,7 +56,7 @@ namespace TestAutomapperConfiguration
                 Listings = new List<Listing>() { new Listing() { Id = 10 } }
             };
 
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<UserViewModel, User>()
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<UserResponseViewModel, User>()
                 .ForMember(dest => dest.Favorites, opt => opt.Ignore())
                 .ForMember(dest => dest.ListingNotes, opt => opt.Ignore())
                 .ForMember(dest => dest.Comments, opt => opt.Ignore())

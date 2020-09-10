@@ -25,7 +25,7 @@ namespace UnrealEstateApi.Controllers
             JwtSecurityToken token = await _authenticationService.Login(model);
             if (token is null)
             {
-                return Unauthorized();
+                return BadRequest("Wrong email and password.");
             }
 
             return Ok(new

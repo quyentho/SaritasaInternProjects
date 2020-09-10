@@ -72,13 +72,13 @@ namespace UnrealEstateApi.Controllers
         /// <summary>
         /// Update listing by Id.
         /// </summary>
-        /// <param name="id">Listing id.</param>
+        /// <param name="listingId">Listing id.</param>
         /// <param name="listing">Listing updated.</param>
         /// <returns>400 status code if url id not match updated id, 204 status code if completed update, not found if id not exists in database.</returns>
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateListing(int id, ListingRequestViewModel listing)
+        [HttpPut("{listingId}")]
+        public async Task<IActionResult> UpdateListing(int listingId, ListingRequestViewModel listing)
         {
-            if (!ModelState.IsValid || id != listing.Id)
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
@@ -87,7 +87,7 @@ namespace UnrealEstateApi.Controllers
             {
                 User currentUser = await GetCurrentUserAsync();
 
-                await _listingService.EditListingAsync(currentUser, listing);
+                await _listingService.EditListingAsync(currentUser, listing, listingId);
             }
             catch (ArgumentOutOfRangeException ex)
             {
@@ -115,7 +115,8 @@ namespace UnrealEstateApi.Controllers
 
             await _listingService.CreateListingAsync(listing, user.Id);
 
-            return CreatedAtAction("GetListing", new { id = listing.Id }, listing);
+            // TODO: return route value for new created listing.
+            return CreatedAtAction("GetListing", listing);
         }
 
         // DELETE: api/Listings/5

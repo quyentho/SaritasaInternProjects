@@ -6,5 +6,8 @@ namespace UnrealEstate.Models.ViewModels.RequestViewModels
     {
         [Required]
         public string Text { get; set; }
+
+        [Required]
+        public int ListingId { get; set; }
     }
 }

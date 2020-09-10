@@ -5,6 +5,7 @@ namespace UnrealEstate.Models.ViewModels.ResponseViewModels
 {
     public class ListingResponseViewModel
     {
+        public int Id { get; set; }
         public string StatusName { get; set; }
 
         public string UserEmail { get; set; }
@@ -29,10 +30,10 @@ namespace UnrealEstate.Models.ViewModels.ResponseViewModels
 
         public string Description { get; set; }
 
-        public List<Comment> Comments { get; set; }
+        public List<CommentResponseViewModel> Comments { get; set; }
 
-        public List<ListingPhoto> ListingPhoTos { get; set; }
+        public List<ListingPhotoResponseViewModel> ListingPhoTos { get; set; }
 
-        public List<ListingNote> ListingNotes { get; set; }
+        public List<ListingNoteResponseViewModel> ListingNotes { get; set; }
     }
 }

@@ -6,8 +6,6 @@ namespace UnrealEstate.Models.ViewModels.RequestViewModels
 {
     public class ListingRequestViewModel
     {
-        public int Id { get; set; }
-
         public string Zip { get; set; }
 
         public string City { get; set; }
@@ -30,8 +28,8 @@ namespace UnrealEstate.Models.ViewModels.RequestViewModels
 
         public string Description { get; set; }
 
-        public List<ListingPhoto> ListingPhoTos { get; set; }
+        public List<ListingPhotoRequestViewModel> ListingPhoTos { get; set; }
 
-        public List<ListingNote> ListingNotes { get; set; }
+        public List<ListingNoteRequestViewModel> ListingNotes { get; set; }
     }
 }

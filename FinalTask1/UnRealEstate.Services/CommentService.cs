@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -47,7 +48,9 @@ namespace UnrealEstate.Services
         public async Task CreateCommentAsync(string userId, CommentRequestViewModel commentViewModel)
         {
             var comment = _mapper.Map<Comment>(commentViewModel);
+            
             comment.UserId = userId;
+            comment.CreatedAt = DateTimeOffset.Now;
 
             await _commentRepository.AddCommentAsync(comment);
         }
@@ -62,6 +65,8 @@ namespace UnrealEstate.Services
             GuardClauses.IsAuthor(currentUserId, commentFromDb.UserId);
 
             _mapper.Map(commentViewModel, commentFromDb);
+
+            commentFromDb.CreatedAt = DateTimeOffset.Now;
 
             await _commentRepository.UpdateCommentAsync(commentFromDb);
         }

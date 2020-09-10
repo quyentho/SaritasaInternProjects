@@ -108,9 +108,9 @@ namespace UnrealEstate.Services
         }
 
         /// <inheritdoc/>
-        public async Task EditListingAsync(User currentUser, ListingRequestViewModel listingViewModel)
+        public async Task EditListingAsync(User currentUser, ListingRequestViewModel listingViewModel,int listingId)
         {
-            var listingFromDb = await _listingRepository.GetListingByIdAsync(listingViewModel.Id);
+            var listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
 
             await ValidateForAdminOrAuthorAction(currentUser, listingFromDb);
 

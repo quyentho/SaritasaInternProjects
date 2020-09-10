@@ -18,8 +18,10 @@ namespace UnrealEstate.Models.MappingConfig
             CreateMap<ListingStatus, ListingStatusResponseViewModel>();
 
             CreateMap<ListingNote, ListingNoteResponseViewModel>();
+            CreateMap<ListingNoteRequestViewModel, ListingNote>();
 
             CreateMap<ListingPhoto, ListingPhotoResponseViewModel>();
+            CreateMap<ListingPhotoRequestViewModel, ListingPhoto>();
             #endregion
 
             #region comment mapping

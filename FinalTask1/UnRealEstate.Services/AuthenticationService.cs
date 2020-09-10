@@ -27,8 +27,7 @@ namespace UnrealEstate.Services
             _emailSender = emailSender;
         }
 
-
-
+        /// <inheritdoc/>
         public async Task<JwtSecurityToken> Login(AuthenticationRequestViewModel model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
@@ -43,6 +42,7 @@ namespace UnrealEstate.Services
             return null;
         }
 
+        /// <inheritdoc/>
         public async Task<AuthenticationResponseViewModel> Register(AuthenticationRequestViewModel model)
         {
 
@@ -70,6 +70,7 @@ namespace UnrealEstate.Services
             return new AuthenticationResponseViewModel() { Status = "Success", Message = "User created successfully!" };
         }
 
+        /// <inheritdoc/>
         public async Task<AuthenticationResponseViewModel> ResetPassword(ResetPasswordRequestViewModel model)
         {
 
@@ -93,6 +94,7 @@ namespace UnrealEstate.Services
 
         }
 
+        /// <inheritdoc/>
         public async Task<AuthenticationResponseViewModel> SendResetPasswordEmail(string email)
         {
             User user = await _userManager.FindByEmailAsync(email);

@@ -14,9 +14,9 @@ namespace UnrealEstate.Models.ViewModels.RequestViewModels
 
         public string Name { get; set; }
 
-        public uint Offset { get; set; }
+        public uint? Offset { get; set; }
 
-        public uint Limit { get; set; }
+        public uint? Limit { get; set; }
 
         public string OrderBy { get; set; }
     }

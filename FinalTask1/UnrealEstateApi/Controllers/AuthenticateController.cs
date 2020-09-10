@@ -18,6 +18,11 @@ namespace UnrealEstateApi.Controllers
             _authenticationService = userSerive;
         }
 
+        /// <summary>
+        /// Login, return JWT token if success authenticate user.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] AuthenticationRequestViewModel model)
@@ -35,8 +40,11 @@ namespace UnrealEstateApi.Controllers
             });
         }
 
-
-
+        /// <summary>
+        /// Send email contains token to restore password.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("forgot-password")]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
@@ -51,6 +59,11 @@ namespace UnrealEstateApi.Controllers
             return Ok(authenticationResponseViewModel);
         }
 
+        /// <summary>
+        /// Verify the reset password token and set new password.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("reset-password")]
         public async Task<IActionResult> ResetPassword(ResetPasswordRequestViewModel model)

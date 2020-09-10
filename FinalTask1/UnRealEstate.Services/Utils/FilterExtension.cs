@@ -14,7 +14,6 @@ namespace UnrealEstate.Services.Utils
             if (offset.HasValue)
             {
                 source = source.Skip(offset.Value);
-
             }
 
             if (limit.HasValue)

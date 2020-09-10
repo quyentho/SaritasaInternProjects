@@ -35,8 +35,9 @@ namespace UnrealEstate.Services
         /// <summary>
         /// Edits listing, only available for admin user or listing author.
         /// </summary>
-        /// <param name="currentUser">current logged in user.</param>
-        /// <param name="listing">listing updated.</param>
+        /// <param name="currentUser"></param>
+        /// <param name="listing"></param>
+        /// <param name="listingId"></param>
         /// <returns></returns>
         Task EditListingAsync(User currentUser, ListingRequestViewModel listing, int listingId);
 
@@ -51,8 +52,8 @@ namespace UnrealEstate.Services
         /// <summary>
         /// Gets active listing with filter.
         /// </summary>
-        /// <param name="filterCriteria">filter criteria.</param>
-        /// <returns>Listing after filtered.</returns>
+        /// <param name="filterCriteria"></param>
+        /// <returns></returns>
         Task<List<ListingResponseViewModel>> GetActiveListingWithFilterAsync(ListingFilterCriteriaRequestViewModel filterCriteria);
 
         /// <summary>

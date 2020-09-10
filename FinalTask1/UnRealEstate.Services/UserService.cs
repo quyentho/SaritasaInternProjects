@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using LinqKit;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using UnrealEstate.Models;
@@ -25,8 +25,13 @@ namespace UnrealEstate.Services
 
         public async Task<List<UserResponseViewModel>> GetUsersWithFilterAsync(UserFilterCriteriaRequestViewModel filterCriteria)
         {
-            // BUG: cannot query
-            List<User> users = await _userManager.Users.ToListAsync();
+            List<User> users = await _userManager.Users
+                .Include(u=>u.Comments)
+                .Include(u=>u.Favorites)
+                .Include(u=>u.Listings)
+                .Include(u=>u.ListingNotes)
+                .Include(u=>u.Bids)
+                .ToListAsync();
 
             users = GetFilteredUsers(filterCriteria, users);
 
@@ -63,20 +68,17 @@ namespace UnrealEstate.Services
 
             IQueryable<User> result = users.Where(conditions).AsQueryable();
 
-            result = result.FilterByRange((int?)filterCriteria.Offset, (int?)filterCriteria.Limit);
+            if (filterCriteria.Offset.HasValue || filterCriteria.Limit.HasValue)
+            {
+                result = result.FilterByRange((int?)filterCriteria.Offset, (int?)filterCriteria.Limit);
+            }
 
-            result = result.SortBy(filterCriteria.OrderBy);
+            if (!string.IsNullOrEmpty(filterCriteria.OrderBy))
+            {
+                result = result.SortBy(filterCriteria.OrderBy);
+            }
 
             return result.ToList();
-        }
-
-        public async Task<List<UserResponseViewModel>> GetUsersAsync()
-        {
-            var users = await _userManager.Users.ToListAsync();
-
-            var userViewModels = _mapper.Map<List<UserResponseViewModel>>(users);
-
-            return userViewModels;
         }
 
         public async Task<User> GetUserByEmailAsync(string email)
@@ -89,9 +91,7 @@ namespace UnrealEstate.Services
         public async Task UpdateUser(User currentUser, UserRequestViewModel userViewModel)
         {
             // Bug: Update fail
-            var user = await _userManager.FindByEmailAsync(userViewModel.Email);
-
-            GuardClauses.IsAuthor(currentUser.Id, user.Id);
+            var user = await _userManager.FindByEmailAsync(currentUser.Email);
 
             _mapper.Map(userViewModel, user);
 

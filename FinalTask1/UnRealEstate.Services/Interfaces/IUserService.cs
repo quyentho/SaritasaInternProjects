@@ -8,9 +8,33 @@ namespace UnrealEstate.Services
 {
     public interface IUserService
     {
+        /// <summary>
+        /// Gets user by email.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         Task<User> GetUserByEmailAsync(string email);
+
+        /// <summary>
+        /// Get user by id.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         Task<UserResponseViewModel> GetUserByIdAsync(string userId);
-        Task<List<UserResponseViewModel>> GetUsersAsync();
+
+        /// <summary>
+        /// Get users after filtered.
+        /// </summary>
+        /// <param name="filterCriteria"></param>
+        /// <returns></returns>
+        Task<List<UserResponseViewModel>> GetUsersWithFilterAsync(UserFilterCriteriaRequestViewModel filterCriteria);
+
+        /// <summary>
+        /// Update current user's info.
+        /// </summary>
+        /// <param name="currentUser"></param>
+        /// <param name="userViewModel"></param>
+        /// <returns></returns>
         Task UpdateUser(User currentUser, UserRequestViewModel userViewModel);
     }
 }

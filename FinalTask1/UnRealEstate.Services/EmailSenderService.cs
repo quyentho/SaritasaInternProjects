@@ -14,6 +14,7 @@ namespace UnrealEstate.Services.EmailService
             _emailConfig = emailConfig;
         }
 
+        /// <inheritdoc/>
         public async Task SendEmailAsync(Message message)
         {
             var emailMessage = CreateEmailMessage(message);

@@ -28,15 +28,25 @@ namespace UnrealEstateApi.Controllers
             _authenticationService = authenticationService;
         }
 
+        /// <summary>
+        /// Get All Users. Only available for admin.
+        /// </summary>
+        /// <param name="userFilterCriteria"></param>
+        /// <returns></returns>
         [Authorize(Roles = UserRole.Admin)]
         [HttpGet]
         public async Task<IActionResult> GetUsers([FromQuery]UserFilterCriteriaRequestViewModel userFilterCriteria)
         {
-            List<UserResponseViewModel> userViewModels = await _userService.GetUsersAsync();
+            List<UserResponseViewModel> userViewModels = await _userService.GetUsersWithFilterAsync(userFilterCriteria);
 
             return Ok(userViewModels);
         }
 
+        /// <summary>
+        /// Get User by Id, only available for admin.
+        /// </summary>
+        /// <param name="userId">user id.</param>
+        /// <returns></returns>
         [HttpGet("{userId}")]
         [Authorize(Roles = UserRole.Admin)]
         public async Task<IActionResult> GetUserById(string userId)
@@ -58,6 +68,11 @@ namespace UnrealEstateApi.Controllers
 
         }
 
+        /// <summary>
+        /// Register new user. Available for guest.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] AuthenticationRequestViewModel model)
@@ -77,6 +92,11 @@ namespace UnrealEstateApi.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Update current logged in user's information.
+        /// </summary>
+        /// <param name="userViewModel"></param>
+        /// <returns></returns>
         [HttpPut]
         [Route("me")]
         public async Task<IActionResult> UpdateInfomation(UserRequestViewModel userViewModel)

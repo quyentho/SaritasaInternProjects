@@ -47,13 +47,12 @@ namespace UnrealEstateApi.Controllers
             return await _listingService.GetActiveListingWithFilterAsync(filterCriteria);
         }
 
-        [AllowAnonymous]
         /// <summary>
         /// Get listing by id.
         /// </summary>
         /// <param name="id">Id of listing to get.</param>
         /// <returns>Listing object if found, otherwise 404 status code.</returns>
-        // GET: api/Listings/5
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<ListingResponseViewModel>> GetListing(int id)
         {
@@ -247,6 +246,12 @@ namespace UnrealEstateApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Make a bid on specified listing. Only available for logged in user.
+        /// </summary>
+        /// <param name="listingId"></param>
+        /// <param name="bidRequestViewModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("{listingId}/bid")]
         public async Task<IActionResult> MakeABid(int listingId, BidRequestViewModel bidRequestViewModel)

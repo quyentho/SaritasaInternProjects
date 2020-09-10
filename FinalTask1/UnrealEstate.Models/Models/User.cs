@@ -5,7 +5,7 @@ using UnrealEstate.Models.Models;
 
 namespace UnrealEstate.Models
 {
-    public class User : IdentiservicetyUser
+    public class User : IdentityUser
     {
         public string FirstName { get; set; }
 

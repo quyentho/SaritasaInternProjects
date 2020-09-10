@@ -24,6 +24,8 @@ namespace UnrealEstate.Models.ViewModels.ResponseViewModels
 
         public double Size { get; set; }
 
+        public decimal CurrentHigestBidPrice { get; set; }
+
         public decimal StatingPrice { get; set; }
 
         public DateTimeOffset DueDate { get; set; }
@@ -35,5 +37,7 @@ namespace UnrealEstate.Models.ViewModels.ResponseViewModels
         public List<ListingPhotoResponseViewModel> ListingPhoTos { get; set; }
 
         public List<ListingNoteResponseViewModel> ListingNotes { get; set; }
+
+        public List<BidResponseViewModel> Bids { get; set; }
     }
 }

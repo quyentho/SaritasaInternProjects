@@ -224,7 +224,7 @@ namespace UnrealEstateApi.Controllers
         /// <param name="listingId">listing id.</param>
         /// <returns></returns>
         [HttpPost("{listingId}/favorite")]
-        public async Task<ActionResult> SetFavorite(int listingId)
+        public async Task<IActionResult> SetFavorite(int listingId)
         {
             if (!ModelState.IsValid)
             {
@@ -245,7 +245,33 @@ namespace UnrealEstateApi.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
 
+        [HttpPost]
+        [Route("{listingId}/bid")]
+        public async Task<IActionResult> MakeABid(int listingId, BidRequestViewModel bidRequestViewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                User user = await GetCurrentUserAsync();
+
+                await _listingService.MakeABid(listingId, user, bidRequestViewModel);
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            return Ok(bidRequestViewModel);
         }
 
         private async Task<User> GetCurrentUserAsync()

@@ -44,6 +44,19 @@ namespace UnrealEstate.Services
             }
         }
 
+        public static void BidPriceHigherThanCurrentPrice(decimal bidPrice, decimal currentPrice)
+        {
+            if (bidPrice <= currentPrice)
+            {
+                throw new InvalidOperationException("Bid price must be higher than current listing price");
+            }
+        }
+
+        /// <summary>
+        /// Throws ArgumentNullException if the argument is null.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="paramName"></param>
         public static void IsNotNull(object source, string paramName)
         {
             if (source is null)

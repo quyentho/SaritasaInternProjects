@@ -30,6 +30,8 @@ namespace UnrealEstate.Models
 
         public DateTimeOffset DueDate { get; set; }
 
+        public decimal CurrentHighestBidPrice { get; set; }
+
         public string Description { get; set; }
 
         public User User { get; set; }
@@ -45,5 +47,12 @@ namespace UnrealEstate.Models
         public List<Favorite> Favorites { get; set; }
 
         public List<Bid> Bids { get; set; }
+
+        public Listing()
+        {
+            Bids = new List<Bid>();
+            ListingPhoTos = new List<ListingPhoto>();
+            ListingNotes = new List<ListingNote>();
+        }
     }
 }

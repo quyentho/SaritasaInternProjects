@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using System.Linq;
+using UnrealEstate.Models.Models;
 using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
@@ -30,16 +31,18 @@ namespace UnrealEstate.Models.MappingConfig
             CreateMap<CommentRequestViewModel, Comment>();
             #endregion
 
-
+            #region user mapping
             CreateMap<User, UserResponseViewModel>()
                 .ForMember(dest => dest.ListingsCreated, opt => opt.MapFrom(src => src.Listings))
                 .ForMember(dest => dest.FavoriteListings, opt => opt.MapFrom(src => src.Favorites.Select(f => f.Listing)));
 
-            CreateMap<UserResponseViewModel, User>()
-                .ForMember(dest => dest.Favorites, opt => opt.Ignore())
-                .ForMember(dest => dest.ListingNotes, opt => opt.Ignore())
-                .ForMember(dest => dest.Comments, opt => opt.Ignore())
-                .ForMember(dest => dest.Listings, opt => opt.Ignore());
+            CreateMap<UserRequestViewModel, User>();
+            #endregion
+
+            #region bid mapping
+            CreateMap<BidRequestViewModel, Bid>();
+            CreateMap<Bid, BidResponseViewModel>();
+            #endregion
         }
     }
 }

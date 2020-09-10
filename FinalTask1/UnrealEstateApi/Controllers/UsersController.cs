@@ -79,7 +79,7 @@ namespace UnrealEstateApi.Controllers
 
         [HttpPut]
         [Route("me")]
-        public async Task<IActionResult> UpdateInfomation(UserResponseViewModel userViewModel)
+        public async Task<IActionResult> UpdateInfomation(UserRequestViewModel userViewModel)
         {
             if (!ModelState.IsValid)
             {

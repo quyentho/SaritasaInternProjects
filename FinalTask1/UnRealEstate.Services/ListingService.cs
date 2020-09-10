@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnrealEstate.Models;
+using UnrealEstate.Models.Models;
 using UnrealEstate.Models.Repositories;
 using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
@@ -97,8 +98,6 @@ namespace UnrealEstate.Services
             return listingViewModels;
         }
 
-
-
         /// <inheritdoc/>
         public async Task CreateListingAsync(ListingRequestViewModel listingViewModel, string userId)
         {
@@ -118,6 +117,27 @@ namespace UnrealEstate.Services
             await ValidateForAdminOrAuthorAction(currentUser, listingFromDb);
 
             _mapper.Map(listingViewModel, listingFromDb);
+
+            await _listingRepository.UpdateListingAsync(listingFromDb);
+        }
+
+        public async Task MakeABid(int listingId,User currentUser, BidRequestViewModel bidRequestViewModel)
+        {
+            var listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
+
+            GuardClauses.HasValue(listingFromDb, "listing id");
+
+            GuardClauses.BidPriceHigherThanCurrentPrice(bidRequestViewModel.Price, listingFromDb.CurrentHighestBidPrice);
+
+            Bid bid = _mapper.Map<Bid>(bidRequestViewModel);
+
+            bid.ListingId = listingId;
+            bid.CreatedAt = DateTimeOffset.Now;
+            bid.UserId = currentUser.Id;
+
+            listingFromDb.CurrentHighestBidPrice = bidRequestViewModel.Price;
+
+            listingFromDb.Bids.Add(bid);
 
             await _listingRepository.UpdateListingAsync(listingFromDb);
         }

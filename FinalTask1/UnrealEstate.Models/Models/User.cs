@@ -5,7 +5,7 @@ using UnrealEstate.Models.Models;
 
 namespace UnrealEstate.Models
 {
-    public class User : IdentityUser
+    public class User : IdentiservicetyUser
     {
         public string FirstName { get; set; }
 
@@ -13,7 +13,7 @@ namespace UnrealEstate.Models
 
         public DateTimeOffset BirthDay { get; set; }
 
-        public bool Status { get; set; } = true;
+        public bool Status { get; set; }
 
         public List<Listing> Listings { get; set; }
 

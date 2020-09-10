@@ -25,7 +25,7 @@ namespace UnrealEstate.Services
 
         public async Task<List<UserResponseViewModel>> GetUsersWithFilterAsync(UserFilterCriteriaRequestViewModel filterCriteria)
         {
-
+            // BUG: cannot query
             List<User> users = await _userManager.Users.ToListAsync();
 
             users = GetFilteredUsers(filterCriteria, users);
@@ -86,8 +86,9 @@ namespace UnrealEstate.Services
             return user;
         }
 
-        public async Task UpdateUser(User currentUser, UserResponseViewModel userViewModel)
+        public async Task UpdateUser(User currentUser, UserRequestViewModel userViewModel)
         {
+            // Bug: Update fail
             var user = await _userManager.FindByEmailAsync(userViewModel.Email);
 
             GuardClauses.IsAuthor(currentUser.Id, user.Id);

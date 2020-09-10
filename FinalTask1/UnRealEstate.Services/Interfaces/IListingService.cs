@@ -67,5 +67,6 @@ namespace UnrealEstate.Services
         /// </summary>
         /// <returns>list of listings.</returns>
         Task<List<ListingResponseViewModel>> GetListingsAsync();
+        Task MakeABid(int listingId, User currentUser, BidRequestViewModel bidRequestViewModel);
     }
 }

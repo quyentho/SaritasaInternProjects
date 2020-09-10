@@ -15,6 +15,8 @@ namespace UnrealEstate.Models.ModelConfigs
             builder.Property(l => l.StatusId).HasDefaultValue((int)Status.Active);
 
             builder.Property(l => l.StatingPrice).HasColumnType("decimal(15,2)").HasDefaultValue(0);
+
+            builder.Property(l => l.CurrentHighestBidPrice).HasColumnType("decimal(15,2)").HasDefaultValue(0);
         }
     }
 }

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace UnrealEstate.Models.ViewModels.RequestViewModels
 {
-    public class ListingRequestViewModel
+    public class ListingRequest
     {
         public string Zip { get; set; }
 
@@ -31,6 +31,6 @@ namespace UnrealEstate.Models.ViewModels.RequestViewModels
 
         public List<IFormFile> ListingPhoTos { get; set; }
 
-        public List<ListingNoteRequestViewModel> ListingNotes { get; set; }
+        public List<ListingNoteRequest> ListingNotes { get; set; }
     }
 }

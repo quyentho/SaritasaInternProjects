@@ -28,7 +28,7 @@ namespace UnrealEstate.Services
         }
 
         /// <inheritdoc/>
-        public async Task<JwtSecurityToken> Login(AuthenticationRequestViewModel model)
+        public async Task<JwtSecurityToken> Login(AuthenticationRequest model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
 
@@ -43,14 +43,14 @@ namespace UnrealEstate.Services
         }
 
         /// <inheritdoc/>
-        public async Task<AuthenticationResponseViewModel> Register(AuthenticationRequestViewModel model)
+        public async Task<AuthenticationResponse> Register(AuthenticationRequest model)
         {
 
             var userExists = await _userManager.FindByNameAsync(model.Email);
 
             if (userExists != null)
             {
-                return new AuthenticationResponseViewModel() { Status = "Error", Message = "User creation failed! Please check user details and try again." };
+                return new AuthenticationResponse() { Status = "Error", Message = "User creation failed! Please check user details and try again." };
             }
 
             User user = new User()
@@ -64,21 +64,21 @@ namespace UnrealEstate.Services
 
             if (!result.Succeeded)
             {
-                return new AuthenticationResponseViewModel() { Status = "Error", Message = "User creation failed! Please check user details and try again." };
+                return new AuthenticationResponse() { Status = "Error", Message = "User creation failed! Please check user details and try again." };
             }
 
-            return new AuthenticationResponseViewModel() { Status = "Success", Message = "User created successfully!" };
+            return new AuthenticationResponse() { Status = "Success", Message = "User created successfully!" };
         }
 
         /// <inheritdoc/>
-        public async Task<AuthenticationResponseViewModel> ResetPassword(ResetPasswordRequestViewModel model)
+        public async Task<AuthenticationResponse> ResetPassword(ResetPasswordRequest model)
         {
 
             bool isPasswordConfirmNotMatched = !model.NewPassword.Equals(model.ConfirmPassword);
 
             if (isPasswordConfirmNotMatched)
             {
-                return new AuthenticationResponseViewModel() { Status = "Fail", Message = "Password and confirm password does not match." };
+                return new AuthenticationResponse() { Status = "Fail", Message = "Password and confirm password does not match." };
             }
 
             var user = await _userManager.FindByEmailAsync(model.Email);
@@ -87,26 +87,26 @@ namespace UnrealEstate.Services
 
             if (result.Succeeded)
             {
-                return new AuthenticationResponseViewModel() { Status = "Success", Message = "Password reset successfully" };
+                return new AuthenticationResponse() { Status = "Success", Message = "Password reset successfully" };
             }
 
-            return new AuthenticationResponseViewModel() { Status = "Fail", Message = result.Errors.Select(e=>e.Description).Aggregate((message, next)=> message + next) };
+            return new AuthenticationResponse() { Status = "Fail", Message = result.Errors.Select(e=>e.Description).Aggregate((message, next)=> message + next) };
 
         }
 
         /// <inheritdoc/>
-        public async Task<AuthenticationResponseViewModel> SendResetPasswordEmail(string email)
+        public async Task<AuthenticationResponse> SendResetPasswordEmail(string email)
         {
             User user = await _userManager.FindByEmailAsync(email);
 
             if (user is null)
             {
-                return new AuthenticationResponseViewModel() { Status = "Fail", Message = "Email is not correct." };
+                return new AuthenticationResponse() { Status = "Fail", Message = "Email is not correct." };
             }
 
             await SendEmail(user);
 
-            return new AuthenticationResponseViewModel() { Status = "Success", Message = "Please check your email to get reset link" };
+            return new AuthenticationResponse() { Status = "Success", Message = "Please check your email to get reset link" };
         }
 
         private async Task SendEmail(User user)

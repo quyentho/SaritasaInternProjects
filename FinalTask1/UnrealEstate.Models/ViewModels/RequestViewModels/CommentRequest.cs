@@ -2,7 +2,7 @@
 
 namespace UnrealEstate.Models.ViewModels.RequestViewModels
 {
-    public class CommentRequestViewModel
+    public class CommentRequest
     {
         [Required]
         public string Text { get; set; }

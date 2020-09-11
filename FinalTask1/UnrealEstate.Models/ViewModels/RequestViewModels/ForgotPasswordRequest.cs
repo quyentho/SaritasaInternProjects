@@ -2,7 +2,7 @@
 
 namespace UnrealEstate.Models.ViewModels.RequestViewModels
 {
-    public class ForgotPasswordRequestViewModel
+    public class ForgotPasswordRequest
     {
         [Required]
         [EmailAddress]

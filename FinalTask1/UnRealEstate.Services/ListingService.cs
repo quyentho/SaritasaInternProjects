@@ -67,40 +67,40 @@ namespace UnrealEstate.Services
 
 
         /// <inheritdoc/>
-        public async Task<List<ListingResponseViewModel>> GetListingsAsync()
+        public async Task<List<ListingResponse>> GetListingsAsync()
         {
             List<Listing> listings = await _listingRepository.GetListingsAsync();
 
-            List<ListingResponseViewModel> listingViewModels = MapListingsToViewModels(listings);
+            List<ListingResponse> listingViewModels = MapListingsToViewModels(listings);
 
             return listingViewModels;
         }
 
         /// <inheritdoc/>
-        public async Task<ListingResponseViewModel> GetListingAsync(int listingId)
+        public async Task<ListingResponse> GetListingAsync(int listingId)
         {
             Listing listing = await _listingRepository.GetListingByIdAsync(listingId);
 
-            ListingResponseViewModel listingViewModel = _mapper.Map<ListingResponseViewModel>(listing);
+            ListingResponse listingViewModel = _mapper.Map<ListingResponse>(listing);
 
             return listingViewModel;
         }
 
         /// <inheritdoc/>
-        public async Task<List<ListingResponseViewModel>> GetActiveListingWithFilterAsync(ListingFilterCriteriaRequestViewModel filterCriteria)
+        public async Task<List<ListingResponse>> GetActiveListingWithFilterAsync(ListingFilterCriteriaRequest filterCriteria)
         {
 
             List<Listing> listings = await _listingRepository.GetListingsAsync();
 
             listings = GetFilteredListings(filterCriteria, listings);
 
-            List<ListingResponseViewModel> listingViewModels = MapListingsToViewModels(listings);
+            List<ListingResponse> listingViewModels = MapListingsToViewModels(listings);
 
             return listingViewModels;
         }
 
         /// <inheritdoc/>
-        public async Task CreateListingAsync(ListingRequestViewModel listingViewModel, string userId)
+        public async Task CreateListingAsync(ListingRequest listingViewModel, string userId)
         {
             Listing listing = _mapper.Map<Listing>(listingViewModel);
             listing.UserId = userId;
@@ -120,7 +120,7 @@ namespace UnrealEstate.Services
       
 
         /// <inheritdoc/>
-        public async Task EditListingAsync(User currentUser, ListingRequestViewModel listingViewModel, int listingId)
+        public async Task EditListingAsync(User currentUser, ListingRequest listingViewModel, int listingId)
         {
             var listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
 
@@ -140,7 +140,7 @@ namespace UnrealEstate.Services
             await _listingRepository.UpdateListingAsync(listingFromDb);
         }
 
-        public async Task MakeABid(int listingId,User currentUser, BidRequestViewModel bidRequestViewModel)
+        public async Task MakeABid(int listingId,User currentUser, BidRequest bidRequestViewModel)
         {
             var listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
 
@@ -182,7 +182,7 @@ namespace UnrealEstate.Services
             return await _userManager.GetRolesAsync(currentUser);
         }
 
-        private static ExpressionStarter<Listing> BuildConditions(ListingFilterCriteriaRequestViewModel filterCriteria)
+        private static ExpressionStarter<Listing> BuildConditions(ListingFilterCriteriaRequest filterCriteria)
         {
             var filterConditions = PredicateBuilder.New<Listing>(true);
 
@@ -253,12 +253,12 @@ namespace UnrealEstate.Services
             GuardClauses.IsValidStatus(listingFromDb.StatusId, statusId);
         }
 
-        private List<ListingResponseViewModel> MapListingsToViewModels(List<Listing> listings)
+        private List<ListingResponse> MapListingsToViewModels(List<Listing> listings)
         {
-            return _mapper.Map<List<ListingResponseViewModel>>(listings);
+            return _mapper.Map<List<ListingResponse>>(listings);
         }
 
-        private static List<Listing> GetFilteredListings(ListingFilterCriteriaRequestViewModel filterCriteria, List<Listing> listings)
+        private static List<Listing> GetFilteredListings(ListingFilterCriteriaRequest filterCriteria, List<Listing> listings)
         {
             ExpressionStarter<Listing> filterConditions = BuildConditions(filterCriteria);
 
@@ -271,7 +271,7 @@ namespace UnrealEstate.Services
             return result.ToList();
         }
 
-        private static async Task<List<ListingPhoto>> GetUploadedListingPhotos(ListingRequestViewModel listingViewModel)
+        private static async Task<List<ListingPhoto>> GetUploadedListingPhotos(ListingRequest listingViewModel)
         {
             List<ListingPhoto> listingPhotos = new List<ListingPhoto>();
             foreach (var formFile in listingViewModel.ListingPhoTos)

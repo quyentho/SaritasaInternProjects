@@ -282,7 +282,9 @@ namespace UnrealEstate.Services
                 {
                     string path = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", Path.GetRandomFileName());
 
-                    listingPhotos.Add(new ListingPhoto { PhotoUrl = path });
+                    path.Replace(Path.GetExtension(path), Path.GetExtension(formFile.FileName));
+
+                    listingPhotos.Add(new ListingPhoto { PhotoUrl = path});
 
                     using (var stream = System.IO.File.Create(path))
                     {

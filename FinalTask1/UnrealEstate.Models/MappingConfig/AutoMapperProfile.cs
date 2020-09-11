@@ -14,7 +14,7 @@ namespace UnrealEstate.Models.MappingConfig
             #region listing mapping
             CreateMap<Listing, ListingResponse>();
 
-            CreateMap<ListingRequest, Listing>();
+            CreateMap<ListingRequest, Listing>().ForMember(dest => dest.ListingPhoTos, opt => opt.Ignore());
 
             CreateMap<ListingStatus, ListingStatusResponse>();
 
@@ -22,7 +22,6 @@ namespace UnrealEstate.Models.MappingConfig
             CreateMap<ListingNoteRequest, ListingNote>();
 
             CreateMap<ListingPhoto, ListingPhotoResponse>();
-            CreateMap<ListingPhotoRequest, ListingPhoto>();
             #endregion
 
             #region comment mapping

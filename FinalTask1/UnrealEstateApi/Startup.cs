@@ -74,7 +74,7 @@ namespace UnrealEstateApi
                 .Get<EmailConfiguration>();
             services.AddSingleton(emailConfig);
 
-            // TODO: this must be redefined;
+            // TODO: this should be redefined for security purpose;
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireDigit = false;

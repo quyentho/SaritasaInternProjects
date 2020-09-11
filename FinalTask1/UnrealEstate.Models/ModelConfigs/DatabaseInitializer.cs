@@ -8,13 +8,13 @@ namespace UnrealEstate.Models.ModelConfigs
     {
         public static void InitializeSeedData(UnrealEstateDbContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
-            SeedListingStatuses(context);
-
-            SeedListings(context);
-
             SeedRoles(roleManager);
 
             SeedUsers(context, userManager);
+
+            SeedListingStatuses(context);
+
+            SeedListings(context);
 
             SeedComments(context);
 
@@ -30,9 +30,8 @@ namespace UnrealEstate.Models.ModelConfigs
                     new Comment {  ListingId = 1, Text = "comment 1", UserId = "2b3bffa2-d5b4-4bac-8a9b-8afa65ec5e85"}, // comment of user 1
                     new Comment {  ListingId = 1, Text = "comment 2", UserId = "2b3bffa2-d5b4-4bac-8a9b-8afa65ec5e85"},// comment of user 1
                     new Comment {  ListingId = 1, Text = "comment 3", UserId = "be26f642-e3b7-46bc-bd68-69f0d574548d"},// comment of user 2
-                    new Comment {  ListingId = 2, Text = "comment 4", UserId = "d35fd6ad-832f-44b4-9e9d-4e113f4ceeaa"},// comment of user 3
-                    new Comment {  ListingId = 2, Text = "comment 4", UserId = "d35fd6ad-832f-44b4-9e9d-4e113f4ceeaa"},// comment of user 3
-                    new Comment {  ListingId = 2, Text = "comment 4", UserId = "eb8d4298-d079-495d-9dbc-ed36fae2a66f"},// comment of user 4
+                    new Comment {  ListingId = 1, Text = "comment 4", UserId = "be26f642-e3b7-46bc-bd68-69f0d574548d"},// comment of user 2
+                    new Comment {  ListingId = 1, Text = "comment 5", UserId = "be26f642-e3b7-46bc-bd68-69f0d574548d"},// comment of user 2
                 });
 
                 context.SaveChanges();
@@ -44,35 +43,19 @@ namespace UnrealEstate.Models.ModelConfigs
 
             if (!context.Users.Any())
             {
-                var user = new User() { Email = "user1@test.com", UserName = "user1@test.com" };
+                var user = new User() { Id= "2b3bffa2-d5b4-4bac-8a9b-8afa65ec5e85", Email = "user1@test.com", UserName = "user1@test.com" };
                 IdentityResult check = userManager.CreateAsync(user, "password").GetAwaiter().GetResult();
                 if (check.Succeeded)
                 {
-                    userManager.AddToRoleAsync(user, "Admin").GetAwaiter().GetResult();
+                    userManager.AddToRoleAsync(user, UserRole.Admin).GetAwaiter().GetResult();
                 }
 
-                user = new User() { Email = "user2@test.com", UserName = "user2@test.com" };
+                user = new User() { Id = "be26f642-e3b7-46bc-bd68-69f0d574548d", Email = "user2@test.com", UserName = "user2@test.com" };
                 check = userManager.CreateAsync(user, "password").GetAwaiter().GetResult();
 
                 if (check.Succeeded)
                 {
-                    userManager.AddToRoleAsync(user, "RegularUser").GetAwaiter().GetResult();
-                }
-
-                user = new User() { Email = "user3@test.com", UserName = "user3@test.com" };
-                check = userManager.CreateAsync(user, "password").GetAwaiter().GetResult();
-
-                if (check.Succeeded)
-                {
-                    userManager.AddToRoleAsync(user, "RegularUser").GetAwaiter().GetResult();
-                }
-
-                user = new User() { Email = "user4@test.com", UserName = "user4@test.com" };
-                check = userManager.CreateAsync(user, "password").GetAwaiter().GetResult();
-
-                if (check.Succeeded)
-                {
-                    userManager.AddToRoleAsync(user, "RegularUser").GetAwaiter().GetResult();
+                    userManager.AddToRoleAsync(user, UserRole.User).GetAwaiter().GetResult();
                 }
             }
         }
@@ -82,15 +65,10 @@ namespace UnrealEstate.Models.ModelConfigs
             if (!context.Listings.Any())
             {
                 context.Listings.AddRange(new List<Listing>() {
-                new Listing { AddressLine1 = "addressline1", AddressLine2 = "addressline2", Beds = 2, BuiltYear = 2019,Zip= "11111", City = "Hcm", Description = "description", StatusId = 1 },
-                new Listing { AddressLine1 = "addressline copy 1", AddressLine2 = "addressline copy 2",Zip= "11111", Beds = 2, BuiltYear = 2019, City = "Hcm", Description = "description", StatusId = 1 },
-                new Listing { AddressLine1 = "addressline copy 1", AddressLine2 = "addressline copy 2",Zip= "11111", Beds = 2, BuiltYear = 2019, City = "Hcm", Description = "description", StatusId = 1 },
-                new Listing { AddressLine1 = "addressline copy 1", AddressLine2 = "addressline copy 2",Zip= "11111", Beds = 2, BuiltYear = 2019, City = "Hcm", Description = "description", StatusId = 1 },
-                new Listing { AddressLine1 = "addressline fake 1", AddressLine2 = "addressline fake 2",Zip= "22222", Beds = 2, BuiltYear = 2019, City = "ha noi", Description = "description", StatusId = 1 },
-                new Listing { AddressLine1 = "addressline fake 1", AddressLine2 = "addressline fake 2",Zip= "22222", Beds = 2, BuiltYear = 2019, City = "ha noi", Description = "description", StatusId = 1 },
-                new Listing { AddressLine1 = "addressline fake 1", AddressLine2 = "addressline fake 2",Zip= "22222", Beds = 2, BuiltYear = 2019, City = "ha noi", Description = "description", StatusId = 1 },
-                new Listing { AddressLine1 = "addressline fake fake 1", AddressLine2 = "addressline fake fake 2",Zip= "22222", Beds = 2, BuiltYear = 2019, City = "ha noi", Description = "description", StatusId = 1 },
-                new Listing { AddressLine1 = "addressline fake fake 1", AddressLine2 = "addressline fake fake 2",Zip= "22222", Beds = 2, BuiltYear = 2019, City = "ha noi", Description = "description", StatusId = 1 },
+                new Listing { AddressLine1 = "addressline1", AddressLine2 = "addressline2", Beds = 2, BuiltYear = 2019,Zip= "11111", City = "Hcm", Description = "description", StatusId = 1,UserId = "2b3bffa2-d5b4-4bac-8a9b-8afa65ec5e85"  },
+                new Listing { AddressLine1 = "addressline copy 1", AddressLine2 = "addressline copy 2",Zip= "11111", Beds = 2, BuiltYear = 2019, City = "Hcm", Description = "description", StatusId = 1, UserId = "2b3bffa2-d5b4-4bac-8a9b-8afa65ec5e85" },
+                new Listing { AddressLine1 = "addressline fake 1", AddressLine2 = "addressline fake 2",Zip= "22222", Beds = 2, BuiltYear = 2019, City = "ha noi", Description = "description", StatusId = 1, UserId = "be26f642-e3b7-46bc-bd68-69f0d574548d"},
+                new Listing { AddressLine1 = "addressline fake fake 1", AddressLine2 = "addressline fake fake 2",Zip= "22222", Beds = 2, BuiltYear = 2019, City = "ha noi", Description = "description", StatusId = 1,UserId = "be26f642-e3b7-46bc-bd68-69f0d574548d" },
                 });
 
                 context.SaveChanges();
@@ -119,14 +97,14 @@ namespace UnrealEstate.Models.ModelConfigs
             if (!roleManager.RoleExistsAsync("Admin").GetAwaiter().GetResult())
             {
                 var role = new IdentityRole();
-                role.Name = "Admin";
+                role.Name = UserRole.Admin;
                 roleManager.CreateAsync(role).GetAwaiter().GetResult();
             }
 
             if (!roleManager.RoleExistsAsync("RegularUser").GetAwaiter().GetResult())
             {
                 var role = new IdentityRole();
-                role.Name = "RegularUser";
+                role.Name = UserRole.User;
                 roleManager.CreateAsync(role).GetAwaiter().GetResult();
             }
 

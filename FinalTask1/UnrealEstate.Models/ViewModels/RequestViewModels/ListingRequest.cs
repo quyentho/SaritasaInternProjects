@@ -15,11 +15,11 @@ namespace UnrealEstate.Models.ViewModels.RequestViewModels
 
         public string AddressLine2 { get; set; }
 
-        public uint BuiltYear { get; set; }
+        public uint? BuiltYear { get; set; }
 
-        public uint Beds { get; set; }
+        public uint? Beds { get; set; }
 
-        public double Size { get; set; }
+        public double? Size { get; set; }
 
         [Required]
         public decimal StatingPrice { get; set; }
@@ -27,7 +27,7 @@ namespace UnrealEstate.Models.ViewModels.RequestViewModels
         [Required]
         public DateTimeOffset DueDate { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         public List<IFormFile> ListingPhoTos { get; set; }
 

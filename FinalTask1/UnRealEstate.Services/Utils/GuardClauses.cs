@@ -48,7 +48,7 @@ namespace UnrealEstate.Services
         {
             if (bidPrice <= currentPrice)
             {
-                throw new InvalidOperationException("Bid price must be higher than current listing price");
+                throw new InvalidOperationException($"Bid price must be higher than current listing price: {currentPrice}");
             }
         }
 

@@ -104,7 +104,7 @@ namespace UnrealEstate.Services
         {
             Listing listing = _mapper.Map<Listing>(listingViewModel);
             listing.UserId = userId;
-
+            listing.CurrentHighestBidPrice = listingViewModel.StatingPrice;
             bool hasPhoto = listingViewModel.ListingPhoTos.Count > 0;
             
             if (hasPhoto)
@@ -148,15 +148,17 @@ namespace UnrealEstate.Services
 
             GuardClauses.BidPriceHigherThanCurrentPrice(bidRequestViewModel.Price, listingFromDb.CurrentHighestBidPrice);
 
+            listingFromDb.CurrentHighestBidPrice = bidRequestViewModel.Price;
+
             Bid bid = _mapper.Map<Bid>(bidRequestViewModel);
 
             bid.ListingId = listingId;
             bid.CreatedAt = DateTimeOffset.Now;
             bid.UserId = currentUser.Id;
 
-            listingFromDb.CurrentHighestBidPrice = bidRequestViewModel.Price;
-
             listingFromDb.Bids.Add(bid);
+
+
 
             await _listingRepository.UpdateListingAsync(listingFromDb);
         }
@@ -278,7 +280,7 @@ namespace UnrealEstate.Services
             {
                 if (formFile.Length > 0)
                 {
-                    string path = Path.Combine(Directory.GetCurrentDirectory(), "Photos", Path.GetRandomFileName());
+                    string path = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", Path.GetRandomFileName());
 
                     listingPhotos.Add(new ListingPhoto { PhotoUrl = path });
 

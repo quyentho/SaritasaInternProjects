@@ -108,7 +108,7 @@ namespace UnrealEstateApi.Controllers
         /// <param name="listing">Listing created.</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Listing>> CreateListing(ListingRequest listing)
+        public async Task<ActionResult<Listing>> CreateListing([FromForm] ListingRequest listing)
         {
             if (!ModelState.IsValid)
             {

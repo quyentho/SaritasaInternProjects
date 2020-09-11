@@ -24,6 +24,7 @@ namespace UnrealEstate.Models.Repositories
                 .Include(l => l.Comments)
                 .Include(l => l.Favorites)
                 .Include(l => l.Bids)
+                .Include(l=>l.ListingPhoTos)
                 .FirstOrDefaultAsync(l => l.Id == listingId);
 
             return listing;
@@ -35,6 +36,7 @@ namespace UnrealEstate.Models.Repositories
                 .Include(l => l.Comments)
                 .Include(l => l.Favorites)
                 .Include(l => l.Bids)
+                .Include(l=>l.ListingPhoTos)
                 .ToListAsync();
 
             return listings;

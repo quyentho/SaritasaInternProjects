@@ -1,4 +1,5 @@
 using AutoMapper;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -16,6 +17,7 @@ using UnrealEstate.Models;
 using UnrealEstate.Models.MappingConfig;
 using UnrealEstate.Models.ModelConfigs;
 using UnrealEstate.Models.Repositories;
+using UnrealEstate.Models.ViewModels.RequestViewModels.RequestModelValidators;
 using UnrealEstate.Services;
 using UnrealEstate.Services.EmailService;
 using UnrealEstateApi.Configurations;
@@ -47,6 +49,7 @@ namespace UnrealEstateApi
                     .AddEntityFrameworkStores<UnrealEstateDbContext>()
                     .AddDefaultTokenProviders();
 
+            
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -71,6 +74,7 @@ namespace UnrealEstateApi
                 .Get<EmailConfiguration>();
             services.AddSingleton(emailConfig);
 
+            // TODO: this must be redefined;
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireDigit = false;
@@ -81,8 +85,14 @@ namespace UnrealEstateApi
                 options.Password.RequiredUniqueChars = 0;
             });
 
-            services.AddControllers().AddNewtonsoftJson(options =>
-                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+                .AddFluentValidation(fv => 
+                { 
+                    fv.RegisterValidatorsFromAssembly(Assembly.GetAssembly(typeof(AuthenticationModelValidator)));
+                    fv.ImplicitlyValidateChildProperties = true;
+                });
 
             services.AddTransient<IListingRepository, ListingRepository>();
             services.AddTransient<IListingService, ListingService>();

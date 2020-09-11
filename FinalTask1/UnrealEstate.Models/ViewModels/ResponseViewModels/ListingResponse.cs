@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace UnrealEstate.Models.ViewModels.ResponseViewModels
 {
-    public class ListingResponseViewModel
+    public class ListingResponse
     {
         public int Id { get; set; }
         public string StatusName { get; set; }
@@ -32,12 +32,12 @@ namespace UnrealEstate.Models.ViewModels.ResponseViewModels
 
         public string Description { get; set; }
 
-        public List<CommentResponseViewModel> Comments { get; set; }
+        public List<CommentResponse> Comments { get; set; }
 
-        public List<ListingPhotoResponseViewModel> ListingPhoTos { get; set; }
+        public List<ListingPhotoResponse> ListingPhoTos { get; set; }
 
-        public List<ListingNoteResponseViewModel> ListingNotes { get; set; }
+        public List<ListingNoteResponse> ListingNotes { get; set; }
 
-        public List<BidResponseViewModel> Bids { get; set; }
+        public List<BidResponse> Bids { get; set; }
     }
 }

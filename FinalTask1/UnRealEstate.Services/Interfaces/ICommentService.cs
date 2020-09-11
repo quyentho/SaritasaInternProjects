@@ -13,7 +13,7 @@ namespace UnrealEstate.Services
         /// </summary>
         /// <param name="comment">new comment.</param>
         /// <returns></returns>
-        Task CreateCommentAsync(string id, CommentRequestViewModel comment);
+        Task CreateCommentAsync(string id, CommentRequest comment);
 
         /// <summary>
         /// Edits comment, only available for author.
@@ -21,21 +21,21 @@ namespace UnrealEstate.Services
         /// <param name="currentUserId">current logged in user id.</param>
         /// <param name="comment">comment edited.</param>
         /// <returns></returns>
-        Task EditCommentAsync(string currentUserId, CommentRequestViewModel commentViewModel, int commentId);
+        Task EditCommentAsync(string currentUserId, CommentRequest commentViewModel, int commentId);
 
         /// <summary>
         /// Gets comment by id.
         /// </summary>
         /// <param name="commentId">comment id.</param>
         /// <returns>comment found.</returns>
-        Task<CommentResponseViewModel> GetCommentAsync(int commentId);
+        Task<CommentResponse> GetCommentAsync(int commentId);
 
         /// <summary>
         /// Gets all comment in listing.
         /// </summary>
         /// <param name="listingId">listing id.</param>
         /// <returns>List comments found.</returns>
-        Task<List<CommentResponseViewModel>> GetCommentsByListingAsync(int listingId);
+        Task<List<CommentResponse>> GetCommentsByListingAsync(int listingId);
 
         /// <summary>
         /// Deletes comment by by comment id.

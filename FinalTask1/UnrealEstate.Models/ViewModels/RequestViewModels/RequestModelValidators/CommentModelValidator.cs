@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace UnrealEstate.Models.ViewModels.RequestViewModels.RequestModelValidators
 {
-    public class CommentModelValidator : AbstractValidator<CommentRequestViewModel>
+    public class CommentModelValidator : AbstractValidator<CommentRequest>
     {
         public CommentModelValidator()
         {

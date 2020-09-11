@@ -12,36 +12,36 @@ namespace UnrealEstate.Models.MappingConfig
         public AutoMapperProfile()
         {
             #region listing mapping
-            CreateMap<Listing, ListingResponseViewModel>();
+            CreateMap<Listing, ListingResponse>();
 
-            CreateMap<ListingRequestViewModel, Listing>();
+            CreateMap<ListingRequest, Listing>();
 
-            CreateMap<ListingStatus, ListingStatusResponseViewModel>();
+            CreateMap<ListingStatus, ListingStatusResponse>();
 
-            CreateMap<ListingNote, ListingNoteResponseViewModel>();
-            CreateMap<ListingNoteRequestViewModel, ListingNote>();
+            CreateMap<ListingNote, ListingNoteResponse>();
+            CreateMap<ListingNoteRequest, ListingNote>();
 
-            CreateMap<ListingPhoto, ListingPhotoResponseViewModel>();
-            CreateMap<ListingPhotoRequestViewModel, ListingPhoto>();
+            CreateMap<ListingPhoto, ListingPhotoResponse>();
+            CreateMap<ListingPhotoRequest, ListingPhoto>();
             #endregion
 
             #region comment mapping
-            CreateMap<Comment, CommentResponseViewModel>();
+            CreateMap<Comment, CommentResponse>();
 
-            CreateMap<CommentRequestViewModel, Comment>();
+            CreateMap<CommentRequest, Comment>();
             #endregion
 
             #region user mapping
-            CreateMap<User, UserResponseViewModel>()
+            CreateMap<User, UserResponse>()
                 .ForMember(dest => dest.ListingsCreated, opt => opt.MapFrom(src => src.Listings))
                 .ForMember(dest => dest.FavoriteListings, opt => opt.MapFrom(src => src.Favorites.Select(f => f.Listing)));
 
-            CreateMap<UserRequestViewModel, User>();
+            CreateMap<UserRequest, User>();
             #endregion
 
             #region bid mapping
-            CreateMap<BidRequestViewModel, Bid>();
-            CreateMap<Bid, BidResponseViewModel>();
+            CreateMap<BidRequest, Bid>();
+            CreateMap<Bid, BidResponse>();
             #endregion
         }
     }

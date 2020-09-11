@@ -80,7 +80,7 @@ namespace UnrealEstateApi.Controllers
         /// <param name="listing">Listing updated.</param>
         /// <returns>400 status code if url id not match updated id, 204 status code if completed update, not found if id not exists in database.</returns>
         [HttpPut("{listingId}")]
-        public async Task<IActionResult> UpdateListing(int listingId, ListingRequestViewModel listing)
+        public async Task<IActionResult> UpdateListing(int listingId,[FromForm] ListingRequestViewModel listing)
         {
             if (!ModelState.IsValid)
             {

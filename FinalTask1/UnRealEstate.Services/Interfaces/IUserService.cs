@@ -20,14 +20,14 @@ namespace UnrealEstate.Services
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        Task<UserResponseViewModel> GetUserByIdAsync(string userId);
+        Task<UserResponse> GetUserByIdAsync(string userId);
 
         /// <summary>
         /// Get users after filtered.
         /// </summary>
         /// <param name="filterCriteria"></param>
         /// <returns></returns>
-        Task<List<UserResponseViewModel>> GetUsersWithFilterAsync(UserFilterCriteriaRequestViewModel filterCriteria);
+        Task<List<UserResponse>> GetUsersWithFilterAsync(UserFilterCriteriaRequest filterCriteria);
 
         /// <summary>
         /// Update current user's info.
@@ -35,6 +35,6 @@ namespace UnrealEstate.Services
         /// <param name="currentUser"></param>
         /// <param name="userViewModel"></param>
         /// <returns></returns>
-        Task UpdateUser(User currentUser, UserRequestViewModel userViewModel);
+        Task UpdateUser(User currentUser, UserRequest userViewModel);
     }
 }

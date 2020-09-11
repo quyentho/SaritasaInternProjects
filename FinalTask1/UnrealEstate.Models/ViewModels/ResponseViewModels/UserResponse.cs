@@ -4,7 +4,7 @@ using UnrealEstate.Models.ViewModels.ResponseViewModels;
 
 namespace UnrealEstate.Models.ViewModels
 {
-    public class UserResponseViewModel
+    public class UserResponse
     {
         public string FirstName { get; set; }
 
@@ -16,14 +16,14 @@ namespace UnrealEstate.Models.ViewModels
 
         public DateTimeOffset BirthDay { get; set; }
 
-        public List<ListingResponseViewModel> ListingsCreated { get; set; }
+        public List<ListingResponse> ListingsCreated { get; set; }
 
-        public List<ListingNoteResponseViewModel> ListingNotes { get; set; }
+        public List<ListingNoteResponse> ListingNotes { get; set; }
 
-        public List<CommentResponseViewModel> Comments { get; set; }
+        public List<CommentResponse> Comments { get; set; }
 
-        public List<ListingResponseViewModel> FavoriteListings { get; set; }
+        public List<ListingResponse> FavoriteListings { get; set; }
 
-        public List<BidResponseViewModel> Bids { get; set; }
+        public List<BidResponse> Bids { get; set; }
     }
 }

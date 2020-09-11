@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UnrealEstate.Models.ViewModels.ResponseViewModels
 {
-    public class BidResponseViewModel
+    public class BidResponse
     {
         public int Id { get; set; }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UnrealEstate.Models.ViewModels.RequestViewModels
 {
-    public class UserRequestViewModel
+    public class UserRequest
     {
         public string Email { get; set; }
 

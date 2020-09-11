@@ -35,9 +35,9 @@ namespace UnrealEstateApi.Controllers
         /// <returns></returns>
         [Authorize(Roles = UserRole.Admin)]
         [HttpGet]
-        public async Task<IActionResult> GetUsers([FromQuery]UserFilterCriteriaRequestViewModel userFilterCriteria)
+        public async Task<IActionResult> GetUsers([FromQuery]UserFilterCriteriaRequest userFilterCriteria)
         {
-            List<UserResponseViewModel> userViewModels = await _userService.GetUsersWithFilterAsync(userFilterCriteria);
+            List<UserResponse> userViewModels = await _userService.GetUsersWithFilterAsync(userFilterCriteria);
 
             return Ok(userViewModels);
         }
@@ -58,7 +58,7 @@ namespace UnrealEstateApi.Controllers
 
             try
             {
-                UserResponseViewModel user = await _userService.GetUserByIdAsync(userId);
+                UserResponse user = await _userService.GetUserByIdAsync(userId);
                 return Ok(user);
             }
             catch (NotSupportedException)
@@ -75,14 +75,14 @@ namespace UnrealEstateApi.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] AuthenticationRequestViewModel model)
+        public async Task<IActionResult> Register([FromBody] AuthenticationRequest model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            AuthenticationResponseViewModel response = await _authenticationService.Register(model);
+            AuthenticationResponse response = await _authenticationService.Register(model);
 
             if (response.Status.Equals("Error"))
             {
@@ -99,7 +99,7 @@ namespace UnrealEstateApi.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("me")]
-        public async Task<IActionResult> UpdateInfomation(UserRequestViewModel userViewModel)
+        public async Task<IActionResult> UpdateInfomation(UserRequest userViewModel)
         {
             if (!ModelState.IsValid)
             {

@@ -23,7 +23,7 @@ namespace UnrealEstate.Services
             _mapper = mapper;
         }
 
-        public async Task<List<UserResponseViewModel>> GetUsersWithFilterAsync(UserFilterCriteriaRequestViewModel filterCriteria)
+        public async Task<List<UserResponse>> GetUsersWithFilterAsync(UserFilterCriteriaRequest filterCriteria)
         {
             List<User> users = await _userManager.Users
                 .Include(u=>u.Comments)
@@ -35,17 +35,17 @@ namespace UnrealEstate.Services
 
             users = GetFilteredUsers(filterCriteria, users);
 
-            List<UserResponseViewModel> userViewModels = MapUsersToViewModels(users);
+            List<UserResponse> userViewModels = MapUsersToViewModels(users);
 
             return userViewModels;
         }
 
-        private List<UserResponseViewModel> MapUsersToViewModels(List<User> users)
+        private List<UserResponse> MapUsersToViewModels(List<User> users)
         {
-            return _mapper.Map<List<UserResponseViewModel>>(users);
+            return _mapper.Map<List<UserResponse>>(users);
         }
 
-        private static ExpressionStarter<User> BuildConditions(UserFilterCriteriaRequestViewModel filterCriteria)
+        private static ExpressionStarter<User> BuildConditions(UserFilterCriteriaRequest filterCriteria)
         {
             var filterConditions = PredicateBuilder.New<User>(true);
 
@@ -62,7 +62,7 @@ namespace UnrealEstate.Services
             return filterConditions;
         }
 
-        private List<User> GetFilteredUsers(UserFilterCriteriaRequestViewModel filterCriteria, List<User> users)
+        private List<User> GetFilteredUsers(UserFilterCriteriaRequest filterCriteria, List<User> users)
         {
             var conditions = BuildConditions(filterCriteria);
 
@@ -88,7 +88,7 @@ namespace UnrealEstate.Services
             return user;
         }
 
-        public async Task UpdateUser(User currentUser, UserRequestViewModel userViewModel)
+        public async Task UpdateUser(User currentUser, UserRequest userViewModel)
         {
             // Bug: Update fail
             var user = await _userManager.FindByEmailAsync(currentUser.Email);
@@ -98,11 +98,11 @@ namespace UnrealEstate.Services
             await _userManager.UpdateAsync(user);
         }
 
-        public async Task<UserResponseViewModel> GetUserByIdAsync(string userId)
+        public async Task<UserResponse> GetUserByIdAsync(string userId)
         {
             User user = await _userManager.FindByIdAsync(userId);
 
-            UserResponseViewModel userViewModel = _mapper.Map<UserResponseViewModel>(user);
+            UserResponse userViewModel = _mapper.Map<UserResponse>(user);
 
             return userViewModel;
         }

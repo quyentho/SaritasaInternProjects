@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -28,7 +29,7 @@ namespace UnrealEstate.Models.ViewModels.RequestViewModels
 
         public string Description { get; set; }
 
-        public List<ListingPhotoRequestViewModel> ListingPhoTos { get; set; }
+        public List<IFormFile> ListingPhoTos { get; set; }
 
         public List<ListingNoteRequestViewModel> ListingNotes { get; set; }
     }

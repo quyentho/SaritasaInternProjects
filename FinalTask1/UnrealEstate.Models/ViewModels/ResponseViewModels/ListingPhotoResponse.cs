@@ -1,8 +1,8 @@
 ﻿namespace UnrealEstate.Models.ViewModels.ResponseViewModels
 {
-    public class ListingNoteResponseViewModel
+    public class ListingPhotoResponse
     {
         public int Id { get; set; }
-        public string Text { get; set; }
+        public string PhotoUrl { get; set; }
     }
 }

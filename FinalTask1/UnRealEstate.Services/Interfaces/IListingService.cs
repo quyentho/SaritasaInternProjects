@@ -22,7 +22,7 @@ namespace UnrealEstate.Services
         /// </summary>
         /// <param name="listing">New listing.</param>
         /// <returns></returns>
-        Task CreateListingAsync(ListingRequestViewModel listingViewModel, string userId);
+        Task CreateListingAsync(ListingRequest listingViewModel, string userId);
 
         /// <summary>
         /// Disable listing if listing status is active, only available for admin user.
@@ -39,7 +39,7 @@ namespace UnrealEstate.Services
         /// <param name="listing"></param>
         /// <param name="listingId"></param>
         /// <returns></returns>
-        Task EditListingAsync(User currentUser, ListingRequestViewModel listing, int listingId);
+        Task EditListingAsync(User currentUser, ListingRequest listing, int listingId);
 
         /// <summary>
         /// Enables listing if listing status is active, only available for admin user.
@@ -54,20 +54,20 @@ namespace UnrealEstate.Services
         /// </summary>
         /// <param name="filterCriteria"></param>
         /// <returns></returns>
-        Task<List<ListingResponseViewModel>> GetActiveListingWithFilterAsync(ListingFilterCriteriaRequestViewModel filterCriteria);
+        Task<List<ListingResponse>> GetActiveListingWithFilterAsync(ListingFilterCriteriaRequest filterCriteria);
 
         /// <summary>
         /// Gets listing by id.
         /// </summary>
         /// <param name="listingId">listing id.</param>
         /// <returns></returns>
-        Task<ListingResponseViewModel> GetListingAsync(int listingId);
+        Task<ListingResponse> GetListingAsync(int listingId);
 
         /// <summary>
         /// Gets all listing.
         /// </summary>
         /// <returns>list of listings.</returns>
-        Task<List<ListingResponseViewModel>> GetListingsAsync();
-        Task MakeABid(int listingId, User currentUser, BidRequestViewModel bidRequestViewModel);
+        Task<List<ListingResponse>> GetListingsAsync();
+        Task MakeABid(int listingId, User currentUser, BidRequest bidRequestViewModel);
     }
 }

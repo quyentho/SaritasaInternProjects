@@ -3,6 +3,7 @@ using LinqKit;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using UnrealEstate.Models;
@@ -102,21 +103,39 @@ namespace UnrealEstate.Services
         public async Task CreateListingAsync(ListingRequestViewModel listingViewModel, string userId)
         {
             Listing listing = _mapper.Map<Listing>(listingViewModel);
-
             listing.UserId = userId;
 
+            bool hasPhoto = listingViewModel.ListingPhoTos.Count > 0;
+            
+            if (hasPhoto)
+            {
+                List<ListingPhoto> listingPhotos = await GetUploadedListingPhotos(listingViewModel);
+                
+                listing.ListingPhoTos.AddRange(listingPhotos);
+            }
 
             await _listingRepository.AddListingAsync(listing);
         }
+
+      
 
         /// <inheritdoc/>
         public async Task EditListingAsync(User currentUser, ListingRequestViewModel listingViewModel, int listingId)
         {
             var listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
 
-            await ValidateForAdminOrAuthorAction(currentUser, listingFromDb);
+            await ValidateAdminOrAuthorPermission(currentUser, listingFromDb);
 
             _mapper.Map(listingViewModel, listingFromDb);
+
+            bool hasPhoto = listingViewModel.ListingPhoTos.Count > 0;
+
+            if (hasPhoto)
+            {
+                List<ListingPhoto> listingPhotos = await GetUploadedListingPhotos(listingViewModel);
+
+                listingFromDb.ListingPhoTos.AddRange(listingPhotos);
+            }
 
             await _listingRepository.UpdateListingAsync(listingFromDb);
         }
@@ -149,7 +168,7 @@ namespace UnrealEstate.Services
             await _listingRepository.UpdateListingAsync(listingFromDb);
         }
 
-        private async Task ValidateForAdminOrAuthorAction(User currentUser, Listing listingFromDb)
+        private async Task ValidateAdminOrAuthorPermission(User currentUser, Listing listingFromDb)
         {
             IList<string> userRole = await GetUserRole(currentUser);
 
@@ -250,6 +269,27 @@ namespace UnrealEstate.Services
             result = result.SortBy(filterCriteria.OrderBy);
 
             return result.ToList();
+        }
+
+        private static async Task<List<ListingPhoto>> GetUploadedListingPhotos(ListingRequestViewModel listingViewModel)
+        {
+            List<ListingPhoto> listingPhotos = new List<ListingPhoto>();
+            foreach (var formFile in listingViewModel.ListingPhoTos)
+            {
+                if (formFile.Length > 0)
+                {
+                    string path = Path.Combine(Directory.GetCurrentDirectory(), "Photos", Path.GetRandomFileName());
+
+                    listingPhotos.Add(new ListingPhoto { PhotoUrl = path });
+
+                    using (var stream = System.IO.File.Create(path))
+                    {
+                        await formFile.CopyToAsync(stream);
+                    }
+                }
+            }
+
+            return listingPhotos;
         }
     }
 }

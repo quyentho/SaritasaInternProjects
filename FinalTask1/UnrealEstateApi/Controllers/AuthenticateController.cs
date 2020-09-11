@@ -25,7 +25,7 @@ namespace UnrealEstateApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] AuthenticationRequestViewModel model)
+        public async Task<IActionResult> Login([FromBody] AuthenticationRequest model)
         {
             JwtSecurityToken token = await _authenticationService.Login(model);
             if (token is null)
@@ -47,14 +47,14 @@ namespace UnrealEstateApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("forgot-password")]
-        public async Task<IActionResult> ForgotPassword(ForgotPasswordRequestViewModel model)
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            AuthenticationResponseViewModel authenticationResponseViewModel = await _authenticationService.SendResetPasswordEmail(model.Email);
+            AuthenticationResponse authenticationResponseViewModel = await _authenticationService.SendResetPasswordEmail(model.Email);
 
             return Ok(authenticationResponseViewModel);
         }
@@ -66,14 +66,14 @@ namespace UnrealEstateApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("reset-password")]
-        public async Task<IActionResult> ResetPassword(ResetPasswordRequestViewModel model)
+        public async Task<IActionResult> ResetPassword(ResetPasswordRequest model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            AuthenticationResponseViewModel resetPasswordResult = await _authenticationService.ResetPassword(model);
+            AuthenticationResponse resetPasswordResult = await _authenticationService.ResetPassword(model);
 
             if (resetPasswordResult.Status.Equals("Success"))
             {

@@ -20,10 +20,6 @@ namespace UnrealEstate.Models.ViewModels.RequestViewModels.RequestModelValidator
 
             RuleFor(x => x.BuiltYear).Must(x => x > 0 && x <= DateTimeOffset.Now.Year)
                 .WithMessage("Build year cannot greater than now ");
-
-            RuleFor(x => x.Beds).Must(x => x > 0);
-
-            RuleFor(x => x.Size).Must(x => x > 0);
         }
     }
 }

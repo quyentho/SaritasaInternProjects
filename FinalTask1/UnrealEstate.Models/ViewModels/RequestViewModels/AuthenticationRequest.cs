@@ -2,7 +2,7 @@
 
 namespace UnrealEstate.Models.ViewModels.RequestViewModels
 {
-    public class AuthenticationRequestViewModel
+    public class AuthenticationRequest
     {
         [EmailAddress]
         [Required(ErrorMessage = "Email is required")]

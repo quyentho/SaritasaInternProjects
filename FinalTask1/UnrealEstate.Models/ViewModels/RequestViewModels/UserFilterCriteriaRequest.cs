@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace UnrealEstate.Models.ViewModels.RequestViewModels
 {
-    public class UserFilterCriteriaRequestViewModel
+    public class UserFilterCriteriaRequest
     {
         [EmailAddress]
         public string Email { get; set; }

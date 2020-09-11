@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace UnrealEstate.Models.ViewModels.RequestViewModels.RequestModelValidators
 {
-    public class BidModelValidator :AbstractValidator<BidRequestViewModel>
+    public class BidModelValidator :AbstractValidator<BidRequest>
     {
         public BidModelValidator()
         {

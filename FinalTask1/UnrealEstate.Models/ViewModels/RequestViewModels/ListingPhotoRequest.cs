@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace UnrealEstate.Models.ViewModels.RequestViewModels
 {
-    public class ListingNoteRequestViewModel
+    public class ListingPhotoRequest
     {
-        public string Text { get; set; }
+        public string PhotoUrl { get; set; }
     }
 }

@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace UnrealEstate.Models.ViewModels.RequestViewModels
 {
-    public class ListingPhotoRequestViewModel
+    public class BidRequest
     {
-        public string PhotoUrl { get; set; }
+        public decimal Price { get; set; }
+
+        public string Comment { get; set; }
     }
 }

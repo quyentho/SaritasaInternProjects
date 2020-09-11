@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace UnrealEstate.Models.ViewModels.RequestViewModels.RequestModelValidators
 {
-    public class ForgotPasswordModelValidator : AbstractValidator<ForgotPasswordRequestViewModel>
+    public class ForgotPasswordModelValidator : AbstractValidator<ForgotPasswordRequest>
     {
         public ForgotPasswordModelValidator()
         {

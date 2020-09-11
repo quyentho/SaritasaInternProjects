@@ -31,7 +31,7 @@ namespace UnrealEstateApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("api/comments")]
-        public async Task<IActionResult> CreateNewComment(CommentRequestViewModel commentViewModel)
+        public async Task<IActionResult> CreateNewComment(CommentRequest commentViewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -63,7 +63,7 @@ namespace UnrealEstateApi.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("api/comments/{commentId}")]
-        public async Task<IActionResult> UpdateComment(int commentId, CommentRequestViewModel commentViewModel)
+        public async Task<IActionResult> UpdateComment(int commentId, CommentRequest commentViewModel)
         {
             if (!ModelState.IsValid)
             {

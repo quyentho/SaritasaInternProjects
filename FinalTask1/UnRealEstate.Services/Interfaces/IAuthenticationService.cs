@@ -13,27 +13,27 @@ namespace UnrealEstate.Services
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        Task<JwtSecurityToken> Login(AuthenticationRequestViewModel model);
+        Task<JwtSecurityToken> Login(AuthenticationRequest model);
 
         /// <summary>
         /// Register new user, save to database.
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        Task<AuthenticationResponseViewModel> Register(AuthenticationRequestViewModel model);
+        Task<AuthenticationResponse> Register(AuthenticationRequest model);
 
         /// <summary>
         /// Send reset password email that contains token.
         /// </summary>
         /// <param name="email"></param>
         /// <returns></returns>
-        Task<AuthenticationResponseViewModel> SendResetPasswordEmail(string email);
+        Task<AuthenticationResponse> SendResetPasswordEmail(string email);
 
         /// <summary>
         /// Verify reset password token and set new password if valid.
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        Task<AuthenticationResponseViewModel> ResetPassword(ResetPasswordRequestViewModel model);
+        Task<AuthenticationResponse> ResetPassword(ResetPasswordRequest model);
     }
 }

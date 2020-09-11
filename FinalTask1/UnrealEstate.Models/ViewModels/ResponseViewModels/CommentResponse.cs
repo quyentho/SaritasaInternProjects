@@ -2,7 +2,7 @@
 
 namespace UnrealEstate.Models.ViewModels.ResponseViewModels
 {
-    public class CommentResponseViewModel
+    public class CommentResponse
     {
         public int Id { get; set; }
         public string Text { get; set; }

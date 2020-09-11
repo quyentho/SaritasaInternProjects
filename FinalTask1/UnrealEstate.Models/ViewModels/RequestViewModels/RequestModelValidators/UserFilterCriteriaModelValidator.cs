@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace UnrealEstate.Models.ViewModels.RequestViewModels.RequestModelValidators
 {
-    public class UserFilterCriteriaModelValidator : AbstractValidator<UserFilterCriteriaRequestViewModel>
+    public class UserFilterCriteriaModelValidator : AbstractValidator<UserFilterCriteriaRequest>
     {
         public UserFilterCriteriaModelValidator()
         {

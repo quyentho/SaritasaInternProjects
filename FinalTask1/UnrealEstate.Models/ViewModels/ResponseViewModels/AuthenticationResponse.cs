@@ -1,6 +1,6 @@
 ﻿namespace UnrealEstate.Models.ViewModels.ResponseViewModels
 {
-    public class AuthenticationResponseViewModel
+    public class AuthenticationResponse
     {
         public string Status { get; set; }
 

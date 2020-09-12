@@ -45,7 +45,6 @@ namespace UnrealEstate.Services
         /// <inheritdoc/>
         public async Task<AuthenticationResponse> Register(AuthenticationRequest model)
         {
-
             var userExists = await _userManager.FindByNameAsync(model.Email);
 
             if (userExists != null)

@@ -40,6 +40,31 @@ namespace UnrealEstate.Services
             return userViewModels;
         }
 
+        public async Task<User> GetUserByEmailAsync(string email)
+        {
+            User user = await _userManager.FindByEmailAsync(email);
+
+            return user;
+        }
+
+        public async Task UpdateUser(User currentUser, UserRequest userViewModel)
+        {
+            var user = await _userManager.FindByEmailAsync(currentUser.Email);
+
+            _mapper.Map(userViewModel, user);
+
+            await _userManager.UpdateAsync(user);
+        }
+
+        public async Task<UserResponse> GetUserByIdAsync(string userId)
+        {
+            User user = await _userManager.FindByIdAsync(userId);
+
+            UserResponse userViewModel = _mapper.Map<UserResponse>(user);
+
+            return userViewModel;
+        }
+
         private List<UserResponse> MapUsersToViewModels(List<User> users)
         {
             return _mapper.Map<List<UserResponse>>(users);
@@ -79,32 +104,6 @@ namespace UnrealEstate.Services
             }
 
             return result.ToList();
-        }
-
-        public async Task<User> GetUserByEmailAsync(string email)
-        {
-            User user = await _userManager.FindByEmailAsync(email);
-
-            return user;
-        }
-
-        public async Task UpdateUser(User currentUser, UserRequest userViewModel)
-        {
-            // Bug: Update fail
-            var user = await _userManager.FindByEmailAsync(currentUser.Email);
-
-            _mapper.Map(userViewModel, user);
-
-            await _userManager.UpdateAsync(user);
-        }
-
-        public async Task<UserResponse> GetUserByIdAsync(string userId)
-        {
-            User user = await _userManager.FindByIdAsync(userId);
-
-            UserResponse userViewModel = _mapper.Map<UserResponse>(user);
-
-            return userViewModel;
         }
     }
 }

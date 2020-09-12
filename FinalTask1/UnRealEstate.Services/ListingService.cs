@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using UnrealEstate.Models;
 using UnrealEstate.Models.Models;
 using UnrealEstate.Models.Repositories;
-using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
 using UnrealEstate.Services.Utils;
@@ -33,11 +32,10 @@ namespace UnrealEstate.Services
         public async Task<bool> AddOrRemoveFavoriteUserAsync(int listingId, string userId)
         {
             Listing listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
+            
             GuardClauses.HasValue(listingFromDb, "listing id"); // null check.
 
-            var favorite = listingFromDb.Favorites.Where(f => f.UserId == userId).FirstOrDefault();
-
-            bool isFavorite = GetFavoriteState(listingId, userId, listingFromDb, favorite);
+            bool isFavorite = GetFavoriteState(listingId, userId, listingFromDb);
 
             await _listingRepository.UpdateListingAsync(listingFromDb);
 
@@ -49,7 +47,7 @@ namespace UnrealEstate.Services
         {
             Listing listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
 
-            await ValidateForAdminAction(currentUser, listingFromDb, (int)Status.Disable);
+            await ValidateAction(currentUser, listingFromDb, (int)Status.Disable);
 
             await Enable(listingFromDb);
         }
@@ -59,12 +57,10 @@ namespace UnrealEstate.Services
         {
             Listing listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
 
-            await ValidateForAdminAction(currentUser, listingFromDb, (int)Status.Active);
+            await ValidateAction(currentUser, listingFromDb, (int)Status.Active);
 
             await Disable(listingFromDb);
         }
-
-
 
         /// <inheritdoc/>
         public async Task<List<ListingResponse>> GetListingsAsync()
@@ -102,53 +98,32 @@ namespace UnrealEstate.Services
         /// <inheritdoc/>
         public async Task CreateListingAsync(ListingRequest listingViewModel, string userId)
         {
-            Listing listing = _mapper.Map<Listing>(listingViewModel);
-            listing.UserId = userId;
-            listing.CurrentHighestBidPrice = listingViewModel.StatingPrice;
-            bool hasPhoto = listingViewModel.ListingPhoTos.Count > 0;
-            
-            if (hasPhoto)
-            {
-                List<ListingPhoto> listingPhotos = await GetUploadedListingPhotos(listingViewModel);
-                
-                listing.ListingPhoTos.AddRange(listingPhotos);
-            }
+            Listing listing = await ProduceListing(listingViewModel, userId);
 
             await _listingRepository.AddListingAsync(listing);
         }
 
-      
-
         /// <inheritdoc/>
         public async Task EditListingAsync(User currentUser, ListingRequest listingViewModel, int listingId)
         {
-            var listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
+            Listing editedListing = await GetEditedListing(currentUser, listingViewModel, listingId);
 
-            await ValidateAdminOrAuthorPermission(currentUser, listingFromDb);
-
-            _mapper.Map(listingViewModel, listingFromDb);
-
-            bool hasPhoto = listingViewModel.ListingPhoTos.Count > 0;
-
-            if (hasPhoto)
-            {
-                List<ListingPhoto> listingPhotos = await GetUploadedListingPhotos(listingViewModel);
-
-                listingFromDb.ListingPhoTos.AddRange(listingPhotos);
-            }
-
-            await _listingRepository.UpdateListingAsync(listingFromDb);
+            await _listingRepository.UpdateListingAsync(editedListing);
         }
 
+        /// <inheritdoc>/>
         public async Task MakeABid(int listingId,User currentUser, BidRequest bidRequestViewModel)
         {
-            var listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
+            Listing listingToBid = await ValidateBidAction(listingId, bidRequestViewModel);
 
-            GuardClauses.HasValue(listingFromDb, "listing id");
+            AddBidOnListing(listingId, currentUser, bidRequestViewModel, listingToBid);
 
-            GuardClauses.BidPriceHigherThanCurrentPrice(bidRequestViewModel.Price, listingFromDb.CurrentHighestBidPrice);
+            await _listingRepository.UpdateListingAsync(listingToBid);
+        }
 
-            listingFromDb.CurrentHighestBidPrice = bidRequestViewModel.Price;
+        private void AddBidOnListing(int listingId, User currentUser, BidRequest bidRequestViewModel, Listing listingToBid)
+        {
+            listingToBid.CurrentHighestBidPrice = bidRequestViewModel.Price;
 
             Bid bid = _mapper.Map<Bid>(bidRequestViewModel);
 
@@ -156,11 +131,18 @@ namespace UnrealEstate.Services
             bid.CreatedAt = DateTimeOffset.Now;
             bid.UserId = currentUser.Id;
 
-            listingFromDb.Bids.Add(bid);
+            listingToBid.Bids.Add(bid);
+        }
 
+        private async Task<Listing> ValidateBidAction(int listingId, BidRequest bidRequestViewModel)
+        {
+            var listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
 
+            GuardClauses.HasValue(listingFromDb, "listing id");
 
-            await _listingRepository.UpdateListingAsync(listingFromDb);
+            GuardClauses.BidPriceHigherThanCurrentPrice(bidRequestViewModel.Price, listingFromDb.CurrentHighestBidPrice);
+            
+            return listingFromDb;
         }
 
         private async Task Disable(Listing listingFromDb)
@@ -168,15 +150,6 @@ namespace UnrealEstate.Services
             listingFromDb.StatusId = (int)Status.Disable;
 
             await _listingRepository.UpdateListingAsync(listingFromDb);
-        }
-
-        private async Task ValidateAdminOrAuthorPermission(User currentUser, Listing listingFromDb)
-        {
-            IList<string> userRole = await GetUserRole(currentUser);
-
-            GuardClauses.HasValue(listingFromDb, "listing");
-
-            GuardClauses.IsAuthorOrAdmin(currentUser.Id, listingFromDb.UserId, userRole.First());
         }
 
         private async Task<IList<string>> GetUserRole(User currentUser)
@@ -222,8 +195,11 @@ namespace UnrealEstate.Services
             return filterConditions;
         }
 
-        private static bool GetFavoriteState(int listingId, string userId, Listing listingFromDb, Favorite favorite)
+        private static bool GetFavoriteState(int listingId, string userId, Listing listingFromDb)
         {
+
+            var favorite = listingFromDb.Favorites.Where(f => f.UserId == userId).FirstOrDefault();
+
             bool isFavorite;
             if (favorite is null)
             {
@@ -246,7 +222,7 @@ namespace UnrealEstate.Services
             await _listingRepository.UpdateListingAsync(listingFromDb);
         }
 
-        private async Task ValidateForAdminAction(User currentUser, Listing listingFromDb, int statusId)
+        private async Task ValidateAction(User currentUser, Listing listingFromDb, int statusId)
         {
             IList<string> userRole = await GetUserRole(currentUser);
 
@@ -262,15 +238,21 @@ namespace UnrealEstate.Services
 
         private static List<Listing> GetFilteredListings(ListingFilterCriteriaRequest filterCriteria, List<Listing> listings)
         {
-            ExpressionStarter<Listing> filterConditions = BuildConditions(filterCriteria);
-
-            IQueryable<Listing> result = listings.Where(filterConditions).AsQueryable();
+            IQueryable<Listing> result = filterByConditions(filterCriteria, listings);
 
             result = result.FilterByRange((int?)filterCriteria.Offset, (int?)filterCriteria.Limit);
 
             result = result.SortBy(filterCriteria.OrderBy);
 
             return result.ToList();
+        }
+
+        private static IQueryable<Listing> filterByConditions(ListingFilterCriteriaRequest filterCriteria, List<Listing> listings)
+        {
+            ExpressionStarter<Listing> filterConditions = BuildConditions(filterCriteria);
+
+            IQueryable<Listing> result = listings.Where(filterConditions).AsQueryable();
+            return result;
         }
 
         private static async Task<List<ListingPhoto>> GetUploadedListingPhotos(ListingRequest listingViewModel)
@@ -294,6 +276,55 @@ namespace UnrealEstate.Services
             }
 
             return listingPhotos;
+        }
+
+        private async Task<Listing> ProduceListing(ListingRequest listingViewModel, string userId)
+        {
+            Listing listing = _mapper.Map<Listing>(listingViewModel);
+
+            listing.UserId = userId;
+            listing.CurrentHighestBidPrice = listingViewModel.StatingPrice;
+
+            await AddUploadedPhotosIfExist(listingViewModel, listing);
+
+            return listing;
+        }
+
+        private static async Task AddUploadedPhotosIfExist(ListingRequest listingViewModel, Listing listing)
+        {
+            bool hasPhoto = listingViewModel.ListingPhoTos.Count > 0;
+
+            if (hasPhoto)
+            {
+                List<ListingPhoto> listingPhotos = await GetUploadedListingPhotos(listingViewModel);
+
+                listing.ListingPhoTos.AddRange(listingPhotos);
+            }
+        }
+
+
+        private async Task<Listing> GetEditedListing(User currentUser, ListingRequest listingViewModel, int listingId)
+        {
+            Listing listing = await ValidateEditAction(currentUser, listingId);
+
+            _mapper.Map(listingViewModel, listing);
+
+            await AddUploadedPhotosIfExist(listingViewModel, listing);
+
+            return listing;
+        }
+
+        private async Task<Listing> ValidateEditAction(User currentUser, int listingId)
+        {
+            var listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
+
+            IList<string> userRole = await GetUserRole(currentUser);
+
+            GuardClauses.HasValue(listingFromDb, "listing");
+
+            GuardClauses.IsAuthorOrAdmin(currentUser.Id, listingFromDb.UserId, userRole.First());
+
+            return listingFromDb;
         }
     }
 }

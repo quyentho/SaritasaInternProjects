@@ -68,6 +68,14 @@ namespace UnrealEstate.Services
         /// </summary>
         /// <returns>list of listings.</returns>
         Task<List<ListingResponse>> GetListingsAsync();
+
+        /// <summary>
+        /// Biding on specified listing.
+        /// </summary>
+        /// <param name="listingId">listing id.</param>
+        /// <param name="currentUser">current logged in user.</param>
+        /// <param name="bidRequestViewModel">bid model.</param>
+        /// <returns>A task represent biding action.</returns>
         Task MakeABid(int listingId, User currentUser, BidRequest bidRequestViewModel);
     }
 }

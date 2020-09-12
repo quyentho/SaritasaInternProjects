@@ -31,15 +31,21 @@ namespace UnrealEstate.Services
         /// <inheritdoc/>
         public async Task<bool> AddOrRemoveFavoriteUserAsync(int listingId, string userId)
         {
-            Listing listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
-            
-            GuardClauses.HasValue(listingFromDb, "listing id"); // null check.
+            Listing listing = await ValidateFavoriteAction(listingId);
 
-            bool isFavorite = GetFavoriteState(listingId, userId, listingFromDb);
+            bool isFavorite = GetFavoriteState(listingId, userId, listing);
 
-            await _listingRepository.UpdateListingAsync(listingFromDb);
+            await _listingRepository.UpdateListingAsync(listing);
 
             return isFavorite;
+        }
+
+        private async Task<Listing> ValidateFavoriteAction(int listingId)
+        {
+            Listing listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
+
+            GuardClauses.HasValue(listingFromDb, "listing id"); // null check.
+            return listingFromDb;
         }
 
         /// <inheritdoc/>

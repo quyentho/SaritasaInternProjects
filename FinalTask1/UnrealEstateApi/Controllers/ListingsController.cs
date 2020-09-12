@@ -44,7 +44,7 @@ namespace UnrealEstateApi.Controllers
                 return BadRequest();
             }
 
-            return await _listingService.GetActiveListingWithFilterAsync(filterCriteria);
+            return await _listingService.GetActiveListingsWithFilterAsync(filterCriteria);
         }
 
         /// <summary>

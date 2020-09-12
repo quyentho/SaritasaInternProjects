@@ -54,7 +54,7 @@ namespace UnrealEstate.Services
         /// </summary>
         /// <param name="filterCriteria"></param>
         /// <returns></returns>
-        Task<List<ListingResponse>> GetActiveListingWithFilterAsync(ListingFilterCriteriaRequest filterCriteria);
+        Task<List<ListingResponse>> GetActiveListingsWithFilterAsync(ListingFilterCriteriaRequest filterCriteria);
 
         /// <summary>
         /// Gets listing by id.

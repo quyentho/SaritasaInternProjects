@@ -40,13 +40,7 @@ namespace UnrealEstate.Services
             return isFavorite;
         }
 
-        private async Task<Listing> ValidateFavoriteAction(int listingId)
-        {
-            Listing listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
-
-            GuardClauses.HasValue(listingFromDb, "listing id"); // null check.
-            return listingFromDb;
-        }
+      
 
         /// <inheritdoc/>
         public async Task EnableListingAsync(User currentUser, int listingId)
@@ -89,7 +83,7 @@ namespace UnrealEstate.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<ListingResponse>> GetActiveListingWithFilterAsync(ListingFilterCriteriaRequest filterCriteria)
+        public async Task<List<ListingResponse>> GetActiveListingsWithFilterAsync(ListingFilterCriteriaRequest filterCriteria)
         {
 
             List<Listing> listings = await _listingRepository.GetListingsAsync();
@@ -228,13 +222,13 @@ namespace UnrealEstate.Services
             await _listingRepository.UpdateListingAsync(listingFromDb);
         }
 
-        private async Task ValidateAction(User currentUser, Listing listingFromDb, int statusId)
+        private async Task ValidateAction(User currentUser, Listing listingFromDb, int validStatusId)
         {
             IList<string> userRole = await GetUserRole(currentUser);
 
             GuardClauses.HasValue(listingFromDb, "listing id");
             GuardClauses.IsAdmin(userRole.First());
-            GuardClauses.IsValidStatus(listingFromDb.StatusId, statusId);
+            GuardClauses.IsValidStatus(listingFromDb.StatusId, validStatusId);
         }
 
         private List<ListingResponse> MapListingsToViewModels(List<Listing> listings)
@@ -329,6 +323,15 @@ namespace UnrealEstate.Services
             GuardClauses.HasValue(listingFromDb, "listing");
 
             GuardClauses.IsAuthorOrAdmin(currentUser.Id, listingFromDb.UserId, userRole.First());
+
+            return listingFromDb;
+        }
+
+        private async Task<Listing> ValidateFavoriteAction(int listingId)
+        {
+            Listing listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
+
+            GuardClauses.HasValue(listingFromDb, "listing id");
 
             return listingFromDb;
         }

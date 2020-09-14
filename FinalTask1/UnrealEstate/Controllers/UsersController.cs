@@ -3,15 +3,18 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
 using UnrealEstate.Services;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace UnrealEstate.Controllers
 {
     public class UsersController : Controller
     {
         private readonly IAuthenticationService _authenticationService;
+        
         public UsersController(IAuthenticationService authenticationService)
         {
             _authenticationService = authenticationService;
@@ -24,25 +27,31 @@ namespace UnrealEstate.Controllers
         }
 
         /// <summary>
-        /// Login, return JWT token if success authenticate user.
+        /// GetJwtLoginToken, return JWT token if success authenticate user.
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody] AuthenticationRequest model)
+        public async Task<IActionResult> Login( AuthenticationRequest model)
         {
-            JwtSecurityToken token = await _authenticationService.Login(model);
-            if (token is null)
+            SignInResult result = await _authenticationService.LoginAsync(model);
+            
+            if (result.Succeeded)
             {
-                return BadRequest("Wrong email and password.");
+                return RedirectToAction("Index", "Home");
             }
 
-            return Ok(new
-            {
-                token = new JwtSecurityTokenHandler().WriteToken(token),
-                expiration = token.ValidTo
-            });
+            return View();
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await _authenticationService.LogoutAsync();
+
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]

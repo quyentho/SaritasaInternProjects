@@ -67,7 +67,7 @@ namespace UnrealEstate
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
 
-                options.LoginPath = "/Identity/Account/Login";
+                options.LoginPath = "/Identity/Account/GetJwtLoginToken";
                 options.AccessDeniedPath = "/Identity/Account/AccessDenied";
                 options.SlidingExpiration = true;
             });
@@ -82,6 +82,8 @@ namespace UnrealEstate
             services.AddTransient<EmailConfiguration>();
 
             services.AddAutoMapper(Assembly.GetAssembly(typeof(AutoMapperProfile)));
+
+            services.AddAuthorization();
 
             services.AddControllersWithViews()
                   .AddFluentValidation(fv =>

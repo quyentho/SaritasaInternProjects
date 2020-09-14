@@ -19,7 +19,7 @@ namespace UnrealEstateApi.Controllers
         }
 
         /// <summary>
-        /// Login, return JWT token if success authenticate user.
+        /// GetJwtLoginToken, return JWT token if success authenticate user.
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -27,7 +27,7 @@ namespace UnrealEstateApi.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] AuthenticationRequest model)
         {
-            JwtSecurityToken token = await _authenticationService.Login(model);
+            JwtSecurityToken token = await _authenticationService.GetJwtLoginToken(model);
             if (token is null)
             {
                 return BadRequest("Wrong email and password.");

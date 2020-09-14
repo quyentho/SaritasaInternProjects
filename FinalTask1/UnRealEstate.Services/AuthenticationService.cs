@@ -20,19 +20,50 @@ namespace UnrealEstate.Services
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
         private readonly IEmailSenderService _emailSender;
-        public AuthenticationService(UserManager<User> userManager, IConfiguration configuration, IEmailSenderService emailSender)
+        private readonly SignInManager<User> _signInManager;
+        public AuthenticationService(
+            UserManager<User> userManager,
+            IConfiguration configuration,
+            IEmailSenderService emailSender,
+            SignInManager<User> signInManager)
         {
             _userManager = userManager;
             _configuration = configuration;
             _emailSender = emailSender;
+            _signInManager = signInManager;
+        }
+
+        /// <summary>
+        /// Sign out.
+        /// </summary>
+        /// <returns></returns>
+        public async Task LogoutAsync()
+        {
+            await _signInManager.SignOutAsync();
+        }
+
+        /// <inheritdoc />
+        public async Task<SignInResult> LoginAsync(AuthenticationRequest authenticationRequest)
+        {
+            var user = await _userManager.FindByEmailAsync(authenticationRequest.Email);
+
+            if (user != null)
+            {
+                SignInResult result = await
+                     _signInManager.PasswordSignInAsync(user, authenticationRequest.Password, false, false);
+
+                return result;
+            }
+
+            return SignInResult.Failed;
         }
 
         /// <inheritdoc/>
-        public async Task<JwtSecurityToken> Login(AuthenticationRequest model)
+        public async Task<JwtSecurityToken> GetJwtLoginToken(AuthenticationRequest authenticationRequest)
         {
-            var user = await _userManager.FindByEmailAsync(model.Email);
+            var user = await _userManager.FindByEmailAsync(authenticationRequest.Email);
 
-            if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
+            if (user != null && await _userManager.CheckPasswordAsync(user, authenticationRequest.Password))
             {
                 JwtSecurityToken token = await CreateToken(user);
 
@@ -89,7 +120,7 @@ namespace UnrealEstate.Services
                 return new AuthenticationResponse() { Status = "Success", Message = "Password reset successfully" };
             }
 
-            return new AuthenticationResponse() { Status = "Fail", Message = result.Errors.Select(e=>e.Description).Aggregate((message, next)=> message + next) };
+            return new AuthenticationResponse() { Status = "Fail", Message = result.Errors.Select(e => e.Description).Aggregate((message, next) => message + next) };
 
         }
 

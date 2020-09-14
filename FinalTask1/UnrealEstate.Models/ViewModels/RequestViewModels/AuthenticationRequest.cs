@@ -8,18 +8,10 @@ namespace UnrealEstate.Models.ViewModels.RequestViewModels
         [EmailAddress]
         public string Email { get; set; }
 
+        [DataType(DataType.Password)]
         public string Password { get; set; }
 
+        [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
-
-        public string FirstName { get; set; }
-
-        public string LastName { get; set; }
-
-        public DateTimeOffset BirthDay { get; set; }
-
-        public string PhoneNumber { get; set; }
-
-
     }
 }

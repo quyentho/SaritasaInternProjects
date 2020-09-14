@@ -1,19 +1,20 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using UnrealEstate.Models;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
 
 namespace UnrealEstate.Services
 {
-    public interface IAuthenticationService
+    public interface IAuthenticationService 
     {
         /// <summary>
         /// Authenticate user and give back jwt token if success login.
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="authenticationRequest"></param>
         /// <returns></returns>
-        Task<JwtSecurityToken> Login(AuthenticationRequest model);
+        Task<JwtSecurityToken> GetJwtLoginToken(AuthenticationRequest authenticationRequest);
 
         /// <summary>
         /// Register new user, save to database.
@@ -35,5 +36,14 @@ namespace UnrealEstate.Services
         /// <param name="model"></param>
         /// <returns></returns>
         Task<AuthenticationResponse> ResetPassword(ResetPasswordRequest model);
+        
+        /// <summary>
+        /// Login by email and password by sign in manager.
+        /// </summary>
+        /// <param name="authenticationRequest">Request Model contains email and password.</param>
+        /// <returns>Sign in result.</returns>
+        Task<SignInResult> LoginAsync(AuthenticationRequest authenticationRequest);
+
+        Task LogoutAsync();
     }
 }

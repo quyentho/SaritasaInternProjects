@@ -73,19 +73,12 @@ namespace UnrealEstate.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(AuthenticationRequest model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return BadRequest();
+                AuthenticationResponse response = await _authenticationService.Register(model);
             }
 
-            AuthenticationResponse response = await _authenticationService.Register(model);
-
-            if (response.Status.Equals("Error"))
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, response);
-            }
-
-            return Ok(response);
+            return RedirectToAction("Index", "Home");
         }
 
         /// <summary>

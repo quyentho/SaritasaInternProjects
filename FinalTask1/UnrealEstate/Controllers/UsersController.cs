@@ -35,12 +35,16 @@ namespace UnrealEstate.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login( AuthenticationRequest model)
         {
-            SignInResult result = await _authenticationService.LoginAsync(model);
-            
-            if (result.Succeeded)
+            if (ModelState.IsValid)
             {
-                return RedirectToAction("Index", "Home");
+                SignInResult result = await _authenticationService.LoginAsync(model);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
+            
 
             return View();
 

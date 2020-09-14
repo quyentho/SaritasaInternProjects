@@ -17,13 +17,19 @@ namespace UnrealEstate.Controllers
             _authenticationService = authenticationService;
         }
 
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
         /// <summary>
         /// Login, return JWT token if success authenticate user.
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] AuthenticationRequest model)
         {
             JwtSecurityToken token = await _authenticationService.Login(model);

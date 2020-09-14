@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
@@ -15,6 +16,7 @@ using UnrealEstate.Models;
 using UnrealEstate.Models.MappingConfig;
 using UnrealEstate.Models.ModelConfigs;
 using UnrealEstate.Models.Repositories;
+using UnrealEstate.Models.ViewModels.RequestViewModels.RequestModelValidators;
 using UnrealEstate.Services;
 using UnrealEstate.Services.EmailService;
 
@@ -81,7 +83,12 @@ namespace UnrealEstate
 
             services.AddAutoMapper(Assembly.GetAssembly(typeof(AutoMapperProfile)));
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                  .AddFluentValidation(fv =>
+                {
+                    fv.RegisterValidatorsFromAssembly(Assembly.GetAssembly(typeof(AuthenticationModelValidator)));
+                    fv.ImplicitlyValidateChildProperties = true;
+                });
             services.AddRazorPages();
         }
 

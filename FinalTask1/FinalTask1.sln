@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnrealEstate.Models", "Unre
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnrealEstateApi", "UnrealEstateApi\UnrealEstateApi.csproj", "{0EDD117C-4D68-4295-BC31-484AB96024B2}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnrealEstate", "UnrealEstate\UnrealEstate.csproj", "{81FDF959-7094-4258-9A8A-D3C0DE5042DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{0EDD117C-4D68-4295-BC31-484AB96024B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EDD117C-4D68-4295-BC31-484AB96024B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0EDD117C-4D68-4295-BC31-484AB96024B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81FDF959-7094-4258-9A8A-D3C0DE5042DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81FDF959-7094-4258-9A8A-D3C0DE5042DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81FDF959-7094-4258-9A8A-D3C0DE5042DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81FDF959-7094-4258-9A8A-D3C0DE5042DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

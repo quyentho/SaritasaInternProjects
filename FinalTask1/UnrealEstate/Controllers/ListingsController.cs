@@ -20,13 +20,32 @@ namespace UnrealEstate.Controllers
         {
             if (ModelState.IsValid)
             {
+
+                SetPaging(filterCriteria);
+
                 List<ListingResponse> listingResponses =
                     await _listingService.GetActiveListingsWithFilterAsync(filterCriteria);
+
+
+                ViewData["Criteria"] = filterCriteria;
 
                 return View(listingResponses);
             }
 
             return View(null);
+        }
+
+        private static void SetPaging(ListingFilterCriteriaRequest filterCriteria)
+        {
+            if (filterCriteria.Offset is null)
+            {
+                filterCriteria.Offset = 0;
+                filterCriteria.Limit = 3;
+            }
+            else
+            {
+                filterCriteria.Offset += 3;
+            }
         }
     }
 }

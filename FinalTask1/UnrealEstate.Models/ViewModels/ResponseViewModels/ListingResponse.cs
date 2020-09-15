@@ -24,7 +24,7 @@ namespace UnrealEstate.Models.ViewModels.ResponseViewModels
 
         public double Size { get; set; }
 
-        public decimal CurrentHigestBidPrice { get; set; }
+        public decimal CurrentHighestBidPrice { get; set; }
 
         public decimal StatingPrice { get; set; }
 

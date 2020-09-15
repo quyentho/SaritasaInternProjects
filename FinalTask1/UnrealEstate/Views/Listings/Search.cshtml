@@ -1,3 +1,49 @@
-﻿@model List<UnrealEstate.Models.ViewModels.ResponseViewModels.ListingResponse>
+﻿@using UnrealEstate.Models.ViewModels.RequestViewModels
+@model List<UnrealEstate.Models.ViewModels.ResponseViewModels.ListingResponse>
 
 <partial name="_SearchBar"/>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col">Author email</th>
+        <th scope="col">Zip</th>
+        <th scope="col">City</th>
+        <th scope="col">Address line 1</th>
+        <th scope="col">Address line 2</th>
+        <th scope="col">Build year</th>
+        <th scope="col">Beds</th>
+        <th scope="col">Size</th>
+        <th scope="col">Current highest bid price</th>
+        <th scope="col">Starting price</th>
+        <th scope="col">Due date</th>
+        <th scope="col">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @item.UserEmail
+            </td>
+            <td>
+                @item.Zip
+            </td>
+            <td>
+                @item.City
+            </td>
+            <td>@item.AddressLine1</td>
+            <td>@item.AddressLine2</td>
+            <td>@item.BuiltYear</td>
+            <td>@item.Beds</td>
+            <td>@item.Size</td>
+            <td>@item.CurrentHighestBidPrice</td>
+            <td>@item.StatingPrice</td>
+            <td>@item.DueDate</td>
+            <td>@item.Description</td>
+        </tr>
+    }
+    </tbody>
+</table>
+@Html.ActionLink("Next page","Search", (ListingFilterCriteriaRequest)ViewData["criteria"])

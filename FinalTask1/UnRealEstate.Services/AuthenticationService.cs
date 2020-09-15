@@ -143,10 +143,12 @@ namespace UnrealEstate.Services
         {
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-            var bodyBuilder = new BodyBuilder();
-            bodyBuilder.TextBody =
-                $"Your token is: {token}\nPlease use this end point to reset your password 'api/auth/reset-password' ";
-            bodyBuilder.HtmlBody = "<a href='http://unrealestate.com/users/forgotpassword'>this link</a>";
+            var bodyBuilder = new BodyBuilder
+            {
+                TextBody =
+                    $"Your token is: {token}\nPlease use this end point to reset your password 'api/auth/reset-password' ",
+                HtmlBody = "<a href='http://unrealestate.com/users/forgotpassword'>this link</a>"
+            };
 
             Message resetPasswordMessage = new Message(new string[] { user.Email }
             , "Reset password token", bodyBuilder.ToMessageBody().ToString());

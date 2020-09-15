@@ -91,47 +91,53 @@ namespace UnrealEstate.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
         /// <summary>
         /// Send email contains token to restore password.
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("forgot-password")]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return BadRequest();
+                AuthenticationResponse authenticationResponseViewModel = await _authenticationService.SendResetPasswordEmail(model.Email);
+                
+                return View(authenticationResponseViewModel);
             }
-
-            AuthenticationResponse authenticationResponseViewModel = await _authenticationService.SendResetPasswordEmail(model.Email);
-
-            return Ok(authenticationResponseViewModel);
+            ModelState.AddModelError("", "Invalid operation");
+            return View();
         }
 
+        [HttpGet]
+        public IActionResult ResetPassword()
+        {
+            return View();
+        }
         /// <summary>
         /// Verify the reset password token and set new password.
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("reset-password")]
         public async Task<IActionResult> ResetPassword(ResetPasswordRequest model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return BadRequest();
+                AuthenticationResponse authenticationResponseViewModel = await _authenticationService.ResetPassword(model);
+
+                return View(authenticationResponseViewModel);
             }
 
-            AuthenticationResponse resetPasswordResult = await _authenticationService.ResetPassword(model);
+            ModelState.AddModelError("", "Invalid operation");
 
-            if (resetPasswordResult.Status.Equals("Success"))
-            {
-                return Ok(resetPasswordResult.Message);
-            }
-
-            return BadRequest(resetPasswordResult.Message);
+            return View();
         }
     }
 }

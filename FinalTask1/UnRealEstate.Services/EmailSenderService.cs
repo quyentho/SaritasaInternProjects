@@ -34,11 +34,6 @@ namespace UnrealEstate.Services.EmailService
 
                     await client.SendAsync(emailMessage);
                 }
-                catch (Exception)
-                {
-
-                    throw;
-                }
                 finally
                 {
                     await client.DisconnectAsync(true);

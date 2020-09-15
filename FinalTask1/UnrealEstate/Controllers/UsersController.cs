@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
 using UnrealEstate.Services;
@@ -14,7 +15,7 @@ namespace UnrealEstate.Controllers
     public class UsersController : Controller
     {
         private readonly IAuthenticationService _authenticationService;
-        
+
         public UsersController(IAuthenticationService authenticationService)
         {
             _authenticationService = authenticationService;
@@ -33,7 +34,7 @@ namespace UnrealEstate.Controllers
         /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Login( AuthenticationRequest model)
+        public async Task<IActionResult> Login(AuthenticationRequest model)
         {
             if (ModelState.IsValid)
             {
@@ -44,7 +45,8 @@ namespace UnrealEstate.Controllers
                     return RedirectToAction("Index", "Home");
                 }
             }
-            
+
+            ModelState.AddModelError("", "Invalid login attempt");
 
             return View();
 
@@ -76,9 +78,17 @@ namespace UnrealEstate.Controllers
             if (ModelState.IsValid)
             {
                 AuthenticationResponse response = await _authenticationService.Register(model);
+                if (response.Status.Equals("Success"))
+                {
+                    await this.Login(model);
+
+                    return RedirectToAction("Index", "Home");
+                }
             }
 
-            return RedirectToAction("Index", "Home");
+            ModelState.AddModelError("", "Invalid register attempt");
+
+            return View();
         }
 
         /// <summary>

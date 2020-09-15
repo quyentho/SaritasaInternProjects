@@ -81,6 +81,10 @@ namespace UnrealEstate
             services.AddTransient<IEmailSenderService, EmailSenderService>();
             services.AddTransient<EmailConfiguration>();
 
+            var emailConfig = Configuration.GetSection("EmailConfiguration")
+                .Get<EmailConfiguration>();
+            services.AddSingleton(emailConfig);
+
             services.AddAutoMapper(Assembly.GetAssembly(typeof(AutoMapperProfile)));
 
             services.AddAuthorization();
@@ -88,7 +92,7 @@ namespace UnrealEstate
             services.AddControllersWithViews()
                   .AddFluentValidation(fv =>
                 {
-                    fv.RegisterValidatorsFromAssembly(Assembly.GetAssembly(typeof(AuthenticationModelValidator)));
+                    fv.RegisterValidatorsFromAssembly(Assembly.GetAssembly(typeof(ListingModelValidator)));
                     fv.ImplicitlyValidateChildProperties = true;
                 });
             services.AddRazorPages();

@@ -90,7 +90,7 @@ namespace UnrealEstateApi
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
                 .AddFluentValidation(fv => 
                 { 
-                    fv.RegisterValidatorsFromAssembly(Assembly.GetAssembly(typeof(AuthenticationModelValidator)));
+                    fv.RegisterValidatorsFromAssembly(Assembly.GetAssembly(typeof(ListingModelValidator)));
                     fv.ImplicitlyValidateChildProperties = true;
                 });
 

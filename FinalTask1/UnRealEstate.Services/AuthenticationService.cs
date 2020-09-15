@@ -8,6 +8,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using MimeKit;
 using UnrealEstate.Models;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
@@ -50,8 +51,7 @@ namespace UnrealEstate.Services
             if (user != null)
             {
                 SignInResult result = await
-                     _signInManager.PasswordSignInAsync(user, authenticationRequest.Password, false, false);
-
+                    _signInManager.PasswordSignInAsync(user, authenticationRequest.Password, false, false);
                 return result;
             }
 
@@ -143,8 +143,13 @@ namespace UnrealEstate.Services
         {
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
+            var bodyBuilder = new BodyBuilder();
+            bodyBuilder.TextBody =
+                $"Your token is: {token}\nPlease use this end point to reset your password 'api/auth/reset-password' ";
+            bodyBuilder.HtmlBody = "<a href='http://unrealestate.com/users/forgotpassword'>this link</a>";
+
             Message resetPasswordMessage = new Message(new string[] { user.Email }
-            , "Reset password token", $"Your token is: {token}\nPlease use this end point to reset your password 'api/auth/reset-password'");
+            , "Reset password token", bodyBuilder.ToMessageBody().ToString());
 
             await _emailSender.SendEmailAsync(resetPasswordMessage);
         }

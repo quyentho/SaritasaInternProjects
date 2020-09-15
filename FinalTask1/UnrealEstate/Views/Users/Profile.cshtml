@@ -1,0 +1,26 @@
+﻿@model UnrealEstate.Models.ViewModels.UserResponse
+<form asp-controller="Users" asp-action="Profile" method="post">
+    <div class="form-group col-md-4">
+        <label>Email</label>
+        <input type="email" asp-for="Email" name="Email" class="form-control" placeholder="Email">
+    </div>
+    <div class="form-group col-md-4">
+        <label>First name</label>
+        <input asp-for="FirstName" name="FirstName" class="form-control" placeholder="First name">
+    </div>
+    <div class="form-group col-md-4">
+        <label>Last name</label>
+        <input asp-for="LastName" name="LastName" class="form-control" placeholder="Last name">
+    </div>
+    <div class="form-group col-md-4">
+        <label>Birth day</label>
+        <input asp-for="BirthDay" name="BirthDay" class="form-control" placeholder="Birth day">
+    </div>
+    <div class="form-group col-md-4">
+        <label>Phone number</label>
+        <input asp-for="PhoneNumber" name="PhoneNumber" class="form-control" placeholder="Phone number">
+    </div>
+    <div class="form-group col-md-4">
+        <input type="submit" class="form-control btn btn-success" />
+    </div>
+</form>

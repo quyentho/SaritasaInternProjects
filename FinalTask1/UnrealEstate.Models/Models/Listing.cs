@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnrealEstate.Models.Models;
 
-namespace UnrealEstate.Models
+namespace UnrealEstate.Models.Models
 {
     public class Listing
     {

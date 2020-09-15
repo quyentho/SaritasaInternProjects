@@ -238,7 +238,7 @@ namespace UnrealEstate.Services
 
         private static List<Listing> GetFilteredListings(ListingFilterCriteriaRequest filterCriteria, List<Listing> listings)
         {
-            IQueryable<Listing> result = filterByConditions(filterCriteria, listings);
+            IQueryable<Listing> result = FilterByConditions(filterCriteria, listings);
 
             result = result.FilterByRange((int?)filterCriteria.Offset, (int?)filterCriteria.Limit);
 
@@ -247,7 +247,7 @@ namespace UnrealEstate.Services
             return result.ToList();
         }
 
-        private static IQueryable<Listing> filterByConditions(ListingFilterCriteriaRequest filterCriteria, List<Listing> listings)
+        private static IQueryable<Listing> FilterByConditions(ListingFilterCriteriaRequest filterCriteria, List<Listing> listings)
         {
             ExpressionStarter<Listing> filterConditions = BuildConditions(filterCriteria);
 
@@ -264,7 +264,7 @@ namespace UnrealEstate.Services
                 {
                     string path = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", Path.GetRandomFileName());
 
-                    path.Replace(Path.GetExtension(path), Path.GetExtension(formFile.FileName));
+                    path = path.Replace(Path.GetExtension(path), Path.GetExtension(formFile.FileName));
 
                     listingPhotos.Add(new ListingPhoto { PhotoUrl = path});
 

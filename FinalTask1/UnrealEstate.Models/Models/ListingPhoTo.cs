@@ -1,4 +1,6 @@
-﻿namespace UnrealEstate.Models
+﻿using UnrealEstate.Models.Models;
+
+namespace UnrealEstate.Models
 {
     public class ListingPhoto
     {

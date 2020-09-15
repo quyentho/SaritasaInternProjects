@@ -1,4 +1,5 @@
 ﻿using System;
+using UnrealEstate.Models.Models;
 
 namespace UnrealEstate.Models
 {

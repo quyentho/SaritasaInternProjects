@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnrealEstate.Models.Models;
 
 namespace UnrealEstate.Models
 {

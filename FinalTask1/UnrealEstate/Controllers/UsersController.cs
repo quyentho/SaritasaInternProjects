@@ -143,6 +143,8 @@ namespace UnrealEstate.Controllers
                 var user = await _userService.GetUserByEmailAsync(email);
 
                 await _userService.UpdateUser(user, userUpdatedUserRequest);
+
+
             }
 
             var userResponse = await GetCurrentUserViewModel();

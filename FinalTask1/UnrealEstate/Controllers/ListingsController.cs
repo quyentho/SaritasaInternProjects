@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Mvc;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
@@ -10,9 +11,34 @@ namespace UnrealEstate.Controllers
     public class ListingsController : Controller
     {
         private readonly IListingService _listingService;
+
         public ListingsController(IListingService listingService)
         {
             _listingService = listingService;
+        }
+
+        [HttpGet]
+        public IActionResult Detail(int? id)
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(ListingRequest listingRequest)
+        {
+            if (ModelState.IsValid)
+            {
+                var userId = HttpContext.User.Identity.GetUserId();
+                await _listingService.CreateListingAsync(listingRequest, userId);
+            }
+
+            return View();
         }
 
         [HttpGet]

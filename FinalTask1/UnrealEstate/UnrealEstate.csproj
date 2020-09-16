@@ -25,4 +25,8 @@
       <ProjectReference Include="..\UnRealEstate.Services\UnrealEstate.Services.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Uploads\" />
+    </ItemGroup>
+
 </Project>

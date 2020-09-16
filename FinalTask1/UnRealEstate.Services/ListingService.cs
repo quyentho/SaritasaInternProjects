@@ -284,6 +284,7 @@ namespace UnrealEstate.Services
 
             listing.UserId = userId;
             listing.CurrentHighestBidPrice = listingViewModel.StatingPrice;
+            listing.StatusId = (int) Status.Active;
 
             await AddUploadedPhotosIfExist(listingViewModel, listing);
 

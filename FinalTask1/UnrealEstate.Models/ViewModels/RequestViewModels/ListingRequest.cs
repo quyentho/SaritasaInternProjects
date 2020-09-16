@@ -27,10 +27,16 @@ namespace UnrealEstate.Models.ViewModels.RequestViewModels
         [Required]
         public DateTimeOffset DueDate { get; set; }
 
-        public string? Description { get; set; }
+        public string Description { get; set; }
 
         public List<IFormFile> ListingPhoTos { get; set; }
 
         public List<ListingNoteRequest> ListingNotes { get; set; }
+
+        public ListingRequest()
+        {
+            ListingPhoTos = new List<IFormFile>();
+            ListingNotes = new List<ListingNoteRequest>();
+        }
     }
 }

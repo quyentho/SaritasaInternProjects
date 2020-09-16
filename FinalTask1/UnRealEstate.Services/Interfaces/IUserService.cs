@@ -27,7 +27,7 @@ namespace UnrealEstate.Services
         /// </summary>
         /// <param name="filterCriteria"></param>
         /// <returns></returns>
-        Task<List<UserResponse>> GetUsersWithFilterAsync(UserFilterCriteriaRequest filterCriteria);
+        Task<List<UserResponse>> GetActiveUsersWithFilterAsync(UserFilterCriteriaRequest filterCriteria);
 
         /// <summary>
         /// Update current user's info.
@@ -36,5 +36,7 @@ namespace UnrealEstate.Services
         /// <param name="userViewModel"></param>
         /// <returns></returns>
         Task UpdateUser(User currentUser, UserRequest userViewModel);
+
+        Task SetUserStatusAsync(string email);
     }
 }

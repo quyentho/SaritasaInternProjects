@@ -37,7 +37,7 @@ namespace UnrealEstateApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUsers([FromQuery]UserFilterCriteriaRequest userFilterCriteria)
         {
-            List<UserResponse> userViewModels = await _userService.GetUsersWithFilterAsync(userFilterCriteria);
+            List<UserResponse> userViewModels = await _userService.GetActiveUsersWithFilterAsync(userFilterCriteria);
 
             return Ok(userViewModels);
         }

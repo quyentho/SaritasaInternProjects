@@ -13,7 +13,7 @@ namespace UnrealEstate.Models
 
         public DateTimeOffset BirthDay { get; set; }
 
-        public bool Status { get; set; }
+        public bool IsActive { get; set; }
 
         public List<Listing> Listings { get; set; }
 

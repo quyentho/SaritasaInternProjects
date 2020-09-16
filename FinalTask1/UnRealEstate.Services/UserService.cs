@@ -23,7 +23,7 @@ namespace UnrealEstate.Services
             _mapper = mapper;
         }
 
-        public async Task<List<UserResponse>> GetUsersWithFilterAsync(UserFilterCriteriaRequest filterCriteria)
+        public async Task<List<UserResponse>> GetActiveUsersWithFilterAsync(UserFilterCriteriaRequest filterCriteria)
         {
             List<User> users = await _userManager.Users
                 .Include(u=>u.Comments)
@@ -52,6 +52,15 @@ namespace UnrealEstate.Services
             var user = await _userManager.FindByEmailAsync(currentUser.Email);
 
             _mapper.Map(userViewModel, user);
+
+            await _userManager.UpdateAsync(user);
+        }
+
+        public async Task SetUserStatusAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            user.IsActive = !user.IsActive;
 
             await _userManager.UpdateAsync(user);
         }

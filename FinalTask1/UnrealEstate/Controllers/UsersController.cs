@@ -137,7 +137,7 @@ namespace UnrealEstate.Controllers
         {
             if (ModelState.IsValid)
             {
-                // BUG: Email null
+                // BUG: Email null 
                 var email = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
 
                 var user = await _userService.GetUserByEmailAsync(email);

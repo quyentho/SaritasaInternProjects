@@ -92,12 +92,15 @@ namespace UnrealEstate.Services
 
             var result = await _userManager.CreateAsync(user, model.Password);
 
-            if (!result.Succeeded)
+            if (result.Succeeded)
             {
-                return new AuthenticationResponse() { Status = "Error", Message = "User creation failed! Please check user details and try again." };
+                var claim = new Claim(ClaimTypes.Email, user.Email);
+                await _userManager.AddClaimAsync(user, claim);
+
+                return new AuthenticationResponse() { Status = "Success", Message = "User created successfully!" };
             }
 
-            return new AuthenticationResponse() { Status = "Success", Message = "User created successfully!" };
+            return new AuthenticationResponse() { Status = "Error", Message = "User creation failed! Please check user details and try again." };
         }
 
         /// <inheritdoc/>

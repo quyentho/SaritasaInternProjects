@@ -108,7 +108,10 @@ namespace UnrealEstate
                 context.Database.Migrate();
 
                 var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<User>>();
+
                 var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                
+
                 DatabaseInitializer.InitializeSeedData(context, userManager, roleManager);
             }
 

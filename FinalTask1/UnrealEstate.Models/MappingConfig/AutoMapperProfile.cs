@@ -12,16 +12,18 @@ namespace UnrealEstate.Models.MappingConfig
         public AutoMapperProfile()
         {
             #region listing mapping
+
             CreateMap<Listing, ListingResponse>();
 
             CreateMap<ListingRequest, Listing>().ForMember(dest => dest.ListingPhoTos, opt => opt.Ignore());
-
-            CreateMap<ListingStatus, ListingStatusResponse>();
 
             CreateMap<ListingNote, ListingNoteResponse>();
             CreateMap<ListingNoteRequest, ListingNote>();
 
             CreateMap<ListingPhoto, ListingPhotoResponse>();
+            CreateMap<ListingResponse, ListingRequest>()
+                .ForMember(dest => dest.ListingPhoTos, opt => opt.Ignore());
+            CreateMap<ListingNoteResponse, ListingNoteRequest>();
             #endregion
 
             #region comment mapping

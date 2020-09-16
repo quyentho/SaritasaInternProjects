@@ -111,7 +111,7 @@ namespace UnrealEstate.Services
             await _listingRepository.UpdateListingAsync(editedListing);
         }
 
-        /// <inheritdoc>/>
+        /// <inheritdoc />
         public async Task MakeABid(int listingId,User currentUser, BidRequest bidRequestViewModel)
         {
             Listing listingToBid = await ValidateBidAction(listingId, bidRequestViewModel);
@@ -323,7 +323,7 @@ namespace UnrealEstate.Services
 
             GuardClauses.HasValue(listingFromDb, "listing");
 
-            GuardClauses.IsAuthorOrAdmin(currentUser.Id, listingFromDb.UserId, userRole.First());
+            GuardClauses.IsAuthorOrAdmin(currentUser.Id, listingFromDb.UserId, userRole.FirstOrDefault());
 
             return listingFromDb;
         }

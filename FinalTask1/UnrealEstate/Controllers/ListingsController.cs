@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Mvc;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
@@ -8,19 +12,59 @@ using UnrealEstate.Services;
 
 namespace UnrealEstate.Controllers
 {
+    [Route("[controller]")]
     public class ListingsController : Controller
     {
         private readonly IListingService _listingService;
+        private readonly IUserService _userService;
+        private readonly IMapper _mapper;
 
-        public ListingsController(IListingService listingService)
+        public ListingsController(IListingService listingService, IMapper mapper, IUserService userService)
         {
             _listingService = listingService;
+            _mapper = mapper;
+            _userService = userService;
         }
 
         [HttpGet]
-        public IActionResult Detail(int? id)
+        [Route("{id}/edit")]
+        public async Task<IActionResult> Edit(int id)
         {
-            return View();
+            var listingResponse = await _listingService.GetListingAsync(id);
+
+            var listingRequest = _mapper.Map<ListingRequest>(listingResponse);
+
+            return View(listingRequest);
+        }
+
+        [HttpPost]
+        [Route("{id}/edit")]
+        public async Task<IActionResult> Edit(ListingRequest listingRequest, int id)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var user = await _userService.GetUserByEmailAsync(User.Claims.
+                        FirstOrDefault(c => c.Type == ClaimTypes.Email)
+                        ?.Value);
+                    await _listingService.EditListingAsync(user, listingRequest, id);
+                }
+            }
+            catch (NotSupportedException ex)
+            {
+                ModelState.AddModelError("error",ex.Message);
+            }
+
+            return View(listingRequest);
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<IActionResult> Detail(int id)
+        {
+            var listingResponse = await _listingService.GetListingAsync(id);
+            return View(listingResponse);
         }
 
         [HttpGet]

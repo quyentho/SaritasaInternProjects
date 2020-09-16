@@ -298,7 +298,7 @@ namespace UnrealEstate.Models.Migrations
 
                     b.HasIndex("ListingId");
 
-                    b.ToTable("ListingPhoTos");
+                    b.ToTable("ListingPhotos");
                 });
 
             modelBuilder.Entity("UnrealEstate.Models.ListingStatus", b =>
@@ -534,7 +534,7 @@ namespace UnrealEstate.Models.Migrations
             modelBuilder.Entity("UnrealEstate.Models.ListingPhoto", b =>
                 {
                     b.HasOne("UnrealEstate.Models.Listing", "Listing")
-                        .WithMany("ListingPhoTos")
+                        .WithMany("ListingPhotos")
                         .HasForeignKey("ListingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

@@ -286,7 +286,7 @@ namespace UnrealEstate.Models.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ListingPhoTos",
+                name: "ListingPhotos",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -371,7 +371,7 @@ namespace UnrealEstate.Models.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_ListingPhoTos_ListingId",
-                table: "ListingPhoTos",
+                table: "ListingPhotos",
                 column: "ListingId");
 
             migrationBuilder.CreateIndex(
@@ -412,7 +412,7 @@ namespace UnrealEstate.Models.Migrations
                 name: "ListingNotes");
 
             migrationBuilder.DropTable(
-                name: "ListingPhoTos");
+                name: "ListingPhotos");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

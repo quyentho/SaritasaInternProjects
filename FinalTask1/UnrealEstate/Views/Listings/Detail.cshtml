@@ -1,9 +1,104 @@
-﻿<div class="row">
-    <div class="col-md-6"></div>
-    <div class="col-md-6">
-        <div class="jumbotron">
-            <h1>Bootstrap Tutorial</h1>
-            <p>Bootstrap is the most popular HTML, CSS...</p>
-        </div>
-    </div>
+﻿@model UnrealEstate.Models.ViewModels.ResponseViewModels.ListingResponse
+
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Detail</h1>
+
+<div>
+    <h4>ListingResponse</h4>
+    <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Id)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Id)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.StatusName)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.StatusName)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.UserEmail)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.UserEmail)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Zip)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Zip)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.City)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.City)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.AddressLine1)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.AddressLine1)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.AddressLine2)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.AddressLine2)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.BuiltYear)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.BuiltYear)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Beds)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Beds)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Size)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Size)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.CurrentHighestBidPrice)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.CurrentHighestBidPrice)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.StatingPrice)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.StatingPrice)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.DueDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.DueDate)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+        </dl>
+@*        <img src="@Model.ListingPhoTos.FirstOrDefault()"/>*@
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    <a asp-action="Index">Back to List</a>
 </div>

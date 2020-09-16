@@ -6,6 +6,7 @@ namespace UnrealEstate.Models.ViewModels.ResponseViewModels
     public class ListingResponse
     {
         public int Id { get; set; }
+
         public string StatusName { get; set; }
 
         public string UserEmail { get; set; }

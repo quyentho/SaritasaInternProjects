@@ -96,6 +96,7 @@ namespace UnrealEstate.Services
             {
                 var claim = new Claim(ClaimTypes.Email, user.Email);
                 await _userManager.AddClaimAsync(user, claim);
+                await _userManager.AddToRoleAsync(user, UserRole.User);
 
                 return new AuthenticationResponse() { Status = "Success", Message = "User created successfully!" };
             }

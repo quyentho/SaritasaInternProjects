@@ -58,9 +58,8 @@ namespace UnrealEstate.Controllers
 
             return View(listingRequest);
         }
-
-        [HttpGet]
         [Route("{id}")]
+        [HttpGet]
         public async Task<IActionResult> Detail(int id)
         {
             var listingResponse = await _listingService.GetListingAsync(id);
@@ -68,11 +67,13 @@ namespace UnrealEstate.Controllers
         }
 
         [HttpGet]
+        [Route("Create")]
         public IActionResult Create()
         {
             return View();
         }
 
+        [Route("Create")]
         [HttpPost]
         public async Task<IActionResult> Create(ListingRequest listingRequest)
         {
@@ -84,7 +85,7 @@ namespace UnrealEstate.Controllers
 
             return View();
         }
-
+        [Route("Search")]
         [HttpGet]
         public async Task<IActionResult> Search(ListingFilterCriteriaRequest filterCriteria)
         {

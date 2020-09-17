@@ -2,22 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using UnrealEstate.Models;
 using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Services;
 
 namespace UnrealEstate.Controllers
 {
+    [Authorize(Roles = UserRole.Admin)]
     public class AdminController : Controller
     {
         private readonly IUserService _userService;
+        
         public AdminController(IUserService userService)
         {
             _userService = userService;
         }
-        // GET: AdminController
+        
         public async Task<ActionResult> Users(UserFilterCriteriaRequest filterCriteria)
         {
             if (ModelState.IsValid)

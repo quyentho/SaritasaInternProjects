@@ -4,7 +4,7 @@
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <h1>Edit</h1>
 
 <h4>ListingRequest</h4>
@@ -55,7 +55,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="DueDate" class="control-label"></label>
-                <input asp-for="DueDate" class="form-control" />
+                <input asp-for="DueDate" type="text" id="datepicker" class="form-control">
                 <span asp-validation-for="DueDate" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -69,11 +69,6 @@
                 <span asp-validation-for="ListingPhoTos"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ListingNotes"></label>
-                <input asp-for="ListingNotes" class="form-control">
-                <span asp-validation-for="ListingNotes"></span>
-            </div>
-            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
@@ -84,6 +79,13 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+
+
 @section Scripts {
+    <script>
+        $( function() {
+            $("#datepicker" ).datepicker();
+        } );
+    </script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

@@ -51,7 +51,6 @@ namespace UnrealEstate.Models.Models
         {
             Bids = new List<Bid>();
             ListingPhoTos = new List<ListingPhoto>();
-            ListingNotes = new List<ListingNote>();
         }
     }
 }

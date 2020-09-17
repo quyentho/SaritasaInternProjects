@@ -35,13 +35,8 @@ namespace UnrealEstate.Controllers
             return View();
         }
 
-        /// <summary>
-        /// GetJwtLoginToken, return JWT token if success authenticate userUpdatedUserRequest.
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
+        
         [HttpPost]
-        [AllowAnonymous]
         public async Task<IActionResult> Login(AuthenticationRequest model)
         {
             if (ModelState.IsValid)
@@ -60,6 +55,7 @@ namespace UnrealEstate.Controllers
 
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
@@ -74,12 +70,7 @@ namespace UnrealEstate.Controllers
             return View();
         }
 
-        /// <summary>
-        /// Register new userUpdatedUserRequest. Available for guest.
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        [AllowAnonymous]
+      
         [HttpPost]
         public async Task<IActionResult> Register(AuthenticationRequest model)
         {
@@ -105,11 +96,7 @@ namespace UnrealEstate.Controllers
             return View();
         }
 
-        /// <summary>
-        /// Send email contains token to restore password.
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
+      
         [HttpPost]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest model)
         {
@@ -124,6 +111,7 @@ namespace UnrealEstate.Controllers
         }
 
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Profile()
         {
@@ -132,6 +120,7 @@ namespace UnrealEstate.Controllers
             return View(currentUser);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Profile(UserRequest userUpdatedUserRequest)
         {
@@ -158,11 +147,6 @@ namespace UnrealEstate.Controllers
             return View();
         }
 
-        /// <summary>
-        /// Verify the reset password token and set new password.
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> ResetPassword(ResetPasswordRequest model)
         {
@@ -173,7 +157,7 @@ namespace UnrealEstate.Controllers
                 return View(authenticationResponseViewModel);
             }
 
-            ModelState.AddModelError("", "Invalid operation");
+            ModelState.AddModelError(string.Empty, "Invalid operation");
 
             return View();
         }

@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
@@ -12,6 +13,7 @@ using UnrealEstate.Services;
 
 namespace UnrealEstate.Controllers
 {
+    [Authorize]
     [Route("[controller]")]
     public class ListingsController : Controller
     {
@@ -53,11 +55,13 @@ namespace UnrealEstate.Controllers
             }
             catch (NotSupportedException ex)
             {
-                ModelState.AddModelError("error",ex.Message);
+                ModelState.AddModelError(string.Empty, ex.Message);
             }
 
             return View(listingRequest);
         }
+        
+        [AllowAnonymous]
         [Route("{id}")]
         [HttpGet]
         public async Task<IActionResult> Detail(int id)
@@ -85,6 +89,8 @@ namespace UnrealEstate.Controllers
 
             return View();
         }
+       
+        [AllowAnonymous]
         [Route("Search")]
         [HttpGet]
         public async Task<IActionResult> Search(ListingFilterCriteriaRequest filterCriteria)

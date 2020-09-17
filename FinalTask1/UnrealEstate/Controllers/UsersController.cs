@@ -23,6 +23,8 @@ namespace UnrealEstate.Controllers
         private readonly IAuthenticationService _authenticationService;
         private readonly SignInManager<User> _signInManager;
         private readonly IUserService _userService;
+
+
         public UsersController(IAuthenticationService authenticationService, IUserService userService, SignInManager<User> signInManager)
         {
             _authenticationService = authenticationService;
@@ -45,7 +47,7 @@ namespace UnrealEstate.Controllers
         [HttpPost]
         public async Task<IActionResult> ExternalLogin(string provider, string returnUrl)
         {
-            var redirectUrl = Url.Action("ExternalLoginCallBack", "Users",new { ReturnUrl = returnUrl });
+            var redirectUrl = Url.Action("ExternalLoginCallBack", "Users", new { ReturnUrl = returnUrl });
 
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
 
@@ -69,12 +71,32 @@ namespace UnrealEstate.Controllers
                 return View("Login", loginViewModel);
             }
 
-            var info = await _signInManager.GetExternalAuthenticationSchemesAsync();
+            var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
             {
                 ModelState.AddModelError(string.Empty, "Error loading external login information");
+                return View("Login", loginViewModel);
             }
-            
+
+            var signInResult =
+                await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false, true);
+
+            if (signInResult.Succeeded)
+            {
+                return LocalRedirect(returnUrl);
+            }
+            else
+            {
+                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+
+                if (email != null)
+                {
+                    var user = await _userService.GetUserByEmailAsync(email);
+
+                    await u
+                }
+            }
+
             return View("Login", loginViewModel);
 
         }

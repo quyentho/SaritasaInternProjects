@@ -75,7 +75,7 @@ namespace UnrealEstateApi.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] AuthenticationRequest model)
+        public async Task<IActionResult> Register([FromBody] RegisterRequest model)
         {
             if (!ModelState.IsValid)
             {

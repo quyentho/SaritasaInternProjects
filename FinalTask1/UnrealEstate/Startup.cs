@@ -62,6 +62,13 @@ namespace UnrealEstate
              .AddEntityFrameworkStores<UnrealEstateDbContext>()
              .AddDefaultTokenProviders();
 
+            services.AddAuthentication()
+                .AddGoogle(options =>
+                {
+                    options.ClientId = "276236464048-s6dhn7otoiedo6j0hltv6r3ke4ir8kkj.apps.googleusercontent.com";
+                    options.ClientSecret = "HAz2HReoehA9DKcAEN6l5c88";
+                });
+         
             services.ConfigureApplicationCookie(options =>
             {
                 // Cookie settings

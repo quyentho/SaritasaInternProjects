@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using LinqKit;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -40,7 +41,7 @@ namespace UnrealEstate.Services
             return isFavorite;
         }
 
-      
+
 
         /// <inheritdoc/>
         public async Task EnableListingAsync(User currentUser, int listingId)
@@ -112,7 +113,7 @@ namespace UnrealEstate.Services
         }
 
         /// <inheritdoc />
-        public async Task MakeABid(int listingId,User currentUser, BidRequest bidRequestViewModel)
+        public async Task MakeABid(int listingId, User currentUser, BidRequest bidRequestViewModel)
         {
             Listing listingToBid = await ValidateBidAction(listingId, bidRequestViewModel);
 
@@ -141,7 +142,7 @@ namespace UnrealEstate.Services
             GuardClauses.HasValue(listingFromDb, "listing id");
 
             GuardClauses.BidPriceHigherThanCurrentPrice(bidRequestViewModel.Price, listingFromDb.CurrentHighestBidPrice);
-            
+
             return listingFromDb;
         }
 
@@ -166,7 +167,7 @@ namespace UnrealEstate.Services
             string address = filterCriteria.Address;
             if (!string.IsNullOrEmpty(address))
             {
-                filterConditions.And(l => l.City.Equals(address) || l.AddressLine1.Equals(address) || l.Zip.Equals(address));
+                filterConditions.And(l => l.City != null && l.City.Equals(address) || l.AddressLine1 != null && l.AddressLine1.Equals(address) || l.Zip != null && l.Zip.Equals(address));
             }
 
             if (filterCriteria.MaxAge.HasValue)
@@ -240,9 +241,9 @@ namespace UnrealEstate.Services
         {
             IQueryable<Listing> result = FilterByConditions(filterCriteria, listings);
 
-            result = result.FilterByRange((int?)filterCriteria.Offset, (int?)filterCriteria.Limit);
-
             result = result.SortBy(filterCriteria.OrderBy);
+
+            result = result.FilterByRange((int?)filterCriteria.Offset, (int?)filterCriteria.Limit);
 
             return result.ToList();
         }
@@ -266,7 +267,7 @@ namespace UnrealEstate.Services
 
                     path = path.Replace(Path.GetExtension(path), Path.GetExtension(formFile.FileName));
 
-                    listingPhotos.Add(new ListingPhoto { PhotoUrl = path});
+                    listingPhotos.Add(new ListingPhoto { PhotoUrl = path });
 
                     using (var stream = System.IO.File.Create(path))
                     {
@@ -284,7 +285,7 @@ namespace UnrealEstate.Services
 
             listing.UserId = userId;
             listing.CurrentHighestBidPrice = listingViewModel.StatingPrice;
-            listing.StatusId = (int) Status.Active;
+            listing.StatusId = (int)Status.Active;
 
             await AddUploadedPhotosIfExist(listingViewModel, listing);
 

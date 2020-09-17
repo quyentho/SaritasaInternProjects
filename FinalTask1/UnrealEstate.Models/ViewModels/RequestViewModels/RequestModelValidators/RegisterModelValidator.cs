@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace UnrealEstate.Models.ViewModels.RequestViewModels.RequestModelValidators
 {
-    public class AuthenticationModelValidator : AbstractValidator<AuthenticationRequest>
+    public class RegisterModelValidator : AbstractValidator<RegisterRequest>
     {
-        public AuthenticationModelValidator()
+        public RegisterModelValidator()
         {
             RuleFor(x => x.Email).NotEmpty().EmailAddress();
             RuleFor(x => x.Password).NotNull();

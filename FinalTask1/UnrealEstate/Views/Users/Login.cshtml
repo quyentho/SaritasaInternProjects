@@ -1,13 +1,15 @@
-﻿@model UnrealEstate.Models.ViewModels.RequestViewModels.AuthenticationRequest
+﻿@model UnrealEstate.Models.ViewModels.LoginViewModel
 <div class="container">
     <div class="d-flex justify-content-center h-100">
         <div class="card">
             <div class="card-header">
                 <h3>Sign In</h3>
                 <div class="d-flex justify-content-end social_icon">
-                    <span><i class="fab fa-facebook-square"></i></span>
-                    <span><i class="fab fa-google-plus-square"></i></span>
-                    <span><i class="fab fa-twitter-square"></i></span>
+                    <form asp-controller="Users" asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl">
+                        <button type="submit"><span><i class="fab fa-facebook-square"></i></span></button>
+                        <button name="provider" value="Google"><span><i class="fab fa-google-plus-square"></i></span></button>
+                        <button><span><i class="fab fa-twitter-square"></i></span></button>
+                    </form>
                 </div>
             </div>
             <div class="card-body">
@@ -30,6 +32,7 @@
                     <div class="form-group">
                         <input type="submit" value="Login" class="btn float-right login_btn">
                     </div>
+                    @Html.ValidationSummary(true)
                 </form>
             </div>
             <div class="card-footer">
@@ -43,3 +46,4 @@
         </div>
     </div>
 </div>
+<div></div>

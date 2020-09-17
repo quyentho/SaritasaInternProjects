@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MimeKit;
 using UnrealEstate.Models;
+using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
 using UnrealEstate.Services.EmailService;
@@ -44,7 +45,7 @@ namespace UnrealEstate.Services
         }
 
         /// <inheritdoc />
-        public async Task<SignInResult> LoginAsync(AuthenticationRequest authenticationRequest)
+        public async Task<SignInResult> LoginAsync(LoginViewModel authenticationRequest)
         {
             var user = await _userManager.FindByEmailAsync(authenticationRequest.Email);
 
@@ -59,7 +60,7 @@ namespace UnrealEstate.Services
         }
 
         /// <inheritdoc/>
-        public async Task<JwtSecurityToken> GetJwtLoginToken(AuthenticationRequest authenticationRequest)
+        public async Task<JwtSecurityToken> GetJwtLoginToken(RegisterRequest authenticationRequest)
         {
             var user = await _userManager.FindByEmailAsync(authenticationRequest.Email);
 
@@ -74,7 +75,7 @@ namespace UnrealEstate.Services
         }
 
         /// <inheritdoc/>
-        public async Task<AuthenticationResponse> Register(AuthenticationRequest model)
+        public async Task<AuthenticationResponse> Register(RegisterRequest model)
         {
             var userExists = await _userManager.FindByNameAsync(model.Email);
 

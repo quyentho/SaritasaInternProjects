@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using UnrealEstate.Models;
+using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
 
@@ -14,14 +15,14 @@ namespace UnrealEstate.Services
         /// </summary>
         /// <param name="authenticationRequest"></param>
         /// <returns></returns>
-        Task<JwtSecurityToken> GetJwtLoginToken(AuthenticationRequest authenticationRequest);
+        Task<JwtSecurityToken> GetJwtLoginToken(RegisterRequest authenticationRequest);
 
         /// <summary>
         /// Register new user, save to database.
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        Task<AuthenticationResponse> Register(AuthenticationRequest model);
+        Task<AuthenticationResponse> Register(RegisterRequest model);
 
         /// <summary>
         /// Send reset password email that contains token.
@@ -42,7 +43,7 @@ namespace UnrealEstate.Services
         /// </summary>
         /// <param name="authenticationRequest">Request Model contains email and password.</param>
         /// <returns>Sign in result.</returns>
-        Task<SignInResult> LoginAsync(AuthenticationRequest authenticationRequest);
+        Task<SignInResult> LoginAsync(LoginViewModel authenticationRequest);
 
         Task LogoutAsync();
     }

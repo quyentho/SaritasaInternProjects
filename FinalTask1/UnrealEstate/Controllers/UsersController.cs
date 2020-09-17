@@ -21,23 +21,66 @@ namespace UnrealEstate.Controllers
     public class UsersController : Controller
     {
         private readonly IAuthenticationService _authenticationService;
-
+        private readonly SignInManager<User> _signInManager;
         private readonly IUserService _userService;
-        public UsersController(IAuthenticationService authenticationService, IUserService userService)
+        public UsersController(IAuthenticationService authenticationService, IUserService userService, SignInManager<User> signInManager)
         {
             _authenticationService = authenticationService;
             _userService = userService;
+            _signInManager = signInManager;
         }
+
 
         [HttpGet]
-        public IActionResult Login()
+        public async Task<IActionResult> Login(string returnUrl)
         {
-            return View();
+            LoginViewModel model = new LoginViewModel()
+            {
+                ReturnUrl = returnUrl,
+                ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
+            };
+            return View(model);
         }
 
-        
         [HttpPost]
-        public async Task<IActionResult> Login(AuthenticationRequest model)
+        public async Task<IActionResult> ExternalLogin(string provider, string returnUrl)
+        {
+            var redirectUrl = Url.Action("ExternalLoginCallBack", "Users",new { ReturnUrl = returnUrl });
+
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+
+            return new ChallengeResult(provider, properties);
+        }
+
+        public async Task<IActionResult> ExternalLoginCallBack(string returnUrl = null, string remoteError = null)
+        {
+            returnUrl ??= Url.Content("~/");
+
+            LoginViewModel loginViewModel = new LoginViewModel()
+            {
+                ReturnUrl = returnUrl,
+                ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
+            };
+
+            if (remoteError != null)
+            {
+                ModelState.AddModelError(string.Empty, $"Error from external provider: {remoteError}");
+
+                return View("Login", loginViewModel);
+            }
+
+            var info = await _signInManager.GetExternalAuthenticationSchemesAsync();
+            if (info == null)
+            {
+                ModelState.AddModelError(string.Empty, "Error loading external login information");
+            }
+            
+            return View("Login", loginViewModel);
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -70,16 +113,17 @@ namespace UnrealEstate.Controllers
             return View();
         }
 
-      
+
         [HttpPost]
-        public async Task<IActionResult> Register(AuthenticationRequest model)
+        public async Task<IActionResult> Register(RegisterRequest model)
         {
             if (ModelState.IsValid)
             {
                 AuthenticationResponse response = await _authenticationService.Register(model);
                 if (response.Status.Equals("Success"))
                 {
-                    await this.Login(model);
+                    LoginViewModel loginViewModel = new LoginViewModel() { Email = model.Email, Password = model.Password };
+                    await this.Login(loginViewModel);
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -96,14 +140,14 @@ namespace UnrealEstate.Controllers
             return View();
         }
 
-      
+
         [HttpPost]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest model)
         {
             if (ModelState.IsValid)
             {
                 AuthenticationResponse authenticationResponseViewModel = await _authenticationService.SendResetPasswordEmail(model.Email);
-                
+
                 return View(authenticationResponseViewModel);
             }
             ModelState.AddModelError("", "Invalid operation");

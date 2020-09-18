@@ -34,19 +34,19 @@ namespace UnrealEstate.Controllers
             if (ModelState.IsValid)
             {
                 model.Email = User.FindFirstValue(ClaimTypes.Email);
-                
+
                 var result = await _authenticationService.ChangePasswordAsync(model);
-                
+
                 if (result.ResponseStatus == AuthenticationResponseStatus.Fail)
                 {
                     ModelState.AddModelError(string.Empty, result.Message);
                 }
-                
+
                 return View("Profile");
             }
 
             ModelState.AddModelError(string.Empty, "Invalid attempt to change password");
-            
+
             return View("Profile");
         }
 
@@ -64,27 +64,29 @@ namespace UnrealEstate.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var loginResult
-                    = await _authenticationService.LoginAsync(model);
-
-                if (loginResult.ResponseStatus == AuthenticationResponseStatus.Success)
-                {
-                    if (!string.IsNullOrEmpty(model.ReturnUrl))
-                    {
-                        return LocalRedirect(model.ReturnUrl);
-                    }
-
-                    return RedirectToAction("Index", "Home");
-                }
-
-                ModelState.AddModelError(String.Empty, loginResult.Message);
+                ModelState.AddModelError(string.Empty, "Invalid login attempt");
+                
+                model.ReturnUrl = Url.RouteUrl(nameof(Index));
 
                 return View();
             }
 
-            ModelState.AddModelError(string.Empty, "Invalid login attempt");
+            var loginResult
+                = await _authenticationService.LoginAsync(model);
+
+            if (loginResult.ResponseStatus == AuthenticationResponseStatus.Success)
+            {
+                if (!string.IsNullOrEmpty(model.ReturnUrl))
+                {
+                    return LocalRedirect(model.ReturnUrl);
+                }
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            ModelState.AddModelError(String.Empty, loginResult.Message);
 
             return View();
         }
@@ -128,7 +130,7 @@ namespace UnrealEstate.Controllers
             return LocalRedirect(returnUrl);
         }
 
-    
+
 
         [Authorize]
         [HttpPost]

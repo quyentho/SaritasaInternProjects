@@ -2,8 +2,15 @@
 {
     public class AuthenticationResponse
     {
-        public string Status { get; set; }
+        public AuthenticationResponseStatus ResponseStatus { get; set; }
 
         public string Message { get; set; }
+    }
+
+    public enum AuthenticationResponseStatus
+    {
+        Success,
+        Error,
+        Fail
     }
 }

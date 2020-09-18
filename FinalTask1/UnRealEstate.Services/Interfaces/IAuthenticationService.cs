@@ -13,9 +13,9 @@ namespace UnrealEstate.Services
         /// <summary>
         /// Authenticate user and give back jwt token if success login.
         /// </summary>
-        /// <param name="authenticationRequest"></param>
+        /// <param name="loginViewModel"></param>
         /// <returns></returns>
-        Task<JwtSecurityToken> GetJwtLoginToken(RegisterRequest authenticationRequest);
+        Task<JwtSecurityToken> GetJwtLoginToken(LoginViewModel loginViewModel);
 
         /// <summary>
         /// Register new user, save to database.
@@ -41,10 +41,11 @@ namespace UnrealEstate.Services
         /// <summary>
         /// Login by email and password by sign in manager.
         /// </summary>
-        /// <param name="authenticationRequest">Request Model contains email and password.</param>
+        /// <param name="loginViewModel">Request Model contains email and password.</param>
         /// <returns>Sign in result.</returns>
-        Task<SignInResult> LoginAsync(LoginViewModel authenticationRequest);
+        Task<SignInResult> LoginAsync(LoginViewModel loginViewModel);
 
         Task LogoutAsync();
+        Task<AuthenticationResponse> ExternalLoginAsync(LoginViewModel loginViewModel);
     }
 }

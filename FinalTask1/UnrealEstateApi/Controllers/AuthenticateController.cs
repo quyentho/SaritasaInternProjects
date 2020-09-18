@@ -2,6 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 using UnrealEstate.Models;
+using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
 using UnrealEstate.Services;
@@ -25,7 +26,7 @@ namespace UnrealEstateApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] RegisterRequest model)
+        public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
             JwtSecurityToken token = await _authenticationService.GetJwtLoginToken(model);
             if (token is null)
@@ -75,7 +76,7 @@ namespace UnrealEstateApi.Controllers
 
             AuthenticationResponse resetPasswordResult = await _authenticationService.ResetPassword(model);
 
-            if (resetPasswordResult.Status.Equals("Success"))
+            if (resetPasswordResult.ResponseStatus.Equals("Success"))
             {
                 return Ok(resetPasswordResult.Message);
             }

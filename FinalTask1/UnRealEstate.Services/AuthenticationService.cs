@@ -44,27 +44,103 @@ namespace UnrealEstate.Services
             await _signInManager.SignOutAsync();
         }
 
-        /// <inheritdoc />
-        public async Task<SignInResult> LoginAsync(LoginViewModel authenticationRequest)
+        public async Task<AuthenticationResponse> ExternalLoginAsync(LoginViewModel loginViewModel)
         {
-            var user = await _userManager.FindByEmailAsync(authenticationRequest.Email);
+            var info = await _signInManager.GetExternalLoginInfoAsync();
+            if (info is null)
+            {
+                return new AuthenticationResponse()
+                {
+                    ResponseStatus = AuthenticationResponseStatus.Error,
+                    Message = "Error loading external login information"
+                };
+            }
+
+            var signInResult =
+                await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false, true);
+            if (signInResult.Succeeded)
+            {
+                return new AuthenticationResponse()
+                {
+                    ResponseStatus = AuthenticationResponseStatus.Success,
+                    Message = "Login successfully"
+                };
+            }
+
+            var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+
+            if (email != null)
+            {
+                var user = await _userManager.FindByEmailAsync(email);
+
+
+                if (user is null)
+                {
+                    // TODO: Check if user has claims
+                    user = new User()
+                    {
+                        UserName = info.Principal.FindFirstValue(ClaimTypes.Email),
+                        Email = info.Principal.FindFirstValue(ClaimTypes.Email)
+                    };
+
+                    await _userManager.CreateAsync(user);
+                }
+
+                await _userManager.AddLoginAsync(user, info);
+                await _signInManager.SignInAsync(user, isPersistent: false);
+
+                return new AuthenticationResponse()
+                {
+                    ResponseStatus = AuthenticationResponseStatus.Success,
+                    Message = "Login successfully"
+                };
+            }
+
+            return new AuthenticationResponse()
+            {
+                ResponseStatus = AuthenticationResponseStatus.Error,
+                Message = $"Email Claim not received from {info.LoginProvider}"
+            };
+        }
+
+        /// <inheritdoc />
+        public async Task<AuthenticationResponse> LoginAsync(LoginViewModel loginViewModel)
+        {
+            var user = await _userManager.FindByEmailAsync(loginViewModel.Email);
+
+            if (user is null)
+            {
+                return new AuthenticationResponse()
+                {
+                    ResponseStatus = AuthenticationResponseStatus.Fail,
+                    Message = "Wrong Email"
+                };
+            }
 
             if (user != null)
             {
                 SignInResult result = await
-                    _signInManager.PasswordSignInAsync(user, authenticationRequest.Password, false, false);
-                return result;
+                    _signInManager.PasswordSignInAsync(user, loginViewModel.Password, false, false);
+
+                if (result == SignInResult.Failed)
+                {
+                    return new AuthenticationResponse()
+                    {
+                        ResponseStatus = AuthenticationResponseStatus.Fail,
+                        Message = "Wrong password"
+                    };
+                }
             }
 
             return SignInResult.Failed;
         }
 
         /// <inheritdoc/>
-        public async Task<JwtSecurityToken> GetJwtLoginToken(RegisterRequest authenticationRequest)
+        public async Task<JwtSecurityToken> GetJwtLoginToken(LoginViewModel loginViewModel)
         {
-            var user = await _userManager.FindByEmailAsync(authenticationRequest.Email);
+            var user = await _userManager.FindByEmailAsync(loginViewModel.Email);
 
-            if (user != null && await _userManager.CheckPasswordAsync(user, authenticationRequest.Password))
+            if (user != null && await _userManager.CheckPasswordAsync(user, loginViewModel.Password))
             {
                 JwtSecurityToken token = await CreateToken(user);
 
@@ -81,7 +157,7 @@ namespace UnrealEstate.Services
 
             if (userExists != null)
             {
-                return new AuthenticationResponse() { Status = "Error", Message = "User creation failed! Please check user details and try again." };
+                return new AuthenticationResponse() { ResponseStatus = AuthenticationResponseStatus.Error, Message = "User creation failed! Please check user details and try again." };
             }
 
             User user = new User()
@@ -99,10 +175,10 @@ namespace UnrealEstate.Services
                 await _userManager.AddClaimAsync(user, claim);
                 await _userManager.AddToRoleAsync(user, UserRole.User);
 
-                return new AuthenticationResponse() { Status = "Success", Message = "User created successfully!" };
+                return new AuthenticationResponse() { ResponseStatus = AuthenticationResponseStatus.Success, Message = "User created successfully!" };
             }
 
-            return new AuthenticationResponse() { Status = "Error", Message = "User creation failed! Please check user details and try again." };
+            return new AuthenticationResponse() { ResponseStatus = AuthenticationResponseStatus.Error, Message = "User creation failed! Please check user details and try again." };
         }
 
         /// <inheritdoc/>
@@ -113,7 +189,7 @@ namespace UnrealEstate.Services
 
             if (isPasswordConfirmNotMatched)
             {
-                return new AuthenticationResponse() { Status = "Fail", Message = "Password and confirm password does not match." };
+                return new AuthenticationResponse() { ResponseStatus = AuthenticationResponseStatus.Fail, Message = "Password and confirm password does not match." };
             }
 
             var user = await _userManager.FindByEmailAsync(model.Email);
@@ -122,10 +198,10 @@ namespace UnrealEstate.Services
 
             if (result.Succeeded)
             {
-                return new AuthenticationResponse() { Status = "Success", Message = "Password reset successfully" };
+                return new AuthenticationResponse() { ResponseStatus = AuthenticationResponseStatus.Success, Message = "Password reset successfully" };
             }
 
-            return new AuthenticationResponse() { Status = "Fail", Message = result.Errors.Select(e => e.Description).Aggregate((message, next) => message + next) };
+            return new AuthenticationResponse() { ResponseStatus = AuthenticationResponseStatus.Fail, Message = result.Errors.Select(e => e.Description).Aggregate((message, next) => message + next) };
 
         }
 
@@ -136,12 +212,12 @@ namespace UnrealEstate.Services
 
             if (user is null)
             {
-                return new AuthenticationResponse() { Status = "Fail", Message = "Email is not correct." };
+                return new AuthenticationResponse() { ResponseStatus = AuthenticationResponseStatus.Fail, Message = "Email is not correct." };
             }
 
             await SendEmail(user);
 
-            return new AuthenticationResponse() { Status = "Success", Message = "Please check your email to get reset link" };
+            return new AuthenticationResponse() { ResponseStatus = AuthenticationResponseStatus.Success, Message = "Please check your email to get reset link" };
         }
 
         private async Task SendEmail(User user)
@@ -189,3 +265,4 @@ namespace UnrealEstate.Services
         }
     }
 }
+

@@ -53,6 +53,7 @@ namespace UnrealEstate.Controllers
             return new ChallengeResult(provider, properties);
         }
 
+        [HttpGet]
         public async Task<IActionResult> ExternalLoginCallBack(string returnUrl = null, string remoteError = null)
         {
             returnUrl ??= Url.Content("~/");
@@ -70,44 +71,15 @@ namespace UnrealEstate.Controllers
                 return View("Login", loginViewModel);
             }
 
-            var info = await _signInManager.GetExternalLoginInfoAsync();
-            if (info == null)
+            var result = await _authenticationService.ExternalLoginAsync(loginViewModel);
+
+            if (result.ResponseStatus == AuthenticationResponseStatus.Error)
             {
-                ModelState.AddModelError(string.Empty, "Error loading external login information");
+                ModelState.AddModelError(string.Empty, result.Message);
                 return View("Login", loginViewModel);
             }
 
-            var signInResult =
-                await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false, true);
-
-            if (signInResult.Succeeded)
-            {
-                return LocalRedirect(returnUrl);
-            }
-
-            var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-
-            if (email != null)
-            {
-                var user = await _userService.GetUserByEmailAsync(email);
-
-                if (user is null)
-                {
-                    user = new User()
-                    {
-                        UserName = info.Principal.FindFirstValue(ClaimTypes.Email),
-                        Email = info.Principal.FindFirstValue(ClaimTypes.Email)
-                    };
-                }
-
-                await _userManager.AddLoginAsync(user, info);
-                await _signInManager.SignInAsync(user, isPersistent: false);
-
-                return LocalRedirect(returnUrl);
-            }
-
-            return View("Login", loginViewModel);
-
+            return LocalRedirect(returnUrl);
         }
 
         [HttpPost]
@@ -151,7 +123,7 @@ namespace UnrealEstate.Controllers
             if (ModelState.IsValid)
             {
                 AuthenticationResponse response = await _authenticationService.Register(model);
-                if (response.Status.Equals("Success"))
+                if (response.ResponseStatus == AuthenticationResponseStatus.Success)
                 {
                     LoginViewModel loginViewModel = new LoginViewModel() { Email = model.Email, Password = model.Password };
                     await this.Login(loginViewModel);

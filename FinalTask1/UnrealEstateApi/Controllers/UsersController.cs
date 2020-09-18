@@ -84,7 +84,7 @@ namespace UnrealEstateApi.Controllers
 
             AuthenticationResponse response = await _authenticationService.Register(model);
 
-            if (response.Status.Equals("Error"))
+            if (response.ResponseStatus.Equals("Error"))
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, response);
             }

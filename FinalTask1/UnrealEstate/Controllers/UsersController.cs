@@ -1,14 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.VisualBasic;
 using UnrealEstate.Models;
 using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
@@ -24,12 +20,15 @@ namespace UnrealEstate.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly IUserService _userService;
 
+        private readonly Microsoft.AspNetCore.Identity.UserManager<User> _userManager;
 
-        public UsersController(IAuthenticationService authenticationService, IUserService userService, SignInManager<User> signInManager)
+
+        public UsersController(IAuthenticationService authenticationService, IUserService userService, SignInManager<User> signInManager, Microsoft.AspNetCore.Identity.UserManager<User> userManager)
         {
             _authenticationService = authenticationService;
             _userService = userService;
             _signInManager = signInManager;
+            _userManager = userManager;
         }
 
 
@@ -45,7 +44,7 @@ namespace UnrealEstate.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ExternalLogin(string provider, string returnUrl)
+        public  IActionResult ExternalLogin(string provider, string returnUrl)
         {
             var redirectUrl = Url.Action("ExternalLoginCallBack", "Users", new { ReturnUrl = returnUrl });
 
@@ -85,16 +84,26 @@ namespace UnrealEstate.Controllers
             {
                 return LocalRedirect(returnUrl);
             }
-            else
+
+            var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+
+            if (email != null)
             {
-                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+                var user = await _userService.GetUserByEmailAsync(email);
 
-                if (email != null)
+                if (user is null)
                 {
-                    var user = await _userService.GetUserByEmailAsync(email);
-
-                    await u
+                    user = new User()
+                    {
+                        UserName = info.Principal.FindFirstValue(ClaimTypes.Email),
+                        Email = info.Principal.FindFirstValue(ClaimTypes.Email)
+                    };
                 }
+
+                await _userManager.AddLoginAsync(user, info);
+                await _signInManager.SignInAsync(user, isPersistent: false);
+
+                return LocalRedirect(returnUrl);
             }
 
             return View("Login", loginViewModel);

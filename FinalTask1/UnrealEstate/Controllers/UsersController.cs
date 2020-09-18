@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -20,17 +21,34 @@ namespace UnrealEstate.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly IUserService _userService;
 
-        private readonly Microsoft.AspNetCore.Identity.UserManager<User> _userManager;
-
-
-        public UsersController(IAuthenticationService authenticationService, IUserService userService, SignInManager<User> signInManager, Microsoft.AspNetCore.Identity.UserManager<User> userManager)
+        public UsersController(IAuthenticationService authenticationService, IUserService userService, SignInManager<User> signInManager)
         {
             _authenticationService = authenticationService;
             _userService = userService;
             _signInManager = signInManager;
-            _userManager = userManager;
         }
 
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordRequest model)
+        {
+            if (ModelState.IsValid)
+            {
+                model.Email = User.FindFirstValue(ClaimTypes.Email);
+                
+                var result = await _authenticationService.ChangePasswordAsync(model);
+                
+                if (result.ResponseStatus == AuthenticationResponseStatus.Fail)
+                {
+                    ModelState.AddModelError(string.Empty, result.Message);
+                }
+                
+                return View("Profile");
+            }
+
+            ModelState.AddModelError(string.Empty, "Invalid attempt to change password");
+            
+            return View("Profile");
+        }
 
         [HttpGet]
         public async Task<IActionResult> Login(string returnUrl)
@@ -44,7 +62,35 @@ namespace UnrealEstate.Controllers
         }
 
         [HttpPost]
-        public  IActionResult ExternalLogin(string provider, string returnUrl)
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var loginResult
+                    = await _authenticationService.LoginAsync(model);
+
+                if (loginResult.ResponseStatus == AuthenticationResponseStatus.Success)
+                {
+                    if (!string.IsNullOrEmpty(model.ReturnUrl))
+                    {
+                        return LocalRedirect(model.ReturnUrl);
+                    }
+
+                    return RedirectToAction("Index", "Home");
+                }
+
+                ModelState.AddModelError(String.Empty, loginResult.Message);
+
+                return View();
+            }
+
+            ModelState.AddModelError(string.Empty, "Invalid login attempt");
+
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ExternalLogin(string provider, string returnUrl)
         {
             var redirectUrl = Url.Action("ExternalLoginCallBack", "Users", new { ReturnUrl = returnUrl });
 
@@ -82,24 +128,7 @@ namespace UnrealEstate.Controllers
             return LocalRedirect(returnUrl);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                SignInResult result = await _authenticationService.LoginAsync(model);
-
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("Index", "Home");
-                }
-            }
-
-            ModelState.AddModelError("", "Invalid login attempt");
-
-            return View();
-
-        }
+    
 
         [Authorize]
         [HttpPost]

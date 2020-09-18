@@ -8,6 +8,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Owin.Security.Provider;
 using MimeKit;
 using UnrealEstate.Models;
 using UnrealEstate.Models.ViewModels;
@@ -44,6 +45,27 @@ namespace UnrealEstate.Services
             await _signInManager.SignOutAsync();
         }
 
+        public async Task<AuthenticationResponse> ChangePasswordAsync(ChangePasswordRequest changePasswordRequest)
+        {
+            User loggedInUser = await _userManager.FindByEmailAsync(changePasswordRequest.Email);
+            IdentityResult result = await _userManager.ChangePasswordAsync(loggedInUser, changePasswordRequest.CurrentPassword,
+                changePasswordRequest.NewPassword);
+
+            if (result == IdentityResult.Success)
+            {
+                return new AuthenticationResponse()
+                {
+                    ResponseStatus = AuthenticationResponseStatus.Success,
+                };
+            }
+
+            return new AuthenticationResponse()
+            {
+                ResponseStatus = AuthenticationResponseStatus.Fail,
+                Message = "Current password is incorrect !"
+            };
+        }
+
         public async Task<AuthenticationResponse> ExternalLoginAsync(LoginViewModel loginViewModel)
         {
             var info = await _signInManager.GetExternalLoginInfoAsync();
@@ -69,37 +91,38 @@ namespace UnrealEstate.Services
 
             var email = info.Principal.FindFirstValue(ClaimTypes.Email);
 
-            if (email != null)
+            if (email == null)
             {
-                var user = await _userManager.FindByEmailAsync(email);
-
-
-                if (user is null)
-                {
-                    // TODO: Check if user has claims
-                    user = new User()
-                    {
-                        UserName = info.Principal.FindFirstValue(ClaimTypes.Email),
-                        Email = info.Principal.FindFirstValue(ClaimTypes.Email)
-                    };
-
-                    await _userManager.CreateAsync(user);
-                }
-
-                await _userManager.AddLoginAsync(user, info);
-                await _signInManager.SignInAsync(user, isPersistent: false);
-
                 return new AuthenticationResponse()
                 {
-                    ResponseStatus = AuthenticationResponseStatus.Success,
-                    Message = "Login successfully"
+                    ResponseStatus = AuthenticationResponseStatus.Error,
+                    Message = $"Email Claim not received from {info.LoginProvider}"
                 };
             }
 
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user is null)
+            {
+                user = new User()
+                {
+                    UserName = info.Principal.FindFirstValue(ClaimTypes.Email),
+                    Email = info.Principal.FindFirstValue(ClaimTypes.Email)
+                };
+
+                await _userManager.CreateAsync(user);
+
+                Claim claim = new Claim(ClaimTypes.Email, email);
+                await _userManager.AddClaimAsync(user, claim);
+            }
+
+            await _userManager.AddLoginAsync(user, info);
+            await _signInManager.SignInAsync(user, isPersistent: false);
+
             return new AuthenticationResponse()
             {
-                ResponseStatus = AuthenticationResponseStatus.Error,
-                Message = $"Email Claim not received from {info.LoginProvider}"
+                ResponseStatus = AuthenticationResponseStatus.Success,
+                Message = "Login successfully"
             };
         }
 
@@ -117,22 +140,22 @@ namespace UnrealEstate.Services
                 };
             }
 
-            if (user != null)
-            {
-                SignInResult result = await
-                    _signInManager.PasswordSignInAsync(user, loginViewModel.Password, false, false);
+            SignInResult result = await
+                      _signInManager.PasswordSignInAsync(user, loginViewModel.Password, false, false);
 
-                if (result == SignInResult.Failed)
+            if (result == SignInResult.Failed)
+            {
+                return new AuthenticationResponse()
                 {
-                    return new AuthenticationResponse()
-                    {
-                        ResponseStatus = AuthenticationResponseStatus.Fail,
-                        Message = "Wrong password"
-                    };
-                }
+                    ResponseStatus = AuthenticationResponseStatus.Fail,
+                    Message = "Wrong password"
+                };
             }
 
-            return SignInResult.Failed;
+            return new AuthenticationResponse()
+            {
+                ResponseStatus = AuthenticationResponseStatus.Success
+            };
         }
 
         /// <inheritdoc/>

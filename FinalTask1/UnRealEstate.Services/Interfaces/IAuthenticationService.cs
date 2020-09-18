@@ -43,9 +43,26 @@ namespace UnrealEstate.Services
         /// </summary>
         /// <param name="loginViewModel">Request Model contains email and password.</param>
         /// <returns>Sign in result.</returns>
-        Task<SignInResult> LoginAsync(LoginViewModel loginViewModel);
+        Task<AuthenticationResponse> LoginAsync(LoginViewModel loginViewModel);
 
+        /// <summary>
+        /// Logout
+        /// </summary>
+        /// <returns></returns>
         Task LogoutAsync();
+
+        /// <summary>
+        /// Use external logging.
+        /// </summary>
+        /// <param name="loginViewModel"></param>
+        /// <returns></returns>
         Task<AuthenticationResponse> ExternalLoginAsync(LoginViewModel loginViewModel);
+
+        /// <summary>
+        /// Change Password for current logged in user.
+        /// </summary>
+        /// <param name="changePasswordRequest"></param>
+        /// <returns></returns>
+        Task<AuthenticationResponse> ChangePasswordAsync(ChangePasswordRequest changePasswordRequest);
     }
 }

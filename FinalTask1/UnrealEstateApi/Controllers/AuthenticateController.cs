@@ -76,7 +76,7 @@ namespace UnrealEstateApi.Controllers
 
             AuthenticationResponse resetPasswordResult = await _authenticationService.ResetPassword(model);
 
-            if (resetPasswordResult.ResponseStatus.Equals("Success"))
+            if (resetPasswordResult.ResponseStatus == AuthenticationResponseStatus.Success)
             {
                 return Ok(resetPasswordResult.Message);
             }

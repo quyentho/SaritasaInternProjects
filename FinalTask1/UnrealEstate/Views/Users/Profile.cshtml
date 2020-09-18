@@ -6,7 +6,7 @@
 <div class="row">
     <div class="col-6">
         <form asp-controller="Users" asp-action="Profile" method="post">
-            <div asp-validation-summary="ModelOnly"></div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group col-md-6">
                 <label>Email</label>
                 <input type="email" asp-for="Email" name="Email" class="form-control" placeholder="Email">
@@ -28,25 +28,44 @@
                 <input asp-for="PhoneNumber" name="PhoneNumber" class="form-control" placeholder="Phone number">
             </div>
             <div class="form-group col-md-6">
-                <input type="submit" class="form-control btn btn-success" />
+                <input type="submit" class="form-control btn btn-success"/>
             </div>
         </form>
     </div>
     <div class="col-6">
-        <form asp-action="ChangePassword">
-            <label>Old Password</label>
-            <input type="text" name="oldpassword" class="form-control  col-md-6" />
+        <form asp-action="ChangePassword" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <label>Current Password</label>
+            <input type="password" name="currentPassword" class="form-control col-md-6 changePassword" disabled/>
             <label>New Password</label>
-            <input type="text" name="newpassword" class="form-control  col-md-6" />
+            <input type="password" name="newpassword" class="form-control  col-md-6 changePassword" disabled/>
             <label>Confirm Password</label>
-            <input type="text" name="confirmpassword" class="form-control  col-md-6" />
+            <input type="password" name="confirmpassword" class="form-control  col-md-6 changePassword" disabled/>
+            <br/>
+            <button type="submit" class="btn btn-success" id="changePasswordSubmitButton" style="visibility: hidden">Submit</button>
+            <button type="button" id="activeButton" class="btn btn-info" onclick="ActiveChangePassword()">Change Password</button>
         </form>
+        <br/>
+        
     </div>
 </div>
 
 
 
 @section Scripts {
+    <script type="text/javascript">
+        function ActiveChangePassword() {
+            var textboxes = document.getElementsByClassName("changePassword");
+             
+            for (var i = 0; i < textboxes.length; i++) {
+                textboxes[i].disabled = false;
+            }
+
+            document.getElementById("activeButton").style.visibility = "hidden";
+            document.getElementById("changePasswordSubmitButton").style.visibility = "visible";
+        }
+    </script>
+
     @{ await Html.RenderPartialAsync("_DatePickerScriptPartial");}
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

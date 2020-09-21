@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using UnrealEstate.Models;
 using UnrealEstate.Models.MappingConfig;
@@ -110,6 +111,7 @@ namespace UnrealEstate
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
+
                 var context = serviceScope.ServiceProvider.GetRequiredService<UnrealEstateDbContext>();
 
                 context.Database.Migrate();
@@ -135,7 +137,11 @@ namespace UnrealEstate
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(@"D:\Projects\quyen.tho\FinalTask1\UnrealEstate\Uploads\"),
+                RequestPath = new PathString("/Images")
+            });
 
             app.UseRouting();
 

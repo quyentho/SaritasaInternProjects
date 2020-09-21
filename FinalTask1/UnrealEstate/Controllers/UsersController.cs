@@ -53,6 +53,7 @@ namespace UnrealEstate.Controllers
         [HttpGet]
         public async Task<IActionResult> Login(string returnUrl)
         {
+            _ = returnUrl ?? Url.Action("Index", "Home");
             LoginViewModel model = new LoginViewModel()
             {
                 ReturnUrl = returnUrl,
@@ -64,29 +65,29 @@ namespace UnrealEstate.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                ModelState.AddModelError(string.Empty, "Invalid login attempt");
+                var loginResult
+                    = await _authenticationService.LoginAsync(model);
 
+                if (loginResult.ResponseStatus == AuthenticationResponseStatus.Success)
+                {
+                    if (!string.IsNullOrEmpty(model.ReturnUrl))
+                    {
+                        return LocalRedirect(model.ReturnUrl);
+                    }
+
+                    return RedirectToAction("Index", "Home");
+                }
+                
+                ModelState.AddModelError(string.Empty, loginResult.Message);
+                
                 return View(model);
             }
 
-            var loginResult
-                = await _authenticationService.LoginAsync(model);
+            ModelState.AddModelError(string.Empty, "Invalid login attempt");
 
-            if (loginResult.ResponseStatus == AuthenticationResponseStatus.Success)
-            {
-                if (!string.IsNullOrEmpty(model.ReturnUrl))
-                {
-                    return LocalRedirect(model.ReturnUrl);
-                }
-
-                return RedirectToAction("Index", "Home");
-            }
-
-            ModelState.AddModelError(string.Empty, loginResult.Message);
-
-            return View();
+            return View(model);
         }
 
         [HttpPost]

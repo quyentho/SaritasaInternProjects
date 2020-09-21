@@ -39,6 +39,7 @@ namespace UnrealEstate.Services
             await _listingRepository.UpdateListingAsync(listing);
 
             return isFavorite;
+
         }
 
 

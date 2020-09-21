@@ -36,9 +36,5 @@ namespace UnrealEstate.Models.ViewModels.ResponseViewModels
         public List<CommentResponse> Comments { get; set; }
 
         public List<ListingPhotoResponse> ListingPhoTos { get; set; }
-
-        public List<ListingNoteResponse> ListingNotes { get; set; }
-
-        public List<BidResponse> Bids { get; set; }
     }
 }

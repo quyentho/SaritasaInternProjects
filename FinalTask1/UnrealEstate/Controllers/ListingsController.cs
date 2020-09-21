@@ -7,6 +7,8 @@ using AutoMapper;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using UnrealEstate.Models;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
 using UnrealEstate.Services;
@@ -26,6 +28,84 @@ namespace UnrealEstate.Controllers
             _listingService = listingService;
             _mapper = mapper;
             _userService = userService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Disable(int listingId, string returnUrl)
+        {
+            try
+            {
+                var currentUser = await GetCurrentUser();
+                await _listingService.DisableListingAsync(currentUser, listingId);
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (NotSupportedException e)
+            {
+                return Forbid(e.Message);
+            }
+            catch (InvalidOperationException e)
+            {
+                ModelState.AddModelError(string.Empty, e.Message);
+                return LocalRedirect(returnUrl);
+            }
+
+            return LocalRedirect(returnUrl);
+        }
+
+
+        [Route("MakeABid")]
+        [HttpGet]
+        public IActionResult Bid(int listingId, string returnUrl)
+        {
+            BidRequest bidRequest = new BidRequest()
+            {
+                ListingId = listingId
+            };
+
+            ViewData["returnUrl"] = returnUrl;
+            return View(bidRequest);
+        }
+
+        [Route("MakeABid")]
+        [HttpPost]
+        public async Task<IActionResult> Bid(BidRequest bidRequest, string returnUrl)
+        {
+            if (ModelState.IsValid)
+            {
+                var currentUser = await GetCurrentUser();
+
+                try
+                {
+                    await _listingService.MakeABid(bidRequest.ListingId, currentUser, bidRequest);
+                }
+                catch (ArgumentOutOfRangeException ex)
+                {
+                    return NotFound(ex.Message);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.Message);
+
+                    return View(bidRequest);
+                }
+
+                return LocalRedirect(returnUrl);
+            }
+
+            ModelState.AddModelError(string.Empty, "Invalid bid attempt");
+            return View(bidRequest);
+        }
+
+        private async Task<User> GetCurrentUser()
+        {
+            var currentUser = await
+                _userService.GetUserByEmailAsync(User.Claims
+                    .FirstOrDefault(c => c.Type == ClaimTypes.Email)
+                    ?.Value);
+            return currentUser;
         }
 
         [HttpGet]
@@ -60,13 +140,19 @@ namespace UnrealEstate.Controllers
 
             return View(listingRequest);
         }
-        
+
         [AllowAnonymous]
         [Route("{id}")]
         [HttpGet]
-        public async Task<IActionResult> Detail(int id)
+        public async Task<IActionResult> Detail(int id, string returnUrl)
         {
-            var listingResponse = await _listingService.GetListingAsync(id);
+            ListingResponse listingResponse = await _listingService.GetListingAsync(id);
+            
+            // TODO: REmove
+            //ViewBag.Image = base.File(listingResponse.ListingPhoTos.FirstOrDefault()?.PhotoUrl, "image/jpeg");
+
+            ViewBag.ReturnUrl = returnUrl;
+
             return View(listingResponse);
         }
 
@@ -89,7 +175,7 @@ namespace UnrealEstate.Controllers
 
             return View();
         }
-       
+
         [AllowAnonymous]
         [Route("Search")]
         [HttpGet]
@@ -97,7 +183,6 @@ namespace UnrealEstate.Controllers
         {
             if (ModelState.IsValid)
             {
-
                 SetPaging(filterCriteria);
 
                 List<ListingResponse> listingResponses =
@@ -109,6 +194,7 @@ namespace UnrealEstate.Controllers
                 return View(listingResponses);
             }
 
+            ModelState.AddModelError(string.Empty, "Fail to get listings");
             return View(null);
         }
 

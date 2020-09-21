@@ -13,7 +13,7 @@ namespace UnrealEstate.Models.MappingConfig
         {
             #region listing mapping
 
-            CreateMap<Listing, ListingResponse>();
+            CreateMap<Listing, ListingResponse>().ForMember(dest=>dest.StatusName, opt=>opt.MapFrom(src=>src.Status.Name));
 
             CreateMap<ListingRequest, Listing>().ForMember(dest => dest.ListingPhoTos, opt => opt.Ignore());
 

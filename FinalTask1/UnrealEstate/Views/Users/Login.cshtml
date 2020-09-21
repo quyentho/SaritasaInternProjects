@@ -8,8 +8,7 @@
             <div class="card-header">
                 <h3>Sign In</h3>
                 <div class="d-flex justify-content-end social_icon">
-                    <form asp-controller="Users" asp-action="ExternalLogin">
-                        <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+                    <form asp-controller="Users" asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl">
                         <button><span><i class="fab fa-facebook-square"></i></span></button>
                         <button type="submit" name="provider" value="Google"><span><i class="fab fa-google-plus-square"></i></span></button>
                         <button><span><i class="fab fa-twitter-square"></i></span></button>

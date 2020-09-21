@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using UnrealEstate.Models.Models;
 
 namespace UnrealEstate.Models.ModelConfigs
@@ -44,10 +45,13 @@ namespace UnrealEstate.Models.ModelConfigs
 
             if (!context.Users.Any())
             {
-                var user = new User() { Id= "2b3bffa2-d5b4-4bac-8a9b-8afa65ec5e85", Email = "user1@test.com", UserName = "user1@test.com" };
+                var user = new User() { Id = "2b3bffa2-d5b4-4bac-8a9b-8afa65ec5e85", Email = "user1@test.com", UserName = "user1@test.com" };
                 IdentityResult check = userManager.CreateAsync(user, "password").GetAwaiter().GetResult();
                 if (check.Succeeded)
                 {
+                    Claim claim = new Claim(ClaimTypes.Email, user.Email);
+                    userManager.AddClaimAsync(user, claim).GetAwaiter().GetResult();
+
                     userManager.AddToRoleAsync(user, UserRole.Admin).GetAwaiter().GetResult();
                 }
 
@@ -56,6 +60,9 @@ namespace UnrealEstate.Models.ModelConfigs
 
                 if (check.Succeeded)
                 {
+                    Claim claim = new Claim(ClaimTypes.Email, user.Email);
+                    userManager.AddClaimAsync(user, claim).GetAwaiter().GetResult();
+
                     userManager.AddToRoleAsync(user, UserRole.User).GetAwaiter().GetResult();
                 }
             }

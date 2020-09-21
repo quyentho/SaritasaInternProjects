@@ -44,6 +44,11 @@ namespace UnrealEstate.Services
             }
         }
 
+        /// <summary>
+        /// Throws InvalidOperationException if bid price is not higher than current price.
+        /// </summary>
+        /// <param name="bidPrice"></param>
+        /// <param name="currentPrice"></param>
         public static void BidPriceHigherThanCurrentPrice(decimal bidPrice, decimal currentPrice)
         {
             if (bidPrice <= currentPrice)

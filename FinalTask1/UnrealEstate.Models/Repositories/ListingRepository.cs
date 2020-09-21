@@ -38,7 +38,8 @@ namespace UnrealEstate.Models.Repositories
                 .Include(l => l.Comments)
                 .Include(l => l.Favorites)
                 .Include(l => l.Bids)
-                .Include(l=>l.ListingPhoTos)
+                .Include(l => l.ListingPhoTos)
+                .Include(l=>l.Status)
                 .ToListAsync();
 
             return listings;
@@ -47,14 +48,14 @@ namespace UnrealEstate.Models.Repositories
         public async Task AddListingAsync(Listing listing)
         {
 
-            _context.Listings.Add(listing);
+            await _context.Listings.AddAsync(listing);
             await _context.SaveChangesAsync();
         }
 
 
         public async Task UpdateListingAsync(Listing listing)
         {
-            var oldListing = _context.Listings.Find(listing.Id);
+            var oldListing = await _context.Listings.FindAsync(listing.Id);
             _context.Entry<Listing>(oldListing).CurrentValues.SetValues(listing);
 
             await _context.SaveChangesAsync();

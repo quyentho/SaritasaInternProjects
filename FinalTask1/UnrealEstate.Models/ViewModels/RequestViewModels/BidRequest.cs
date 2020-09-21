@@ -9,6 +9,7 @@ namespace UnrealEstate.Models.ViewModels.RequestViewModels
 {
     public class BidRequest
     {
+        public int ListingId { get; set; }
         public decimal Price { get; set; }
 
         public string Comment { get; set; }

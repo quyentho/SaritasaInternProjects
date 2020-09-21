@@ -1,4 +1,5 @@
 ﻿@using UnrealEstate.Models.ViewModels.RequestViewModels
+@using Microsoft.AspNet.Identity
 @model List<UnrealEstate.Models.ViewModels.ResponseViewModels.ListingResponse>
 
 <partial name="_SearchBar" />
@@ -18,6 +19,7 @@
             <th scope="col">Starting price</th>
             <th scope="col">Due date</th>
             <th scope="col">Description</th>
+            <th scope="col">Status</th>
         </tr>
     </thead>
     <tbody>
@@ -42,6 +44,15 @@
                 <td>@item.StatingPrice</td>
                 <td>@item.DueDate</td>
                 <td>@item.Description</td>
+                <td class="text-danger">@item.StatusName</td>
+                <td class="btn-group">
+                    <a class="btn btn-success" asp-action="Bid" asp-route-listingId=@item.Id asp-route-returnUrl=@string.Format($"{Context.Request.Path}{Context.Request.QueryString}")>Bid</a>
+                    <a class="btn btn-primary" asp-action="Detail" asp-route-id=@item.Id asp-route-returnUrl=@string.Format($"{Context.Request.Path}{Context.Request.QueryString}")>View</a>
+                    @if (User.IsInRole(UserRole.Admin))
+                    {
+                            <a asp-controller="Listings" asp-action="Disable" asp-route-listingId=@item.Id asp-route-returnUrl=@string.Format("{0}{1}", Context.Request.Path, Context.Request.QueryString) class="btn btn-danger">Disable</a>
+                    }
+                </td>
             </tr>
         }
     </tbody>

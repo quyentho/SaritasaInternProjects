@@ -67,10 +67,8 @@ namespace UnrealEstate.Controllers
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError(string.Empty, "Invalid login attempt");
-                
-                model.ReturnUrl = Url.RouteUrl(nameof(Index));
 
-                return View();
+                return View(model);
             }
 
             var loginResult
@@ -86,7 +84,7 @@ namespace UnrealEstate.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            ModelState.AddModelError(String.Empty, loginResult.Message);
+            ModelState.AddModelError(string.Empty, loginResult.Message);
 
             return View();
         }

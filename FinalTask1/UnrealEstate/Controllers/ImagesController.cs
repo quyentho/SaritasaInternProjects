@@ -10,7 +10,6 @@ using Microsoft.Extensions.Configuration;
 
 namespace UnrealEstate.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class ImagesController : ControllerBase
     {
@@ -20,6 +19,7 @@ namespace UnrealEstate.Controllers
             _configuration = configuration;
         }
 
+        [Route("api/GetImage")]
         public ActionResult GetImage(string photoUrl)
         {
             var path = _configuration.GetSection("ImagesPhysicalPath").Value;

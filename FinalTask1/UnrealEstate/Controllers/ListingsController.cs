@@ -148,9 +148,6 @@ namespace UnrealEstate.Controllers
         {
             ListingResponse listingResponse = await _listingService.GetListingAsync(id);
             
-            // TODO: REmove
-            //ViewBag.Image = base.File(listingResponse.ListingPhoTos.FirstOrDefault()?.PhotoUrl, "image/jpeg");
-
             ViewBag.ReturnUrl = returnUrl;
 
             return View(listingResponse);

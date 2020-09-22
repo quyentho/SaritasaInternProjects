@@ -137,11 +137,9 @@ namespace UnrealEstate
             }
 
             app.UseHttpsRedirection();
-            //app.UseStaticFiles(new StaticFileOptions()
-            //{
-            //    FileProvider = new PhysicalFileProvider(@"D:\Projects\quyen.tho\FinalTask1\UnrealEstate\Uploads\"),
-            //    RequestPath = new PathString("/Images")
-            //});
+
+            app.UseStaticFiles();
+          
 
             app.UseRouting();
 

@@ -132,7 +132,11 @@
     </div>
 
     <div class="col-3">
-        <img src="@string.Format($"{Context.Request.Scheme}://{Context.Request.Host}/api/Images/GetImage?photoUrl={Model.ListingPhoTos.FirstOrDefault().PhotoUrl}")"  width="100%" style="border-radius:5px; border:1px solid #bbb9b9;" alt="image" />
+        @foreach (var photo in Model.ListingPhoTos)
+        {
+            <img src="@string.Format($"{Context.Request.Scheme}://{Context.Request.Host}/api/GetImage?photoUrl={photo.PhotoUrl}")" width="100%" style="border-radius: 5px; border: 1px solid #bbb9b9;" alt="image" />
+            <div class="pt-4"></div>
+        }
     </div>
 </div>
 <div>

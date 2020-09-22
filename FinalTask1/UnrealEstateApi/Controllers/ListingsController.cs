@@ -248,7 +248,7 @@ namespace UnrealEstateApi.Controllers
 
                 User currentUser = await GetCurrentUserAsync();
 
-                isFavorite = await _listingService.AddOrRemoveFavoriteUserAsync(listingId, currentUser.Id);
+                isFavorite = await _listingService.AddOrRemoveFavoriteAsync(listingId, currentUser.Id);
 
                 return Ok(isFavorite);
             }

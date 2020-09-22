@@ -15,7 +15,7 @@ namespace UnrealEstate.Services
         /// <param name="listingId">Listing id.</param>
         /// <param name="userId">User id.</param>
         /// <returns>Bool indicates if user is favorited this listing.</returns>
-        Task<bool> AddOrRemoveFavoriteUserAsync(int listingId, string userId);
+        Task<bool> AddOrRemoveFavoriteAsync(int listingId, string userId);
 
         /// <summary>
         /// Creates new Listing.

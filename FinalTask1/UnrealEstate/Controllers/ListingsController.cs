@@ -30,12 +30,18 @@ namespace UnrealEstate.Controllers
             _userService = userService;
         }
 
+        //[HttpGet]
+        //public async Task<IActionResult> SetFavorite(int listingId)
+        //{
+        //    _listingService.AddOrRemoveFavoriteAsync()
+        //}
+
         [HttpGet]
         public async Task<IActionResult> Disable(int listingId, string returnUrl)
         {
             try
             {
-                var currentUser = await GetCurrentUser();
+                User currentUser = await GetCurrentUser();
                 await _listingService.DisableListingAsync(currentUser, listingId);
             }
             catch (ArgumentOutOfRangeException e)
@@ -141,6 +147,7 @@ namespace UnrealEstate.Controllers
             {
                 ModelState.AddModelError(string.Empty, TempData["errorMessage"].ToString());
             }
+
             var listingResponse = await _listingService.GetListingAsync(id);
 
             var listingRequest = _mapper.Map<ListingRequest>(listingResponse);
@@ -166,13 +173,13 @@ namespace UnrealEstate.Controllers
                     await _listingService.EditListingAsync(user, listingRequest, id);
                 }
             }
-            catch (NotSupportedException ex)
+            catch (NotSupportedException ex) // Not have permission
             {
                 TempData["errorMessage"] = ex.Message;
 
                 return LocalRedirect(returnUrl);
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException ex) // Photos Exceed 3.
             {
                 TempData["errorMessage"] = ex.Message;
 

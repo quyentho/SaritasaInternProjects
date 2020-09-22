@@ -1,7 +1,4 @@
-﻿@using Microsoft.EntityFrameworkCore
-@using Org.BouncyCastle.Asn1.Ocsp
-@using Microsoft.AspNetCore.Http
-@model UnrealEstate.Models.ViewModels.ResponseViewModels.ListingResponse
+﻿@model UnrealEstate.Models.ViewModels.ResponseViewModels.ListingResponse
 
 @{
     ViewData["Title"] = "Detail";
@@ -10,7 +7,6 @@
 
 <h1>Detail</h1>
 
-<h4>ListingResponse</h4>
 <hr />
 <div class="p-4 border rounded row">
     <div class="col-8">
@@ -142,7 +138,7 @@
 <div>
     @if (User.Identity.IsAuthenticated)
     {
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id, returnUrl = @ViewBag.ReturnUrl })
     }
     | <a href=@ViewBag.ReturnUrl>Back To List</a>
 </div>

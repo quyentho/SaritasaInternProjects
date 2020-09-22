@@ -22,7 +22,7 @@ namespace UnrealEstate.Services
         /// </summary>
         /// <param name="listing">New listing.</param>
         /// <returns></returns>
-        Task CreateListingAsync(ListingRequest listingViewModel, string userId);
+        Task CreateListingAsync(ListingRequest listingRequest, string userId);
 
         /// <summary>
         /// Disable listing if listing status is active, only available for admin user.
@@ -77,5 +77,14 @@ namespace UnrealEstate.Services
         /// <param name="bidRequestViewModel">bid model.</param>
         /// <returns>A task represent biding action.</returns>
         Task MakeABid(int listingId, User currentUser, BidRequest bidRequestViewModel);
+
+        /// <summary>
+        /// Delete Photo on a listing by id.
+        /// </summary>
+        /// <param name="currentUser">current logged in user.</param>
+        /// <param name="listingId">listing id.</param>
+        /// <param name="photoId">photo id.</param>
+        /// <returns></returns>
+        Task DeletePhotoAsync(User currentUser, int listingId, int photoId);
     }
 }

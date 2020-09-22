@@ -98,6 +98,10 @@ namespace UnrealEstateApi.Controllers
             {
                 return NotFound(ex.Message);
             }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
             return NoContent();
         }
@@ -116,9 +120,16 @@ namespace UnrealEstateApi.Controllers
                 return BadRequest();
             }
 
-            User user = await GetCurrentUserAsync();
+            try
+            {
+                User user = await GetCurrentUserAsync();
 
-            await _listingService.CreateListingAsync(listing, user.Id);
+                await _listingService.CreateListingAsync(listing, user.Id);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
             return CreatedAtAction("GetListing", listing);
         }

@@ -1,4 +1,5 @@
-﻿@model UnrealEstate.Models.ViewModels.RequestViewModels.ListingRequest
+﻿@using UnrealEstate.Models.ViewModels.ResponseViewModels
+@model UnrealEstate.Models.ViewModels.RequestViewModels.ListingRequest
 
 @{
     ViewData["Title"] = "Edit";
@@ -9,8 +10,8 @@
 
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit"  enctype="multipart/form-data" method="post">
+    <div class="col-8">
+        <form asp-action="Edit" enctype="multipart/form-data" method="post" asp-route-returnUrl="@ViewData["returnUrl"]">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Zip" class="control-label"></label>
@@ -72,10 +73,24 @@
             </div>
         </form>
     </div>
+
+    <div class="col-1"></div>
+    <div class="col-3">
+        @foreach (var photo in (List<ListingPhotoResponse>)ViewData["photos"])
+        {
+            <form asp-action="DeleteListingPhoto" method="get"  asp-route-listingId="@ViewData["listingId"]" asp-route-photoId ="@photo.Id">
+                <button type="submit" class="btn btn-danger float-right text-white">X</button>
+                <input type="hidden" value="@ViewData["returnUrl"]" name="returnUrl"/>
+                <img src="@string.Format($"{Context.Request.Scheme}://{Context.Request.Host}/api/GetImage?photoUrl={photo.PhotoUrl}")" width="100%" style="border-radius: 5px; border: 1px solid #bbb9b9;" alt="image" />
+                <div class="pt-4"></div>
+
+            </form>
+        }
+    </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Search" asp-route-returnUrl="@ViewData["returnUrl"]">Back to List</a>
 </div>
 
 

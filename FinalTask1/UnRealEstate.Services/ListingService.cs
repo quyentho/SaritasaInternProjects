@@ -123,6 +123,29 @@ namespace UnrealEstate.Services
             await _listingRepository.UpdateListingAsync(listingToBid);
         }
 
+        /// <inheritdoc/>
+        public async Task DeletePhotoAsync(User currentUser, int listingId, int photoId)
+        {
+            GuardClauses.IsNotNull(currentUser, "User");
+
+            var listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
+
+            GuardClauses.HasValue(listingFromDb, "listing id");
+
+            var photo = listingFromDb.ListingPhoTos.FirstOrDefault(p => p.Id == photoId);
+
+            GuardClauses.HasValue(photo, "photo id");
+
+            if (File.Exists(photo.PhotoUrl))
+            {
+                File.Delete(photo.PhotoUrl);
+            }
+
+            listingFromDb.ListingPhoTos.Remove(photo);
+
+            await _listingRepository.UpdateListingAsync(listingFromDb);
+        }
+
         private void AddBidOnListing(int listingId, User currentUser, BidRequest bidRequestViewModel, Listing listingToBid)
         {
             listingToBid.CurrentHighestBidPrice = bidRequestViewModel.Price;
@@ -295,10 +318,17 @@ namespace UnrealEstate.Services
 
         private static async Task AddUploadedPhotosIfExist(ListingRequest listingViewModel, Listing listing)
         {
-            bool hasPhoto = listingViewModel.ListingPhoTos.Count > 0;
+            bool hasPhotoUploaded = listingViewModel.ListingPhoTos.Count > 0;
 
-            if (hasPhoto)
+            if (hasPhotoUploaded)
             {
+                var existedPhotosNumber = listing.ListingPhoTos.Count;
+
+                if (existedPhotosNumber >= 3)
+                {
+                    throw new InvalidOperationException("Number of photos cannot exceeds 3");
+                }
+
                 List<ListingPhoto> listingPhotos = await GetUploadedListingPhotos(listingViewModel);
 
                 listing.ListingPhoTos.AddRange(listingPhotos);

@@ -55,6 +55,30 @@ namespace UnrealEstate.Controllers
             return LocalRedirect(returnUrl);
         }
 
+        [HttpGet]
+        [Route("{listingId}/DeletePhoto/{photoId}")]
+        public async Task<IActionResult> DeleteListingPhoto(int listingId, int photoId, string returnUrl)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var currentUser = await GetCurrentUser();
+                    await _listingService.DeletePhotoAsync(currentUser, listingId, photoId);
+
+                }
+                catch (NotSupportedException ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                }
+                catch (ArgumentOutOfRangeException ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                }
+            }
+
+            return RedirectToAction("Edit", new { id = listingId, returnUrl });
+        }
 
         [Route("MakeABid")]
         [HttpGet]
@@ -110,35 +134,52 @@ namespace UnrealEstate.Controllers
 
         [HttpGet]
         [Route("{id}/edit")]
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(int id, string returnUrl)
         {
+            // Error message from edit HttpPost method.
+            if (TempData["errorMessage"] != null)
+            {
+                ModelState.AddModelError(string.Empty, TempData["errorMessage"].ToString());
+            }
             var listingResponse = await _listingService.GetListingAsync(id);
 
             var listingRequest = _mapper.Map<ListingRequest>(listingResponse);
+
+            ViewData["returnUrl"] = returnUrl;
+            ViewData["photos"] = listingResponse.ListingPhoTos;
+            ViewData["listingId"] = id;
 
             return View(listingRequest);
         }
 
         [HttpPost]
         [Route("{id}/edit")]
-        public async Task<IActionResult> Edit(ListingRequest listingRequest, int id)
+        public async Task<IActionResult> Edit(ListingRequest listingRequest, int id, string returnUrl)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var user = await _userService.GetUserByEmailAsync(User.Claims.
-                        FirstOrDefault(c => c.Type == ClaimTypes.Email)
+                    var user = await _userService.GetUserByEmailAsync(User.Claims
+                        .FirstOrDefault(c => c.Type == ClaimTypes.Email)
                         ?.Value);
                     await _listingService.EditListingAsync(user, listingRequest, id);
                 }
             }
             catch (NotSupportedException ex)
             {
-                ModelState.AddModelError(string.Empty, ex.Message);
+                TempData["errorMessage"] = ex.Message;
+
+                return LocalRedirect(returnUrl);
+            }
+            catch (InvalidOperationException ex)
+            {
+                TempData["errorMessage"] = ex.Message;
+
+                return RedirectToAction("Edit", new { id, returnUrl });
             }
 
-            return View(listingRequest);
+            return RedirectToAction("Detail", new { id, returnUrl });
         }
 
         [AllowAnonymous]
@@ -147,7 +188,7 @@ namespace UnrealEstate.Controllers
         public async Task<IActionResult> Detail(int id, string returnUrl)
         {
             ListingResponse listingResponse = await _listingService.GetListingAsync(id);
-            
+
             ViewBag.ReturnUrl = returnUrl;
 
             return View(listingResponse);
@@ -166,8 +207,15 @@ namespace UnrealEstate.Controllers
         {
             if (ModelState.IsValid)
             {
-                var userId = HttpContext.User.Identity.GetUserId();
-                await _listingService.CreateListingAsync(listingRequest, userId);
+                try
+                {
+                    var userId = HttpContext.User.Identity.GetUserId();
+                    await _listingService.CreateListingAsync(listingRequest, userId);
+                }
+                catch (InvalidOperationException exception)
+                {
+                    ModelState.AddModelError(string.Empty, exception.Message);
+                }
             }
 
             return View();

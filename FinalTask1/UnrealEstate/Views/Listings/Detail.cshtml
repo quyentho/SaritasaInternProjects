@@ -1,5 +1,6 @@
 ﻿@using Microsoft.EntityFrameworkCore
 @using Org.BouncyCastle.Asn1.Ocsp
+@using Microsoft.AspNetCore.Http
 @model UnrealEstate.Models.ViewModels.ResponseViewModels.ListingResponse
 
 @{
@@ -131,7 +132,7 @@
     </div>
 
     <div class="col-3">
-        <img src="@string.Format($"{Context.Request.Scheme}://{Context.Request.Host}{Model.ListingPhoTos.FirstOrDefault().PhotoUrl.Replace(@"D:\Projects\quyen.tho\FinalTask1\UnrealEstate\Uploads\","/Images/")}")"  width="100%" style="border-radius:5px; border:1px solid #bbb9b9;" alt="image" />
+        <img src="@string.Format($"{Context.Request.Scheme}://{Context.Request.Host}/api/Images/GetImage?photoUrl={Model.ListingPhoTos.FirstOrDefault().PhotoUrl}")"  width="100%" style="border-radius:5px; border:1px solid #bbb9b9;" alt="image" />
     </div>
 </div>
 <div>

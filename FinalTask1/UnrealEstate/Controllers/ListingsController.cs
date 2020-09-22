@@ -191,6 +191,7 @@ namespace UnrealEstate.Controllers
 
                 ViewData["Criteria"] = filterCriteria;
 
+
                 return View(listingResponses);
             }
 

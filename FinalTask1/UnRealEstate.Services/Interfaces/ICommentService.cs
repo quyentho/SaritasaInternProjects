@@ -13,7 +13,7 @@ namespace UnrealEstate.Services
         /// </summary>
         /// <param name="comment">new comment.</param>
         /// <returns></returns>
-        Task CreateCommentAsync(string id, CommentRequest comment);
+        Task CreateCommentAsync(string userId, CommentRequest comment);
 
         /// <summary>
         /// Edits comment, only available for author.

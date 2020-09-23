@@ -138,24 +138,57 @@
         }
     </div>
     <div>
-        @if (User.Identity.IsAuthenticated)
+        @if (User.Identity.IsAuthenticated || User.Identity.Name == Model.UserEmail)
         {
-            @Html.ActionLink("Edit", "Edit", new { id = Model.Id, returnUrl = @ViewBag.ReturnUrl })
+            @Html.ActionLink("Edit", "Edit", new { id = Model.Id, returnUrl = @ViewData["returnUrl"] })
         }
-        | <a href=@ViewBag.ReturnUrl>Back To List</a>
+        | <a href=@ViewData["returnUrl"]>Back To List</a>
     </div>
 </div>
+
+<div>
+    <p class="font-weight-bold">Comments</p>
+</div>
 <div class="p-4 border rounded row">
-    <table class="table table-striped">
+    <table class="table table-sm">
         @foreach (var comment in Model.Comments)
         {
-            <tr>
+            <tr class="table-primary">
                 <th scope="col">@comment.UserEmail</th>
                 <th scope="col">@comment.CreatedAt.ToString("dd/MM/yyyy H:mm:ss")</th>
+                <th>
+                    @if (User.IsInRole(UserRole.Admin))
+                    {
+                        @Html.ActionLink("Delete", "DeleteComment", new { commentId = comment.Id, listingId = Model.Id, returnUrl = ViewData["returnUrl"] })
+                    }
+                </th>
+                @*<th>
+                    @if (User.Identity.Name == comment.UserEmail)
+                    {
+                        @Html.ActionLink("Edit", "DeleteComment", new { commentId = comment.Id, listingId = Model.Id, returnUrl = ViewData["returnUrl"] }, new {@onclick="editComment"});
+                    }
+                </th>*@
             </tr>
             <tr>
-                <th>@comment.Text</th>
+                <td>@comment.Text</td>
             </tr>
         }
     </table>
+    <form  id="commentForm" asp-controller="Listings" asp-action="AddComment" asp-route-listingId="@Model.Id" method="post">
+        <textarea class="flex-fill" name="text" placeholder="Leave a comment"></textarea>
+        <input type="hidden" name="returnUrl" value="@ViewData["returnUrl"]"/>
+    </form>
 </div>
+
+<script type="text/javascript">
+    var form = document.getElementById("commentForm");
+
+    form.addEventListener("keydown",
+        function(event) {
+            if (event.key === "Enter") {
+                form.submit();
+            }
+        });
+
+   
+</script>

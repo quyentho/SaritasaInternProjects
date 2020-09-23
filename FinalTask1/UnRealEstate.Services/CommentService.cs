@@ -86,6 +86,8 @@ namespace UnrealEstate.Services
             GuardClauses.IsAdmin(userRole.First());
 
             var comment = await _commentRepository.GetCommentByIdAsync(commentId);
+            
+            GuardClauses.HasValue(comment, "comment id");
 
             await _commentRepository.DeleteCommentAsync(comment);
         }

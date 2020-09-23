@@ -80,6 +80,7 @@
         {
             <form asp-action="DeleteListingPhoto" method="get"  asp-route-listingId="@ViewData["listingId"]" asp-route-photoId ="@photo.Id">
                 <button type="submit" class="btn btn-danger float-right text-white">X</button>
+                
                 <input type="hidden" value="@ViewData["returnUrl"]" name="returnUrl"/>
                 <img src="@string.Format($"{Context.Request.Scheme}://{Context.Request.Host}/api/GetImage?photoUrl={photo.PhotoUrl}")" width="100%" style="border-radius: 5px; border: 1px solid #bbb9b9;" alt="image" />
                 <div class="pt-4"></div>

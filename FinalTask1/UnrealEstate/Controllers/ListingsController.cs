@@ -8,6 +8,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MimeKit.Cryptography;
 using UnrealEstate.Models;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
@@ -22,27 +23,74 @@ namespace UnrealEstate.Controllers
         private readonly IListingService _listingService;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
+        private readonly ICommentService _commentService;
 
-        public ListingsController(IListingService listingService, IMapper mapper, IUserService userService)
+        public ListingsController(IListingService listingService, IMapper mapper, IUserService userService, ICommentService commentService)
         {
             _listingService = listingService;
             _mapper = mapper;
             _userService = userService;
+            _commentService = commentService;
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> SetFavorite(int listingId)
-        //{
-        //    _listingService.AddOrRemoveFavoriteAsync()
-        //}
+        [HttpPost]
+        [Route("{listingId}/AddComment")]
+        public async Task<IActionResult> AddComment(CommentRequest commentRequest ,string returnUrl)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    User currentUser = await GetCurrentUser();
+
+                    await _commentService.CreateCommentAsync(currentUser.Id, commentRequest);
+                }
+                catch (ArgumentOutOfRangeException ex)
+                {
+                    TempData["errorMessage"] = ex.Message;
+                }
+                catch (InvalidOperationException ex)
+                {
+                    TempData["errorMessage"] = ex.Message;
+                }
+            }
+
+            return RedirectToAction(nameof(Detail), new { id = commentRequest.ListingId, returnUrl });
+        }
 
         [HttpGet]
+        [Route("{listingId}/DeleteComment/{commentId}")]
+        public async Task<IActionResult> DeleteComment(int commentId, int listingId, string returnUrl)
+        {
+            try
+            {
+                User currentUser = await GetCurrentUser();
+
+                await _commentService.DeleteCommentAsync(currentUser, commentId);
+            }
+            catch (NotSupportedException ex)
+            {
+                TempData["errorMessage"] = ex.Message;
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                TempData["errorMessage"] = ex.Message;
+            }
+
+            return RedirectToAction(nameof(Detail), new { id = listingId, returnUrl });
+        }
+
+        [HttpGet]
+        [Route("{listingId}/Disable")]
         public async Task<IActionResult> Disable(int listingId, string returnUrl)
         {
             try
             {
                 User currentUser = await GetCurrentUser();
+
                 await _listingService.DisableListingAsync(currentUser, listingId);
+
+                return LocalRedirect(returnUrl);
             }
             catch (ArgumentOutOfRangeException e)
             {
@@ -58,7 +106,6 @@ namespace UnrealEstate.Controllers
                 return LocalRedirect(returnUrl);
             }
 
-            return LocalRedirect(returnUrl);
         }
 
         [HttpGet]
@@ -194,9 +241,15 @@ namespace UnrealEstate.Controllers
         [HttpGet]
         public async Task<IActionResult> Detail(int id, string returnUrl)
         {
+            // Error from DeleteComment action.
+            if (TempData["errorMessage"] != null)
+            {
+                ModelState.AddModelError(string.Empty, TempData["errorMessage"].ToString());
+            }
+
             ListingResponse listingResponse = await _listingService.GetListingAsync(id);
 
-            ViewBag.ReturnUrl = returnUrl;
+            ViewData["returnUrl"] = returnUrl;
 
             return View(listingResponse);
         }

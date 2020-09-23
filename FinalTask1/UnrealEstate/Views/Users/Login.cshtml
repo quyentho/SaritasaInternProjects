@@ -21,14 +21,14 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-user"></i></span>
                         </div>
-                        <input type="text" class="form-control" asp-for="Email" placeholder="email address">
+                        <input type="text" class="form-control" value="user1@test.com" asp-for="Email" placeholder="email address">
                     </div>
-                    <span asp-validation-for="Email" class="text-danger"></span>
+                    <span asp-validation-for="Email"  class="text-danger"></span>
                     <div class="input-group form-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-key"></i></span>
                         </div>
-                        <input type="password" class="form-control" asp-for="Password" placeholder="password">
+                        <input type="password" class="form-control" value="password" asp-for="Password" placeholder="password">
                         <br />
                     </div>
                     <span asp-validation-for="Password" class="text-danger"></span>

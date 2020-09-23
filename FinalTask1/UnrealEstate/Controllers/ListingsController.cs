@@ -33,7 +33,7 @@ namespace UnrealEstate.Controllers
             _commentService = commentService;
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("{listingId}/AddComment")]
         public async Task<IActionResult> AddComment(CommentRequest commentRequest ,string returnUrl)
         {

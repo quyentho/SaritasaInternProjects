@@ -162,19 +162,19 @@
                         @Html.ActionLink("Delete", "DeleteComment", new { commentId = comment.Id, listingId = Model.Id, returnUrl = ViewData["returnUrl"] })
                     }
                 </th>
-                @*<th>
+                <th>
                     @if (User.Identity.Name == comment.UserEmail)
                     {
-                        @Html.ActionLink("Edit", "DeleteComment", new { commentId = comment.Id, listingId = Model.Id, returnUrl = ViewData["returnUrl"] }, new {@onclick="editComment"});
+                        <a href="#" onclick="editComment(@comment)">Edit</a>
                     }
-                </th>*@
+                </th>
             </tr>
             <tr>
                 <td>@comment.Text</td>
             </tr>
         }
     </table>
-    <form  id="commentForm" asp-controller="Listings" asp-action="AddComment" asp-route-listingId="@Model.Id" method="post">
+    <form  id="commentForm" asp-controller="Listings" asp-action="AddComment" asp-route-listingId="@Model.Id" method="get">
         <textarea class="flex-fill" name="text" placeholder="Leave a comment"></textarea>
         <input type="hidden" name="returnUrl" value="@ViewData["returnUrl"]"/>
     </form>
@@ -190,5 +190,13 @@
             }
         });
 
-   
+    // BUG: cannot get value
+    function editComment(comment) {
+        console.log(comment);
+        document.textarea.value = comment.Text;
+
+        //var form = document.getElementById("commentForm");
+        //form.addEventListener();
+    }
+
 </script>

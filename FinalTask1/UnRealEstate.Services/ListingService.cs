@@ -98,17 +98,17 @@ namespace UnrealEstate.Services
         }
 
         /// <inheritdoc/>
-        public async Task CreateListingAsync(ListingRequest listingViewModel, string userId)
+        public async Task CreateListingAsync(ListingRequest listingRequest, string userId)
         {
-            Listing listing = await ProduceListing(listingViewModel, userId);
+            Listing listing = await ProduceListing(listingRequest, userId);
 
             await _listingRepository.AddListingAsync(listing);
         }
 
         /// <inheritdoc/>
-        public async Task EditListingAsync(User currentUser, ListingRequest listingViewModel, int listingId)
+        public async Task EditListingAsync(User currentUser, ListingRequest listingRequest, int listingId)
         {
-            Listing editedListing = await GetEditedListing(currentUser, listingViewModel, listingId);
+            Listing editedListing = await GetEditedListing(currentUser, listingRequest, listingId);
 
             await _listingRepository.UpdateListingAsync(editedListing);
         }

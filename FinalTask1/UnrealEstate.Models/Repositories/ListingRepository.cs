@@ -22,7 +22,7 @@ namespace UnrealEstate.Models.Repositories
         {
             var listing = await _context
                 .Listings
-                .Include(l => l.Comments)
+                .Include(l => l.Comments).ThenInclude(c=>c.User)
                 .Include(l => l.Favorites)
                 .Include(l => l.Bids)
                 .Include(l=>l.ListingPhoTos)

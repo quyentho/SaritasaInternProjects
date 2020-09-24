@@ -1,5 +1,6 @@
 ﻿@model UnrealEstate.Models.ViewModels.RequestViewModels.ListingRequest
 
+
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -8,7 +9,7 @@
 <hr />
 
 
-<form asp-controller="Listings" asp-action="Create" method="post" enctype="multipart/form-data">
+<form asp-controller="Listings" asp-action="Create" method="post" enctype="multipart/form-data" id="createListingForm">
     <div asp-validation-summary="ModelOnly"></div>
     <div class="row">
         <div class="col-6">
@@ -83,6 +84,14 @@
 
 
 @section Scripts {
+    @*<script type="text/javascript">
+        $("#createListingForm").submit(function() {
+            var datetime = $("#datepicker").val;
+
+            $("#datepicker").val = new Date(datetime.year,  )
+        });
+    </script>*@
+
     @{ await Html.RenderPartialAsync("_DatePickerScriptPartial");}
 
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

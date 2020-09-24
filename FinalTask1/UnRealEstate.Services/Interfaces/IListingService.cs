@@ -36,10 +36,10 @@ namespace UnrealEstate.Services
         /// Edits listing, only available for admin user or listing author.
         /// </summary>
         /// <param name="currentUser"></param>
-        /// <param name="listing"></param>
+        /// <param name="listingRequest"></param>
         /// <param name="listingId"></param>
         /// <returns></returns>
-        Task EditListingAsync(User currentUser, ListingRequest listing, int listingId);
+        Task EditListingAsync(User currentUser, ListingRequest listingRequest, int listingId);
 
         /// <summary>
         /// Enables listing if listing status is active, only available for admin user.

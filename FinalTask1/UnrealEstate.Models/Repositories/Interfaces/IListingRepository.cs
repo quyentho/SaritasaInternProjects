@@ -12,6 +12,7 @@ namespace UnrealEstate.Models.Repositories
 
         Task<Listing> GetListingByIdAsync(int listingId);
 
+
         Task AddListingAsync(Listing listing);
 
         Task UpdateListingAsync(Listing listing);

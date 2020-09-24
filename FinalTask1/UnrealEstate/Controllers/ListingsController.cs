@@ -7,8 +7,6 @@ using AutoMapper;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MimeKit.Cryptography;
 using UnrealEstate.Models;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
@@ -34,8 +32,37 @@ namespace UnrealEstate.Controllers
         }
 
         [HttpGet]
+        [Route("{listingId}/UpdateComment/{commentId}")]
+        public async Task<IActionResult> UpdateComment(CommentRequest commentRequest, int commentId, string returnUrl)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["errorMessage"] = "Error when attempt to edit comment";
+             
+                return RedirectToAction(nameof(Detail), new { id = commentRequest.ListingId, returnUrl });
+            }
+
+            try
+            {
+                User currentUser = await GetCurrentUser();
+                await _commentService.EditCommentAsync(currentUser.Id, commentRequest, commentId);
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                TempData["errorMessage"] = ex.Message;
+            }
+            catch (NotSupportedException ex)
+            {
+                TempData["errorMessage"] = ex.Message;
+            }
+
+            return RedirectToAction(nameof(Detail), new { id = commentRequest.ListingId, returnUrl });
+
+        }
+
+        [HttpGet]
         [Route("{listingId}/AddComment")]
-        public async Task<IActionResult> AddComment(CommentRequest commentRequest ,string returnUrl)
+        public async Task<IActionResult> AddComment(CommentRequest commentRequest, string returnUrl)
         {
             if (ModelState.IsValid)
             {
@@ -241,7 +268,7 @@ namespace UnrealEstate.Controllers
         [HttpGet]
         public async Task<IActionResult> Detail(int id, string returnUrl)
         {
-            // Error from DeleteComment action.
+            // Error from other actions occur when performs action on detail view.
             if (TempData["errorMessage"] != null)
             {
                 ModelState.AddModelError(string.Empty, TempData["errorMessage"].ToString());
@@ -265,6 +292,7 @@ namespace UnrealEstate.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(ListingRequest listingRequest)
         {
+
             if (ModelState.IsValid)
             {
                 try

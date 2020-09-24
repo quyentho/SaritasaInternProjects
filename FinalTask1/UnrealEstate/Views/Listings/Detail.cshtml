@@ -1,4 +1,5 @@
 ﻿@using System.Globalization
+@using Newtonsoft.Json
 @model UnrealEstate.Models.ViewModels.ResponseViewModels.ListingResponse
 
 @{
@@ -114,7 +115,10 @@
                 @Html.DisplayNameFor(model => model.DueDate)
             </div>
             <div class="col-8">
-                @Html.DisplayFor(model => model.DueDate)
+                @{
+                    var dueDate = Model.DueDate.ToString("dd/MM/yyyy H:mm:ss");
+                }
+                @Html.DisplayFor(model => dueDate)
             </div>
         </div>
         <div class="form-group row">
@@ -165,7 +169,7 @@
                 <th>
                     @if (User.Identity.Name == comment.UserEmail)
                     {
-                        <a href="#" onclick="editComment(@comment)">Edit</a>
+                        <a href="javascript:void(0)" onclick="editComment(@JsonConvert.SerializeObject(comment))">Edit</a>
                     }
                 </th>
             </tr>
@@ -175,7 +179,7 @@
         }
     </table>
     <form  id="commentForm" asp-controller="Listings" asp-action="AddComment" asp-route-listingId="@Model.Id" method="get">
-        <textarea class="flex-fill" name="text" placeholder="Leave a comment"></textarea>
+        <textarea id="commentText" class="flex-fill" name="text" placeholder="Leave a comment"></textarea>
         <input type="hidden" name="returnUrl" value="@ViewData["returnUrl"]"/>
     </form>
 </div>
@@ -192,11 +196,12 @@
 
     // BUG: cannot get value
     function editComment(comment) {
-        console.log(comment);
-        document.textarea.value = comment.Text;
 
-        //var form = document.getElementById("commentForm");
-        //form.addEventListener();
+        document.getElementById("commentText").value = comment.Text;
+        document.getElementById("commentText").focus();
+        document.getElementById("commentText").select();
+
+        document.getElementById("commentForm").action = "/Listings/" + @Model.Id + "/UpdateComment/" + comment.Id;
     }
 
 </script>

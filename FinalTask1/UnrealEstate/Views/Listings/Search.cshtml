@@ -1,7 +1,13 @@
-﻿@using UnrealEstate.Models.ViewModels.RequestViewModels
+﻿@inject IUserService UserService
+
+@using UnrealEstate.Models.ViewModels.RequestViewModels
+@using UnrealEstate.Services
 @using Microsoft.AspNet.Identity
 @model List<UnrealEstate.Models.ViewModels.ResponseViewModels.ListingResponse>
 
+@{
+    Layout = "_Layout";
+}
 <partial name="_SearchBar" />
 
 <table class="table table-striped">
@@ -48,14 +54,41 @@
                 <td class="btn-group">
                     <a class="btn btn-success" asp-action="Bid" asp-route-listingId=@item.Id asp-route-returnUrl=@string.Format($"{Context.Request.Path}{Context.Request.QueryString}")>Bid</a>
                     <a class="btn btn-primary" asp-action="Detail" asp-route-id=@item.Id asp-route-returnUrl=@string.Format($"{Context.Request.Path}{Context.Request.QueryString}")>View</a>
-                    @if (User.IsInRole(UserRole.Admin))
-                    {
-                            <a asp-controller="Listings" asp-action="Disable" asp-route-listingId=@item.Id asp-route-returnUrl=@string.Format("{0}{1}", Context.Request.Path, Context.Request.QueryString) class="btn btn-danger">Disable</a>
-                    }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-@Html.ActionLink("Next page", "Search", (ListingFilterCriteriaRequest)ViewData["criteria"])
 
+                    @{
+                        //BUG: user service not injected
+                        var currentUser = await UserService.GetUserByIdAsync(User.Identity.GetUserId());
+                    }
+
+                    @if (currentUser.FavoriteListings.Contains(item))
+                    {
+                        <a id="favoriteButton" class="btn btn-light active" href="javascript:void(0)">
+                            }
+                            else{
+
+                            }
+
+                            Favorite
+                        </a>
+                        @if (User.IsInRole(UserRole.Admin))
+                        {
+                            <a asp-controller="Listings" asp-action="Disable" asp-route-listingId=@item.Id asp-route-returnUrl=@string.Format("{0}{1}", Context.Request.Path, Context.Request.QueryString) class="btn btn-danger">Disable</a>
+                        }
+                    </td>
+                </tr>
+            }
+                </tbody>
+            </table>
+            @Html.ActionLink("Next page", "Search", (ListingFilterCriteriaRequest)ViewData["criteria"])
+
+            @section Scripts{
+                <script type="text/javascript">
+
+                    var favoriteButton = $("#favoriteButton");
+
+                    favoriteButton.click(function () {
+                        favoriteButton.toggleClass('btn-light');
+                        favoriteButton.toggleClass('btn-danger');
+                    });
+                </script>
+            }

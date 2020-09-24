@@ -194,7 +194,6 @@
             }
         });
 
-    // BUG: cannot get value
     function editComment(comment) {
 
         document.getElementById("commentText").value = comment.Text;
@@ -203,5 +202,4 @@
 
         document.getElementById("commentForm").action = "/Listings/" + @Model.Id + "/UpdateComment/" + comment.Id;
     }
-
 </script>

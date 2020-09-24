@@ -32,13 +32,29 @@ namespace UnrealEstate.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Favorite(int listingId, string returnUrl)
+        {
+            try
+            {
+                User user = await GetCurrentUser();
+                bool isFavorite = await _listingService.AddOrRemoveFavoriteAsync(listingId, user.Id);
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                TempData["errorMessage"] = ex.Message;
+            }
+
+            return LocalRedirect(returnUrl);
+        }
+
+        [HttpGet]
         [Route("{listingId}/UpdateComment/{commentId}")]
         public async Task<IActionResult> UpdateComment(CommentRequest commentRequest, int commentId, string returnUrl)
         {
             if (!ModelState.IsValid)
             {
                 TempData["errorMessage"] = "Error when attempt to edit comment";
-             
+
                 return RedirectToAction(nameof(Detail), new { id = commentRequest.ListingId, returnUrl });
             }
 

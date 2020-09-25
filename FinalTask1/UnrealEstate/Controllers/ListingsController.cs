@@ -48,37 +48,8 @@ namespace UnrealEstate.Controllers
                 TempData["errorMessage"] = ex.Message;
             }
 
-            return RedirectToAction(nameof(Search), filterCriteria);
+            return RedirectToAction(nameof(Search),  filterCriteria);
         }
-
-        //private ListingFilterCriteriaRequest GetFilterCriteria()
-        //{
-        //    ListingFilterCriteriaRequest filterCriteria = new ListingFilterCriteriaRequest
-        //    {
-        //        Address = HttpContext.Request.Query["Address"],
-
-        //        MaxPrice = HttpContext.Request.Query["MaxPrice"].Any()
-        //        ? (uint?)Convert.ToUInt32(HttpContext.Request.Query["MaxPrice"])
-        //        : null,
-
-        //        MinSize = HttpContext.Request.Query["MinSize"].Any()
-        //        ? (uint?)Convert.ToUInt32(HttpContext.Request.Query["MinSize"])
-        //        : null,
-
-        //        MaxAge = HttpContext.Request.Query["MaxAge"].Any()
-        //        ? (uint?)Convert.ToUInt32(HttpContext.Request.Query["MaxAge"])
-        //        : null,
-
-        //        Limit = HttpContext.Request.Query["Limit"].Any()
-        //        ? (uint?)Convert.ToUInt32(HttpContext.Request.Query["Limit"])
-        //        : null,
-
-        //        Offset = HttpContext.Request.Query["Offset"].Any()
-        //        ? (uint?)Convert.ToUInt32(HttpContext.Request.Query["Offset"])
-        //        : null
-        //    };
-        //    return filterCriteria;
-        //}
 
         [HttpGet]
         [Route("{listingId}/UpdateComment/{commentId}")]

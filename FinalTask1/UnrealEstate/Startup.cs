@@ -83,6 +83,7 @@ namespace UnrealEstate
             services.AddTransient<IListingRepository, ListingRepository>();
             services.AddTransient<IListingService, ListingService>();
             services.AddTransient<IUserService, UserService>();
+           // services.AddTransient<UserService>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<ICommentRepository, CommentRepository>();
             services.AddTransient<ICommentService, CommentService>();

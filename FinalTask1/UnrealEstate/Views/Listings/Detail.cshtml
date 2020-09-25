@@ -178,9 +178,11 @@
             </tr>
         }
     </table>
-    <form  id="commentForm" asp-controller="Listings" asp-action="AddComment" asp-route-listingId="@Model.Id" method="get">
+    <form id="commentForm" asp-controller="Listings" asp-action="AddComment" asp-route-listingId="@Model.Id" method="get">
+
         <textarea id="commentText" class="flex-fill" name="text" placeholder="Leave a comment"></textarea>
         <input type="hidden" name="returnUrl" value="@ViewData["returnUrl"]"/>
+
     </form>
 </div>
 

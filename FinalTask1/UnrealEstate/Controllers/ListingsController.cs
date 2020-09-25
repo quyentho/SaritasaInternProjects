@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UnrealEstate.Models;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
@@ -31,21 +33,52 @@ namespace UnrealEstate.Controllers
             _commentService = commentService;
         }
 
+        [Route("{listingId}/Favorite")]
         [HttpGet]
-        public async Task<IActionResult> Favorite(int listingId, string returnUrl)
+        public async Task<IActionResult> Favorite(int listingId, ListingFilterCriteriaRequest filterCriteria)
         {
             try
             {
                 User user = await GetCurrentUser();
-                bool isFavorite = await _listingService.AddOrRemoveFavoriteAsync(listingId, user.Id);
+
+                await _listingService.AddOrRemoveFavoriteAsync(listingId, user.Id);
             }
             catch (ArgumentOutOfRangeException ex)
             {
                 TempData["errorMessage"] = ex.Message;
             }
 
-            return LocalRedirect(returnUrl);
+            return RedirectToAction(nameof(Search), filterCriteria);
         }
+
+        //private ListingFilterCriteriaRequest GetFilterCriteria()
+        //{
+        //    ListingFilterCriteriaRequest filterCriteria = new ListingFilterCriteriaRequest
+        //    {
+        //        Address = HttpContext.Request.Query["Address"],
+
+        //        MaxPrice = HttpContext.Request.Query["MaxPrice"].Any()
+        //        ? (uint?)Convert.ToUInt32(HttpContext.Request.Query["MaxPrice"])
+        //        : null,
+
+        //        MinSize = HttpContext.Request.Query["MinSize"].Any()
+        //        ? (uint?)Convert.ToUInt32(HttpContext.Request.Query["MinSize"])
+        //        : null,
+
+        //        MaxAge = HttpContext.Request.Query["MaxAge"].Any()
+        //        ? (uint?)Convert.ToUInt32(HttpContext.Request.Query["MaxAge"])
+        //        : null,
+
+        //        Limit = HttpContext.Request.Query["Limit"].Any()
+        //        ? (uint?)Convert.ToUInt32(HttpContext.Request.Query["Limit"])
+        //        : null,
+
+        //        Offset = HttpContext.Request.Query["Offset"].Any()
+        //        ? (uint?)Convert.ToUInt32(HttpContext.Request.Query["Offset"])
+        //        : null
+        //    };
+        //    return filterCriteria;
+        //}
 
         [HttpGet]
         [Route("{listingId}/UpdateComment/{commentId}")]
@@ -265,7 +298,7 @@ namespace UnrealEstate.Controllers
             }
             catch (NotSupportedException ex) // Not have permission
             {
-                TempData["errorMessage"] = ex.Message;
+                TempData["errorMessage"] = ex.Message; // BUG: lost message because redirect
 
                 return LocalRedirect(returnUrl);
             }
@@ -330,21 +363,28 @@ namespace UnrealEstate.Controllers
         [HttpGet]
         public async Task<IActionResult> Search(ListingFilterCriteriaRequest filterCriteria)
         {
-            if (ModelState.IsValid)
+            if (TempData["errorMessage"] != null)
             {
-                SetPaging(filterCriteria);
-
-                List<ListingResponse> listingResponses =
-                    await _listingService.GetActiveListingsWithFilterAsync(filterCriteria);
-
-
-                ViewData["Criteria"] = filterCriteria;
-
-                return View(listingResponses);
+                ModelState.AddModelError(string.Empty, TempData["errorMessage"].ToString());
             }
 
-            ModelState.AddModelError(string.Empty, "Fail to get listings");
-            return View(null);
+            if (!ModelState.IsValid)
+            {
+                TempData["errorMessage"] = "Fail to get listings";
+
+                // TODO: Try to render view.
+                return RedirectToAction(nameof(Index), "Home");
+            }
+
+            SetPaging(filterCriteria);
+
+            List<ListingResponse> listingResponses =
+                await _listingService.GetActiveListingsWithFilterAsync(filterCriteria);
+
+
+            ViewData["filterCriteria"] = filterCriteria;
+
+            return View(listingResponses);
         }
 
         private static void SetPaging(ListingFilterCriteriaRequest filterCriteria)

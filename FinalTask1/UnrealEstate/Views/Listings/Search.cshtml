@@ -7,6 +7,8 @@
 
 @{
     Layout = "_Layout";
+
+    string returnUrl = string.Format($"{Context.Request.Path}{Context.Request.QueryString}");
 }
 <partial name="_SearchBar" />
 
@@ -52,43 +54,33 @@
                 <td>@item.Description</td>
                 <td class="text-danger">@item.StatusName</td>
                 <td class="btn-group">
-                    <a class="btn btn-success" asp-action="Bid" asp-route-listingId=@item.Id asp-route-returnUrl=@string.Format($"{Context.Request.Path}{Context.Request.QueryString}")>Bid</a>
-                    <a class="btn btn-primary" asp-action="Detail" asp-route-id=@item.Id asp-route-returnUrl=@string.Format($"{Context.Request.Path}{Context.Request.QueryString}")>View</a>
+                    <a class="btn btn-success" asp-action="Bid" asp-route-listingId=@item.Id asp-route-returnUrl=@returnUrl>Bid</a>
+                    <a class="btn btn-primary" asp-action="Detail" asp-route-id=@item.Id asp-route-returnUrl=@returnUrl )>View</a>
 
-                    @{
-                        //BUG: user service not injected
+                    @if (User.Identity.IsAuthenticated)
+                    {
                         var currentUser = await UserService.GetUserByIdAsync(User.Identity.GetUserId());
+
+                        if (currentUser.FavoriteListings.Select(l => l.Id).Contains(item.Id))
+                        {
+                            <a id="favoriteButton" asp-action="Favorite" asp-route-listingId="@item.Id" asp-route-filterCriteria="@ViewData["filterCriteria"]" class="btn btn-danger">Favorite</a>
+                        }
+                        else
+                        {
+                            <a id="favoriteButton" asp-action="Favorite" asp-route-listingId="@item.Id" asp-route-filterCriteria="@ViewData["filterCriteria"]" class="btn btn-light">Favorite</a>
+                        }
                     }
 
-                    @if (currentUser.FavoriteListings.Contains(item))
+                    @if (User.IsInRole(UserRole.Admin))
                     {
-                        <a id="favoriteButton" class="btn btn-light active" href="javascript:void(0)">
-                            }
-                            else{
+                        <a asp-controller="Listings" asp-action="Disable" asp-route-listingId=@item.Id asp-route-returnUrl=@string.Format("{0}{1}", Context.Request.Path, Context.Request.QueryString) class="btn btn-danger">Disable</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
-                            }
+@*TODO: make previous action link*@
+@Html.ActionLink("Next page", "Search", (ListingFilterCriteriaRequest)ViewData["filterCriteria"])
 
-                            Favorite
-                        </a>
-                        @if (User.IsInRole(UserRole.Admin))
-                        {
-                            <a asp-controller="Listings" asp-action="Disable" asp-route-listingId=@item.Id asp-route-returnUrl=@string.Format("{0}{1}", Context.Request.Path, Context.Request.QueryString) class="btn btn-danger">Disable</a>
-                        }
-                    </td>
-                </tr>
-            }
-                </tbody>
-            </table>
-            @Html.ActionLink("Next page", "Search", (ListingFilterCriteriaRequest)ViewData["criteria"])
-
-            @section Scripts{
-                <script type="text/javascript">
-
-                    var favoriteButton = $("#favoriteButton");
-
-                    favoriteButton.click(function () {
-                        favoriteButton.toggleClass('btn-light');
-                        favoriteButton.toggleClass('btn-danger');
-                    });
-                </script>
-            }

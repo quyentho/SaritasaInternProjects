@@ -32,16 +32,13 @@ namespace UnrealEstate.Services
         /// <inheritdoc/>
         
         // TODO: define exception for services.
-        public async Task<bool> AddOrRemoveFavoriteAsync(int listingId, string userId)
+        public async Task AddOrRemoveFavoriteAsync(int listingId, string userId)
         {
             Listing listing = await ValidateFavoriteAction(listingId);
 
-            bool isFavorite = GetFavoriteState(listingId, userId, listing);
+            SetFavoriteState(listingId, userId, listing);
 
             await _listingRepository.UpdateListingAsync(listing);
-
-            return isFavorite;
-
         }
 
 
@@ -222,24 +219,20 @@ namespace UnrealEstate.Services
             return filterConditions;
         }
 
-        private static bool GetFavoriteState(int listingId, string userId, Listing listingFromDb)
+        private static void SetFavoriteState(int listingId, string userId, Listing listingFromDb)
         {
 
-            var favorite = listingFromDb.Favorites.Where(f => f.UserId == userId).FirstOrDefault();
+            var favorite = listingFromDb.Favorites.FirstOrDefault(f => f.UserId == userId);
 
-            bool isFavorite;
             if (favorite is null)
             {
-                isFavorite = true;
                 listingFromDb.Favorites.Add(new Favorite() { ListingId = listingId, UserId = userId });
             }
             else // User already favorited this listing.
             {
-                isFavorite = false;
                 listingFromDb.Favorites.Remove(favorite);
             }
 
-            return isFavorite;
         }
 
         private async Task Enable(Listing listingFromDb)

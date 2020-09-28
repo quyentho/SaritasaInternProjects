@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using UnrealEstate.Models.Models;
 
-namespace UnrealEstate.Models
+namespace UnrealEstate.Models.Models
 {
     public class ListingStatus
     {
@@ -9,7 +8,7 @@ namespace UnrealEstate.Models
 
         public string Name { get; set; }
 
-        public List<Listing> Listings { get; set; }
+        public List<UnrealEstate.Models.Models.Listing> Listings { get; set; }
     }
 
     public enum Status

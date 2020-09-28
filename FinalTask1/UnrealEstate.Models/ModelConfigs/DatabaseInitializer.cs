@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 using UnrealEstate.Models.Models;
 
 namespace UnrealEstate.Models.ModelConfigs
 {
     public static class DatabaseInitializer
     {
-        public static void InitializeSeedData(UnrealEstateDbContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public static void InitializeSeedData(UnrealEstateDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             SeedRoles(roleManager);
 
@@ -40,22 +40,22 @@ namespace UnrealEstate.Models.ModelConfigs
             }
         }
 
-        private static void SeedUsers(UnrealEstateDbContext context, Microsoft.AspNetCore.Identity.UserManager<User> userManager)
+        private static void SeedUsers(UnrealEstateDbContext context, Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager)
         {
 
-            if (!context.Users.Any())
+            if (!context.ApplicationUsers.Any())
             {
-                var user = new User() { Id = "2b3bffa2-d5b4-4bac-8a9b-8afa65ec5e85", Email = "user1@test.com", UserName = "user1@test.com" };
+                var user = new ApplicationUser() { Id = "2b3bffa2-d5b4-4bac-8a9b-8afa65ec5e85", Email = "user1@test.com", UserName = "user1@test.com" };
                 IdentityResult check = userManager.CreateAsync(user, "password").GetAwaiter().GetResult();
                 if (check.Succeeded)
                 {
                     Claim claim = new Claim(ClaimTypes.Email, user.Email);
                     userManager.AddClaimAsync(user, claim).GetAwaiter().GetResult();
 
-                    userManager.AddToRoleAsync(user, UserRole.Admin).GetAwaiter().GetResult();
+                    userManager.AddToRoleAsync(user, "Admin").GetAwaiter().GetResult();
                 }
 
-                user = new User() { Id = "be26f642-e3b7-46bc-bd68-69f0d574548d", Email = "user2@test.com", UserName = "user2@test.com" };
+                user = new ApplicationUser() { Id = "be26f642-e3b7-46bc-bd68-69f0d574548d", Email = "user2@test.com", UserName = "user2@test.com" };
                 check = userManager.CreateAsync(user, "password").GetAwaiter().GetResult();
 
                 if (check.Succeeded)
@@ -63,7 +63,7 @@ namespace UnrealEstate.Models.ModelConfigs
                     Claim claim = new Claim(ClaimTypes.Email, user.Email);
                     userManager.AddClaimAsync(user, claim).GetAwaiter().GetResult();
 
-                    userManager.AddToRoleAsync(user, UserRole.User).GetAwaiter().GetResult();
+                    userManager.AddToRoleAsync(user, "User").GetAwaiter().GetResult();
                 }
             }
         }
@@ -105,14 +105,14 @@ namespace UnrealEstate.Models.ModelConfigs
             if (!roleManager.RoleExistsAsync("Admin").GetAwaiter().GetResult())
             {
                 var role = new IdentityRole();
-                role.Name = UserRole.Admin;
+                role.Name = "Admin";
                 roleManager.CreateAsync(role).GetAwaiter().GetResult();
             }
 
             if (!roleManager.RoleExistsAsync("RegularUser").GetAwaiter().GetResult())
             {
                 var role = new IdentityRole();
-                role.Name = UserRole.User;
+                role.Name = "User";
                 roleManager.CreateAsync(role).GetAwaiter().GetResult();
             }
 

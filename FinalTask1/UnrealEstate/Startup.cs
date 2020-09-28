@@ -1,26 +1,29 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using UnrealEstate.Models;
-using UnrealEstate.Models.MappingConfig;
-using UnrealEstate.Models.ModelConfigs;
+using UnrealEstate.Models.Models;
 using UnrealEstate.Models.Repositories;
-using UnrealEstate.Models.ViewModels.RequestViewModels.RequestModelValidators;
 using UnrealEstate.Services;
+using UnrealEstate.Services.Authentication;
+using UnrealEstate.Services.Authentication.Interface;
+using UnrealEstate.Services.Comment.Repository;
+using UnrealEstate.Services.Comment.Repository.Interface;
 using UnrealEstate.Services.EmailService;
+using UnrealEstate.Services.Listing;
+using UnrealEstate.Services.Listing.Interface;
+using UnrealEstate.Services.Listing.ViewModel.Request.Validator;
+using UnrealEstate.Services.MappingConfig;
+using UnrealEstate.Services.User;
+using UnrealEstate.Services.User.Interface;
 
 namespace UnrealEstate
 {
@@ -40,7 +43,7 @@ namespace UnrealEstate
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<User, IdentityRole>(options =>
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
              {
 
                  options.User.AllowedUserNameCharacters =
@@ -116,13 +119,6 @@ namespace UnrealEstate
                 var context = serviceScope.ServiceProvider.GetRequiredService<UnrealEstateDbContext>();
 
                 context.Database.Migrate();
-
-                var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<User>>();
-
-                var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-                
-
-                DatabaseInitializer.InitializeSeedData(context, userManager, roleManager);
             }
 
 

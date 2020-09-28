@@ -12,6 +12,9 @@ using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
 using UnrealEstate.Services;
+using UnrealEstate.Services.Listing.Interface;
+using UnrealEstate.Services.Listing.ViewModel.Request;
+using UnrealEstate.Services.User.Interface;
 
 namespace UnrealEstateApi.Controllers
 {
@@ -90,7 +93,7 @@ namespace UnrealEstateApi.Controllers
 
             try
             {
-                User currentUser = await GetCurrentUserAsync();
+                ApplicationUser currentUser = await GetCurrentUserAsync();
 
                 await _listingService.EditListingAsync(currentUser, listing, listingId);
             }
@@ -122,7 +125,7 @@ namespace UnrealEstateApi.Controllers
 
             try
             {
-                User user = await GetCurrentUserAsync();
+                ApplicationUser user = await GetCurrentUserAsync();
 
                 await _listingService.CreateListingAsync(listing, user.Id);
             }
@@ -150,7 +153,7 @@ namespace UnrealEstateApi.Controllers
 
             try
             {
-                User currentUser = await GetCurrentUserAsync();
+                ApplicationUser currentUser = await GetCurrentUserAsync();
                 await _listingService.DisableListingAsync(currentUser, id);
             }
             catch (ArgumentOutOfRangeException ex)
@@ -186,7 +189,7 @@ namespace UnrealEstateApi.Controllers
 
             try
             {
-                User currentUser = await GetCurrentUserAsync();
+                ApplicationUser currentUser = await GetCurrentUserAsync();
                 await _listingService.EnableListingAsync(currentUser, id);
             }
             catch (ArgumentOutOfRangeException ex)
@@ -244,13 +247,11 @@ namespace UnrealEstateApi.Controllers
 
             try
             {
-                bool isFavorite;
+                ApplicationUser currentUser = await GetCurrentUserAsync();
 
-                User currentUser = await GetCurrentUserAsync();
+                await _listingService.AddOrRemoveFavoriteAsync(listingId, currentUser.Id);
 
-                isFavorite = await _listingService.AddOrRemoveFavoriteAsync(listingId, currentUser.Id);
-
-                return Ok(isFavorite);
+                return NoContent();
             }
             catch (ArgumentOutOfRangeException ex)
             {
@@ -266,7 +267,7 @@ namespace UnrealEstateApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("{listingId}/bid")]
-        public async Task<IActionResult> MakeABid(int listingId, BidRequest bidRequestViewModel)
+        public async Task<IActionResult> MakeABid(int listingId, ListingBidRequest bidRequestViewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -275,7 +276,7 @@ namespace UnrealEstateApi.Controllers
 
             try
             {
-                User user = await GetCurrentUserAsync();
+                ApplicationUser user = await GetCurrentUserAsync();
 
                 await _listingService.MakeABid(listingId, user, bidRequestViewModel);
             }
@@ -291,7 +292,7 @@ namespace UnrealEstateApi.Controllers
             return Ok(bidRequestViewModel);
         }
 
-        private async Task<User> GetCurrentUserAsync()
+        private async Task<ApplicationUser> GetCurrentUserAsync()
         {
             var email = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
 

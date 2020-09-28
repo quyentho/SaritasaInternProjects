@@ -6,8 +6,10 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using UnrealEstate.Models;
+using UnrealEstate.Models.Models;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Services;
+using UnrealEstate.Services.User.Interface;
 
 namespace UnrealEstateApi.Controllers
 {
@@ -38,7 +40,7 @@ namespace UnrealEstateApi.Controllers
                 return BadRequest();
             }
 
-            User currentUser = await GetCurrentUserAsync();
+            ApplicationUser currentUser = await GetCurrentUserAsync();
 
             try
             {
@@ -72,7 +74,7 @@ namespace UnrealEstateApi.Controllers
 
             try
             {
-                User currentUser = await GetCurrentUserAsync();
+                ApplicationUser currentUser = await GetCurrentUserAsync();
 
                 await _commentService.EditCommentAsync(currentUser.Email, commentViewModel, commentId);
             }
@@ -104,7 +106,7 @@ namespace UnrealEstateApi.Controllers
 
             try
             {
-                User currentUser = await GetCurrentUserAsync();
+                ApplicationUser currentUser = await GetCurrentUserAsync();
 
                 await _commentService.DeleteCommentAsync(currentUser, commentId);
             }
@@ -116,11 +118,11 @@ namespace UnrealEstateApi.Controllers
             return Ok();
         }
 
-        private async Task<User> GetCurrentUserAsync()
+        private async Task<ApplicationUser> GetCurrentUserAsync()
         {
             var email = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
 
-            User currentUser = await _userService.GetUserByEmailAsync(email);
+            ApplicationUser currentUser = await _userService.GetUserByEmailAsync(email);
 
             return currentUser;
         }

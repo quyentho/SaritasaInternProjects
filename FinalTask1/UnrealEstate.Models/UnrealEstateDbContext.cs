@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using System.Reflection;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
 using UnrealEstate.Models.Models;
 
 namespace UnrealEstate.Models
 {
-    public class UnrealEstateDbContext : IdentityDbContext<User>
+    public class UnrealEstateDbContext : IdentityDbContext<ApplicationUser>
     {
         public UnrealEstateDbContext(DbContextOptions<UnrealEstateDbContext> options)
             : base(options)
@@ -25,7 +25,7 @@ namespace UnrealEstate.Models
 
         public DbSet<Listing> Listings { get; set; }
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         public DbSet<Comment> Comments { get; set; }
 

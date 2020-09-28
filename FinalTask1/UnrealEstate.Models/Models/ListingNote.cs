@@ -1,6 +1,4 @@
-﻿using UnrealEstate.Models.Models;
-
-namespace UnrealEstate.Models
+﻿namespace UnrealEstate.Models.Models
 {
     public class ListingNote
     {
@@ -12,8 +10,8 @@ namespace UnrealEstate.Models
 
         public string UserId { get; set; }
 
-        public User User { get; set; }
+        public ApplicationUser User { get; set; }
 
-        public Listing Listing { get; set; }
+        public UnrealEstate.Models.Models.Listing Listing { get; set; }
     }
 }

@@ -1,6 +1,4 @@
-﻿using UnrealEstate.Models.Models;
-
-namespace UnrealEstate.Models
+﻿namespace UnrealEstate.Models.Models
 {
     public class Favorite
     {
@@ -8,7 +6,7 @@ namespace UnrealEstate.Models
 
         public string UserId { get; set; }
 
-        public User User { get; set; }
+        public ApplicationUser User { get; set; }
 
         public Listing Listing { get; set; }
     }

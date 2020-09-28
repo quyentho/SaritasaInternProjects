@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using UnrealEstate.Models;
+using UnrealEstate.Models.Models;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
 using UnrealEstate.Services;
+using UnrealEstate.Services.Listing.Interface;
+using UnrealEstate.Services.Listing.ViewModel.Request;
+using UnrealEstate.Services.User.Interface;
 
 namespace UnrealEstate.Controllers
 {
@@ -39,7 +40,7 @@ namespace UnrealEstate.Controllers
         {
             try
             {
-                User user = await GetCurrentUser();
+                ApplicationUser user = await GetCurrentUser();
 
                 await _listingService.AddOrRemoveFavoriteAsync(listingId, user.Id);
             }
@@ -64,7 +65,7 @@ namespace UnrealEstate.Controllers
 
             try
             {
-                User currentUser = await GetCurrentUser();
+                ApplicationUser currentUser = await GetCurrentUser();
                 await _commentService.EditCommentAsync(currentUser.Id, commentRequest, commentId);
             }
             catch (ArgumentOutOfRangeException ex)
@@ -88,7 +89,7 @@ namespace UnrealEstate.Controllers
             {
                 try
                 {
-                    User currentUser = await GetCurrentUser();
+                    ApplicationUser currentUser = await GetCurrentUser();
 
                     await _commentService.CreateCommentAsync(currentUser.Id, commentRequest);
                 }
@@ -111,7 +112,7 @@ namespace UnrealEstate.Controllers
         {
             try
             {
-                User currentUser = await GetCurrentUser();
+                ApplicationUser currentUser = await GetCurrentUser();
 
                 await _commentService.DeleteCommentAsync(currentUser, commentId);
             }
@@ -133,7 +134,7 @@ namespace UnrealEstate.Controllers
         {
             try
             {
-                User currentUser = await GetCurrentUser();
+                ApplicationUser currentUser = await GetCurrentUser();
 
                 await _listingService.DisableListingAsync(currentUser, listingId);
 
@@ -184,7 +185,7 @@ namespace UnrealEstate.Controllers
         [HttpGet]
         public IActionResult Bid(int listingId, string returnUrl)
         {
-            BidRequest bidRequest = new BidRequest()
+            ListingBidRequest bidRequest = new ListingBidRequest()
             {
                 ListingId = listingId
             };
@@ -195,7 +196,7 @@ namespace UnrealEstate.Controllers
 
         [Route("MakeABid")]
         [HttpPost]
-        public async Task<IActionResult> Bid(BidRequest bidRequest, string returnUrl)
+        public async Task<IActionResult> Bid(ListingBidRequest bidRequest, string returnUrl)
         {
             if (ModelState.IsValid)
             {
@@ -223,7 +224,7 @@ namespace UnrealEstate.Controllers
             return View(bidRequest);
         }
 
-        private async Task<User> GetCurrentUser()
+        private async Task<ApplicationUser> GetCurrentUser()
         {
             var currentUser = await
                 _userService.GetUserByEmailAsync(User.Claims
@@ -317,8 +318,11 @@ namespace UnrealEstate.Controllers
             {
                 try
                 {
-                    var userId = HttpContext.User.Identity.GetUserId();
-                    await _listingService.CreateListingAsync(listingRequest, userId);
+                    var userEmail = HttpContext.User.Claims.FirstOrDefault(c=>c.Type == ClaimTypes.Email)?.Value;
+                    
+                    var currentUser = await _userService.GetUserByEmailAsync(userEmail);
+
+                    await _listingService.CreateListingAsync(listingRequest, currentUser.Id);
                 }
                 catch (InvalidOperationException exception)
                 {

@@ -1,6 +1,4 @@
-﻿using UnrealEstate.Models.Models;
-
-namespace UnrealEstate.Models
+﻿namespace UnrealEstate.Models.Models
 {
     public class ListingPhoto
     {
@@ -10,6 +8,6 @@ namespace UnrealEstate.Models
 
         public string PhotoUrl { get; set; }
 
-        public Listing Listing { get; set; }
+        public UnrealEstate.Models.Models.Listing Listing { get; set; }
     }
 }

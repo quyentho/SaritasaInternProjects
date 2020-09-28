@@ -14,12 +14,20 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using UnrealEstate.Models;
-using UnrealEstate.Models.MappingConfig;
-using UnrealEstate.Models.ModelConfigs;
+using UnrealEstate.Models.Models;
 using UnrealEstate.Models.Repositories;
-using UnrealEstate.Models.ViewModels.RequestViewModels.RequestModelValidators;
 using UnrealEstate.Services;
+using UnrealEstate.Services.Authentication;
+using UnrealEstate.Services.Authentication.Interface;
+using UnrealEstate.Services.Comment.Repository;
+using UnrealEstate.Services.Comment.Repository.Interface;
 using UnrealEstate.Services.EmailService;
+using UnrealEstate.Services.Listing;
+using UnrealEstate.Services.Listing.Interface;
+using UnrealEstate.Services.Listing.ViewModel.Request.Validator;
+using UnrealEstate.Services.MappingConfig;
+using UnrealEstate.Services.User;
+using UnrealEstate.Services.User.Interface;
 using UnrealEstateApi.Configurations;
 
 namespace UnrealEstateApi
@@ -38,7 +46,7 @@ namespace UnrealEstateApi
         {
             services.AddDbContext<UnrealEstateDbContext>();
 
-            services.AddIdentity<User, IdentityRole>(options =>
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
 
                 options.User.AllowedUserNameCharacters =
@@ -142,10 +150,6 @@ namespace UnrealEstateApi
                 var context = serviceScope.ServiceProvider.GetRequiredService<UnrealEstateDbContext>();
 
                 context.Database.Migrate();
-
-                var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<User>>();
-                var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-                DatabaseInitializer.InitializeSeedData(context, userManager, roleManager);
             }
 
             if (env.IsDevelopment())

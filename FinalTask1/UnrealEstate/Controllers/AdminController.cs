@@ -9,6 +9,7 @@ using UnrealEstate.Models;
 using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Services;
+using UnrealEstate.Services.User.Interface;
 
 namespace UnrealEstate.Controllers
 {

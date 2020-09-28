@@ -6,6 +6,7 @@ using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
 using UnrealEstate.Services;
+using UnrealEstate.Services.Authentication.Interface;
 
 namespace UnrealEstateApi.Controllers
 {

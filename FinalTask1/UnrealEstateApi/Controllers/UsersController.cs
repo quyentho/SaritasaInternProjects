@@ -7,10 +7,13 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using UnrealEstate.Models;
+using UnrealEstate.Models.Models;
 using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
 using UnrealEstate.Services;
+using UnrealEstate.Services.Authentication.Interface;
+using UnrealEstate.Services.User.Interface;
 
 namespace UnrealEstateApi.Controllers
 {
@@ -58,7 +61,7 @@ namespace UnrealEstateApi.Controllers
 
             try
             {
-                UserResponse user = await _userService.GetUserByIdAsync(userId);
+                UserResponse user = await _userService.GetUserResponseByIdlAsync(userId);
                 return Ok(user);
             }
             catch (NotSupportedException)
@@ -106,7 +109,7 @@ namespace UnrealEstateApi.Controllers
                 return BadRequest();
             }
 
-            User currentUser = await GetCurrentUserAsync();
+            ApplicationUser currentUser = await GetCurrentUserAsync();
 
             try
             {
@@ -120,11 +123,11 @@ namespace UnrealEstateApi.Controllers
             return NoContent();
         }
 
-        private async Task<User> GetCurrentUserAsync()
+        private async Task<ApplicationUser> GetCurrentUserAsync()
         {
             var email = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
 
-            User currentUser = await _userService.GetUserByEmailAsync(email);
+            ApplicationUser currentUser = await _userService.GetUserByEmailAsync(email);
 
             return currentUser;
         }

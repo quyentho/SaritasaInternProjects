@@ -1,27 +1,25 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using UnrealEstate.Models;
+using UnrealEstate.Models.Models;
 using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
-using UnrealEstate.Services;
-using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
+using UnrealEstate.Services.Authentication.Interface;
+using UnrealEstate.Services.User.Interface;
 
 namespace UnrealEstate.Controllers
 {
     public class UsersController : Controller
     {
         private readonly IAuthenticationService _authenticationService;
-        private readonly SignInManager<User> _signInManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IUserService _userService;
 
-        public UsersController(IAuthenticationService authenticationService, IUserService userService, SignInManager<User> signInManager)
+        public UsersController(IAuthenticationService authenticationService, IUserService userService, SignInManager<ApplicationUser> signInManager)
         {
             _authenticationService = authenticationService;
             _userService = userService;
@@ -241,7 +239,11 @@ namespace UnrealEstate.Controllers
 
         private async Task<UserResponse> GetCurrentUserViewModel()
         {
-            var user = await _userService.GetUserByIdAsync(User.Identity.GetUserId());
+            var userEmail = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+
+            var currentUser = await _userService.GetUserByEmailAsync(userEmail);
+
+            var user = await _userService.GetUserResponseByEmailAsync(currentUser.Id);
 
             return user;
         }

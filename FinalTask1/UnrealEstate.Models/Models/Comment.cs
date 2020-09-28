@@ -1,7 +1,6 @@
 ﻿using System;
-using UnrealEstate.Models.Models;
 
-namespace UnrealEstate.Models
+namespace UnrealEstate.Models.Models
 {
     public class Comment
     {
@@ -17,6 +16,6 @@ namespace UnrealEstate.Models
 
         public Listing Listing { get; set; }
 
-        public User User { get; set; }
+        public ApplicationUser User { get; set; }
     }
 }

@@ -33,7 +33,7 @@ namespace UnrealEstate.Models.Models
 
         public string Description { get; set; }
 
-        public User User { get; set; }
+        public ApplicationUser User { get; set; }
 
         public ListingStatus Status { get; set; }
 

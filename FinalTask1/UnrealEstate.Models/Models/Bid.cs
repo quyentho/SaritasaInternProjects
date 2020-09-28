@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UnrealEstate.Models.Models
 {
@@ -22,6 +18,6 @@ namespace UnrealEstate.Models.Models
 
         public Listing Listing { get; set; }
 
-        public User User { get; set; }
+        public ApplicationUser User { get; set; }
     }
 }

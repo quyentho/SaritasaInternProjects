@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using UnrealEstate.Infrastructure.Models;
-using UnrealEstate.Models;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Services;
 using UnrealEstate.Services.User.Interface;
@@ -27,7 +26,7 @@ namespace UnrealEstateApi.Controllers
         }
 
         /// <summary>
-        /// Create new comment.
+        ///     Create new comment.
         /// </summary>
         /// <param name="commentViewModel"></param>
         /// <returns></returns>
@@ -35,12 +34,9 @@ namespace UnrealEstateApi.Controllers
         [Route("api/comments")]
         public async Task<IActionResult> CreateNewComment(CommentRequest commentViewModel)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
+            if (!ModelState.IsValid) return BadRequest();
 
-            ApplicationUser currentUser = await GetCurrentUserAsync();
+            var currentUser = await GetCurrentUserAsync();
 
             try
             {
@@ -59,7 +55,7 @@ namespace UnrealEstateApi.Controllers
         }
 
         /// <summary>
-        /// Update comment, only available for comment's author.
+        ///     Update comment, only available for comment's author.
         /// </summary>
         /// <param name="commentViewModel">comment id.</param>
         /// <returns></returns>
@@ -67,14 +63,11 @@ namespace UnrealEstateApi.Controllers
         [Route("api/comments/{commentId}")]
         public async Task<IActionResult> UpdateComment(int commentId, CommentRequest commentViewModel)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
+            if (!ModelState.IsValid) return BadRequest();
 
             try
             {
-                ApplicationUser currentUser = await GetCurrentUserAsync();
+                var currentUser = await GetCurrentUserAsync();
 
                 await _commentService.EditCommentAsync(currentUser.Email, commentViewModel, commentId);
             }
@@ -91,7 +84,7 @@ namespace UnrealEstateApi.Controllers
         }
 
         /// <summary>
-        /// Delete comment by id, only available for admin.
+        ///     Delete comment by id, only available for admin.
         /// </summary>
         /// <param name="commentId">comment id.</param>
         /// <returns></returns>
@@ -99,14 +92,11 @@ namespace UnrealEstateApi.Controllers
         [Route("api/comments/{commentId}")]
         public async Task<IActionResult> DeleteComment(int commentId)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
+            if (!ModelState.IsValid) return BadRequest();
 
             try
             {
-                ApplicationUser currentUser = await GetCurrentUserAsync();
+                var currentUser = await GetCurrentUserAsync();
 
                 await _commentService.DeleteCommentAsync(currentUser, commentId);
             }
@@ -122,7 +112,7 @@ namespace UnrealEstateApi.Controllers
         {
             var email = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
 
-            ApplicationUser currentUser = await _userService.GetUserByEmailAsync(email);
+            var currentUser = await _userService.GetUserByEmailAsync(email);
 
             return currentUser;
         }

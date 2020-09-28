@@ -9,35 +9,35 @@ namespace UnrealEstate.Services.User.Interface
     public interface IUserService
     {
         /// <summary>
-        /// Gets user by email.
+        ///     Gets user by email.
         /// </summary>
         /// <param name="email"></param>
         /// <returns></returns>
         Task<ApplicationUser> GetUserByEmailAsync(string email);
 
         /// <summary>
-        /// Get user response model by email.
+        ///     Get user response model by email.
         /// </summary>
         /// <param name="userEmail"></param>
         /// <returns></returns>
         Task<UserResponse> GetUserResponseByEmailAsync(string userEmail);
 
         /// <summary>
-        /// Get user response model by id.
+        ///     Get user response model by id.
         /// </summary>
         /// <param name="userEmail"></param>
         /// <returns></returns>
         Task<UserResponse> GetUserResponseByIdlAsync(string userEmail);
 
         /// <summary>
-        /// Get users after filtered.
+        ///     Get users after filtered.
         /// </summary>
         /// <param name="filterCriteria"></param>
         /// <returns></returns>
         Task<List<UserResponse>> GetActiveUsersWithFilterAsync(UserFilterCriteriaRequest filterCriteria);
 
         /// <summary>
-        /// Update current user's info.
+        ///     Update current user's info.
         /// </summary>
         /// <param name="currentUser"></param>
         /// <param name="userViewModel"></param>

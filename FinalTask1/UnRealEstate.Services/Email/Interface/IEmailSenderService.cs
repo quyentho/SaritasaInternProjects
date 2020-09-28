@@ -5,7 +5,7 @@ namespace UnrealEstate.Services.EmailService
     public interface IEmailSenderService
     {
         /// <summary>
-        /// Send email service.
+        ///     Send email service.
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>

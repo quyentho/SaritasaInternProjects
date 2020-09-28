@@ -3,19 +3,14 @@ using System.Linq.Expressions;
 
 namespace UnrealEstate.Services.Utils
 {
-    public static class FilterExtension 
+    public static class FilterExtension
     {
-        public static IQueryable<TSource> FilterByRange<TSource>(this IQueryable<TSource> source, int? offset, int? limit) 
+        public static IQueryable<TSource> FilterByRange<TSource>(this IQueryable<TSource> source, int? offset,
+            int? limit)
         {
-            if (offset.HasValue)
-            {
-                source = source.Skip(offset.Value);
-            }
+            if (offset.HasValue) source = source.Skip(offset.Value);
 
-            if (limit.HasValue)
-            {
-                source = source.Take(limit.Value);
-            }
+            if (limit.HasValue) source = source.Take(limit.Value);
 
             return source;
         }
@@ -30,11 +25,12 @@ namespace UnrealEstate.Services.Utils
 
                 var lambda = Expression.Lambda(property, parameter);
 
-                var orderByMethod = typeof(Queryable).GetMethods().First(x => x.Name == "OrderBy" && x.GetParameters().Length == 2);
+                var orderByMethod = typeof(Queryable).GetMethods()
+                    .First(x => x.Name == "OrderBy" && x.GetParameters().Length == 2);
                 var orderByGeneric = orderByMethod.MakeGenericMethod(typeof(TSource), property.Type);
-                var result = orderByGeneric.Invoke(null, new object[] { source, lambda });
+                var result = orderByGeneric.Invoke(null, new object[] {source, lambda});
 
-                return (IOrderedQueryable<TSource>)result;
+                return (IOrderedQueryable<TSource>) result;
             }
 
             return source;

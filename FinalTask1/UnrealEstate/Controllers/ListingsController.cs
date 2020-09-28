@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UnrealEstate.Infrastructure.Models;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
-using UnrealEstate.Models.ViewModels.ResponseViewModels;
 using UnrealEstate.Services;
 using UnrealEstate.Services.Listing.Interface;
 using UnrealEstate.Services.Listing.ViewModel.Request;
@@ -21,12 +18,13 @@ namespace UnrealEstate.Controllers
     [Route("[controller]")]
     public class ListingsController : Controller
     {
-        private readonly IListingService _listingService;
-        private readonly IUserService _userService;
-        private readonly IMapper _mapper;
         private readonly ICommentService _commentService;
+        private readonly IListingService _listingService;
+        private readonly IMapper _mapper;
+        private readonly IUserService _userService;
 
-        public ListingsController(IListingService listingService, IMapper mapper, IUserService userService, ICommentService commentService)
+        public ListingsController(IListingService listingService, IMapper mapper, IUserService userService,
+            ICommentService commentService)
         {
             _listingService = listingService;
             _mapper = mapper;
@@ -40,7 +38,7 @@ namespace UnrealEstate.Controllers
         {
             try
             {
-                ApplicationUser user = await GetCurrentUser();
+                var user = await GetCurrentUser();
 
                 await _listingService.AddOrRemoveFavoriteAsync(listingId, user.Id);
             }
@@ -60,12 +58,12 @@ namespace UnrealEstate.Controllers
             {
                 TempData["errorMessage"] = "Error when attempt to edit comment";
 
-                return RedirectToAction(nameof(Detail), new { id = commentRequest.ListingId, returnUrl });
+                return RedirectToAction(nameof(Detail), new {id = commentRequest.ListingId, returnUrl});
             }
 
             try
             {
-                ApplicationUser currentUser = await GetCurrentUser();
+                var currentUser = await GetCurrentUser();
                 await _commentService.EditCommentAsync(currentUser.Id, commentRequest, commentId);
             }
             catch (ArgumentOutOfRangeException ex)
@@ -77,8 +75,7 @@ namespace UnrealEstate.Controllers
                 TempData["errorMessage"] = ex.Message;
             }
 
-            return RedirectToAction(nameof(Detail), new { id = commentRequest.ListingId, returnUrl });
-
+            return RedirectToAction(nameof(Detail), new {id = commentRequest.ListingId, returnUrl});
         }
 
         [HttpGet]
@@ -86,10 +83,9 @@ namespace UnrealEstate.Controllers
         public async Task<IActionResult> AddComment(CommentRequest commentRequest, string returnUrl)
         {
             if (ModelState.IsValid)
-            {
                 try
                 {
-                    ApplicationUser currentUser = await GetCurrentUser();
+                    var currentUser = await GetCurrentUser();
 
                     await _commentService.CreateCommentAsync(currentUser.Id, commentRequest);
                 }
@@ -101,9 +97,8 @@ namespace UnrealEstate.Controllers
                 {
                     TempData["errorMessage"] = ex.Message;
                 }
-            }
 
-            return RedirectToAction(nameof(Detail), new { id = commentRequest.ListingId, returnUrl });
+            return RedirectToAction(nameof(Detail), new {id = commentRequest.ListingId, returnUrl});
         }
 
         [HttpGet]
@@ -112,7 +107,7 @@ namespace UnrealEstate.Controllers
         {
             try
             {
-                ApplicationUser currentUser = await GetCurrentUser();
+                var currentUser = await GetCurrentUser();
 
                 await _commentService.DeleteCommentAsync(currentUser, commentId);
             }
@@ -125,7 +120,7 @@ namespace UnrealEstate.Controllers
                 TempData["errorMessage"] = ex.Message;
             }
 
-            return RedirectToAction(nameof(Detail), new { id = listingId, returnUrl });
+            return RedirectToAction(nameof(Detail), new {id = listingId, returnUrl});
         }
 
         [HttpGet]
@@ -134,7 +129,7 @@ namespace UnrealEstate.Controllers
         {
             try
             {
-                ApplicationUser currentUser = await GetCurrentUser();
+                var currentUser = await GetCurrentUser();
 
                 await _listingService.DisableListingAsync(currentUser, listingId);
 
@@ -153,7 +148,6 @@ namespace UnrealEstate.Controllers
                 ModelState.AddModelError(string.Empty, e.Message);
                 return LocalRedirect(returnUrl);
             }
-
         }
 
         [HttpGet]
@@ -161,12 +155,10 @@ namespace UnrealEstate.Controllers
         public async Task<IActionResult> DeleteListingPhoto(int listingId, int photoId, string returnUrl)
         {
             if (ModelState.IsValid)
-            {
                 try
                 {
                     var currentUser = await GetCurrentUser();
                     await _listingService.DeletePhotoAsync(currentUser, listingId, photoId);
-
                 }
                 catch (NotSupportedException ex)
                 {
@@ -176,16 +168,15 @@ namespace UnrealEstate.Controllers
                 {
                     ModelState.AddModelError(string.Empty, ex.Message);
                 }
-            }
 
-            return RedirectToAction("Edit", new { id = listingId, returnUrl });
+            return RedirectToAction("Edit", new {id = listingId, returnUrl});
         }
 
         [Route("MakeABid")]
         [HttpGet]
         public IActionResult Bid(int listingId, string returnUrl)
         {
-            ListingBidRequest bidRequest = new ListingBidRequest()
+            var bidRequest = new ListingBidRequest
             {
                 ListingId = listingId
             };
@@ -239,9 +230,7 @@ namespace UnrealEstate.Controllers
         {
             // Error message from edit HttpPost method.
             if (TempData["errorMessage"] != null)
-            {
                 ModelState.AddModelError(string.Empty, TempData["errorMessage"].ToString());
-            }
 
             var listingResponse = await _listingService.GetListingAsync(id);
 
@@ -278,10 +267,10 @@ namespace UnrealEstate.Controllers
             {
                 TempData["errorMessage"] = ex.Message;
 
-                return RedirectToAction("Edit", new { id, returnUrl });
+                return RedirectToAction("Edit", new {id, returnUrl});
             }
 
-            return RedirectToAction("Detail", new { id, returnUrl });
+            return RedirectToAction("Detail", new {id, returnUrl});
         }
 
         [AllowAnonymous]
@@ -291,11 +280,9 @@ namespace UnrealEstate.Controllers
         {
             // Error from other actions occur when performs action on detail view.
             if (TempData["errorMessage"] != null)
-            {
                 ModelState.AddModelError(string.Empty, TempData["errorMessage"].ToString());
-            }
 
-            ListingResponse listingResponse = await _listingService.GetListingAsync(id);
+            var listingResponse = await _listingService.GetListingAsync(id);
 
             ViewData["returnUrl"] = returnUrl;
 
@@ -313,13 +300,11 @@ namespace UnrealEstate.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(ListingRequest listingRequest)
         {
-
             if (ModelState.IsValid)
-            {
                 try
                 {
-                    var userEmail = HttpContext.User.Claims.FirstOrDefault(c=>c.Type == ClaimTypes.Email)?.Value;
-                    
+                    var userEmail = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+
                     var currentUser = await _userService.GetUserByEmailAsync(userEmail);
 
                     await _listingService.CreateListingAsync(listingRequest, currentUser.Id);
@@ -328,7 +313,6 @@ namespace UnrealEstate.Controllers
                 {
                     ModelState.AddModelError(string.Empty, exception.Message);
                 }
-            }
 
             return View();
         }
@@ -339,9 +323,7 @@ namespace UnrealEstate.Controllers
         public async Task<IActionResult> Search(ListingFilterCriteriaRequest filterCriteria)
         {
             if (TempData["errorMessage"] != null)
-            {
                 ModelState.AddModelError(string.Empty, TempData["errorMessage"].ToString());
-            }
 
             if (!ModelState.IsValid)
             {
@@ -350,12 +332,9 @@ namespace UnrealEstate.Controllers
                 return RedirectToAction(nameof(Index), "Home");
             }
 
-            if (filterCriteria.Offset is null)
-            {
-                SetPaging(filterCriteria);
-            }
+            if (filterCriteria.Offset is null) SetPaging(filterCriteria);
 
-            List<ListingResponse> listingResponses =
+            var listingResponses =
                 await _listingService.GetActiveListingsWithFilterAsync(filterCriteria);
 
 
@@ -366,9 +345,8 @@ namespace UnrealEstate.Controllers
 
         private void SetPaging(ListingFilterCriteriaRequest filterCriteria)
         {
-                filterCriteria.Offset = 0;
-                filterCriteria.Limit = 3;
-            
+            filterCriteria.Offset = 0;
+            filterCriteria.Limit = 3;
         }
 
         [AllowAnonymous]
@@ -379,7 +357,7 @@ namespace UnrealEstate.Controllers
 
             return RedirectToAction(nameof(Search), filterCriteria);
         }
-        
+
         [AllowAnonymous]
         [Route("PreviousPage")]
         public IActionResult BackPreviousPage(ListingFilterCriteriaRequest filterCriteria)

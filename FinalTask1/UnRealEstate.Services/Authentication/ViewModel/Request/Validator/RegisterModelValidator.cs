@@ -11,7 +11,7 @@ namespace UnrealEstate.Services.Authentication.ViewModel.Request.Validator
             RuleFor(x => x.Password).NotNull();
 
             RuleFor(x => x.ConfirmPassword).Equal(x => x.Password)
-                .WithMessage("Confirm password does not match").When(x=>x.ConfirmPassword != null);
+                .WithMessage("Confirm password does not match").When(x => x.ConfirmPassword != null);
         }
     }
 }

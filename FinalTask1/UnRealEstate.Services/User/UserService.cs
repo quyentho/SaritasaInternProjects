@@ -15,8 +15,9 @@ namespace UnrealEstate.Services.User
 {
     public class UserService : IUserService
     {
-        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IMapper _mapper;
+        private readonly UserManager<ApplicationUser> _userManager;
+
         public UserService(UserManager<ApplicationUser> userManager, IMapper mapper)
         {
             _userManager = userManager;
@@ -25,33 +26,33 @@ namespace UnrealEstate.Services.User
 
         public async Task<UserResponse> GetUserResponseByIdlAsync(string userEmail)
         {
-            ApplicationUser user = await _userManager.FindByIdAsync(userEmail);
+            var user = await _userManager.FindByIdAsync(userEmail);
 
-            UserResponse userViewModel = _mapper.Map<UserResponse>(user);
+            var userViewModel = _mapper.Map<UserResponse>(user);
 
             return userViewModel;
         }
 
         public async Task<List<UserResponse>> GetActiveUsersWithFilterAsync(UserFilterCriteriaRequest filterCriteria)
         {
-            List<ApplicationUser> users = await _userManager.Users
-                .Include(u=>u.Comments)
-                .Include(u=>u.Favorites)
-                .Include(u=>u.Listings)
-                .Include(u=>u.ListingNotes)
-                .Include(u=>u.Bids)
+            var users = await _userManager.Users
+                .Include(u => u.Comments)
+                .Include(u => u.Favorites)
+                .Include(u => u.Listings)
+                .Include(u => u.ListingNotes)
+                .Include(u => u.Bids)
                 .ToListAsync();
 
             users = GetFilteredUsers(filterCriteria, users);
 
-            List<UserResponse> userViewModels = MapUsersToViewModels(users);
+            var userViewModels = MapUsersToViewModels(users);
 
             return userViewModels;
         }
 
         public async Task<ApplicationUser> GetUserByEmailAsync(string email)
         {
-            ApplicationUser user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByEmailAsync(email);
 
             return user;
         }
@@ -76,9 +77,9 @@ namespace UnrealEstate.Services.User
 
         public async Task<UserResponse> GetUserResponseByEmailAsync(string userEmail)
         {
-            ApplicationUser user = await _userManager.FindByEmailAsync(userEmail);
+            var user = await _userManager.FindByEmailAsync(userEmail);
 
-            UserResponse userViewModel = _mapper.Map<UserResponse>(user);
+            var userViewModel = _mapper.Map<UserResponse>(user);
 
             return userViewModel;
         }
@@ -93,33 +94,26 @@ namespace UnrealEstate.Services.User
             var filterConditions = PredicateBuilder.New<ApplicationUser>(true);
 
             if (!string.IsNullOrEmpty(filterCriteria.Email))
-            {
                 filterConditions.And(u => u.Email.Equals(filterCriteria.Email));
-            }
 
             if (!string.IsNullOrEmpty(filterCriteria.Name))
-            {
-                filterConditions.And(u => u.FirstName.Equals(filterCriteria.Name) || u.LastName.Equals(filterCriteria.Name));
-            }
+                filterConditions.And(u =>
+                    u.FirstName.Equals(filterCriteria.Name) || u.LastName.Equals(filterCriteria.Name));
 
             return filterConditions;
         }
 
-        private List<ApplicationUser> GetFilteredUsers(UserFilterCriteriaRequest filterCriteria, List<ApplicationUser> users)
+        private List<ApplicationUser> GetFilteredUsers(UserFilterCriteriaRequest filterCriteria,
+            List<ApplicationUser> users)
         {
             var conditions = BuildConditions(filterCriteria);
 
-            IQueryable<ApplicationUser> result = users.Where(conditions).AsQueryable();
+            var result = users.Where(conditions).AsQueryable();
 
             if (filterCriteria.Offset.HasValue || filterCriteria.Limit.HasValue)
-            {
-                result = result.FilterByRange((int?)filterCriteria.Offset, (int?)filterCriteria.Limit);
-            }
+                result = result.FilterByRange((int?) filterCriteria.Offset, (int?) filterCriteria.Limit);
 
-            if (!string.IsNullOrEmpty(filterCriteria.OrderBy))
-            {
-                result = result.SortBy(filterCriteria.OrderBy);
-            }
+            if (!string.IsNullOrEmpty(filterCriteria.OrderBy)) result = result.SortBy(filterCriteria.OrderBy);
 
             return result.ToList();
         }

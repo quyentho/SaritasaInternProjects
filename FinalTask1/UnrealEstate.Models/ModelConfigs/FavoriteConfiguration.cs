@@ -8,7 +8,7 @@ namespace UnrealEstate.Infrastructure.ModelConfigs
     {
         public void Configure(EntityTypeBuilder<Favorite> builder)
         {
-            builder.HasKey(f => new { f.UserId, f.ListingId });
+            builder.HasKey(f => new {f.UserId, f.ListingId});
 
             builder.HasOne(f => f.User)
                 .WithMany(u => u.Favorites)

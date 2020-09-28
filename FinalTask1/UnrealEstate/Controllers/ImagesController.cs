@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.IO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
@@ -14,6 +8,7 @@ namespace UnrealEstate.Controllers
     public class ImagesController : ControllerBase
     {
         private readonly IConfiguration _configuration;
+
         public ImagesController(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -28,7 +23,7 @@ namespace UnrealEstate.Controllers
 
             var fileBytes = System.IO.File.ReadAllBytes(path);
 
-            return this.File(fileBytes, "image/jpeg");
+            return File(fileBytes, "image/jpeg");
         }
     }
 }

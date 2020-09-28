@@ -5,6 +5,12 @@ namespace UnrealEstate.Infrastructure.Models
 {
     public class Listing
     {
+        public Listing()
+        {
+            Bids = new List<Bid>();
+            ListingPhoTos = new List<ListingPhoto>();
+        }
+
         public int Id { get; set; }
 
         public int StatusId { get; set; }
@@ -46,11 +52,5 @@ namespace UnrealEstate.Infrastructure.Models
         public List<Favorite> Favorites { get; set; }
 
         public List<Bid> Bids { get; set; }
-
-        public Listing()
-        {
-            Bids = new List<Bid>();
-            ListingPhoTos = new List<ListingPhoto>();
-        }
     }
 }

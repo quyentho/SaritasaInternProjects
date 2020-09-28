@@ -2,7 +2,7 @@
 
 namespace UnrealEstate.Services.Listing.ViewModel.Request.Validator
 {
-    public class BidModelValidator :AbstractValidator<ListingBidRequest>
+    public class BidModelValidator : AbstractValidator<ListingBidRequest>
     {
         public BidModelValidator()
         {

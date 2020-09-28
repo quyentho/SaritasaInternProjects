@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
-using UnrealEstate.Models;
+using Microsoft.AspNetCore.Mvc;
 using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
-using UnrealEstate.Services;
 using UnrealEstate.Services.Authentication.Interface;
 
 namespace UnrealEstateApi.Controllers
@@ -15,13 +13,14 @@ namespace UnrealEstateApi.Controllers
     public class AuthenticateController : ControllerBase
     {
         private readonly IAuthenticationService _authenticationService;
+
         public AuthenticateController(IAuthenticationService userSerive)
         {
             _authenticationService = userSerive;
         }
 
         /// <summary>
-        /// GetJwtLoginToken, return JWT token if success authenticate user.
+        ///     GetJwtLoginToken, return JWT token if success authenticate user.
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -29,11 +28,8 @@ namespace UnrealEstateApi.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
-            JwtSecurityToken token = await _authenticationService.GetJwtLoginToken(model);
-            if (token is null)
-            {
-                return BadRequest("Wrong email and password.");
-            }
+            var token = await _authenticationService.GetJwtLoginToken(model);
+            if (token is null) return BadRequest("Wrong email and password.");
 
             return Ok(new
             {
@@ -43,7 +39,7 @@ namespace UnrealEstateApi.Controllers
         }
 
         /// <summary>
-        /// Send email contains token to restore password.
+        ///     Send email contains token to restore password.
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -51,18 +47,15 @@ namespace UnrealEstateApi.Controllers
         [Route("forgot-password")]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
+            if (!ModelState.IsValid) return BadRequest();
 
-            AuthenticationResponse authenticationResponseViewModel = await _authenticationService.SendResetPasswordEmail(model.Email);
+            var authenticationResponseViewModel = await _authenticationService.SendResetPasswordEmail(model.Email);
 
             return Ok(authenticationResponseViewModel);
         }
 
         /// <summary>
-        /// Verify the reset password token and set new password.
+        ///     Verify the reset password token and set new password.
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -70,17 +63,12 @@ namespace UnrealEstateApi.Controllers
         [Route("reset-password")]
         public async Task<IActionResult> ResetPassword(ResetPasswordRequest model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
+            if (!ModelState.IsValid) return BadRequest();
 
-            AuthenticationResponse resetPasswordResult = await _authenticationService.ResetPassword(model);
+            var resetPasswordResult = await _authenticationService.ResetPassword(model);
 
             if (resetPasswordResult.ResponseStatus == AuthenticationResponseStatus.Success)
-            {
                 return Ok(resetPasswordResult.Message);
-            }
 
             return BadRequest(resetPasswordResult.Message);
         }

@@ -7,9 +7,9 @@ namespace UnrealEstate.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<decimal>(
-                name: "StatingPrice",
-                table: "Listings",
-                type: "decimal(15,2)",
+                "StatingPrice",
+                "Listings",
+                "decimal(15,2)",
                 nullable: false,
                 defaultValue: 0m,
                 oldClrType: typeof(decimal),
@@ -19,9 +19,9 @@ namespace UnrealEstate.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<decimal>(
-                name: "StatingPrice",
-                table: "Listings",
-                type: "decimal(18,2)",
+                "StatingPrice",
+                "Listings",
+                "decimal(18,2)",
                 nullable: false,
                 oldClrType: typeof(decimal),
                 oldType: "decimal(15,2)",

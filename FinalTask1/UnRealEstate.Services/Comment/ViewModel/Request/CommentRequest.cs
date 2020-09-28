@@ -4,10 +4,8 @@ namespace UnrealEstate.Models.ViewModels.RequestViewModels
 {
     public class CommentRequest
     {
-        [Required]
-        public string Text { get; set; }
+        [Required] public string Text { get; set; }
 
-        [Required]
-        public int ListingId { get; set; }
+        [Required] public int ListingId { get; set; }
     }
 }

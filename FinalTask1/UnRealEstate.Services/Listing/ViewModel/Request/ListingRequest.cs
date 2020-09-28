@@ -1,12 +1,18 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
 namespace UnrealEstate.Models.ViewModels.RequestViewModels
 {
     public class ListingRequest
     {
+        public ListingRequest()
+        {
+            ListingPhoTos = new List<IFormFile>();
+            ListingNotes = new List<ListingNoteRequest>();
+        }
+
         public string Zip { get; set; }
 
         public string City { get; set; }
@@ -21,22 +27,14 @@ namespace UnrealEstate.Models.ViewModels.RequestViewModels
 
         public double? Size { get; set; }
 
-        [Required]
-        public decimal StatingPrice { get; set; }
+        [Required] public decimal StatingPrice { get; set; }
 
-        [Required]
-        public DateTimeOffset DueDate { get; set; }
+        [Required] public DateTimeOffset DueDate { get; set; }
 
         public string Description { get; set; }
 
         public List<IFormFile> ListingPhoTos { get; set; }
 
         public List<ListingNoteRequest> ListingNotes { get; set; }
-
-        public ListingRequest()
-        {
-            ListingPhoTos = new List<IFormFile>();
-            ListingNotes = new List<ListingNoteRequest>();
-        }
     }
 }

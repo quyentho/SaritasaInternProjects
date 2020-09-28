@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using UnrealEstate.Infrastructure;
-using UnrealEstate.Models;
 using UnrealEstate.Services.Comment.Repository.Interface;
 
 namespace UnrealEstate.Services.Comment.Repository
@@ -14,7 +13,7 @@ namespace UnrealEstate.Services.Comment.Repository
 
         public CommentRepository(UnrealEstateDbContext context)
         {
-            this._context = context;
+            _context = context;
         }
 
         public Task<List<Infrastructure.Models.Comment>> GetAllByListingAsync(int listingId)
@@ -31,7 +30,7 @@ namespace UnrealEstate.Services.Comment.Repository
 
         public async Task UpdateCommentAsync(Infrastructure.Models.Comment comment)
         {
-            _context.Entry<Infrastructure.Models.Comment>(comment).CurrentValues.SetValues(comment);
+            _context.Entry(comment).CurrentValues.SetValues(comment);
 
             await _context.SaveChangesAsync();
         }

@@ -8,49 +8,49 @@
 
 <h1>Edit</h1>
 
-<hr />
+<hr/>
 <div class="row">
     <div class="col-8">
         <form asp-action="Edit" enctype="multipart/form-data" method="post" asp-route-returnUrl="@ViewData["returnUrl"]">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Zip" class="control-label"></label>
-                <input asp-for="Zip" class="form-control" />
+                <input asp-for="Zip" class="form-control"/>
                 <span asp-validation-for="Zip" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="City" class="control-label"></label>
-                <input asp-for="City" class="form-control" />
+                <input asp-for="City" class="form-control"/>
                 <span asp-validation-for="City" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="AddressLine1" class="control-label"></label>
-                <input asp-for="AddressLine1" class="form-control" />
+                <input asp-for="AddressLine1" class="form-control"/>
                 <span asp-validation-for="AddressLine1" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="AddressLine2" class="control-label"></label>
-                <input asp-for="AddressLine2" class="form-control" />
+                <input asp-for="AddressLine2" class="form-control"/>
                 <span asp-validation-for="AddressLine2" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="BuiltYear" class="control-label"></label>
-                <input asp-for="BuiltYear" class="form-control" />
+                <input asp-for="BuiltYear" class="form-control"/>
                 <span asp-validation-for="BuiltYear" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Beds" class="control-label"></label>
-                <input asp-for="Beds" class="form-control" />
+                <input asp-for="Beds" class="form-control"/>
                 <span asp-validation-for="Beds" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Size" class="control-label"></label>
-                <input asp-for="Size" class="form-control" />
+                <input asp-for="Size" class="form-control"/>
                 <span asp-validation-for="Size" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="StatingPrice" class="control-label"></label>
-                <input asp-for="StatingPrice" class="form-control" />
+                <input asp-for="StatingPrice" class="form-control"/>
                 <span asp-validation-for="StatingPrice" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -60,7 +60,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
+                <input asp-for="Description" class="form-control"/>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group ">
@@ -69,20 +69,20 @@
                 <span asp-validation-for="ListingPhoTos"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary"/>
             </div>
         </form>
     </div>
 
     <div class="col-1"></div>
     <div class="col-3">
-        @foreach (var photo in (List<ListingPhotoResponse>)ViewData["photos"])
+        @foreach (var photo in (List<ListingPhotoResponse>) ViewData["photos"])
         {
-            <form asp-action="DeleteListingPhoto" method="get"  asp-route-listingId="@ViewData["listingId"]" asp-route-photoId ="@photo.Id">
+            <form asp-action="DeleteListingPhoto" method="get" asp-route-listingId="@ViewData["listingId"]" asp-route-photoId="@photo.Id">
                 <button type="submit" class="btn btn-danger float-right text-white">X</button>
-                
+
                 <input type="hidden" value="@ViewData["returnUrl"]" name="returnUrl"/>
-                <img src="@string.Format($"{Context.Request.Scheme}://{Context.Request.Host}/api/GetImage?photoUrl={photo.PhotoUrl}")" width="100%" style="border-radius: 5px; border: 1px solid #bbb9b9;" alt="image" />
+                <img src="@string.Format($"{Context.Request.Scheme}://{Context.Request.Host}/api/GetImage?photoUrl={photo.PhotoUrl}")" width="100%" style="border: 1px solid #bbb9b9; border-radius: 5px;" alt="image"/>
                 <div class="pt-4"></div>
 
             </form>
@@ -95,9 +95,8 @@
 </div>
 
 
-
 @section Scripts {
-    @{ await Html.RenderPartialAsync("_DatePickerScriptPartial");}
+    @{ await Html.RenderPartialAsync("_DatePickerScriptPartial"); }
 
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

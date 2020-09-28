@@ -1,15 +1,11 @@
-﻿using MimeKit;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using MimeKit;
 
 namespace UnrealEstate.Services.EmailService
 {
     public class Message
     {
-        public List<MailboxAddress> To { get; set; }
-        public string Subject { get; set; }
-        public string Content { get; set; }
-
         public Message(IEnumerable<string> to, string subject, string content)
         {
             To = new List<MailboxAddress>();
@@ -18,5 +14,9 @@ namespace UnrealEstate.Services.EmailService
             Subject = subject;
             Content = content;
         }
+
+        public List<MailboxAddress> To { get; set; }
+        public string Subject { get; set; }
+        public string Content { get; set; }
     }
 }

@@ -6,9 +6,7 @@ namespace UnrealEstate.Models.ViewModels
 {
     public class LoginViewModel
     {
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
+        [Required] [EmailAddress] public string Email { get; set; }
 
         [DataType(DataType.Password)]
         [Required]

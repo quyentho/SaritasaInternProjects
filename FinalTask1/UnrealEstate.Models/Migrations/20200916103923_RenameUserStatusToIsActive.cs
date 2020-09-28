@@ -7,42 +7,42 @@ namespace UnrealEstate.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_ListingPhotos_Listings_ListingId",
-                table: "ListingPhotos");
+                "FK_ListingPhotos_Listings_ListingId",
+                "ListingPhotos");
 
             migrationBuilder.DropPrimaryKey(
-                name: "PK_ListingPhotos",
-                table: "ListingPhotos");
+                "PK_ListingPhotos",
+                "ListingPhotos");
 
             migrationBuilder.DropColumn(
-                name: "Status",
-                table: "AspNetUsers");
+                "Status",
+                "AspNetUsers");
 
             migrationBuilder.RenameTable(
-                name: "ListingPhotos",
+                "ListingPhotos",
                 newName: "ListingPhoTos");
 
             migrationBuilder.RenameIndex(
-                name: "IX_ListingPhotos_ListingId",
+                "IX_ListingPhotos_ListingId",
                 table: "ListingPhoTos",
                 newName: "IX_ListingPhoTos_ListingId");
 
             migrationBuilder.AddColumn<bool>(
-                name: "IsActive",
-                table: "AspNetUsers",
+                "IsActive",
+                "AspNetUsers",
                 nullable: false,
                 defaultValue: true);
 
             migrationBuilder.AddPrimaryKey(
-                name: "PK_ListingPhoTos",
-                table: "ListingPhoTos",
-                column: "Id");
+                "PK_ListingPhoTos",
+                "ListingPhoTos",
+                "Id");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_ListingPhoTos_Listings_ListingId",
-                table: "ListingPhoTos",
-                column: "ListingId",
-                principalTable: "Listings",
+                "FK_ListingPhoTos_Listings_ListingId",
+                "ListingPhoTos",
+                "ListingId",
+                "Listings",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
         }
@@ -50,43 +50,43 @@ namespace UnrealEstate.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_ListingPhoTos_Listings_ListingId",
-                table: "ListingPhoTos");
+                "FK_ListingPhoTos_Listings_ListingId",
+                "ListingPhoTos");
 
             migrationBuilder.DropPrimaryKey(
-                name: "PK_ListingPhoTos",
-                table: "ListingPhoTos");
+                "PK_ListingPhoTos",
+                "ListingPhoTos");
 
             migrationBuilder.DropColumn(
-                name: "IsActive",
-                table: "AspNetUsers");
+                "IsActive",
+                "AspNetUsers");
 
             migrationBuilder.RenameTable(
-                name: "ListingPhoTos",
+                "ListingPhoTos",
                 newName: "ListingPhotos");
 
             migrationBuilder.RenameIndex(
-                name: "IX_ListingPhoTos_ListingId",
+                "IX_ListingPhoTos_ListingId",
                 table: "ListingPhotos",
                 newName: "IX_ListingPhotos_ListingId");
 
             migrationBuilder.AddColumn<bool>(
-                name: "Status",
-                table: "AspNetUsers",
-                type: "bit",
+                "Status",
+                "AspNetUsers",
+                "bit",
                 nullable: false,
                 defaultValue: true);
 
             migrationBuilder.AddPrimaryKey(
-                name: "PK_ListingPhotos",
-                table: "ListingPhotos",
-                column: "Id");
+                "PK_ListingPhotos",
+                "ListingPhotos",
+                "Id");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_ListingPhotos_Listings_ListingId",
-                table: "ListingPhotos",
-                column: "ListingId",
-                principalTable: "Listings",
+                "FK_ListingPhotos_Listings_ListingId",
+                "ListingPhotos",
+                "ListingId",
+                "Listings",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
         }

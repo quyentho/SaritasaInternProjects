@@ -1,6 +1,5 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using Microsoft.AspNetCore.Http
-@using UnrealEstate.Infrastructure.Models
+﻿@using UnrealEstate.Infrastructure.Models
+@using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
@@ -8,7 +7,7 @@
     @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" href="@Url.Action("Profile","Users")">Hello @User.Identity.Name!</a>
+            <a class="nav-link text-dark" href="@Url.Action("Profile", "Users")">Hello @User.Identity.Name!</a>
         </li>
         <li class="nav-item">
             <form class="form-inline" asp-controller="Users" asp-action="Logout">

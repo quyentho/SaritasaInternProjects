@@ -1,4 +1,4 @@
-﻿namespace UnrealEstate.Models
+﻿namespace UnrealEstate.Services
 {
     public static class UserRole
     {

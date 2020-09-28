@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Linq;
+﻿using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using UnrealEstate.Infrastructure.Models;
 using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
@@ -19,7 +19,8 @@ namespace UnrealEstate.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IUserService _userService;
 
-        public UsersController(IAuthenticationService authenticationService, IUserService userService, SignInManager<ApplicationUser> signInManager)
+        public UsersController(IAuthenticationService authenticationService, IUserService userService,
+            SignInManager<ApplicationUser> signInManager)
         {
             _authenticationService = authenticationService;
             _userService = userService;
@@ -36,9 +37,7 @@ namespace UnrealEstate.Controllers
                 var result = await _authenticationService.ChangePasswordAsync(model);
 
                 if (result.ResponseStatus == AuthenticationResponseStatus.Fail)
-                {
                     ModelState.AddModelError(string.Empty, result.Message);
-                }
 
                 return View("Profile");
             }
@@ -52,7 +51,7 @@ namespace UnrealEstate.Controllers
         public async Task<IActionResult> Login(string returnUrl)
         {
             _ = returnUrl ?? Url.Action("Index", "Home");
-            LoginViewModel model = new LoginViewModel()
+            var model = new LoginViewModel
             {
                 ReturnUrl = returnUrl,
                 ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
@@ -70,16 +69,13 @@ namespace UnrealEstate.Controllers
 
                 if (loginResult.ResponseStatus == AuthenticationResponseStatus.Success)
                 {
-                    if (!string.IsNullOrEmpty(model.ReturnUrl))
-                    {
-                        return LocalRedirect(model.ReturnUrl);
-                    }
+                    if (!string.IsNullOrEmpty(model.ReturnUrl)) return LocalRedirect(model.ReturnUrl);
 
                     return RedirectToAction("Index", "Home");
                 }
-                
+
                 ModelState.AddModelError(string.Empty, loginResult.Message);
-                
+
                 return View(model);
             }
 
@@ -91,7 +87,7 @@ namespace UnrealEstate.Controllers
         [HttpPost]
         public IActionResult ExternalLogin(string provider, string returnUrl)
         {
-            var redirectUrl = Url.Action("ExternalLoginCallBack", "Users", new { ReturnUrl = returnUrl });
+            var redirectUrl = Url.Action("ExternalLoginCallBack", "Users", new {ReturnUrl = returnUrl});
 
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
 
@@ -103,7 +99,7 @@ namespace UnrealEstate.Controllers
         {
             returnUrl ??= Url.Content("~/");
 
-            LoginViewModel loginViewModel = new LoginViewModel()
+            var loginViewModel = new LoginViewModel
             {
                 ReturnUrl = returnUrl,
                 ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
@@ -128,7 +124,6 @@ namespace UnrealEstate.Controllers
         }
 
 
-
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> Logout()
@@ -150,11 +145,11 @@ namespace UnrealEstate.Controllers
         {
             if (ModelState.IsValid)
             {
-                AuthenticationResponse response = await _authenticationService.Register(model);
+                var response = await _authenticationService.Register(model);
                 if (response.ResponseStatus == AuthenticationResponseStatus.Success)
                 {
-                    LoginViewModel loginViewModel = new LoginViewModel() { Email = model.Email, Password = model.Password };
-                    await this.Login(loginViewModel);
+                    var loginViewModel = new LoginViewModel {Email = model.Email, Password = model.Password};
+                    await Login(loginViewModel);
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -177,10 +172,11 @@ namespace UnrealEstate.Controllers
         {
             if (ModelState.IsValid)
             {
-                AuthenticationResponse authenticationResponseViewModel = await _authenticationService.SendResetPasswordEmail(model.Email);
+                var authenticationResponseViewModel = await _authenticationService.SendResetPasswordEmail(model.Email);
 
                 return View(authenticationResponseViewModel);
             }
+
             ModelState.AddModelError("", "Invalid operation");
             return View();
         }
@@ -207,8 +203,6 @@ namespace UnrealEstate.Controllers
                 var user = await _userService.GetUserByEmailAsync(email);
 
                 await _userService.UpdateUser(user, userUpdatedUserRequest);
-
-
             }
 
             var userResponse = await GetCurrentUserViewModel();
@@ -227,7 +221,7 @@ namespace UnrealEstate.Controllers
         {
             if (ModelState.IsValid)
             {
-                AuthenticationResponse authenticationResponseViewModel = await _authenticationService.ResetPassword(model);
+                var authenticationResponseViewModel = await _authenticationService.ResetPassword(model);
 
                 return View(authenticationResponseViewModel);
             }

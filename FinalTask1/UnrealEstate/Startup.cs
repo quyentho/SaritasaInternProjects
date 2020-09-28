@@ -3,15 +3,14 @@ using System.Reflection;
 using AutoMapper;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using UnrealEstate.Infrastructure;
 using UnrealEstate.Infrastructure.Models;
-using UnrealEstate.Models;
 using UnrealEstate.Models.Repositories;
 using UnrealEstate.Services;
 using UnrealEstate.Services.Authentication;
@@ -45,27 +44,26 @@ namespace UnrealEstate
                     Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-             {
+                {
+                    options.User.AllowedUserNameCharacters =
+                        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
 
-                 options.User.AllowedUserNameCharacters =
-                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                    options.Password.RequireDigit = false;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequiredLength = 6;
+                    options.Password.RequiredUniqueChars = 0;
 
-                 options.Password.RequireDigit = false;
-                 options.Password.RequireLowercase = false;
-                 options.Password.RequireNonAlphanumeric = false;
-                 options.Password.RequireUppercase = false;
-                 options.Password.RequiredLength = 6;
-                 options.Password.RequiredUniqueChars = 0;
+                    // Lockout settings.
+                    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                    options.Lockout.MaxFailedAccessAttempts = 5;
+                    options.Lockout.AllowedForNewUsers = true;
 
-                 // Lockout settings.
-                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-                 options.Lockout.MaxFailedAccessAttempts = 5;
-                 options.Lockout.AllowedForNewUsers = true;
-
-                 options.User.RequireUniqueEmail = true;
-             })
-             .AddEntityFrameworkStores<UnrealEstateDbContext>()
-             .AddDefaultTokenProviders();
+                    options.User.RequireUniqueEmail = true;
+                })
+                .AddEntityFrameworkStores<UnrealEstateDbContext>()
+                .AddDefaultTokenProviders();
 
             services.AddAuthentication()
                 .AddGoogle(options =>
@@ -73,7 +71,7 @@ namespace UnrealEstate
                     options.ClientId = "276236464048-s6dhn7otoiedo6j0hltv6r3ke4ir8kkj.apps.googleusercontent.com";
                     options.ClientSecret = "HAz2HReoehA9DKcAEN6l5c88";
                 });
-         
+
             services.ConfigureApplicationCookie(options =>
             {
                 // Cookie settings
@@ -87,7 +85,7 @@ namespace UnrealEstate
             services.AddTransient<IListingRepository, ListingRepository>();
             services.AddTransient<IListingService, ListingService>();
             services.AddTransient<IUserService, UserService>();
-           // services.AddTransient<UserService>();
+            // services.AddTransient<UserService>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<ICommentRepository, CommentRepository>();
             services.AddTransient<ICommentService, CommentService>();
@@ -103,7 +101,7 @@ namespace UnrealEstate
             services.AddAuthorization();
 
             services.AddControllersWithViews()
-                  .AddFluentValidation(fv =>
+                .AddFluentValidation(fv =>
                 {
                     fv.RegisterValidatorsFromAssembly(Assembly.GetAssembly(typeof(ListingModelValidator)));
                     fv.ImplicitlyValidateChildProperties = true;
@@ -116,7 +114,6 @@ namespace UnrealEstate
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
-
                 var context = serviceScope.ServiceProvider.GetRequiredService<UnrealEstateDbContext>();
 
                 context.Database.Migrate();
@@ -137,7 +134,7 @@ namespace UnrealEstate
             app.UseHttpsRedirection();
 
             app.UseStaticFiles();
-          
+
 
             app.UseRouting();
 
@@ -147,9 +144,9 @@ namespace UnrealEstate
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-                
+                    "default",
+                    "{controller=Home}/{action=Index}/{id?}");
+
                 endpoints.MapRazorPages();
             });
         }

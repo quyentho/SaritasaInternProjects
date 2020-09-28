@@ -7,36 +7,36 @@ namespace UnrealEstate.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
-                name: "UserId",
-                table: "Bid",
+                "UserId",
+                "Bid",
                 nullable: true,
                 oldClrType: typeof(string),
                 oldType: "nvarchar(max)",
                 oldNullable: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bid_ListingId",
-                table: "Bid",
-                column: "ListingId");
+                "IX_Bid_ListingId",
+                "Bid",
+                "ListingId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bid_UserId",
-                table: "Bid",
-                column: "UserId");
+                "IX_Bid_UserId",
+                "Bid",
+                "UserId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Bid_Listings_ListingId",
-                table: "Bid",
-                column: "ListingId",
-                principalTable: "Listings",
+                "FK_Bid_Listings_ListingId",
+                "Bid",
+                "ListingId",
+                "Listings",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Bid_AspNetUsers_UserId",
-                table: "Bid",
-                column: "UserId",
-                principalTable: "AspNetUsers",
+                "FK_Bid_AspNetUsers_UserId",
+                "Bid",
+                "UserId",
+                "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
         }
@@ -44,25 +44,25 @@ namespace UnrealEstate.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Bid_Listings_ListingId",
-                table: "Bid");
+                "FK_Bid_Listings_ListingId",
+                "Bid");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Bid_AspNetUsers_UserId",
-                table: "Bid");
+                "FK_Bid_AspNetUsers_UserId",
+                "Bid");
 
             migrationBuilder.DropIndex(
-                name: "IX_Bid_ListingId",
-                table: "Bid");
+                "IX_Bid_ListingId",
+                "Bid");
 
             migrationBuilder.DropIndex(
-                name: "IX_Bid_UserId",
-                table: "Bid");
+                "IX_Bid_UserId",
+                "Bid");
 
             migrationBuilder.AlterColumn<string>(
-                name: "UserId",
-                table: "Bid",
-                type: "nvarchar(max)",
+                "UserId",
+                "Bid",
+                "nvarchar(max)",
                 nullable: true,
                 oldClrType: typeof(string),
                 oldNullable: true);

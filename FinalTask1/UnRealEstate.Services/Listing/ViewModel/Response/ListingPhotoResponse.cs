@@ -6,7 +6,6 @@ namespace UnrealEstate.Models.ViewModels.ResponseViewModels
     {
         public int Id { get; set; }
 
-        [DisplayName("Photo Url")]
-        public string PhotoUrl { get; set; }
+        [DisplayName("Photo Url")] public string PhotoUrl { get; set; }
     }
 }

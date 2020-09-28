@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Reflection;
+using System.Text;
 using AutoMapper;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -10,12 +13,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
+using Newtonsoft.Json;
 using UnrealEstate.Infrastructure;
 using UnrealEstate.Infrastructure.Models;
-using UnrealEstate.Models;
 using UnrealEstate.Models.Repositories;
 using UnrealEstate.Services;
 using UnrealEstate.Services.Authentication;
@@ -48,36 +48,35 @@ namespace UnrealEstateApi
             services.AddDbContext<UnrealEstateDbContext>();
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-            {
-
-                options.User.AllowedUserNameCharacters =
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-
-                options.User.RequireUniqueEmail = true;
-            })
-                    .AddEntityFrameworkStores<UnrealEstateDbContext>()
-                    .AddDefaultTokenProviders();
-
-            
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-                .AddJwtBearer(options =>
-            {
-                options.SaveToken = true;
-                options.RequireHttpsMetadata = false;
-                options.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidAudience = Configuration["JWT:ValidAudience"],
-                    ValidIssuer = Configuration["JWT:ValidIssuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
-                };
-            });
+                    options.User.AllowedUserNameCharacters =
+                        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+
+                    options.User.RequireUniqueEmail = true;
+                })
+                .AddEntityFrameworkStores<UnrealEstateDbContext>()
+                .AddDefaultTokenProviders();
+
+
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(options =>
+                {
+                    options.SaveToken = true;
+                    options.RequireHttpsMetadata = false;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidAudience = Configuration["JWT:ValidAudience"],
+                        ValidIssuer = Configuration["JWT:ValidIssuer"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
+                    };
+                });
 
             var emailConfig = Configuration.GetSection("EmailConfiguration")
                 .Get<EmailConfiguration>();
@@ -96,9 +95,9 @@ namespace UnrealEstateApi
 
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
-                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
-                .AddFluentValidation(fv => 
-                { 
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore)
+                .AddFluentValidation(fv =>
+                {
                     fv.RegisterValidatorsFromAssembly(Assembly.GetAssembly(typeof(ListingModelValidator)));
                     fv.ImplicitlyValidateChildProperties = true;
                 });
@@ -113,29 +112,33 @@ namespace UnrealEstateApi
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo() { Title = "Unreal Estate API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo {Title = "Unreal Estate API", Version = "v1"});
 
                 //First we define the security scheme
                 c.AddSecurityDefinition("Bearer", //Name the security scheme
                     new OpenApiSecurityScheme
                     {
                         Description = "JWT Authorization header using the Bearer scheme.",
-                        Type = SecuritySchemeType.Http, //We set the scheme type to http since we're using bearer authentication
-                        Scheme = "bearer" //The name of the HTTP Authorization scheme to be used in the Authorization header. In this case "bearer".
+                        Type = SecuritySchemeType
+                            .Http, //We set the scheme type to http since we're using bearer authentication
+                        Scheme =
+                            "bearer" //The name of the HTTP Authorization scheme to be used in the Authorization header. In this case "bearer".
                     });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
-                        new OpenApiSecurityScheme{
-                            Reference = new OpenApiReference{
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
                                 Id = "Bearer", //The name of the previously defined security scheme.
                                 Type = ReferenceType.SecurityScheme
                             }
-                        },new List<string>()
+                        },
+                        new List<string>()
                     }
-                }); 
-
+                });
             });
 
             services.AddAutoMapper(Assembly.GetAssembly(typeof(AutoMapperProfile)));
@@ -153,21 +156,15 @@ namespace UnrealEstateApi
                 context.Database.Migrate();
             }
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
             var swaggerOptions = Configuration.GetSection("SwaggerOptions").Get<SwaggerOptions>();
 
-            app.UseSwagger(option =>
-            {
-                option.RouteTemplate = swaggerOptions.JsonRoute;
-            });
+            app.UseSwagger(option => { option.RouteTemplate = swaggerOptions.JsonRoute; });
             app.UseSwaggerUI(option =>
-             {
-                 option.SwaggerEndpoint(swaggerOptions.UIEndpoint, swaggerOptions.Description);
-             });
+            {
+                option.SwaggerEndpoint(swaggerOptions.UIEndpoint, swaggerOptions.Description);
+            });
 
             app.UseRouting();
 
@@ -177,8 +174,8 @@ namespace UnrealEstateApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Listing}/{action=GetListing}/{id?}");
+                    "default",
+                    "{controller=Listing}/{action=GetListing}/{id?}");
             });
         }
     }

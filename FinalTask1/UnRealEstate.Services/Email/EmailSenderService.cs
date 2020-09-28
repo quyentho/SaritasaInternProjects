@@ -1,7 +1,7 @@
-﻿using MailKit.Net.Smtp;
+﻿using System.Threading.Tasks;
+using MailKit.Net.Smtp;
 using MimeKit;
-using System;
-using System.Threading.Tasks;
+using MimeKit.Text;
 using UnrealEstate.Infrastructure.Models;
 
 namespace UnrealEstate.Services.EmailService
@@ -15,7 +15,7 @@ namespace UnrealEstate.Services.EmailService
             _emailConfig = emailConfig;
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public async Task SendEmailAsync(Message message)
         {
             var emailMessage = CreateEmailMessage(message);
@@ -49,7 +49,7 @@ namespace UnrealEstate.Services.EmailService
             emailMessage.From.Add(new MailboxAddress(_emailConfig.From));
             emailMessage.To.AddRange(message.To);
             emailMessage.Subject = message.Subject;
-            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Text) { Text = message.Content };
+            emailMessage.Body = new TextPart(TextFormat.Text) {Text = message.Content};
 
             return emailMessage;
         }

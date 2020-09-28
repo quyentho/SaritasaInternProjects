@@ -7,34 +7,34 @@ namespace UnrealEstate.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Comments_AspNetUsers_UserId1",
-                table: "Comments");
+                "FK_Comments_AspNetUsers_UserId1",
+                "Comments");
 
             migrationBuilder.DropIndex(
-                name: "IX_Comments_UserId1",
-                table: "Comments");
+                "IX_Comments_UserId1",
+                "Comments");
 
             migrationBuilder.DropColumn(
-                name: "UserId1",
-                table: "Comments");
+                "UserId1",
+                "Comments");
 
             migrationBuilder.AlterColumn<string>(
-                name: "UserId",
-                table: "Comments",
+                "UserId",
+                "Comments",
                 nullable: true,
                 oldClrType: typeof(int),
                 oldType: "int");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_UserId",
-                table: "Comments",
-                column: "UserId");
+                "IX_Comments_UserId",
+                "Comments",
+                "UserId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Comments_AspNetUsers_UserId",
-                table: "Comments",
-                column: "UserId",
-                principalTable: "AspNetUsers",
+                "FK_Comments_AspNetUsers_UserId",
+                "Comments",
+                "UserId",
+                "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
         }
@@ -42,37 +42,37 @@ namespace UnrealEstate.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Comments_AspNetUsers_UserId",
-                table: "Comments");
+                "FK_Comments_AspNetUsers_UserId",
+                "Comments");
 
             migrationBuilder.DropIndex(
-                name: "IX_Comments_UserId",
-                table: "Comments");
+                "IX_Comments_UserId",
+                "Comments");
 
             migrationBuilder.AlterColumn<int>(
-                name: "UserId",
-                table: "Comments",
-                type: "int",
+                "UserId",
+                "Comments",
+                "int",
                 nullable: false,
                 oldClrType: typeof(string),
                 oldNullable: true);
 
             migrationBuilder.AddColumn<string>(
-                name: "UserId1",
-                table: "Comments",
-                type: "nvarchar(450)",
+                "UserId1",
+                "Comments",
+                "nvarchar(450)",
                 nullable: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_UserId1",
-                table: "Comments",
-                column: "UserId1");
+                "IX_Comments_UserId1",
+                "Comments",
+                "UserId1");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Comments_AspNetUsers_UserId1",
-                table: "Comments",
-                column: "UserId1",
-                principalTable: "AspNetUsers",
+                "FK_Comments_AspNetUsers_UserId1",
+                "Comments",
+                "UserId1",
+                "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
         }

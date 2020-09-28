@@ -6,6 +6,14 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="Data\**" />
+      <Content Remove="Data\**" />
+      <EmbeddedResource Remove="Data\**" />
+      <EntityDeploy Remove="Data\**" />
+      <None Remove="Data\**" />
+    </ItemGroup>
+
+    <ItemGroup>
       <Content Include="Uploads\03pzk4yi.jpg" />
       <Content Include="Uploads\owoeyhsd.png" />
       <Content Include="Uploads\r4igdxfu.jpg" />
@@ -33,7 +41,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Data\" />
       <Folder Include="Uploads\" />
     </ItemGroup>
 

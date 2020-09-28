@@ -12,17 +12,6 @@ namespace UnrealEstate.Infrastructure
         {
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder
-                .UseSqlServer(@"Server =.; Database=UnrealEstate;Trusted_Connection=True;");
-
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            base.OnModelCreating(builder);
-
-            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        }
-
         public DbSet<Listing> Listings { get; set; }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
@@ -36,5 +25,18 @@ namespace UnrealEstate.Infrastructure
         public DbSet<ListingStatus> ListingStatuses { get; set; }
 
         public DbSet<Favorite> Favorites { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder
+                .UseSqlServer(@"Server =.; Database=UnrealEstate;Trusted_Connection=True;");
+        }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        }
     }
 }

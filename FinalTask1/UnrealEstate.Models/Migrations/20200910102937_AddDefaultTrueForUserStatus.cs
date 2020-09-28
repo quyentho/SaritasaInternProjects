@@ -7,8 +7,8 @@ namespace UnrealEstate.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<bool>(
-                name: "Status",
-                table: "AspNetUsers",
+                "Status",
+                "AspNetUsers",
                 nullable: false,
                 defaultValue: true,
                 oldClrType: typeof(bool),
@@ -18,9 +18,9 @@ namespace UnrealEstate.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<bool>(
-                name: "Status",
-                table: "AspNetUsers",
-                type: "bit",
+                "Status",
+                "AspNetUsers",
+                "bit",
                 nullable: false,
                 oldClrType: typeof(bool),
                 oldDefaultValue: true);

@@ -8,7 +8,8 @@ namespace UnrealEstate.Services.Authentication.ViewModel.Request.Validator
         public ChangePasswordModelValidator()
         {
             RuleFor(x => x.NewPassword).NotNull();
-            RuleFor(x => x.ConfirmPassword).NotNull().Equal(x => x.NewPassword).WithMessage("Password confirm  not match!");
+            RuleFor(x => x.ConfirmPassword).NotNull().Equal(x => x.NewPassword)
+                .WithMessage("Password confirm  not match!");
         }
     }
 }

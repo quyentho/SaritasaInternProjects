@@ -1,5 +1,5 @@
-﻿@using System.Globalization
-@using Newtonsoft.Json
+﻿@using Newtonsoft.Json
+@using UnrealEstate.Services
 @model UnrealEstate.Models.ViewModels.ResponseViewModels.ListingResponse
 
 @{
@@ -11,7 +11,7 @@
 <label class="text-warning font-weight-bold">
 </label>
 
-<hr />
+<hr/>
 <div class="p-4 border rounded row">
     <div class="col-8">
         <div class="form-group row">
@@ -137,14 +137,14 @@
     <div class="col-3">
         @foreach (var photo in Model.ListingPhoTos)
         {
-            <img src="@string.Format($"{Context.Request.Scheme}://{Context.Request.Host}/api/GetImage?photoUrl={photo.PhotoUrl}")" width="100%" style="border-radius: 5px; border: 1px solid #bbb9b9;" alt="image" />
+            <img src="@string.Format($"{Context.Request.Scheme}://{Context.Request.Host}/api/GetImage?photoUrl={photo.PhotoUrl}")" width="100%" style="border: 1px solid #bbb9b9; border-radius: 5px;" alt="image"/>
             <div class="pt-4"></div>
         }
     </div>
     <div>
         @if (User.Identity.IsAuthenticated || User.Identity.Name == Model.UserEmail)
         {
-            @Html.ActionLink("Edit", "Edit", new { id = Model.Id, returnUrl = @ViewData["returnUrl"] })
+            @Html.ActionLink("Edit", "Edit", new {id = Model.Id, returnUrl = ViewData["returnUrl"]})
         }
         | <a href=@ViewData["returnUrl"]>Back To List</a>
     </div>
@@ -163,7 +163,7 @@
                 <th>
                     @if (User.IsInRole(UserRole.Admin))
                     {
-                        @Html.ActionLink("Delete", "DeleteComment", new { commentId = comment.Id, listingId = Model.Id, returnUrl = ViewData["returnUrl"] })
+                        @Html.ActionLink("Delete", "DeleteComment", new {commentId = comment.Id, listingId = Model.Id, returnUrl = ViewData["returnUrl"]})
                     }
                 </th>
                 <th>

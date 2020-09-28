@@ -8,22 +8,19 @@ namespace UnrealEstate.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AspNetRoles",
-                columns: table => new
+                "AspNetRoles",
+                table => new
                 {
                     Id = table.Column<string>(nullable: false),
                     Name = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
-                });
+                constraints: table => { table.PrimaryKey("PK_AspNetRoles", x => x.Id); });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
+                "AspNetUsers",
+                table => new
                 {
                     Id = table.Column<string>(nullable: false),
                     UserName = table.Column<string>(maxLength: 256, nullable: true),
@@ -45,27 +42,21 @@ namespace UnrealEstate.Infrastructure.Migrations
                     BirthDay = table.Column<DateTimeOffset>(nullable: false),
                     Status = table.Column<bool>(nullable: false)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
+                constraints: table => { table.PrimaryKey("PK_AspNetUsers", x => x.Id); });
 
             migrationBuilder.CreateTable(
-                name: "ListingStatuses",
-                columns: table => new
+                "ListingStatuses",
+                table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: true)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ListingStatuses", x => x.Id);
-                });
+                constraints: table => { table.PrimaryKey("PK_ListingStatuses", x => x.Id); });
 
             migrationBuilder.CreateTable(
-                name: "AspNetRoleClaims",
-                columns: table => new
+                "AspNetRoleClaims",
+                table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
@@ -77,16 +68,16 @@ namespace UnrealEstate.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
+                        "FK_AspNetRoleClaims_AspNetRoles_RoleId",
+                        x => x.RoleId,
+                        "AspNetRoles",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUserClaims",
-                columns: table => new
+                "AspNetUserClaims",
+                table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
@@ -98,16 +89,16 @@ namespace UnrealEstate.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        "FK_AspNetUserClaims_AspNetUsers_UserId",
+                        x => x.UserId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUserLogins",
-                columns: table => new
+                "AspNetUserLogins",
+                table => new
                 {
                     LoginProvider = table.Column<string>(nullable: false),
                     ProviderKey = table.Column<string>(nullable: false),
@@ -116,42 +107,42 @@ namespace UnrealEstate.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                    table.PrimaryKey("PK_AspNetUserLogins", x => new {x.LoginProvider, x.ProviderKey});
                     table.ForeignKey(
-                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        "FK_AspNetUserLogins_AspNetUsers_UserId",
+                        x => x.UserId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUserRoles",
-                columns: table => new
+                "AspNetUserRoles",
+                table => new
                 {
                     UserId = table.Column<string>(nullable: false),
                     RoleId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new {x.UserId, x.RoleId});
                     table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
+                        "FK_AspNetUserRoles_AspNetRoles_RoleId",
+                        x => x.RoleId,
+                        "AspNetRoles",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        "FK_AspNetUserRoles_AspNetUsers_UserId",
+                        x => x.UserId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUserTokens",
-                columns: table => new
+                "AspNetUserTokens",
+                table => new
                 {
                     UserId = table.Column<string>(nullable: false),
                     LoginProvider = table.Column<string>(nullable: false),
@@ -160,18 +151,18 @@ namespace UnrealEstate.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                    table.PrimaryKey("PK_AspNetUserTokens", x => new {x.UserId, x.LoginProvider, x.Name});
                     table.ForeignKey(
-                        name: "FK_AspNetUserTokens_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        "FK_AspNetUserTokens_AspNetUsers_UserId",
+                        x => x.UserId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Listings",
-                columns: table => new
+                "Listings",
+                table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
@@ -192,22 +183,22 @@ namespace UnrealEstate.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Listings", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Listings_ListingStatuses_StatusId",
-                        column: x => x.StatusId,
-                        principalTable: "ListingStatuses",
-                        principalColumn: "Id",
+                        "FK_Listings_ListingStatuses_StatusId",
+                        x => x.StatusId,
+                        "ListingStatuses",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Listings_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        "FK_Listings_AspNetUsers_UserId",
+                        x => x.UserId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Comments",
-                columns: table => new
+                "Comments",
+                table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
@@ -221,46 +212,46 @@ namespace UnrealEstate.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Comments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Comments_Listings_ListingId",
-                        column: x => x.ListingId,
-                        principalTable: "Listings",
-                        principalColumn: "Id",
+                        "FK_Comments_Listings_ListingId",
+                        x => x.ListingId,
+                        "Listings",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Comments_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        "FK_Comments_AspNetUsers_UserId1",
+                        x => x.UserId1,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Favorites",
-                columns: table => new
+                "Favorites",
+                table => new
                 {
                     ListingId = table.Column<int>(nullable: false),
                     UserId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Favorites", x => new { x.UserId, x.ListingId });
+                    table.PrimaryKey("PK_Favorites", x => new {x.UserId, x.ListingId});
                     table.ForeignKey(
-                        name: "FK_Favorites_Listings_ListingId",
-                        column: x => x.ListingId,
-                        principalTable: "Listings",
-                        principalColumn: "Id",
+                        "FK_Favorites_Listings_ListingId",
+                        x => x.ListingId,
+                        "Listings",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Favorites_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        "FK_Favorites_AspNetUsers_UserId",
+                        x => x.UserId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ListingNotes",
-                columns: table => new
+                "ListingNotes",
+                table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
@@ -272,22 +263,22 @@ namespace UnrealEstate.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_ListingNotes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ListingNotes_Listings_ListingId",
-                        column: x => x.ListingId,
-                        principalTable: "Listings",
-                        principalColumn: "Id",
+                        "FK_ListingNotes_Listings_ListingId",
+                        x => x.ListingId,
+                        "Listings",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ListingNotes_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        "FK_ListingNotes_AspNetUsers_UserId",
+                        x => x.UserId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ListingPhotos",
-                columns: table => new
+                "ListingPhotos",
+                table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
@@ -298,133 +289,133 @@ namespace UnrealEstate.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_ListingPhoTos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ListingPhoTos_Listings_ListingId",
-                        column: x => x.ListingId,
-                        principalTable: "Listings",
-                        principalColumn: "Id",
+                        "FK_ListingPhoTos_Listings_ListingId",
+                        x => x.ListingId,
+                        "Listings",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetRoleClaims_RoleId",
-                table: "AspNetRoleClaims",
-                column: "RoleId");
+                "IX_AspNetRoleClaims_RoleId",
+                "AspNetRoleClaims",
+                "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "RoleNameIndex",
-                table: "AspNetRoles",
-                column: "NormalizedName",
+                "RoleNameIndex",
+                "AspNetRoles",
+                "NormalizedName",
                 unique: true,
                 filter: "[NormalizedName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserClaims_UserId",
-                table: "AspNetUserClaims",
-                column: "UserId");
+                "IX_AspNetUserClaims_UserId",
+                "AspNetUserClaims",
+                "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserLogins_UserId",
-                table: "AspNetUserLogins",
-                column: "UserId");
+                "IX_AspNetUserLogins_UserId",
+                "AspNetUserLogins",
+                "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserRoles_RoleId",
-                table: "AspNetUserRoles",
-                column: "RoleId");
+                "IX_AspNetUserRoles_RoleId",
+                "AspNetUserRoles",
+                "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "EmailIndex",
-                table: "AspNetUsers",
-                column: "NormalizedEmail");
+                "EmailIndex",
+                "AspNetUsers",
+                "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "UserNameIndex",
-                table: "AspNetUsers",
-                column: "NormalizedUserName",
+                "UserNameIndex",
+                "AspNetUsers",
+                "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_ListingId",
-                table: "Comments",
-                column: "ListingId");
+                "IX_Comments_ListingId",
+                "Comments",
+                "ListingId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_UserId1",
-                table: "Comments",
-                column: "UserId1");
+                "IX_Comments_UserId1",
+                "Comments",
+                "UserId1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Favorites_ListingId",
-                table: "Favorites",
-                column: "ListingId");
+                "IX_Favorites_ListingId",
+                "Favorites",
+                "ListingId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ListingNotes_ListingId",
-                table: "ListingNotes",
-                column: "ListingId");
+                "IX_ListingNotes_ListingId",
+                "ListingNotes",
+                "ListingId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ListingNotes_UserId",
-                table: "ListingNotes",
-                column: "UserId");
+                "IX_ListingNotes_UserId",
+                "ListingNotes",
+                "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ListingPhoTos_ListingId",
-                table: "ListingPhotos",
-                column: "ListingId");
+                "IX_ListingPhoTos_ListingId",
+                "ListingPhotos",
+                "ListingId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Listings_StatusId",
-                table: "Listings",
-                column: "StatusId");
+                "IX_Listings_StatusId",
+                "Listings",
+                "StatusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Listings_UserId",
-                table: "Listings",
-                column: "UserId");
+                "IX_Listings_UserId",
+                "Listings",
+                "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AspNetRoleClaims");
+                "AspNetRoleClaims");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserClaims");
+                "AspNetUserClaims");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserLogins");
+                "AspNetUserLogins");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserRoles");
+                "AspNetUserRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserTokens");
+                "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Comments");
+                "Comments");
 
             migrationBuilder.DropTable(
-                name: "Favorites");
+                "Favorites");
 
             migrationBuilder.DropTable(
-                name: "ListingNotes");
+                "ListingNotes");
 
             migrationBuilder.DropTable(
-                name: "ListingPhotos");
+                "ListingPhotos");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Listings");
+                "Listings");
 
             migrationBuilder.DropTable(
-                name: "ListingStatuses");
+                "ListingStatuses");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                "AspNetUsers");
         }
     }
 }

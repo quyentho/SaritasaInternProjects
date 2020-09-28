@@ -14,7 +14,7 @@ namespace UnrealEstate.Services.Authentication.ViewModel.Request.Validator
             RuleFor(x => x.NewPassword).NotEmpty();
 
             RuleFor(x => x.ConfirmPassword)
-                        .Equal(x => x.NewPassword);
+                .Equal(x => x.NewPassword);
         }
     }
 }

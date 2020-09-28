@@ -14,9 +14,11 @@ namespace UnrealEstate.Services.MappingConfig
         {
             #region listing mapping
 
-            CreateMap<Infrastructure.Models.Listing, ListingResponse>().ForMember(dest=>dest.StatusName, opt=>opt.MapFrom(src=>src.Status.Name));
+            CreateMap<Infrastructure.Models.Listing, ListingResponse>().ForMember(dest => dest.StatusName,
+                opt => opt.MapFrom(src => src.Status.Name));
 
-            CreateMap<ListingRequest, Infrastructure.Models.Listing>().ForMember(dest => dest.ListingPhoTos, opt => opt.Ignore());
+            CreateMap<ListingRequest, Infrastructure.Models.Listing>()
+                .ForMember(dest => dest.ListingPhoTos, opt => opt.Ignore());
 
             CreateMap<ListingNote, ListingNoteResponse>();
             CreateMap<ListingNoteRequest, ListingNote>();
@@ -25,25 +27,33 @@ namespace UnrealEstate.Services.MappingConfig
             CreateMap<ListingResponse, ListingRequest>()
                 .ForMember(dest => dest.ListingPhoTos, opt => opt.Ignore());
             CreateMap<ListingNoteResponse, ListingNoteRequest>();
+
             #endregion
 
             #region comment mapping
+
             CreateMap<Infrastructure.Models.Comment, CommentResponse>();
 
             CreateMap<CommentRequest, Infrastructure.Models.Comment>();
+
             #endregion
 
             #region user mapping
+
             CreateMap<ApplicationUser, UserResponse>()
                 .ForMember(dest => dest.ListingsCreated, opt => opt.MapFrom(src => src.Listings))
-                .ForMember(dest => dest.FavoriteListings, opt => opt.MapFrom(src => src.Favorites.Select(f => f.Listing)));
+                .ForMember(dest => dest.FavoriteListings,
+                    opt => opt.MapFrom(src => src.Favorites.Select(f => f.Listing)));
 
             CreateMap<UserRequest, ApplicationUser>();
+
             #endregion
 
             #region bid mapping
+
             CreateMap<ListingBidRequest, Bid>();
             CreateMap<Bid, ListingBidResponse>();
+
             #endregion
         }
     }

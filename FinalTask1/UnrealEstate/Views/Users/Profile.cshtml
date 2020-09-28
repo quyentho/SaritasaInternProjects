@@ -46,17 +46,16 @@
             <button type="button" id="activeButton" class="btn btn-info" onclick="ActiveChangePassword()">Change Password</button>
         </form>
         <br/>
-        
+
     </div>
 </div>
-
 
 
 @section Scripts {
     <script type="text/javascript">
         function ActiveChangePassword() {
             var textboxes = document.getElementsByClassName("changePassword");
-             
+
             for (var i = 0; i < textboxes.length; i++) {
                 textboxes[i].disabled = false;
             }
@@ -66,6 +65,6 @@
         }
     </script>
 
-    @{ await Html.RenderPartialAsync("_DatePickerScriptPartial");}
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_DatePickerScriptPartial"); }
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

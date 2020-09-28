@@ -48,7 +48,7 @@ namespace UnrealEstate.Controllers
                 TempData["errorMessage"] = ex.Message;
             }
 
-            return RedirectToAction(nameof(Search),  filterCriteria);
+            return RedirectToAction(nameof(Search), filterCriteria);
         }
 
         [HttpGet]
@@ -343,11 +343,13 @@ namespace UnrealEstate.Controllers
             {
                 TempData["errorMessage"] = "Fail to get listings";
 
-                // TODO: Try to render view.
                 return RedirectToAction(nameof(Index), "Home");
             }
 
-            SetPaging(filterCriteria);
+            if (filterCriteria.Offset is null)
+            {
+                SetPaging(filterCriteria);
+            }
 
             List<ListingResponse> listingResponses =
                 await _listingService.GetActiveListingsWithFilterAsync(filterCriteria);
@@ -358,7 +360,9 @@ namespace UnrealEstate.Controllers
             return View(listingResponses);
         }
 
-        private static void SetPaging(ListingFilterCriteriaRequest filterCriteria)
+        [Route("Paging")]
+        [AllowAnonymous]
+        public IActionResult SetPaging(ListingFilterCriteriaRequest filterCriteria)
         {
             if (filterCriteria.Offset is null)
             {
@@ -369,6 +373,8 @@ namespace UnrealEstate.Controllers
             {
                 filterCriteria.Offset += 3;
             }
+
+            return RedirectToAction(nameof(Search), filterCriteria);
         }
     }
 }

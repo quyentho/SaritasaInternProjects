@@ -8,6 +8,8 @@
 @{
     Layout = "_Layout";
 
+    ListingFilterCriteriaRequest filterCriteria = (ListingFilterCriteriaRequest) ViewData["filterCriteria"];
+
     string returnUrl = string.Format($"{Context.Request.Path}{Context.Request.QueryString}");
 }
 <partial name="_SearchBar" />
@@ -63,11 +65,14 @@
 
                         if (currentUser.FavoriteListings.Select(l => l.Id).Contains(item.Id))
                         {
-                            <a id="favoriteButton" asp-action="Favorite" asp-route-listingId="@item.Id" asp-route-filterCriteria="@ViewData["filterCriteria"]" class="btn btn-danger">Favorite</a>
+                            @*<a id="favoriteButton" asp-action="Favorite" asp-route-filterCriteria="@filterCriteria" asp-route-listingId="@item.Id"  class="btn btn-danger">Favorite</a>*@
+                            @Html.ActionLink("Favorite", "Favorite", new { listingId = item.Id, filterCriteria.MaxPrice, filterCriteria.Offset, filterCriteria.MaxAge, filterCriteria.MinSize, filterCriteria.Address, filterCriteria.Limit, filterCriteria.MinPrice, filterCriteria.OrderBy }, new { @class = "btn btn-danger" });
                         }
                         else
                         {
-                            <a id="favoriteButton" asp-action="Favorite" asp-route-listingId="@item.Id" asp-route-filterCriteria="@ViewData["filterCriteria"]" class="btn btn-light">Favorite</a>
+                            @Html.ActionLink("Favorite", "Favorite", new { listingId = item.Id, filterCriteria.MaxPrice, filterCriteria.Offset, filterCriteria.MaxAge, filterCriteria.MinSize, filterCriteria.Address, filterCriteria.Limit, filterCriteria.MinPrice, filterCriteria.OrderBy }, new { @class = "btn btn-light" });
+
+                            @*<a id="favoriteButton" asp-action="Favorite" asp-route-filterCriteria="@filterCriteria" asp-route-listingId="@item.Id" class="btn btn-light">Favorite</a>*@
                         }
                     }
 
@@ -82,5 +87,5 @@
 </table>
 
 @*TODO: make previous action link*@
-@Html.ActionLink("Next page", "Search", (ListingFilterCriteriaRequest)ViewData["filterCriteria"])
+@Html.ActionLink("Next page", "SetPaging", (ListingFilterCriteriaRequest)ViewData["filterCriteria"])
 

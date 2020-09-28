@@ -6,12 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using UnrealEstate.Business.Interfaces;
 using UnrealEstate.Models;
 using UnrealEstate.Models.Models;
-using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
-using UnrealEstate.Services;
 
 namespace UnrealEstateApi.Controllers
 {
@@ -81,7 +80,7 @@ namespace UnrealEstateApi.Controllers
         /// <param name="listing">Listing updated.</param>
         /// <returns>400 status code if url id not match updated id, 204 status code if completed update, not found if id not exists in database.</returns>
         [HttpPut("{listingId}")]
-        public async Task<IActionResult> UpdateListing(int listingId,[FromForm] ListingRequest listing)
+        public async Task<IActionResult> UpdateListing(int listingId, [FromForm] ListingRequest listing)
         {
             if (!ModelState.IsValid)
             {
@@ -233,7 +232,6 @@ namespace UnrealEstateApi.Controllers
         /// Add listing to favorite for current user, Remove listing from favorite if user already favorited.
         /// </summary>
         /// <param name="listingId">listing id.</param>
-        /// <returns></returns>
         [HttpPost("{listingId}/favorite")]
         public async Task<IActionResult> SetFavorite(int listingId)
         {
@@ -244,13 +242,11 @@ namespace UnrealEstateApi.Controllers
 
             try
             {
-                bool isFavorite;
-
                 User currentUser = await GetCurrentUserAsync();
 
-                isFavorite = await _listingService.AddOrRemoveFavoriteAsync(listingId, currentUser.Id);
+                await _listingService.AddOrRemoveFavoriteAsync(listingId, currentUser.Id);
 
-                return Ok(isFavorite);
+                return NoContent();
             }
             catch (ArgumentOutOfRangeException ex)
             {

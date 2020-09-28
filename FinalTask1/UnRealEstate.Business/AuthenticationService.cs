@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using MimeKit;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -8,15 +9,14 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Owin.Security.Provider;
-using MimeKit;
+using UnrealEstate.Business.EmailService;
+using UnrealEstate.Business.Interfaces;
 using UnrealEstate.Models;
 using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
-using UnrealEstate.Services.EmailService;
 
-namespace UnrealEstate.Services
+namespace UnrealEstate.Business
 {
     public class AuthenticationService : IAuthenticationService
     {

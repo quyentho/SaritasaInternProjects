@@ -4,13 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UnrealEstate.Business.Interfaces;
 using UnrealEstate.Models;
 using UnrealEstate.Models.Repositories;
-using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
 
-namespace UnrealEstate.Services
+namespace UnrealEstate.Business
 {
     public class CommentService : ICommentService
     {
@@ -50,12 +50,12 @@ namespace UnrealEstate.Services
         public async Task CreateCommentAsync(string userId, CommentRequest commentViewModel)
         {
             var listing = await _listingRepository.GetListingByIdAsync(commentViewModel.ListingId);
-            
+
             GuardClauses.HasValue(listing, "listing id");
             GuardClauses.IsAllowCommentStatus(listing.StatusId);
 
             var comment = _mapper.Map<Comment>(commentViewModel);
-            
+
             comment.UserId = userId;
             comment.CreatedAt = DateTimeOffset.Now;
 
@@ -86,7 +86,7 @@ namespace UnrealEstate.Services
             GuardClauses.IsAdmin(userRole.First());
 
             var comment = await _commentRepository.GetCommentByIdAsync(commentId);
-            
+
             GuardClauses.HasValue(comment, "comment id");
 
             await _commentRepository.DeleteCommentAsync(comment);

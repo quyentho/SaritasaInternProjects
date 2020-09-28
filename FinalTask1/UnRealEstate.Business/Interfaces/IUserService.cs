@@ -4,7 +4,7 @@ using UnrealEstate.Models;
 using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 
-namespace UnrealEstate.Services
+namespace UnrealEstate.Business.Interfaces
 {
     public interface IUserService
     {

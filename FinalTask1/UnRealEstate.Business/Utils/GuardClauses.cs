@@ -1,7 +1,7 @@
 ﻿using System;
 using UnrealEstate.Models;
 
-namespace UnrealEstate.Services
+namespace UnrealEstate.Business
 {
     public static class GuardClauses
     {
@@ -24,7 +24,7 @@ namespace UnrealEstate.Services
         /// <param name="currentListingStatus"></param>
         public static void IsAllowCommentStatus(int currentListingStatus)
         {
-            if (currentListingStatus != (int) Status.Active && currentListingStatus != (int) Status.Canceled)
+            if (currentListingStatus != (int)Status.Active && currentListingStatus != (int)Status.Canceled)
             {
                 throw new InvalidOperationException("Listing status is not valid to perform this action.");
             }

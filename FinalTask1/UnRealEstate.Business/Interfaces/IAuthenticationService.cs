@@ -1,14 +1,12 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using UnrealEstate.Models;
 using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
 
-namespace UnrealEstate.Services
+namespace UnrealEstate.Business.Interfaces
 {
-    public interface IAuthenticationService 
+    public interface IAuthenticationService
     {
         /// <summary>
         /// Authenticate user and give back jwt token if success login.
@@ -37,7 +35,7 @@ namespace UnrealEstate.Services
         /// <param name="model"></param>
         /// <returns></returns>
         Task<AuthenticationResponse> ResetPassword(ResetPasswordRequest model);
-        
+
         /// <summary>
         /// Login by email and password by sign in manager.
         /// </summary>

@@ -6,11 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using UnrealEstate.Business.Interfaces;
 using UnrealEstate.Models;
 using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
-using UnrealEstate.Services;
 
 namespace UnrealEstateApi.Controllers
 {
@@ -35,7 +35,7 @@ namespace UnrealEstateApi.Controllers
         /// <returns></returns>
         [Authorize(Roles = UserRole.Admin)]
         [HttpGet]
-        public async Task<IActionResult> GetUsers([FromQuery]UserFilterCriteriaRequest userFilterCriteria)
+        public async Task<IActionResult> GetUsers([FromQuery] UserFilterCriteriaRequest userFilterCriteria)
         {
             List<UserResponse> userViewModels = await _userService.GetActiveUsersWithFilterAsync(userFilterCriteria);
 

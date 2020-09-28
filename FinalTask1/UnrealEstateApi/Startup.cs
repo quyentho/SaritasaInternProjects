@@ -13,13 +13,14 @@ using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using UnrealEstate.Business;
+using UnrealEstate.Business.EmailService;
+using UnrealEstate.Business.Interfaces;
 using UnrealEstate.Models;
 using UnrealEstate.Models.MappingConfig;
 using UnrealEstate.Models.ModelConfigs;
 using UnrealEstate.Models.Repositories;
 using UnrealEstate.Models.ViewModels.RequestViewModels.RequestModelValidators;
-using UnrealEstate.Services;
-using UnrealEstate.Services.EmailService;
 using UnrealEstateApi.Configurations;
 
 namespace UnrealEstateApi
@@ -49,7 +50,7 @@ namespace UnrealEstateApi
                     .AddEntityFrameworkStores<UnrealEstateDbContext>()
                     .AddDefaultTokenProviders();
 
-            
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -88,8 +89,8 @@ namespace UnrealEstateApi
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
-                .AddFluentValidation(fv => 
-                { 
+                .AddFluentValidation(fv =>
+                {
                     fv.RegisterValidatorsFromAssembly(Assembly.GetAssembly(typeof(ListingModelValidator)));
                     fv.ImplicitlyValidateChildProperties = true;
                 });
@@ -125,7 +126,7 @@ namespace UnrealEstateApi
                             }
                         },new List<string>()
                     }
-                }); 
+                });
 
             });
 

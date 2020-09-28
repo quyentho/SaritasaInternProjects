@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnrealEstate.Models;
 using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
-using UnrealEstate.Services;
 
 namespace UnrealEstate.Controllers
 {
@@ -16,12 +12,12 @@ namespace UnrealEstate.Controllers
     public class AdminController : Controller
     {
         private readonly IUserService _userService;
-        
+
         public AdminController(IUserService userService)
         {
             _userService = userService;
         }
-        
+
         public async Task<ActionResult> Users(UserFilterCriteriaRequest filterCriteria)
         {
             if (ModelState.IsValid)

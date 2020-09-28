@@ -12,7 +12,7 @@ namespace UnrealEstate.Models.ViewModels
         public string Email { get; set; }
 
         [DisplayName("Is Active")]
-        public bool IsActive { get; set; }          
+        public bool IsActive { get; set; }
 
         [DisplayName("Last Name")]
         public string LastName { get; set; }

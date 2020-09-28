@@ -29,7 +29,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\UnrealEstate.Models\UnrealEstate.Models.csproj" />
-      <ProjectReference Include="..\UnRealEstate.Services\UnrealEstate.Services.csproj" />
+      <ProjectReference Include="..\UnrealEstate.Business\UnrealEstate.Business.csproj" />
+      <ProjectReference Include="..\UnRealEstate.Services\UnrealEstate.Business.csproj" />
     </ItemGroup>
 
     <ItemGroup>

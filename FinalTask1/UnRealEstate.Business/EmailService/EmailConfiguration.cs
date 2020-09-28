@@ -1,4 +1,4 @@
-﻿namespace UnrealEstate.Services.EmailService
+﻿namespace UnrealEstate.Business.EmailService
 {
     public class EmailConfiguration
     {

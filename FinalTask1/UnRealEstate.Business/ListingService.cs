@@ -1,20 +1,20 @@
 ﻿using AutoMapper;
 using LinqKit;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using UnrealEstate.Business.Interfaces;
+using UnrealEstate.Business.Utils;
 using UnrealEstate.Models;
 using UnrealEstate.Models.Models;
 using UnrealEstate.Models.Repositories;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
-using UnrealEstate.Services.Utils;
 
-namespace UnrealEstate.Services
+namespace UnrealEstate.Business
 {
     public class ListingService : IListingService
     {
@@ -30,7 +30,7 @@ namespace UnrealEstate.Services
         }
 
         /// <inheritdoc/>
-        
+
         // TODO: define exception for services.
         public async Task AddOrRemoveFavoriteAsync(int listingId, string userId)
         {
@@ -221,7 +221,6 @@ namespace UnrealEstate.Services
 
         private static void SetFavoriteState(int listingId, string userId, Listing listingFromDb)
         {
-
             var favorite = listingFromDb.Favorites.FirstOrDefault(f => f.UserId == userId);
 
             if (favorite is null)
@@ -232,7 +231,6 @@ namespace UnrealEstate.Services
             {
                 listingFromDb.Favorites.Remove(favorite);
             }
-
         }
 
         private async Task Enable(Listing listingFromDb)

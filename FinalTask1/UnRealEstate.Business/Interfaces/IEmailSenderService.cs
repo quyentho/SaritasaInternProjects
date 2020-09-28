@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
+using UnrealEstate.Business.EmailService;
 
-namespace UnrealEstate.Services.EmailService
+namespace UnrealEstate.Business.Interfaces
 {
     public interface IEmailSenderService
     {

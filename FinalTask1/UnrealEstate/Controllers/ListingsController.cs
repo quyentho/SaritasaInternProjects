@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UnrealEstate.Business.Comment.Interface;
+using UnrealEstate.Business.Comment.ViewModel.Request;
+using UnrealEstate.Business.Listing.Interface;
+using UnrealEstate.Business.Listing.ViewModel.Request;
+using UnrealEstate.Business.User.Interface;
 using UnrealEstate.Infrastructure.Models;
-using UnrealEstate.Models.ViewModels.RequestViewModels;
-using UnrealEstate.Services;
-using UnrealEstate.Services.Listing.Interface;
-using UnrealEstate.Services.Listing.ViewModel.Request;
-using UnrealEstate.Services.User.Interface;
 
 namespace UnrealEstate.Controllers
 {

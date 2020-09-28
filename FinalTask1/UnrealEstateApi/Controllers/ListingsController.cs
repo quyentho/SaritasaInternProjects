@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using UnrealEstate.Business.Comment.Interface;
+using UnrealEstate.Business.Comment.ViewModel.Response;
+using UnrealEstate.Business.Listing.Interface;
+using UnrealEstate.Business.Listing.ViewModel.Request;
+using UnrealEstate.Business.Listing.ViewModel.Response;
+using UnrealEstate.Business.User.Interface;
 using UnrealEstate.Infrastructure.Models;
-using UnrealEstate.Models.ViewModels.RequestViewModels;
-using UnrealEstate.Models.ViewModels.ResponseViewModels;
-using UnrealEstate.Services;
-using UnrealEstate.Services.Listing.Interface;
-using UnrealEstate.Services.Listing.ViewModel.Request;
-using UnrealEstate.Services.User.Interface;
 
 namespace UnrealEstateApi.Controllers
 {

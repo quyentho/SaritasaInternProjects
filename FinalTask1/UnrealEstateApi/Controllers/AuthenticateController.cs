@@ -1,10 +1,9 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using UnrealEstate.Models.ViewModels;
-using UnrealEstate.Models.ViewModels.RequestViewModels;
-using UnrealEstate.Models.ViewModels.ResponseViewModels;
-using UnrealEstate.Services.Authentication.Interface;
+using UnrealEstate.Business.Authentication.Interface;
+using UnrealEstate.Business.Authentication.ViewModel.Request;
+using UnrealEstate.Business.Authentication.ViewModel.Response;
 
 namespace UnrealEstateApi.Controllers
 {

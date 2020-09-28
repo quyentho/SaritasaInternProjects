@@ -1,10 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using UnrealEstate.Models;
-using UnrealEstate.Models.ViewModels.RequestViewModels;
-using UnrealEstate.Services;
-using UnrealEstate.Services.User.Interface;
+using UnrealEstate.Business;
+using UnrealEstate.Business.User.Interface;
+using UnrealEstate.Business.User.ViewModel.Request;
 
 namespace UnrealEstate.Controllers
 {

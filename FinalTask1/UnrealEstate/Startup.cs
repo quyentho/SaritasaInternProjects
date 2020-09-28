@@ -9,21 +9,24 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using UnrealEstate.Business.Authentication;
+using UnrealEstate.Business.Authentication.Interface;
+using UnrealEstate.Business.Comment;
+using UnrealEstate.Business.Comment.Interface;
+using UnrealEstate.Business.Comment.Repository;
+using UnrealEstate.Business.Comment.Repository.Interface;
+using UnrealEstate.Business.Email;
+using UnrealEstate.Business.Email.Interface;
+using UnrealEstate.Business.Listing;
+using UnrealEstate.Business.Listing.Interface;
+using UnrealEstate.Business.Listing.Repository;
+using UnrealEstate.Business.Listing.Repository.Interface;
+using UnrealEstate.Business.Listing.ViewModel.Request.Validator;
+using UnrealEstate.Business.MappingConfig;
+using UnrealEstate.Business.User;
+using UnrealEstate.Business.User.Interface;
 using UnrealEstate.Infrastructure;
 using UnrealEstate.Infrastructure.Models;
-using UnrealEstate.Models.Repositories;
-using UnrealEstate.Services;
-using UnrealEstate.Services.Authentication;
-using UnrealEstate.Services.Authentication.Interface;
-using UnrealEstate.Services.Comment.Repository;
-using UnrealEstate.Services.Comment.Repository.Interface;
-using UnrealEstate.Services.EmailService;
-using UnrealEstate.Services.Listing;
-using UnrealEstate.Services.Listing.Interface;
-using UnrealEstate.Services.Listing.ViewModel.Request.Validator;
-using UnrealEstate.Services.MappingConfig;
-using UnrealEstate.Services.User;
-using UnrealEstate.Services.User.Interface;
 
 namespace UnrealEstate
 {
@@ -85,7 +88,6 @@ namespace UnrealEstate
             services.AddTransient<IListingRepository, ListingRepository>();
             services.AddTransient<IListingService, ListingService>();
             services.AddTransient<IUserService, UserService>();
-            // services.AddTransient<UserService>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<ICommentRepository, CommentRepository>();
             services.AddTransient<ICommentService, CommentService>();

@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using UnrealEstate.Business;
+using UnrealEstate.Business.Authentication.Interface;
+using UnrealEstate.Business.Authentication.ViewModel.Request;
+using UnrealEstate.Business.User.Interface;
+using UnrealEstate.Business.User.ViewModel.Request;
 using UnrealEstate.Infrastructure.Models;
-using UnrealEstate.Models;
-using UnrealEstate.Models.ViewModels.RequestViewModels;
-using UnrealEstate.Services;
-using UnrealEstate.Services.Authentication.Interface;
-using UnrealEstate.Services.User.Interface;
 
 namespace UnrealEstateApi.Controllers
 {

@@ -25,9 +25,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\UnRealEstate.Business\UnrealEstate.Business.csproj" />
     <ProjectReference Include="..\UnrealEstate.Infrastructure\UnrealEstate.Infrastructure.csproj" />
     <ProjectReference Include="..\UnrealEstate.Models\UnrealEstate.Infrastructure.csproj" />
-    <ProjectReference Include="..\UnRealEstate.Services\UnrealEstate.Services.csproj" />
+    <ProjectReference Include="..\UnRealEstate.Services\UnrealEstate.Business.csproj" />
     <ProjectReference Include="..\UnrealEstate\UnrealEstate.csproj" />
   </ItemGroup>
 

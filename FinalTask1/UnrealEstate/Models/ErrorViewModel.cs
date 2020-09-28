@@ -1,4 +1,4 @@
-﻿namespace UnrealEstate.Models
+﻿namespace UnrealEstate.Models.ViewModels
 {
     public class ErrorViewModel
     {

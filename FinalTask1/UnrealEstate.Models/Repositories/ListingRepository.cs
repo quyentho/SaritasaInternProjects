@@ -19,12 +19,12 @@ namespace UnrealEstate.Models.Repositories
         {
             var listing = await _context
                 .Listings
-                .Include(l => l.Comments).ThenInclude(c => c.User)
+                .Include(l => l.Comments).ThenInclude(c=>c.User)
                 .Include(l => l.Favorites)
                 .Include(l => l.Bids)
-                .Include(l => l.ListingPhoTos)
-                .Include(l => l.Status)
-                .Include(l => l.User)
+                .Include(l=>l.ListingPhoTos)
+                .Include(l=>l.Status)
+                .Include(l=>l.User)
                 .FirstOrDefaultAsync(l => l.Id == listingId);
 
             return listing;
@@ -38,7 +38,7 @@ namespace UnrealEstate.Models.Repositories
                 .Include(l => l.Bids)
                 .Include(l => l.ListingPhoTos)
                 .Include(l => l.User)
-                .Include(l => l.Status)
+                .Include(l=>l.Status)
                 .ToListAsync();
 
             return listings;

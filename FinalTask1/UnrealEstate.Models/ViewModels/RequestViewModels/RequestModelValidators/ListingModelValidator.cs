@@ -1,5 +1,9 @@
 ﻿using FluentValidation;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace UnrealEstate.Models.ViewModels.RequestViewModels.RequestModelValidators
 {
@@ -14,7 +18,7 @@ namespace UnrealEstate.Models.ViewModels.RequestViewModels.RequestModelValidator
                 .Must(x => x.DateTime.Date > DateTime.Now.Date && x.DateTime.Date <= x.DateTime.AddMonths(2))
                 .WithMessage("Due date must greater than today and not exceeds 2 months from now");
 
-            RuleFor(x => x.BuiltYear).Must(x => x > 0 && x <= DateTimeOffset.Now.Year).When(x => x.BuiltYear.HasValue)
+            RuleFor(x => x.BuiltYear).Must(x => x > 0 && x <= DateTimeOffset.Now.Year).When(x=>x.BuiltYear.HasValue)
                 .WithMessage("Build year cannot greater than now ");
         }
     }

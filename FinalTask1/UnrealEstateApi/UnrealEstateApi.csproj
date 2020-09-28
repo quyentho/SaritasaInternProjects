@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -26,8 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\UnrealEstate.Models\UnrealEstate.Models.csproj" />
-    <ProjectReference Include="..\UnrealEstate.Business\UnrealEstate.Business.csproj" />
-    <ProjectReference Include="..\UnRealEstate.Services\UnrealEstate.Business.csproj" />
+    <ProjectReference Include="..\UnRealEstate.Services\UnrealEstate.Services.csproj" />
     <ProjectReference Include="..\UnrealEstate\UnrealEstate.csproj" />
   </ItemGroup>
 

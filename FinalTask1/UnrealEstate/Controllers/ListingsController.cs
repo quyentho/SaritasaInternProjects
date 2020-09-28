@@ -1,16 +1,18 @@
-﻿using AutoMapper;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using UnrealEstate.Business.Interfaces;
+using AutoMapper;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using UnrealEstate.Models;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
+using UnrealEstate.Services;
 
 namespace UnrealEstate.Controllers
 {
@@ -360,9 +362,9 @@ namespace UnrealEstate.Controllers
 
         private void SetPaging(ListingFilterCriteriaRequest filterCriteria)
         {
-            filterCriteria.Offset = 0;
-            filterCriteria.Limit = 3;
-
+                filterCriteria.Offset = 0;
+                filterCriteria.Limit = 3;
+            
         }
 
         [AllowAnonymous]
@@ -373,7 +375,7 @@ namespace UnrealEstate.Controllers
 
             return RedirectToAction(nameof(Search), filterCriteria);
         }
-
+        
         [AllowAnonymous]
         [Route("PreviousPage")]
         public IActionResult BackPreviousPage(ListingFilterCriteriaRequest filterCriteria)

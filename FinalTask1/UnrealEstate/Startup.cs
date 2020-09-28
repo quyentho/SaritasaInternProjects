@@ -1,22 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Reflection;
-using UnrealEstate.Business;
-using UnrealEstate.Business.EmailService;
-using UnrealEstate.Business.Interfaces;
 using UnrealEstate.Models;
 using UnrealEstate.Models.MappingConfig;
 using UnrealEstate.Models.ModelConfigs;
 using UnrealEstate.Models.Repositories;
 using UnrealEstate.Models.ViewModels.RequestViewModels.RequestModelValidators;
+using UnrealEstate.Services;
+using UnrealEstate.Services.EmailService;
 
 namespace UnrealEstate
 {
@@ -65,7 +69,7 @@ namespace UnrealEstate
                     options.ClientId = "276236464048-s6dhn7otoiedo6j0hltv6r3ke4ir8kkj.apps.googleusercontent.com";
                     options.ClientSecret = "HAz2HReoehA9DKcAEN6l5c88";
                 });
-
+         
             services.ConfigureApplicationCookie(options =>
             {
                 // Cookie settings
@@ -79,7 +83,7 @@ namespace UnrealEstate
             services.AddTransient<IListingRepository, ListingRepository>();
             services.AddTransient<IListingService, ListingService>();
             services.AddTransient<IUserService, UserService>();
-            // services.AddTransient<UserService>();
+           // services.AddTransient<UserService>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<ICommentRepository, CommentRepository>();
             services.AddTransient<ICommentService, CommentService>();
@@ -116,7 +120,7 @@ namespace UnrealEstate
                 var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<User>>();
 
                 var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-
+                
 
                 DatabaseInitializer.InitializeSeedData(context, userManager, roleManager);
             }
@@ -136,7 +140,7 @@ namespace UnrealEstate
             app.UseHttpsRedirection();
 
             app.UseStaticFiles();
-
+          
 
             app.UseRouting();
 
@@ -148,7 +152,7 @@ namespace UnrealEstate
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-
+                
                 endpoints.MapRazorPages();
             });
         }

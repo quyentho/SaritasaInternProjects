@@ -5,9 +5,9 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using UnrealEstate.Business.Interfaces;
 using UnrealEstate.Models;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
+using UnrealEstate.Services;
 
 namespace UnrealEstateApi.Controllers
 {

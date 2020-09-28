@@ -4,7 +4,7 @@ using UnrealEstate.Models;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
 
-namespace UnrealEstate.Business.Interfaces
+namespace UnrealEstate.Services
 {
     public interface ICommentService
     {

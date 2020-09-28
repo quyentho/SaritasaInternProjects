@@ -1,15 +1,17 @@
-﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using UnrealEstate.Business.Interfaces;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using UnrealEstate.Models;
 using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
+using UnrealEstate.Services;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace UnrealEstate.Controllers
 {
@@ -77,9 +79,9 @@ namespace UnrealEstate.Controllers
 
                     return RedirectToAction("Index", "Home");
                 }
-
+                
                 ModelState.AddModelError(string.Empty, loginResult.Message);
-
+                
                 return View(model);
             }
 

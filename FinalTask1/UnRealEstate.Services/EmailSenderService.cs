@@ -1,10 +1,9 @@
-﻿using System.Threading.Tasks;
-using MailKit.Net.Smtp;
+﻿using MailKit.Net.Smtp;
 using MimeKit;
-using UnrealEstate.Business.EmailService;
-using UnrealEstate.Business.Interfaces;
+using System;
+using System.Threading.Tasks;
 
-namespace UnrealEstate.Business
+namespace UnrealEstate.Services.EmailService
 {
     public class EmailSenderService : IEmailSenderService
     {

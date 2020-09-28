@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace UnrealEstate.Business.EmailService
+namespace UnrealEstate.Services.EmailService
 {
     public class Message
     {

@@ -1,11 +1,11 @@
 ﻿using System.Linq;
 using System.Linq.Expressions;
 
-namespace UnrealEstate.Business.Utils
+namespace UnrealEstate.Services.Utils
 {
-    public static class FilterExtension
+    public static class FilterExtension 
     {
-        public static IQueryable<TSource> FilterByRange<TSource>(this IQueryable<TSource> source, int? offset, int? limit)
+        public static IQueryable<TSource> FilterByRange<TSource>(this IQueryable<TSource> source, int? offset, int? limit) 
         {
             if (offset.HasValue)
             {

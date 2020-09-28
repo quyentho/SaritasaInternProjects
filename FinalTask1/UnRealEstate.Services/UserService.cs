@@ -2,16 +2,16 @@
 using LinqKit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using UnrealEstate.Business.Interfaces;
-using UnrealEstate.Business.Utils;
 using UnrealEstate.Models;
 using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
+using UnrealEstate.Services.Utils;
 
-namespace UnrealEstate.Business
+namespace UnrealEstate.Services
 {
     public class UserService : IUserService
     {
@@ -26,11 +26,11 @@ namespace UnrealEstate.Business
         public async Task<List<UserResponse>> GetActiveUsersWithFilterAsync(UserFilterCriteriaRequest filterCriteria)
         {
             List<User> users = await _userManager.Users
-                .Include(u => u.Comments)
-                .Include(u => u.Favorites)
-                .Include(u => u.Listings)
-                .Include(u => u.ListingNotes)
-                .Include(u => u.Bids)
+                .Include(u=>u.Comments)
+                .Include(u=>u.Favorites)
+                .Include(u=>u.Listings)
+                .Include(u=>u.ListingNotes)
+                .Include(u=>u.Bids)
                 .ToListAsync();
 
             users = GetFilteredUsers(filterCriteria, users);

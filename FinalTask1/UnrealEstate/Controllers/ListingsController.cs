@@ -360,19 +360,27 @@ namespace UnrealEstate.Controllers
             return View(listingResponses);
         }
 
-        [Route("Paging")]
-        [AllowAnonymous]
-        public IActionResult SetPaging(ListingFilterCriteriaRequest filterCriteria)
+        private void SetPaging(ListingFilterCriteriaRequest filterCriteria)
         {
-            if (filterCriteria.Offset is null)
-            {
                 filterCriteria.Offset = 0;
                 filterCriteria.Limit = 3;
-            }
-            else
-            {
-                filterCriteria.Offset += 3;
-            }
+            
+        }
+
+        [AllowAnonymous]
+        [Route("NextPage")]
+        public IActionResult GoNextPage(ListingFilterCriteriaRequest filterCriteria)
+        {
+            filterCriteria.Offset += 3;
+
+            return RedirectToAction(nameof(Search), filterCriteria);
+        }
+        
+        [AllowAnonymous]
+        [Route("PreviousPage")]
+        public IActionResult BackPreviousPage(ListingFilterCriteriaRequest filterCriteria)
+        {
+            filterCriteria.Offset -= 3;
 
             return RedirectToAction(nameof(Search), filterCriteria);
         }

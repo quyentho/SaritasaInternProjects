@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
-using UnrealEstate.Models.Models;
+using UnrealEstate.Infrastructure.Models;
 
-namespace UnrealEstate.Models.ModelConfigs
+namespace UnrealEstate.Infrastructure.ModelConfigs
 {
     public static class DatabaseInitializer
     {

@@ -7,7 +7,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using UnrealEstate.Models.Models;
+using UnrealEstate.Infrastructure.Models;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
 using UnrealEstate.Services;

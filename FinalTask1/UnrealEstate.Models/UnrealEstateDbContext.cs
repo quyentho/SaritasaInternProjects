@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using UnrealEstate.Models.Models;
+using UnrealEstate.Infrastructure.Models;
 
-namespace UnrealEstate.Models
+namespace UnrealEstate.Infrastructure
 {
     public class UnrealEstateDbContext : IdentityDbContext<ApplicationUser>
     {

@@ -1,4 +1,4 @@
-﻿namespace UnrealEstate.Models.Models
+﻿namespace UnrealEstate.Infrastructure.Models
 {
     public class ListingPhoto
     {
@@ -8,6 +8,6 @@
 
         public string PhotoUrl { get; set; }
 
-        public UnrealEstate.Models.Models.Listing Listing { get; set; }
+        public Listing Listing { get; set; }
     }
 }

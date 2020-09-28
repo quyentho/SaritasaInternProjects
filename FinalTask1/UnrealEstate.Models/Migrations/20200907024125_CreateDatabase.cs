@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace UnrealEstate.Models.Migrations
+namespace UnrealEstate.Infrastructure.Migrations
 {
     public partial class CreateDatabase : Migration
     {

@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using UnrealEstate.Models.Models;
+using UnrealEstate.Infrastructure.Models;
 
-namespace UnrealEstate.Models.ModelConfigs
+namespace UnrealEstate.Infrastructure.ModelConfigs
 {
     public class UserConfiguration : IEntityTypeConfiguration<ApplicationUser>
     {

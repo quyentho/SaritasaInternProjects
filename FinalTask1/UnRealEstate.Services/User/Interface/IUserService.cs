@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using UnrealEstate.Models.Models;
+using UnrealEstate.Infrastructure.Models;
 using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 

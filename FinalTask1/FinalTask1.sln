@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnrealEstate.Services", "UnRealEstate.Services\UnrealEstate.Services.csproj", "{31939AE5-003B-4A8A-8109-D14FF9CA860D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnrealEstate.Models", "UnrealEstate.Models\UnrealEstate.Models.csproj", "{6E71F8E4-C2CB-4F7A-AB32-69FC5CAA2FC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnrealEstate.Infrastructure", "UnrealEstate.Models\UnrealEstate.Infrastructure.csproj", "{6E71F8E4-C2CB-4F7A-AB32-69FC5CAA2FC0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnrealEstateApi", "UnrealEstateApi\UnrealEstateApi.csproj", "{0EDD117C-4D68-4295-BC31-484AB96024B2}"
 EndProject

@@ -2,7 +2,7 @@
 using MimeKit;
 using System;
 using System.Threading.Tasks;
-using UnrealEstate.Models.Models;
+using UnrealEstate.Infrastructure.Models;
 
 namespace UnrealEstate.Services.EmailService
 {

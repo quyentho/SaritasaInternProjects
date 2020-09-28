@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace UnrealEstate.Models.Models
+namespace UnrealEstate.Infrastructure.Models
 {
     public class Listing
     {

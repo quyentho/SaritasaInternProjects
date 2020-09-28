@@ -1,6 +1,6 @@
 ﻿using System;
+using UnrealEstate.Infrastructure.Models;
 using UnrealEstate.Models;
-using UnrealEstate.Models.Models;
 
 namespace UnrealEstate.Services
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UnrealEstate.Models.Models
+namespace UnrealEstate.Infrastructure.Models
 {
     public class Comment
     {

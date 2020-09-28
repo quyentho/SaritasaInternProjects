@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using AutoMapper;
-using UnrealEstate.Models.Models;
+using UnrealEstate.Infrastructure.Models;
 using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
@@ -14,9 +14,9 @@ namespace UnrealEstate.Services.MappingConfig
         {
             #region listing mapping
 
-            CreateMap<Models.Models.Listing, ListingResponse>().ForMember(dest=>dest.StatusName, opt=>opt.MapFrom(src=>src.Status.Name));
+            CreateMap<Infrastructure.Models.Listing, ListingResponse>().ForMember(dest=>dest.StatusName, opt=>opt.MapFrom(src=>src.Status.Name));
 
-            CreateMap<ListingRequest, Models.Models.Listing>().ForMember(dest => dest.ListingPhoTos, opt => opt.Ignore());
+            CreateMap<ListingRequest, Infrastructure.Models.Listing>().ForMember(dest => dest.ListingPhoTos, opt => opt.Ignore());
 
             CreateMap<ListingNote, ListingNoteResponse>();
             CreateMap<ListingNoteRequest, ListingNote>();
@@ -28,9 +28,9 @@ namespace UnrealEstate.Services.MappingConfig
             #endregion
 
             #region comment mapping
-            CreateMap<Models.Models.Comment, CommentResponse>();
+            CreateMap<Infrastructure.Models.Comment, CommentResponse>();
 
-            CreateMap<CommentRequest, Models.Models.Comment>();
+            CreateMap<CommentRequest, Infrastructure.Models.Comment>();
             #endregion
 
             #region user mapping

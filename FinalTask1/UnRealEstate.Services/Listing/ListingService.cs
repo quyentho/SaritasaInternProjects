@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using UnrealEstate.Models.Models;
+using UnrealEstate.Infrastructure.Models;
 using UnrealEstate.Models.Repositories;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
@@ -34,7 +34,7 @@ namespace UnrealEstate.Services.Listing
         // TODO: define exception for services.
         public async Task AddOrRemoveFavoriteAsync(int listingId, string userId)
         {
-            Models.Models.Listing listing = await ValidateFavoriteAction(listingId);
+            Infrastructure.Models.Listing listing = await ValidateFavoriteAction(listingId);
 
             SetFavoriteState(listingId, userId, listing);
 
@@ -46,7 +46,7 @@ namespace UnrealEstate.Services.Listing
         /// <inheritdoc/>
         public async Task EnableListingAsync(ApplicationUser currentUser, int listingId)
         {
-            Models.Models.Listing listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
+            Infrastructure.Models.Listing listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
 
             await ValidateAction(currentUser, listingFromDb, (int)Status.Disable);
 
@@ -56,7 +56,7 @@ namespace UnrealEstate.Services.Listing
         /// <inheritdoc/>
         public async Task DisableListingAsync(ApplicationUser currentUser, int listingId)
         {
-            Models.Models.Listing listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
+            Infrastructure.Models.Listing listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
 
             await ValidateAction(currentUser, listingFromDb, (int)Status.Active);
 
@@ -66,7 +66,7 @@ namespace UnrealEstate.Services.Listing
         /// <inheritdoc/>
         public async Task<List<ListingResponse>> GetListingsAsync()
         {
-            List<Models.Models.Listing> listings = await _listingRepository.GetListingsAsync();
+            List<Infrastructure.Models.Listing> listings = await _listingRepository.GetListingsAsync();
 
             List<ListingResponse> listingViewModels = MapListingsToViewModels(listings);
 
@@ -76,7 +76,7 @@ namespace UnrealEstate.Services.Listing
         /// <inheritdoc/>
         public async Task<ListingResponse> GetListingAsync(int listingId)
         {
-            Models.Models.Listing listing = await _listingRepository.GetListingByIdAsync(listingId);
+            Infrastructure.Models.Listing listing = await _listingRepository.GetListingByIdAsync(listingId);
 
             ListingResponse listingViewModel = _mapper.Map<ListingResponse>(listing);
 
@@ -87,7 +87,7 @@ namespace UnrealEstate.Services.Listing
         public async Task<List<ListingResponse>> GetActiveListingsWithFilterAsync(ListingFilterCriteriaRequest filterCriteria)
         {
 
-            List<Models.Models.Listing> listings = await _listingRepository.GetListingsAsync();
+            List<Infrastructure.Models.Listing> listings = await _listingRepository.GetListingsAsync();
 
             listings = GetFilteredListings(filterCriteria, listings);
 
@@ -99,7 +99,7 @@ namespace UnrealEstate.Services.Listing
         /// <inheritdoc/>
         public async Task CreateListingAsync(ListingRequest listingRequest, string userId)
         {
-            Models.Models.Listing listing = await ProduceListing(listingRequest, userId);
+            Infrastructure.Models.Listing listing = await ProduceListing(listingRequest, userId);
 
             await _listingRepository.AddListingAsync(listing);
         }
@@ -107,7 +107,7 @@ namespace UnrealEstate.Services.Listing
         /// <inheritdoc/>
         public async Task EditListingAsync(ApplicationUser currentUser, ListingRequest listingRequest, int listingId)
         {
-            Models.Models.Listing editedListing = await GetEditedListing(currentUser, listingRequest, listingId);
+            Infrastructure.Models.Listing editedListing = await GetEditedListing(currentUser, listingRequest, listingId);
 
             await _listingRepository.UpdateListingAsync(editedListing);
         }
@@ -115,7 +115,7 @@ namespace UnrealEstate.Services.Listing
         /// <inheritdoc />
         public async Task MakeABid(int listingId, ApplicationUser currentUser, ListingBidRequest bidRequestViewModel)
         {
-            Models.Models.Listing listingToBid = await ValidateBidAction(listingId, bidRequestViewModel);
+            Infrastructure.Models.Listing listingToBid = await ValidateBidAction(listingId, bidRequestViewModel);
 
             AddBidOnListing(listingId, currentUser, bidRequestViewModel, listingToBid);
 
@@ -145,7 +145,7 @@ namespace UnrealEstate.Services.Listing
             await _listingRepository.UpdateListingAsync(listingFromDb);
         }
 
-        private void AddBidOnListing(int listingId, ApplicationUser currentUser, ListingBidRequest bidRequestViewModel, Models.Models.Listing listingToBid)
+        private void AddBidOnListing(int listingId, ApplicationUser currentUser, ListingBidRequest bidRequestViewModel, Infrastructure.Models.Listing listingToBid)
         {
             listingToBid.CurrentHighestBidPrice = bidRequestViewModel.Price;
 
@@ -158,7 +158,7 @@ namespace UnrealEstate.Services.Listing
             listingToBid.Bids.Add(bid);
         }
 
-        private async Task<Models.Models.Listing> ValidateBidAction(int listingId, ListingBidRequest bidRequestViewModel)
+        private async Task<Infrastructure.Models.Listing> ValidateBidAction(int listingId, ListingBidRequest bidRequestViewModel)
         {
             var listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
 
@@ -169,7 +169,7 @@ namespace UnrealEstate.Services.Listing
             return listingFromDb;
         }
 
-        private async Task Disable(Models.Models.Listing listingFromDb)
+        private async Task Disable(Infrastructure.Models.Listing listingFromDb)
         {
             listingFromDb.StatusId = (int)Status.Disable;
 
@@ -181,9 +181,9 @@ namespace UnrealEstate.Services.Listing
             return await _userManager.GetRolesAsync(currentUser);
         }
 
-        private static ExpressionStarter<Models.Models.Listing> BuildConditions(ListingFilterCriteriaRequest filterCriteria)
+        private static ExpressionStarter<Infrastructure.Models.Listing> BuildConditions(ListingFilterCriteriaRequest filterCriteria)
         {
-            var filterConditions = PredicateBuilder.New<Models.Models.Listing>(true);
+            var filterConditions = PredicateBuilder.New<Infrastructure.Models.Listing>(true);
 
             filterConditions.And(l => l.StatusId == 1);
 
@@ -219,7 +219,7 @@ namespace UnrealEstate.Services.Listing
             return filterConditions;
         }
 
-        private static void SetFavoriteState(int listingId, string userId, Models.Models.Listing listingFromDb)
+        private static void SetFavoriteState(int listingId, string userId, Infrastructure.Models.Listing listingFromDb)
         {
 
             var favorite = listingFromDb.Favorites.FirstOrDefault(f => f.UserId == userId);
@@ -235,14 +235,14 @@ namespace UnrealEstate.Services.Listing
 
         }
 
-        private async Task Enable(Models.Models.Listing listingFromDb)
+        private async Task Enable(Infrastructure.Models.Listing listingFromDb)
         {
             listingFromDb.StatusId = (int)Status.Active;
 
             await _listingRepository.UpdateListingAsync(listingFromDb);
         }
 
-        private async Task ValidateAction(ApplicationUser currentUser, Models.Models.Listing listingFromDb, int validStatusId)
+        private async Task ValidateAction(ApplicationUser currentUser, Infrastructure.Models.Listing listingFromDb, int validStatusId)
         {
             IList<string> userRole = await GetUserRole(currentUser);
 
@@ -251,14 +251,14 @@ namespace UnrealEstate.Services.Listing
             GuardClauses.IsValidStatus(listingFromDb.StatusId, validStatusId);
         }
 
-        private List<ListingResponse> MapListingsToViewModels(List<Models.Models.Listing> listings)
+        private List<ListingResponse> MapListingsToViewModels(List<Infrastructure.Models.Listing> listings)
         {
             return _mapper.Map<List<ListingResponse>>(listings);
         }
 
-        private static List<Models.Models.Listing> GetFilteredListings(ListingFilterCriteriaRequest filterCriteria, List<Models.Models.Listing> listings)
+        private static List<Infrastructure.Models.Listing> GetFilteredListings(ListingFilterCriteriaRequest filterCriteria, List<Infrastructure.Models.Listing> listings)
         {
-            IQueryable<Models.Models.Listing> result = FilterByConditions(filterCriteria, listings);
+            IQueryable<Infrastructure.Models.Listing> result = FilterByConditions(filterCriteria, listings);
 
             result = result.SortBy(filterCriteria.OrderBy);
 
@@ -267,11 +267,11 @@ namespace UnrealEstate.Services.Listing
             return result.ToList();
         }
 
-        private static IQueryable<Models.Models.Listing> FilterByConditions(ListingFilterCriteriaRequest filterCriteria, List<Models.Models.Listing> listings)
+        private static IQueryable<Infrastructure.Models.Listing> FilterByConditions(ListingFilterCriteriaRequest filterCriteria, List<Infrastructure.Models.Listing> listings)
         {
-            ExpressionStarter<Models.Models.Listing> filterConditions = BuildConditions(filterCriteria);
+            ExpressionStarter<Infrastructure.Models.Listing> filterConditions = BuildConditions(filterCriteria);
 
-            IQueryable<Models.Models.Listing> result = listings.Where(filterConditions).AsQueryable();
+            IQueryable<Infrastructure.Models.Listing> result = listings.Where(filterConditions).AsQueryable();
             return result;
         }
 
@@ -298,9 +298,9 @@ namespace UnrealEstate.Services.Listing
             return listingPhotos;
         }
 
-        private async Task<Models.Models.Listing> ProduceListing(ListingRequest listingViewModel, string userId)
+        private async Task<Infrastructure.Models.Listing> ProduceListing(ListingRequest listingViewModel, string userId)
         {
-            Models.Models.Listing listing = _mapper.Map<Models.Models.Listing>(listingViewModel);
+            Infrastructure.Models.Listing listing = _mapper.Map<Infrastructure.Models.Listing>(listingViewModel);
 
             listing.UserId = userId;
             listing.CurrentHighestBidPrice = listingViewModel.StatingPrice;
@@ -311,7 +311,7 @@ namespace UnrealEstate.Services.Listing
             return listing;
         }
 
-        private static async Task AddUploadedPhotosIfExist(ListingRequest listingViewModel, Models.Models.Listing listing)
+        private static async Task AddUploadedPhotosIfExist(ListingRequest listingViewModel, Infrastructure.Models.Listing listing)
         {
             bool hasPhotoUploaded = listingViewModel.ListingPhoTos.Count > 0;
 
@@ -331,9 +331,9 @@ namespace UnrealEstate.Services.Listing
         }
 
 
-        private async Task<Models.Models.Listing> GetEditedListing(ApplicationUser currentUser, ListingRequest listingViewModel, int listingId)
+        private async Task<Infrastructure.Models.Listing> GetEditedListing(ApplicationUser currentUser, ListingRequest listingViewModel, int listingId)
         {
-            Models.Models.Listing listing = await ValidateEditAction(currentUser, listingId);
+            Infrastructure.Models.Listing listing = await ValidateEditAction(currentUser, listingId);
 
             _mapper.Map(listingViewModel, listing);
 
@@ -342,7 +342,7 @@ namespace UnrealEstate.Services.Listing
             return listing;
         }
 
-        private async Task<Models.Models.Listing> ValidateEditAction(ApplicationUser currentUser, int listingId)
+        private async Task<Infrastructure.Models.Listing> ValidateEditAction(ApplicationUser currentUser, int listingId)
         {
             var listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
 
@@ -355,9 +355,9 @@ namespace UnrealEstate.Services.Listing
             return listingFromDb;
         }
 
-        private async Task<Models.Models.Listing> ValidateFavoriteAction(int listingId)
+        private async Task<Infrastructure.Models.Listing> ValidateFavoriteAction(int listingId)
         {
-            Models.Models.Listing listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
+            Infrastructure.Models.Listing listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
 
             GuardClauses.HasValue(listingFromDb, "listing id");
 

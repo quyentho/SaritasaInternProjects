@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 
-namespace UnrealEstate.Models.Models
+namespace UnrealEstate.Infrastructure.Models
 {
     public class ApplicationUser : IdentityUser
     {

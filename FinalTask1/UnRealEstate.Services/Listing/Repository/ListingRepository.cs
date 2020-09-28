@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UnrealEstate.Models.Models;
+using UnrealEstate.Infrastructure;
+using UnrealEstate.Infrastructure.Models;
 using UnrealEstate.Services;
 
 namespace UnrealEstate.Models.Repositories

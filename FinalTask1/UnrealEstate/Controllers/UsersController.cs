@@ -4,7 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using UnrealEstate.Models.Models;
+using UnrealEstate.Infrastructure.Models;
 using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;

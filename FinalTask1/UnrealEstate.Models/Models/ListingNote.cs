@@ -1,4 +1,4 @@
-﻿namespace UnrealEstate.Models.Models
+﻿namespace UnrealEstate.Infrastructure.Models
 {
     public class ListingNote
     {
@@ -12,6 +12,6 @@
 
         public ApplicationUser User { get; set; }
 
-        public UnrealEstate.Models.Models.Listing Listing { get; set; }
+        public Listing Listing { get; set; }
     }
 }

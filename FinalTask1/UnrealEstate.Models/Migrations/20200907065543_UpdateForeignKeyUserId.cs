@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace UnrealEstate.Models.Migrations
+namespace UnrealEstate.Infrastructure.Migrations
 {
     public partial class UpdateForeignKeyUserId : Migration
     {

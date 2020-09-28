@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnrealEstate.Infrastructure.Models;
 using UnrealEstate.Models;
-using UnrealEstate.Models.Models;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
 using UnrealEstate.Models.ViewModels.ResponseViewModels;
 

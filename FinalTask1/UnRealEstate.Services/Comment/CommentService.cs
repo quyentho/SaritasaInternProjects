@@ -4,8 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UnrealEstate.Infrastructure.Models;
 using UnrealEstate.Models;
-using UnrealEstate.Models.Models;
 using UnrealEstate.Models.Repositories;
 using UnrealEstate.Models.ViewModels;
 using UnrealEstate.Models.ViewModels.RequestViewModels;
@@ -56,7 +56,7 @@ namespace UnrealEstate.Services
             GuardClauses.HasValue(listing, "listing id");
             GuardClauses.IsAllowCommentStatus(listing.StatusId);
 
-            var comment = _mapper.Map<Models.Models.Comment>(commentViewModel);
+            var comment = _mapper.Map<Infrastructure.Models.Comment>(commentViewModel);
             
             comment.UserId = userId;
             comment.CreatedAt = DateTimeOffset.Now;

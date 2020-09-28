@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\UnrealEstate.Infrastructure\UnrealEstate.Infrastructure.csproj" />
     <ProjectReference Include="..\UnrealEstate.Models\UnrealEstate.Infrastructure.csproj" />
   </ItemGroup>
 

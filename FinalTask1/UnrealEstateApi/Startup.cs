@@ -31,6 +31,7 @@ using UnrealEstate.Business.MappingConfig;
 using UnrealEstate.Business.User;
 using UnrealEstate.Business.User.Interface;
 using UnrealEstate.Infrastructure;
+using UnrealEstate.Infrastructure.ModelConfigs;
 using UnrealEstate.Infrastructure.Models;
 using UnrealEstateApi.Configurations;
 
@@ -157,6 +158,10 @@ namespace UnrealEstateApi
                 var context = serviceScope.ServiceProvider.GetRequiredService<UnrealEstateDbContext>();
 
                 context.Database.Migrate();
+
+                UserManager<ApplicationUser> userManager = (UserManager<ApplicationUser>)serviceScope.ServiceProvider.GetService(typeof(UserManager<ApplicationUser>));
+                RoleManager<IdentityRole> roleManager = (RoleManager<IdentityRole>)serviceScope.ServiceProvider.GetService(typeof(RoleManager<IdentityRole>));
+                DatabaseInitializer.InitializeSeedData(context, userManager, roleManager);
             }
 
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();

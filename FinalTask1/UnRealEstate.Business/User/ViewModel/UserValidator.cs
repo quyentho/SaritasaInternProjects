@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace UnrealEstate.Business.User.ViewModel.Request.Validator
 {
-    public class UserModelValidator : AbstractValidator<UserRequest>
+    public class UserValidator : AbstractValidator<UserRequest>
     {
-        public UserModelValidator()
+        public UserValidator()
         {
             RuleFor(x => x.Email).EmailAddress();
 

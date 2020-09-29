@@ -19,6 +19,7 @@ namespace UnrealEstateApi.Controllers
         private readonly ICommentService _commentService;
         private readonly IUserService _userService;
 
+        
         public CommentsController(ICommentService commentService, IUserService userService)
         {
             _commentService = commentService;

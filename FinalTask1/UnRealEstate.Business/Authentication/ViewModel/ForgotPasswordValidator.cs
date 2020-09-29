@@ -2,9 +2,9 @@
 
 namespace UnrealEstate.Business.Authentication.ViewModel.Request.Validator
 {
-    public class ForgotPasswordModelValidator : AbstractValidator<ForgotPasswordRequest>
+    public class ForgotPasswordValidator : AbstractValidator<ForgotPasswordRequest>
     {
-        public ForgotPasswordModelValidator()
+        public ForgotPasswordValidator()
         {
             RuleFor(x => x.Email).NotEmpty().EmailAddress();
         }

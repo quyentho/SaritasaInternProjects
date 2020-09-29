@@ -106,7 +106,7 @@ namespace UnrealEstate
             services.AddControllersWithViews()
                 .AddFluentValidation(fv =>
                 {
-                    fv.RegisterValidatorsFromAssembly(Assembly.GetAssembly(typeof(ListingModelValidator)));
+                    fv.RegisterValidatorsFromAssembly(Assembly.GetAssembly(typeof(ListingValidator)));
                     fv.ImplicitlyValidateChildProperties = true;
                 });
             services.AddRazorPages();

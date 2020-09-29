@@ -2,9 +2,9 @@
 
 namespace UnrealEstate.Business.User.ViewModel.Request.Validator
 {
-    public class UserFilterCriteriaModelValidator : AbstractValidator<UserFilterCriteriaRequest>
+    public class UserFilterCriteriaValidator : AbstractValidator<UserFilterCriteriaRequest>
     {
-        public UserFilterCriteriaModelValidator()
+        public UserFilterCriteriaValidator()
         {
             RuleFor(x => x.Email).EmailAddress();
         }

@@ -2,9 +2,9 @@
 
 namespace UnrealEstate.Business.Listing.ViewModel.Request.Validator
 {
-    public class BidModelValidator : AbstractValidator<ListingBidRequest>
+    public class BidValidator : AbstractValidator<ListingBidRequest>
     {
-        public BidModelValidator()
+        public BidValidator()
         {
             RuleFor(x => x.Price).NotEmpty().Must(x => x > 0 && x < 100_000_000_000);
         }

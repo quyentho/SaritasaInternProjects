@@ -2,9 +2,9 @@
 
 namespace UnrealEstate.Business.Authentication.ViewModel.Request.Validator
 {
-    public class ResetPasswordModel : AbstractValidator<ResetPasswordRequest>
+    public class ResetPasswordValidator : AbstractValidator<ResetPasswordRequest>
     {
-        public ResetPasswordModel()
+        public ResetPasswordValidator()
         {
             RuleFor(x => x.Email).EmailAddress();
 

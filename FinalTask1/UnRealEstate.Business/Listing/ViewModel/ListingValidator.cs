@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace UnrealEstate.Business.Listing.ViewModel.Request.Validator
 {
-    public class ListingModelValidator : AbstractValidator<ListingRequest>
+    public class ListingValidator : AbstractValidator<ListingRequest>
     {
-        public ListingModelValidator()
+        public ListingValidator()
         {
             RuleFor(x => x.StatingPrice).NotEmpty().Must(x => x > 0 && x < 100_000_000_000);
 

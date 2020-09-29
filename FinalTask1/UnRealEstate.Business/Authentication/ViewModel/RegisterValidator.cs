@@ -2,9 +2,9 @@
 
 namespace UnrealEstate.Business.Authentication.ViewModel.Request.Validator
 {
-    public class RegisterModelValidator : AbstractValidator<RegisterRequest>
+    public class RegisterValidator : AbstractValidator<RegisterRequest>
     {
-        public RegisterModelValidator()
+        public RegisterValidator()
         {
             RuleFor(x => x.Email).NotEmpty().EmailAddress();
             RuleFor(x => x.Password).NotNull();

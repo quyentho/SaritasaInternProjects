@@ -102,7 +102,7 @@ namespace UnrealEstateApi
                     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore)
                 .AddFluentValidation(fv =>
                 {
-                    fv.RegisterValidatorsFromAssembly(Assembly.GetAssembly(typeof(ListingModelValidator)));
+                    fv.RegisterValidatorsFromAssembly(Assembly.GetAssembly(typeof(ListingValidator)));
                     fv.ImplicitlyValidateChildProperties = true;
                 });
 

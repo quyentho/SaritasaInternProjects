@@ -5,7 +5,7 @@ namespace UnrealEstate.Business.Comment.Repository
 {
     public interface ICommentRepository
     {
-        Task AddCommentAsync(Infrastructure.Models.Comment comment);
+        Task AddAsync(Infrastructure.Models.Comment comment);
         
         Task DeleteCommentAsync(Infrastructure.Models.Comment comment);
         
@@ -13,6 +13,6 @@ namespace UnrealEstate.Business.Comment.Repository
 
         Task<List<Infrastructure.Models.Comment>> GetAllByListingAsync(int listingId);
         
-        Task UpdateCommentAsync(Infrastructure.Models.Comment comment);
+        Task UpdateAsync(Infrastructure.Models.Comment comment);
     }
 }

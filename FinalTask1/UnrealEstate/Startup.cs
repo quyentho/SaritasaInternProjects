@@ -136,6 +136,8 @@ namespace UnrealEstate
                 app.UseHsts();
             }
 
+
+
             app.UseHttpsRedirection();
 
             app.UseStaticFiles();

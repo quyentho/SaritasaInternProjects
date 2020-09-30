@@ -3,14 +3,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using UnrealEstate.Infrastructure;
+using UnrealEstate.Infrastructure.Repository;
 
 namespace UnrealEstate.Business.Comment.Repository
 {
-    public class CommentRepository : ICommentRepository
+    public class CommentRepository : BaseRepository<Infrastructure.Models.Comment>, ICommentRepository
     {
         private readonly UnrealEstateDbContext _context;
 
-        public CommentRepository(UnrealEstateDbContext context)
+        public CommentRepository(UnrealEstateDbContext context) : base(context)
         {
             _context = context;
         }
@@ -18,20 +19,6 @@ namespace UnrealEstate.Business.Comment.Repository
         public Task<List<Infrastructure.Models.Comment>> GetAllByListingAsync(int listingId)
         {
             return _context.Comments.Where(c => c.ListingId == listingId).ToListAsync();
-        }
-
-        public async Task AddCommentAsync(Infrastructure.Models.Comment comment)
-        {
-            await _context.Comments.AddAsync(comment);
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateCommentAsync(Infrastructure.Models.Comment comment)
-        {
-            _context.Entry(comment).CurrentValues.SetValues(comment);
-
-            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteCommentAsync(Infrastructure.Models.Comment comment)

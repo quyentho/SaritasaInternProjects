@@ -2,14 +2,15 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using UnrealEstate.Infrastructure;
+using UnrealEstate.Infrastructure.Repository;
 
 namespace UnrealEstate.Business.Listing.Repository
 {
-    public class ListingRepository : IListingRepository
+    public class ListingRepository : BaseRepository<Infrastructure.Models.Listing>, IListingRepository
     {
         private readonly UnrealEstateDbContext _context;
 
-        public ListingRepository(UnrealEstateDbContext context)
+        public ListingRepository(UnrealEstateDbContext context) : base(context)
         {
             _context = context;
         }
@@ -41,20 +42,6 @@ namespace UnrealEstate.Business.Listing.Repository
                 .ToListAsync();
 
             return listings;
-        }
-
-        public async Task AddListingAsync(Infrastructure.Models.Listing listing)
-        {
-            await _context.Listings.AddAsync(listing);
-            await _context.SaveChangesAsync();
-        }
-
-
-        public async Task UpdateListingAsync(Infrastructure.Models.Listing listing)
-        {
-            _context.Entry(listing).CurrentValues.SetValues(listing);
-
-            await _context.SaveChangesAsync();
         }
     }
 }

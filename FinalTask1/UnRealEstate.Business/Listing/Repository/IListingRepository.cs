@@ -9,8 +9,8 @@ namespace UnrealEstate.Business.Listing.Repository
 
         Task<Infrastructure.Models.Listing> GetListingByIdAsync(int listingId);
 
-        Task AddListingAsync(Infrastructure.Models.Listing listing);
+        Task AddAsync(Infrastructure.Models.Listing listing);
 
-        Task UpdateListingAsync(Infrastructure.Models.Listing listing);
+        Task UpdateAsync(Infrastructure.Models.Listing listing);
     }
 }

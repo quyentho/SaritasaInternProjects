@@ -6,14 +6,13 @@ using System.Threading.Tasks;
 using AutoMapper;
 using LinqKit;
 using Microsoft.AspNetCore.Identity;
-using UnrealEstate.Business.Listing.Interface;
-using UnrealEstate.Business.Listing.Repository.Interface;
+using UnrealEstate.Business.Listing.Repository;
+using UnrealEstate.Business.Listing.ViewModel;
 using UnrealEstate.Business.Listing.ViewModel.Request;
-using UnrealEstate.Business.Listing.ViewModel.Response;
 using UnrealEstate.Business.Utils;
 using UnrealEstate.Infrastructure.Models;
 
-namespace UnrealEstate.Business.Listing
+namespace UnrealEstate.Business.Listing.Service
 {
     public class ListingService : IListingService
     {

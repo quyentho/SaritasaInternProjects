@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using UnrealEstate.Business.Comment.ViewModel.Response;
-using UnrealEstate.Business.Listing.ViewModel.Response;
+using UnrealEstate.Business.Comment.ViewModel;
+using UnrealEstate.Business.Listing.ViewModel;
 
-namespace UnrealEstate.Business.User.ViewModel.Response
+namespace UnrealEstate.Business.User.ViewModel
 {
     public class UserResponse
     {

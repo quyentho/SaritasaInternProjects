@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace UnrealEstate.Business.Comment.Repository.Interface
+namespace UnrealEstate.Business.Comment.Repository
 {
     public interface ICommentRepository
     {

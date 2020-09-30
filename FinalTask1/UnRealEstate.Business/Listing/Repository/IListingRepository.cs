@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace UnrealEstate.Business.Listing.Repository.Interface
+namespace UnrealEstate.Business.Listing.Repository
 {
     public interface IListingRepository
     {

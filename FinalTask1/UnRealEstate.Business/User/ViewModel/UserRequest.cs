@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UnrealEstate.Business.User.ViewModel.Request
+namespace UnrealEstate.Business.User.ViewModel
 {
     public class UserRequest
     {

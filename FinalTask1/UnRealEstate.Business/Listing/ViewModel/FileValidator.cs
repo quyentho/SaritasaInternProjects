@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Http;
 
-namespace UnrealEstate.Business.Listing.ViewModel.Request.Validator
+namespace UnrealEstate.Business.Listing.ViewModel
 {
     public class FileValidator : AbstractValidator<IFormFile>
     {

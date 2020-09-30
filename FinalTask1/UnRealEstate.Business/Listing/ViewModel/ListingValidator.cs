@@ -1,7 +1,7 @@
 ﻿using System;
 using FluentValidation;
 
-namespace UnrealEstate.Business.Listing.ViewModel.Request.Validator
+namespace UnrealEstate.Business.Listing.ViewModel
 {
     public class ListingValidator : AbstractValidator<ListingRequest>
     {

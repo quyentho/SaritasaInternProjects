@@ -1,7 +1,7 @@
 ﻿using System;
 using FluentValidation;
 
-namespace UnrealEstate.Business.User.ViewModel.Request.Validator
+namespace UnrealEstate.Business.User.ViewModel
 {
     public class UserValidator : AbstractValidator<UserRequest>
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace UnrealEstate.Business.Comment.ViewModel.Response
+namespace UnrealEstate.Business.Comment.ViewModel
 {
     public class CommentResponse
     {

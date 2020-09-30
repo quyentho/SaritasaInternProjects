@@ -5,13 +5,12 @@ using AutoMapper;
 using LinqKit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using UnrealEstate.Business.User.Interface;
+using UnrealEstate.Business.User.ViewModel;
 using UnrealEstate.Business.User.ViewModel.Request;
-using UnrealEstate.Business.User.ViewModel.Response;
 using UnrealEstate.Business.Utils;
 using UnrealEstate.Infrastructure.Models;
 
-namespace UnrealEstate.Business.User
+namespace UnrealEstate.Business.User.Service
 {
     public class UserService : IUserService
     {

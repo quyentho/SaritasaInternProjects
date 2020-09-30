@@ -2,11 +2,10 @@
 using MailKit.Net.Smtp;
 using MimeKit;
 using MimeKit.Text;
-using UnrealEstate.Business.Email.Interface;
-using UnrealEstate.Business.Email.Models;
+using UnrealEstate.Business.Email.BussinessModel;
 using UnrealEstate.Infrastructure.Models;
 
-namespace UnrealEstate.Business.Email
+namespace UnrealEstate.Business.Email.Service
 {
     public class EmailSenderService : IEmailSenderService
     {

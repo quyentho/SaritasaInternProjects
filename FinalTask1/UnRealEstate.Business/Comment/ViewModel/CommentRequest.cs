@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace UnrealEstate.Business.Comment.ViewModel.Request
+namespace UnrealEstate.Business.Comment.ViewModel
 {
     public class CommentRequest
     {

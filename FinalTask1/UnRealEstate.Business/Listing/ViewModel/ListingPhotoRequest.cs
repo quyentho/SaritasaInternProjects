@@ -1,4 +1,4 @@
-﻿namespace UnrealEstate.Business.Listing.ViewModel.Request
+﻿namespace UnrealEstate.Business.Listing.ViewModel
 {
     public class ListingPhotoRequest
     {

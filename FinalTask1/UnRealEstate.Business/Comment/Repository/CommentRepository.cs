@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using UnrealEstate.Business.Comment.Repository.Interface;
 using UnrealEstate.Infrastructure;
 
 namespace UnrealEstate.Business.Comment.Repository

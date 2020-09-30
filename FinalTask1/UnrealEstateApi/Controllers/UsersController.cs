@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using UnrealEstate.Business;
 using UnrealEstate.Business.Authentication.Interface;
 using UnrealEstate.Business.Authentication.ViewModel.Request;
-using UnrealEstate.Business.User.Interface;
+using UnrealEstate.Business.User.Service;
+using UnrealEstate.Business.User.ViewModel;
 using UnrealEstate.Business.User.ViewModel.Request;
 using UnrealEstate.Infrastructure.Models;
 

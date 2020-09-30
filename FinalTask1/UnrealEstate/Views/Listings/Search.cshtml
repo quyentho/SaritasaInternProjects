@@ -1,8 +1,9 @@
 ﻿@inject IUserService UserService
-@using UnrealEstate.Business.User.Interface
 @using UnrealEstate.Business.Listing.ViewModel.Request
 @using UnrealEstate.Business
-@model List<UnrealEstate.Business.Listing.ViewModel.Response.ListingResponse>
+@using UnrealEstate.Business.Listing.ViewModel
+@using UnrealEstate.Business.User.Service
+@model List<ListingResponse>
 
 @{
     Layout = "_Layout";

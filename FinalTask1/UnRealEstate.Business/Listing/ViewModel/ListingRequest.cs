@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 
-namespace UnrealEstate.Business.Listing.ViewModel.Request
+namespace UnrealEstate.Business.Listing.ViewModel
 {
     public class ListingRequest
     {

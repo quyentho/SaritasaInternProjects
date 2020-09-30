@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace UnrealEstate.Business.Comment.ViewModel.Request.Validator
+namespace UnrealEstate.Business.Comment.ViewModel
 {
     public class CommentModelValidator : AbstractValidator<CommentRequest>
     {

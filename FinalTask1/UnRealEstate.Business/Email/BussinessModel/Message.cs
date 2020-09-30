@@ -2,7 +2,7 @@
 using System.Linq;
 using MimeKit;
 
-namespace UnrealEstate.Business.Email.Models
+namespace UnrealEstate.Business.Email.BussinessModel
 {
     public class Message
     {

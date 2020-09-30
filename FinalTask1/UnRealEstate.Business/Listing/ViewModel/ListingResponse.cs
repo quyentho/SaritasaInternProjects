@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using UnrealEstate.Business.Comment.ViewModel.Response;
+using UnrealEstate.Business.Comment.ViewModel;
 
-namespace UnrealEstate.Business.Listing.ViewModel.Response
+namespace UnrealEstate.Business.Listing.ViewModel
 {
     public class ListingResponse
     {

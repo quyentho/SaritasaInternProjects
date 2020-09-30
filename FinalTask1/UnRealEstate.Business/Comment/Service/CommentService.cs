@@ -4,11 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using UnrealEstate.Business.Comment.Interface;
-using UnrealEstate.Business.Comment.Repository.Interface;
-using UnrealEstate.Business.Comment.ViewModel.Request;
-using UnrealEstate.Business.Comment.ViewModel.Response;
-using UnrealEstate.Business.Listing.Repository.Interface;
+using UnrealEstate.Business.Comment.Repository;
+using UnrealEstate.Business.Comment.Service;
+using UnrealEstate.Business.Comment.ViewModel;
+using UnrealEstate.Business.Listing.Repository;
 using UnrealEstate.Business.Utils;
 using UnrealEstate.Infrastructure.Models;
 

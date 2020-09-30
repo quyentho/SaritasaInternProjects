@@ -1,4 +1,4 @@
-﻿namespace UnrealEstate.Business.Listing.ViewModel.Response
+﻿namespace UnrealEstate.Business.Listing.ViewModel
 {
     public class ListingNoteResponse
     {

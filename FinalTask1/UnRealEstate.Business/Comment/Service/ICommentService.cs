@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using UnrealEstate.Business.Comment.ViewModel.Request;
-using UnrealEstate.Business.Comment.ViewModel.Response;
+using UnrealEstate.Business.Comment.ViewModel;
 using UnrealEstate.Infrastructure.Models;
 
-namespace UnrealEstate.Business.Comment.Interface
+namespace UnrealEstate.Business.Comment.Service
 {
     public interface ICommentService
     {

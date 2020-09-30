@@ -1,11 +1,9 @@
 ﻿using System.Linq;
 using AutoMapper;
-using UnrealEstate.Business.Comment.ViewModel.Request;
-using UnrealEstate.Business.Comment.ViewModel.Response;
-using UnrealEstate.Business.Listing.ViewModel.Request;
-using UnrealEstate.Business.Listing.ViewModel.Response;
+using UnrealEstate.Business.Comment.ViewModel;
+using UnrealEstate.Business.Listing.ViewModel;
+using UnrealEstate.Business.User.ViewModel;
 using UnrealEstate.Business.User.ViewModel.Request;
-using UnrealEstate.Business.User.ViewModel.Response;
 using UnrealEstate.Infrastructure.Models;
 
 namespace UnrealEstate.Business.MappingConfig

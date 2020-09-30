@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace UnrealEstate.Business.User.ViewModel.Request
+namespace UnrealEstate.Business.User.ViewModel
 {
     public class UserFilterCriteriaRequest
     {

@@ -12,8 +12,8 @@ using MimeKit;
 using UnrealEstate.Business.Authentication.Interface;
 using UnrealEstate.Business.Authentication.ViewModel.Request;
 using UnrealEstate.Business.Authentication.ViewModel.Response;
-using UnrealEstate.Business.Email.Interface;
-using UnrealEstate.Business.Email.Models;
+using UnrealEstate.Business.Email.BussinessModel;
+using UnrealEstate.Business.Email.Service;
 using UnrealEstate.Infrastructure.Models;
 
 namespace UnrealEstate.Business.Authentication

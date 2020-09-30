@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using UnrealEstate.Business.Comment.Interface;
-using UnrealEstate.Business.Comment.ViewModel.Request;
-using UnrealEstate.Business.User.Interface;
+using UnrealEstate.Business.Comment.Service;
+using UnrealEstate.Business.Comment.ViewModel;
+using UnrealEstate.Business.User.Service;
 using UnrealEstate.Infrastructure.Models;
 
 namespace UnrealEstateApi.Controllers

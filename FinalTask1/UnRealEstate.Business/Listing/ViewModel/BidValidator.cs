@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using UnrealEstate.Business.Listing.ViewModel.Request;
 
 namespace UnrealEstate.Business.Listing.ViewModel
 {

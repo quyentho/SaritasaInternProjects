@@ -9,7 +9,6 @@ using UnrealEstate.Business.Authentication.ViewModel.Request;
 using UnrealEstate.Business.Authentication.ViewModel.Response;
 using UnrealEstate.Business.User.Service;
 using UnrealEstate.Business.User.ViewModel;
-using UnrealEstate.Business.User.ViewModel.Request;
 using UnrealEstate.Infrastructure.Models;
 
 namespace UnrealEstate.Controllers

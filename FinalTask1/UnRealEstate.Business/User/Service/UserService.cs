@@ -6,7 +6,6 @@ using LinqKit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using UnrealEstate.Business.User.ViewModel;
-using UnrealEstate.Business.User.ViewModel.Request;
 using UnrealEstate.Business.Utils;
 using UnrealEstate.Infrastructure.Models;
 

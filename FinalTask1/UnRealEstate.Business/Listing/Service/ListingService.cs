@@ -8,7 +8,6 @@ using LinqKit;
 using Microsoft.AspNetCore.Identity;
 using UnrealEstate.Business.Listing.Repository;
 using UnrealEstate.Business.Listing.ViewModel;
-using UnrealEstate.Business.Listing.ViewModel.Request;
 using UnrealEstate.Business.Utils;
 using UnrealEstate.Infrastructure.Models;
 

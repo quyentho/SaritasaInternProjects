@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnrealEstate.Business.Listing.ViewModel;
-using UnrealEstate.Business.Listing.ViewModel.Request;
 using UnrealEstate.Infrastructure.Models;
 
 namespace UnrealEstate.Business.Listing.Service

@@ -22,7 +22,7 @@ namespace UnrealEstate.Business.Comment.Repository
 
         public async Task AddCommentAsync(Infrastructure.Models.Comment comment)
         {
-            _context.Comments.Add(comment);
+            await _context.Comments.AddAsync(comment);
 
             await _context.SaveChangesAsync();
         }

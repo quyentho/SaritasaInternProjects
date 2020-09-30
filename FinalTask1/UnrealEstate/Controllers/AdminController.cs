@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using UnrealEstate.Business;
 using UnrealEstate.Business.User.Service;
 using UnrealEstate.Business.User.ViewModel;
-using UnrealEstate.Business.User.ViewModel.Request;
 
 namespace UnrealEstate.Controllers
 {

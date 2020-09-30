@@ -3,7 +3,6 @@ using AutoMapper;
 using UnrealEstate.Business.Comment.ViewModel;
 using UnrealEstate.Business.Listing.ViewModel;
 using UnrealEstate.Business.User.ViewModel;
-using UnrealEstate.Business.User.ViewModel.Request;
 using UnrealEstate.Infrastructure.Models;
 
 namespace UnrealEstate.Business.MappingConfig

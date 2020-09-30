@@ -10,7 +10,6 @@ using UnrealEstate.Business.Comment.Service;
 using UnrealEstate.Business.Comment.ViewModel;
 using UnrealEstate.Business.Listing.Service;
 using UnrealEstate.Business.Listing.ViewModel;
-using UnrealEstate.Business.Listing.ViewModel.Request;
 using UnrealEstate.Business.User.Service;
 using UnrealEstate.Infrastructure.Models;
 

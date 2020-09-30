@@ -19,14 +19,11 @@ using UnrealEstate.Business.Authentication.Interface;
 using UnrealEstate.Business.Comment;
 using UnrealEstate.Business.Comment.Repository;
 using UnrealEstate.Business.Comment.Service;
-using UnrealEstate.Business.Email;
 using UnrealEstate.Business.Email.Service;
-using UnrealEstate.Business.Listing;
 using UnrealEstate.Business.Listing.Repository;
 using UnrealEstate.Business.Listing.Service;
 using UnrealEstate.Business.Listing.ViewModel;
 using UnrealEstate.Business.MappingConfig;
-using UnrealEstate.Business.User;
 using UnrealEstate.Business.User.Service;
 using UnrealEstate.Infrastructure;
 using UnrealEstate.Infrastructure.ModelConfigs;
@@ -157,12 +154,19 @@ namespace UnrealEstateApi
 
                 context.Database.Migrate();
 
-                UserManager<ApplicationUser> userManager = (UserManager<ApplicationUser>)serviceScope.ServiceProvider.GetService(typeof(UserManager<ApplicationUser>));
-                RoleManager<IdentityRole> roleManager = (RoleManager<IdentityRole>)serviceScope.ServiceProvider.GetService(typeof(RoleManager<IdentityRole>));
+                var userManager =
+                    (UserManager<ApplicationUser>) serviceScope.ServiceProvider.GetService(
+                        typeof(UserManager<ApplicationUser>));
+                var roleManager =
+                    (RoleManager<IdentityRole>) serviceScope.ServiceProvider.GetService(
+                        typeof(RoleManager<IdentityRole>));
                 DatabaseInitializer.InitializeSeedData(context, userManager, roleManager);
             }
 
-            if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
 
             var swaggerOptions = Configuration.GetSection("SwaggerOptions").Get<SwaggerOptions>();
 

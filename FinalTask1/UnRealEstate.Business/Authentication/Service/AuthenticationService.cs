@@ -53,10 +53,12 @@ namespace UnrealEstate.Business.Authentication
                 changePasswordRequest.NewPassword);
 
             if (result == IdentityResult.Success)
+            {
                 return new AuthenticationResponse
                 {
                     ResponseStatus = AuthenticationResponseStatus.Success
                 };
+            }
 
             return new AuthenticationResponse
             {
@@ -69,29 +71,35 @@ namespace UnrealEstate.Business.Authentication
         {
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info is null)
+            {
                 return new AuthenticationResponse
                 {
                     ResponseStatus = AuthenticationResponseStatus.Error,
                     Message = "Error loading external login information"
                 };
+            }
 
             var signInResult =
                 await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false, true);
             if (signInResult.Succeeded)
+            {
                 return new AuthenticationResponse
                 {
                     ResponseStatus = AuthenticationResponseStatus.Success,
                     Message = "Login successfully"
                 };
+            }
 
             var email = info.Principal.FindFirstValue(ClaimTypes.Email);
 
             if (email == null)
+            {
                 return new AuthenticationResponse
                 {
                     ResponseStatus = AuthenticationResponseStatus.Error,
                     Message = $"Email Claim not received from {info.LoginProvider}"
                 };
+            }
 
             var user = await _userManager.FindByEmailAsync(email);
 
@@ -125,21 +133,25 @@ namespace UnrealEstate.Business.Authentication
             var user = await _userManager.FindByEmailAsync(loginViewModel.Email);
 
             if (user is null)
+            {
                 return new AuthenticationResponse
                 {
                     ResponseStatus = AuthenticationResponseStatus.Fail,
                     Message = "Wrong Email"
                 };
+            }
 
             var result = await
                 _signInManager.PasswordSignInAsync(user, loginViewModel.Password, false, false);
 
             if (result == SignInResult.Failed)
+            {
                 return new AuthenticationResponse
                 {
                     ResponseStatus = AuthenticationResponseStatus.Fail,
                     Message = "Wrong password"
                 };
+            }
 
             return new AuthenticationResponse
             {
@@ -168,11 +180,13 @@ namespace UnrealEstate.Business.Authentication
             var userExists = await _userManager.FindByNameAsync(model.Email);
 
             if (userExists != null)
+            {
                 return new AuthenticationResponse
                 {
                     ResponseStatus = AuthenticationResponseStatus.Error,
                     Message = "User creation failed! Please check user details and try again."
                 };
+            }
 
             var user = new ApplicationUser
             {
@@ -206,19 +220,23 @@ namespace UnrealEstate.Business.Authentication
             var isPasswordConfirmNotMatched = !model.NewPassword.Equals(model.ConfirmPassword);
 
             if (isPasswordConfirmNotMatched)
+            {
                 return new AuthenticationResponse
                 {
                     ResponseStatus = AuthenticationResponseStatus.Fail,
                     Message = "Password and confirm password does not match."
                 };
+            }
 
             var user = await _userManager.FindByEmailAsync(model.Email);
 
             var result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
 
             if (result.Succeeded)
+            {
                 return new AuthenticationResponse
                     {ResponseStatus = AuthenticationResponseStatus.Success, Message = "Password reset successfully"};
+            }
 
             return new AuthenticationResponse
             {
@@ -233,8 +251,10 @@ namespace UnrealEstate.Business.Authentication
             var user = await _userManager.FindByEmailAsync(email);
 
             if (user is null)
+            {
                 return new AuthenticationResponse
                     {ResponseStatus = AuthenticationResponseStatus.Fail, Message = "Email is not correct."};
+            }
 
             await SendEmail(user);
 
@@ -272,7 +292,10 @@ namespace UnrealEstate.Business.Authentication
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
-            foreach (var userRole in userRoles) authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+            foreach (var userRole in userRoles)
+            {
+                authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+            }
 
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
 

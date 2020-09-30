@@ -62,7 +62,7 @@ namespace UnrealEstate.Business.Comment
             comment.UserId = userId;
             comment.CreatedAt = DateTimeOffset.Now;
 
-            await _commentRepository.AddCommentAsync(comment);
+            await _commentRepository.AddAsync(comment);
         }
 
         /// <inheritdoc />
@@ -78,7 +78,7 @@ namespace UnrealEstate.Business.Comment
 
             commentFromDb.CreatedAt = DateTimeOffset.Now;
 
-            await _commentRepository.UpdateCommentAsync(commentFromDb);
+            await _commentRepository.UpdateAsync(commentFromDb);
         }
 
         /// <inheritdoc />

@@ -39,7 +39,11 @@ namespace UnrealEstate.Controllers
         [Route("{email}")]
         public async Task<IActionResult> SetStatus(string email)
         {
-            if (ModelState.IsValid) await _userService.SetUserStatusAsync(email);
+            if (ModelState.IsValid)
+            {
+                await _userService.SetUserStatusAsync(email);
+            }
+
             return RedirectToAction(nameof(Users));
         }
 

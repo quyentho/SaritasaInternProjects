@@ -8,9 +8,15 @@ namespace UnrealEstate.Business.Utils
         public static IQueryable<TSource> FilterByRange<TSource>(this IQueryable<TSource> source, int? offset,
             int? limit)
         {
-            if (offset.HasValue) source = source.Skip(offset.Value);
+            if (offset.HasValue)
+            {
+                source = source.Skip(offset.Value);
+            }
 
-            if (limit.HasValue) source = source.Take(limit.Value);
+            if (limit.HasValue)
+            {
+                source = source.Take(limit.Value);
+            }
 
             return source;
         }

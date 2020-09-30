@@ -92,11 +92,15 @@ namespace UnrealEstate.Business.User.Service
             var filterConditions = PredicateBuilder.New<ApplicationUser>(true);
 
             if (!string.IsNullOrEmpty(filterCriteria.Email))
+            {
                 filterConditions.And(u => u.Email.Equals(filterCriteria.Email));
+            }
 
             if (!string.IsNullOrEmpty(filterCriteria.Name))
+            {
                 filterConditions.And(u =>
                     u.FirstName.Equals(filterCriteria.Name) || u.LastName.Equals(filterCriteria.Name));
+            }
 
             return filterConditions;
         }
@@ -109,9 +113,14 @@ namespace UnrealEstate.Business.User.Service
             var result = users.Where(conditions).AsQueryable();
 
             if (filterCriteria.Offset.HasValue || filterCriteria.Limit.HasValue)
+            {
                 result = result.FilterByRange((int?) filterCriteria.Offset, (int?) filterCriteria.Limit);
+            }
 
-            if (!string.IsNullOrEmpty(filterCriteria.OrderBy)) result = result.SortBy(filterCriteria.OrderBy);
+            if (!string.IsNullOrEmpty(filterCriteria.OrderBy))
+            {
+                result = result.SortBy(filterCriteria.OrderBy);
+            }
 
             return result.ToList();
         }

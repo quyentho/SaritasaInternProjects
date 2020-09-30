@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using UnrealEstate.Business.Comment.Service;
 using UnrealEstate.Business.Comment.ViewModel;
 using UnrealEstate.Business.Listing.Service;
@@ -62,7 +59,7 @@ namespace UnrealEstate.Controllers
             {
                 TempData["errorMessage"] = "Error when attempt to edit comment";
 
-                return RedirectToAction(nameof(Detail), new { id = commentRequest.ListingId, returnUrl });
+                return RedirectToAction(nameof(Detail), new {id = commentRequest.ListingId, returnUrl});
             }
 
             try
@@ -79,7 +76,7 @@ namespace UnrealEstate.Controllers
                 TempData["errorMessage"] = ex.Message;
             }
 
-            return RedirectToAction(nameof(Detail), new { id = commentRequest.ListingId, returnUrl });
+            return RedirectToAction(nameof(Detail), new {id = commentRequest.ListingId, returnUrl});
         }
 
         [HttpGet]
@@ -87,6 +84,7 @@ namespace UnrealEstate.Controllers
         public async Task<IActionResult> AddComment(CommentRequest commentRequest, string returnUrl)
         {
             if (ModelState.IsValid)
+            {
                 try
                 {
                     var currentUser = await GetCurrentUser();
@@ -101,8 +99,9 @@ namespace UnrealEstate.Controllers
                 {
                     TempData["errorMessage"] = ex.Message;
                 }
+            }
 
-            return RedirectToAction(nameof(Detail), new { id = commentRequest.ListingId, returnUrl });
+            return RedirectToAction(nameof(Detail), new {id = commentRequest.ListingId, returnUrl});
         }
 
         [HttpGet]
@@ -124,7 +123,7 @@ namespace UnrealEstate.Controllers
                 TempData["errorMessage"] = ex.Message;
             }
 
-            return RedirectToAction(nameof(Detail), new { id = listingId, returnUrl });
+            return RedirectToAction(nameof(Detail), new {id = listingId, returnUrl});
         }
 
         [HttpGet]
@@ -159,6 +158,7 @@ namespace UnrealEstate.Controllers
         public async Task<IActionResult> DeleteListingPhoto(int listingId, int photoId, string returnUrl)
         {
             if (ModelState.IsValid)
+            {
                 try
                 {
                     var currentUser = await GetCurrentUser();
@@ -172,8 +172,9 @@ namespace UnrealEstate.Controllers
                 {
                     ModelState.AddModelError(string.Empty, ex.Message);
                 }
+            }
 
-            return RedirectToAction("Edit", new { id = listingId, returnUrl });
+            return RedirectToAction("Edit", new {id = listingId, returnUrl});
         }
 
         [Route("MakeABid")]
@@ -235,9 +236,9 @@ namespace UnrealEstate.Controllers
             // Error message from edit HttpPost method.
             if (TempData["errorMessage"] != null)
             {
-                foreach (var errorMessage in (IEnumerable<string>)TempData["errorMessage"])
+                foreach (var errorMessage in (IEnumerable<string>) TempData["errorMessage"])
                 {
-                    ModelState.AddModelError(string.Empty, errorMessage);    
+                    ModelState.AddModelError(string.Empty, errorMessage);
                 }
             }
 
@@ -263,8 +264,8 @@ namespace UnrealEstate.Controllers
                     var user = await GetCurrentUser();
 
                     await _listingService.EditListingAsync(user, listingRequest, listingId);
-                    
-                    return RedirectToAction("Detail", new { listingId, returnUrl });
+
+                    return RedirectToAction("Detail", new {listingId, returnUrl});
                 }
             }
             catch (NotSupportedException ex) // Not have permission
@@ -277,14 +278,14 @@ namespace UnrealEstate.Controllers
             {
                 TempData["errorMessage"] = ex.Message;
 
-                return RedirectToAction("Edit", new { listingId, returnUrl });
+                return RedirectToAction("Edit", new {listingId, returnUrl});
             }
 
-            var errors = ModelState.SelectMany(x => x.Value.Errors).Select(e=>e.ErrorMessage).ToList();
+            var errors = ModelState.SelectMany(x => x.Value.Errors).Select(e => e.ErrorMessage).ToList();
 
             TempData["errorMessage"] = errors;
 
-            return RedirectToAction("Edit", new { listingId, returnUrl });
+            return RedirectToAction("Edit", new {listingId, returnUrl});
         }
 
         [AllowAnonymous]
@@ -317,6 +318,7 @@ namespace UnrealEstate.Controllers
         public async Task<IActionResult> Create(ListingRequest listingRequest)
         {
             if (ModelState.IsValid)
+            {
                 try
                 {
                     var userEmail = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
@@ -329,6 +331,7 @@ namespace UnrealEstate.Controllers
                 {
                     ModelState.AddModelError(string.Empty, exception.Message);
                 }
+            }
 
             return View();
         }
@@ -339,7 +342,9 @@ namespace UnrealEstate.Controllers
         public async Task<IActionResult> Search(ListingFilterCriteriaRequest filterCriteria)
         {
             if (TempData["errorMessage"] != null)
+            {
                 ModelState.AddModelError(string.Empty, TempData["errorMessage"].ToString());
+            }
 
             if (!ModelState.IsValid)
             {
@@ -348,7 +353,10 @@ namespace UnrealEstate.Controllers
                 return RedirectToAction(nameof(Index), "Home");
             }
 
-            if (filterCriteria.Offset is null) SetPaging(filterCriteria);
+            if (filterCriteria.Offset is null)
+            {
+                SetPaging(filterCriteria);
+            }
 
             var listingResponses =
                 await _listingService.GetActiveListingsWithFilterAsync(filterCriteria);

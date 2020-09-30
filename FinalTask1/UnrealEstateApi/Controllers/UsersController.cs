@@ -52,7 +52,10 @@ namespace UnrealEstateApi.Controllers
         [Authorize(Roles = UserRole.Admin)]
         public async Task<IActionResult> GetUserById(string userId)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
 
             try
             {
@@ -74,12 +77,17 @@ namespace UnrealEstateApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] RegisterRequest model)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
 
             var response = await _authenticationService.Register(model);
 
             if (response.ResponseStatus.Equals("Error"))
+            {
                 return StatusCode(StatusCodes.Status500InternalServerError, response);
+            }
 
             return Ok(response);
         }
@@ -93,7 +101,10 @@ namespace UnrealEstateApi.Controllers
         [Route("me")]
         public async Task<IActionResult> UpdateInfomation(UserRequest userViewModel)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
 
             var currentUser = await GetCurrentUserAsync();
 

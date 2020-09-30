@@ -19,7 +19,7 @@ namespace UnrealEstateApi.Controllers
         private readonly ICommentService _commentService;
         private readonly IUserService _userService;
 
-        
+
         public CommentsController(ICommentService commentService, IUserService userService)
         {
             _commentService = commentService;
@@ -35,7 +35,10 @@ namespace UnrealEstateApi.Controllers
         [Route("api/comments")]
         public async Task<IActionResult> CreateNewComment(CommentRequest commentViewModel)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
 
             var currentUser = await GetCurrentUserAsync();
 
@@ -64,7 +67,10 @@ namespace UnrealEstateApi.Controllers
         [Route("api/comments/{commentId}")]
         public async Task<IActionResult> UpdateComment(int commentId, CommentRequest commentViewModel)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
 
             try
             {
@@ -93,7 +99,10 @@ namespace UnrealEstateApi.Controllers
         [Route("api/comments/{commentId}")]
         public async Task<IActionResult> DeleteComment(int commentId)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
 
             try
             {

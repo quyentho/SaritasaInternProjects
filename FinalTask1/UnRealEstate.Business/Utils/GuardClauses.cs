@@ -13,7 +13,9 @@ namespace UnrealEstate.Business.Utils
         public static void IsValidStatus(int currentStatus, int validStatusId)
         {
             if (currentStatus != validStatusId)
+            {
                 throw new InvalidOperationException("Listing status is not valid to perform this action.");
+            }
         }
 
         /// <summary>
@@ -23,7 +25,9 @@ namespace UnrealEstate.Business.Utils
         public static void IsAllowCommentStatus(int currentListingStatus)
         {
             if (currentListingStatus != (int) Status.Active && currentListingStatus != (int) Status.Canceled)
+            {
                 throw new InvalidOperationException("Listing status is not valid to perform this action.");
+            }
         }
 
         /// <summary>
@@ -35,7 +39,9 @@ namespace UnrealEstate.Business.Utils
         public static void IsAuthorOrAdmin(string currentUserId, string authorId, string currentUserRole)
         {
             if (!currentUserRole.Equals("Admin") && !currentUserId.Equals(authorId))
+            {
                 throw new NotSupportedException("User not has privilege to perform this action.");
+            }
         }
 
         /// <summary>
@@ -46,8 +52,10 @@ namespace UnrealEstate.Business.Utils
         public static void BidPriceHigherThanCurrentPrice(decimal bidPrice, decimal currentPrice)
         {
             if (bidPrice <= currentPrice)
+            {
                 throw new InvalidOperationException(
                     $"Bid price must be higher than current listing price: {currentPrice}");
+            }
         }
 
         /// <summary>
@@ -57,7 +65,10 @@ namespace UnrealEstate.Business.Utils
         /// <param name="paramName"></param>
         public static void IsNotNull(object source, string paramName)
         {
-            if (source is null) throw new ArgumentNullException(paramName);
+            if (source is null)
+            {
+                throw new ArgumentNullException(paramName);
+            }
         }
 
         /// <summary>
@@ -67,7 +78,9 @@ namespace UnrealEstate.Business.Utils
         public static void IsAdmin(string role)
         {
             if (!role.Equals("Admin"))
+            {
                 throw new NotSupportedException("User not has privilege to perform this action.");
+            }
         }
 
         /// <summary>
@@ -78,7 +91,9 @@ namespace UnrealEstate.Business.Utils
         public static void IsAuthor(string currentUserId, string authorId)
         {
             if (!currentUserId.Equals(authorId))
+            {
                 throw new NotSupportedException("User not has privilege to perform this action.");
+            }
         }
 
         /// <summary>
@@ -88,7 +103,10 @@ namespace UnrealEstate.Business.Utils
         /// <param name="paramName">parameter causes null value.</param>
         public static void HasValue(object value, string paramName)
         {
-            if (value is null) throw new ArgumentOutOfRangeException(paramName, "Value not valid");
+            if (value is null)
+            {
+                throw new ArgumentOutOfRangeException(paramName, "Value not valid");
+            }
         }
     }
 }

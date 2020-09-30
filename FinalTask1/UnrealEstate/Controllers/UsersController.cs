@@ -37,7 +37,9 @@ namespace UnrealEstate.Controllers
                 var result = await _authenticationService.ChangePasswordAsync(model);
 
                 if (result.ResponseStatus == AuthenticationResponseStatus.Fail)
+                {
                     ModelState.AddModelError(string.Empty, result.Message);
+                }
 
                 return View("Profile");
             }
@@ -69,7 +71,10 @@ namespace UnrealEstate.Controllers
 
                 if (loginResult.ResponseStatus == AuthenticationResponseStatus.Success)
                 {
-                    if (!string.IsNullOrEmpty(model.ReturnUrl)) return LocalRedirect(model.ReturnUrl);
+                    if (!string.IsNullOrEmpty(model.ReturnUrl))
+                    {
+                        return LocalRedirect(model.ReturnUrl);
+                    }
 
                     return RedirectToAction("Index", "Home");
                 }

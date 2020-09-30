@@ -36,7 +36,7 @@ namespace UnrealEstate.Business.Listing.Service
 
             SetFavoriteState(listingId, userId, listing);
 
-            await _listingRepository.UpdateListingAsync(listing);
+            await _listingRepository.UpdateAsync(listing);
         }
 
 
@@ -98,7 +98,7 @@ namespace UnrealEstate.Business.Listing.Service
         {
             var listing = await ProduceListing(listingRequest, userId);
 
-            await _listingRepository.AddListingAsync(listing);
+            await _listingRepository.AddAsync(listing);
         }
 
         /// <inheritdoc />
@@ -106,7 +106,7 @@ namespace UnrealEstate.Business.Listing.Service
         {
             var editedListing = await GetEditedListing(currentUser, listingRequest, listingId);
 
-            await _listingRepository.UpdateListingAsync(editedListing);
+            await _listingRepository.UpdateAsync(editedListing);
         }
 
         /// <inheritdoc />
@@ -116,7 +116,7 @@ namespace UnrealEstate.Business.Listing.Service
 
             AddBidOnListing(listingId, currentUser, bidRequestViewModel, listingToBid);
 
-            await _listingRepository.UpdateListingAsync(listingToBid);
+            await _listingRepository.UpdateAsync(listingToBid);
         }
 
         /// <inheritdoc />
@@ -132,11 +132,14 @@ namespace UnrealEstate.Business.Listing.Service
 
             GuardClauses.HasValue(photo, "photo id");
 
-            if (File.Exists(photo.PhotoUrl)) File.Delete(photo.PhotoUrl);
+            if (File.Exists(photo.PhotoUrl))
+            {
+                File.Delete(photo.PhotoUrl);
+            }
 
             listingFromDb.ListingPhoTos.Remove(photo);
 
-            await _listingRepository.UpdateListingAsync(listingFromDb);
+            await _listingRepository.UpdateAsync(listingFromDb);
         }
 
         private void AddBidOnListing(int listingId, ApplicationUser currentUser, ListingBidRequest bidRequestViewModel,
@@ -170,7 +173,7 @@ namespace UnrealEstate.Business.Listing.Service
         {
             listingFromDb.StatusId = (int) Status.Disable;
 
-            await _listingRepository.UpdateListingAsync(listingFromDb);
+            await _listingRepository.UpdateAsync(listingFromDb);
         }
 
         private async Task<IList<string>> GetUserRole(ApplicationUser currentUser)
@@ -187,23 +190,34 @@ namespace UnrealEstate.Business.Listing.Service
 
             var address = filterCriteria.Address;
             if (!string.IsNullOrEmpty(address))
+            {
                 filterConditions.And(l =>
                     l.City != null && l.City.Equals(address) ||
                     l.AddressLine1 != null && l.AddressLine1.Equals(address) || l.Zip != null && l.Zip.Equals(address));
+            }
 
             if (filterCriteria.MaxAge.HasValue)
                 // specify maximum house age.
+            {
                 filterConditions.And(l => DateTimeOffset.Now.Year - l.BuiltYear <= filterCriteria.MaxAge);
+            }
 
             if (filterCriteria.MaxPrice.HasValue)
                 // specify max price.
+            {
                 filterConditions.And(l => l.StatingPrice <= filterCriteria.MaxPrice);
+            }
 
             if (filterCriteria.MinPrice.HasValue)
                 // specify min price.
+            {
                 filterConditions.And(l => l.StatingPrice >= filterCriteria.MinPrice);
+            }
 
-            if (filterCriteria.MinSize.HasValue) filterConditions.And(l => l.Size >= filterCriteria.MinSize);
+            if (filterCriteria.MinSize.HasValue)
+            {
+                filterConditions.And(l => l.Size >= filterCriteria.MinSize);
+            }
 
             return filterConditions;
         }
@@ -213,16 +227,20 @@ namespace UnrealEstate.Business.Listing.Service
             var favorite = listingFromDb.Favorites.FirstOrDefault(f => f.UserId == userId);
 
             if (favorite is null)
+            {
                 listingFromDb.Favorites.Add(new Favorite {ListingId = listingId, UserId = userId});
+            }
             else // User already favorited this listing.
+            {
                 listingFromDb.Favorites.Remove(favorite);
+            }
         }
 
         private async Task Enable(Infrastructure.Models.Listing listingFromDb)
         {
             listingFromDb.StatusId = (int) Status.Active;
 
-            await _listingRepository.UpdateListingAsync(listingFromDb);
+            await _listingRepository.UpdateAsync(listingFromDb);
         }
 
         private async Task ValidateAction(ApplicationUser currentUser, Infrastructure.Models.Listing listingFromDb,
@@ -265,6 +283,7 @@ namespace UnrealEstate.Business.Listing.Service
         {
             var listingPhotos = new List<ListingPhoto>();
             foreach (var formFile in listingViewModel.ListingPhoTos)
+            {
                 if (formFile.Length > 0)
                 {
                     var path = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", Path.GetRandomFileName());
@@ -278,6 +297,7 @@ namespace UnrealEstate.Business.Listing.Service
                         await formFile.CopyToAsync(stream);
                     }
                 }
+            }
 
             return listingPhotos;
         }
@@ -304,7 +324,10 @@ namespace UnrealEstate.Business.Listing.Service
             {
                 var existedPhotosNumber = listing.ListingPhoTos.Count;
 
-                if (existedPhotosNumber >= 3) throw new InvalidOperationException("Number of photos cannot exceeds 3");
+                if (existedPhotosNumber >= 3)
+                {
+                    throw new InvalidOperationException("Number of photos cannot exceeds 3");
+                }
 
                 var listingPhotos = await GetUploadedListingPhotos(listingRequest);
 

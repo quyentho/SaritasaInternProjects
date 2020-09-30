@@ -15,7 +15,10 @@ namespace UnrealEstate.Controllers
         public IActionResult Index()
         {
             if (TempData["errorMessage"] != null)
+            {
                 ModelState.AddModelError(string.Empty, TempData["errorMessage"].ToString());
+            }
+
             return View();
         }
     }

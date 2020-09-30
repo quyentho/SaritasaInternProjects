@@ -42,7 +42,10 @@ namespace UnrealEstateApi.Controllers
         public async Task<ActionResult<IEnumerable<ListingResponse>>> GetListings(
             [FromQuery] ListingFilterCriteriaRequest filterCriteria)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
 
             return await _listingService.GetActiveListingsWithFilterAsync(filterCriteria);
         }
@@ -56,11 +59,17 @@ namespace UnrealEstateApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ListingResponse>> GetListing(int id)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
 
             var listing = await _listingService.GetListingAsync(id);
 
-            if (listing == null) return NotFound();
+            if (listing == null)
+            {
+                return NotFound();
+            }
 
             return Ok(listing);
         }
@@ -78,7 +87,10 @@ namespace UnrealEstateApi.Controllers
         [HttpPut("{listingId}")]
         public async Task<IActionResult> UpdateListing(int listingId, [FromForm] ListingRequest listing)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
 
             try
             {
@@ -107,7 +119,10 @@ namespace UnrealEstateApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Listing>> CreateListing([FromForm] ListingRequest listing)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
 
             try
             {
@@ -132,7 +147,10 @@ namespace UnrealEstateApi.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<ListingResponse>> DeleteListing(int id)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
 
             try
             {
@@ -165,7 +183,10 @@ namespace UnrealEstateApi.Controllers
         [HttpPost("{id}/enable")]
         public async Task<ActionResult<ListingResponse>> EnableListing(int id)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
 
             try
             {
@@ -196,11 +217,17 @@ namespace UnrealEstateApi.Controllers
         [HttpGet("{listingId}/comments")]
         public async Task<ActionResult<IEnumerable<CommentResponse>>> GetComments(int listingId)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
 
             var comments = await _commentService.GetCommentsByListingAsync(listingId);
 
-            if (comments == null) return NotFound();
+            if (comments == null)
+            {
+                return NotFound();
+            }
 
             return comments;
         }
@@ -214,7 +241,10 @@ namespace UnrealEstateApi.Controllers
         [HttpPost("{listingId}/favorite")]
         public async Task<IActionResult> SetFavorite(int listingId)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
 
             try
             {
@@ -240,7 +270,10 @@ namespace UnrealEstateApi.Controllers
         [Route("{listingId}/bid")]
         public async Task<IActionResult> MakeABid(int listingId, ListingBidRequest bidRequestViewModel)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
 
             try
             {

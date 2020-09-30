@@ -33,7 +33,7 @@ namespace UnrealEstate.Controllers
             _commentService = commentService;
         }
 
-        [Route("{listingId}/Favorite")]
+        [Route("{listingId}/favorite")]
         [HttpGet]
         public async Task<IActionResult> Favorite(int listingId, ListingFilterCriteriaRequest filterCriteria)
         {
@@ -49,81 +49,6 @@ namespace UnrealEstate.Controllers
             }
 
             return RedirectToAction(nameof(Search), filterCriteria);
-        }
-
-        [HttpGet]
-        [Route("{listingId}/UpdateComment/{commentId}")]
-        public async Task<IActionResult> UpdateComment(CommentRequest commentRequest, int commentId, string returnUrl)
-        {
-            if (!ModelState.IsValid)
-            {
-                TempData["errorMessage"] = "Error when attempt to edit comment";
-
-                return RedirectToAction(nameof(Detail), new {id = commentRequest.ListingId, returnUrl});
-            }
-
-            try
-            {
-                var currentUser = await GetCurrentUser();
-                await _commentService.EditCommentAsync(currentUser.Id, commentRequest, commentId);
-            }
-            catch (ArgumentOutOfRangeException ex)
-            {
-                TempData["errorMessage"] = ex.Message;
-            }
-            catch (NotSupportedException ex)
-            {
-                TempData["errorMessage"] = ex.Message;
-            }
-
-            return RedirectToAction(nameof(Detail), new {id = commentRequest.ListingId, returnUrl});
-        }
-
-        [HttpGet]
-        [Route("{listingId}/AddComment")]
-        public async Task<IActionResult> AddComment(CommentRequest commentRequest, string returnUrl)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var currentUser = await GetCurrentUser();
-
-                    await _commentService.CreateCommentAsync(currentUser.Id, commentRequest);
-                }
-                catch (ArgumentOutOfRangeException ex)
-                {
-                    TempData["errorMessage"] = ex.Message;
-                }
-                catch (InvalidOperationException ex)
-                {
-                    TempData["errorMessage"] = ex.Message;
-                }
-            }
-
-            return RedirectToAction(nameof(Detail), new {id = commentRequest.ListingId, returnUrl});
-        }
-
-        [HttpGet]
-        [Route("{listingId}/DeleteComment/{commentId}")]
-        public async Task<IActionResult> DeleteComment(int commentId, int listingId, string returnUrl)
-        {
-            try
-            {
-                var currentUser = await GetCurrentUser();
-
-                await _commentService.DeleteCommentAsync(currentUser, commentId);
-            }
-            catch (NotSupportedException ex)
-            {
-                TempData["errorMessage"] = ex.Message;
-            }
-            catch (ArgumentOutOfRangeException ex)
-            {
-                TempData["errorMessage"] = ex.Message;
-            }
-
-            return RedirectToAction(nameof(Detail), new {id = listingId, returnUrl});
         }
 
         [HttpGet]
@@ -291,7 +216,7 @@ namespace UnrealEstate.Controllers
         [AllowAnonymous]
         [Route("{listingId}")]
         [HttpGet]
-        public async Task<IActionResult> Detail(int listingId, string returnUrl)
+        public async Task<IActionResult> Detail(int listingId, [FromQuery] string returnUrl)
         {
             // Error from other actions occur when performs action on detail view.
             if (TempData["errorMessage"] != null)

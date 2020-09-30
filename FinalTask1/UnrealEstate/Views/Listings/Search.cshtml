@@ -65,12 +65,10 @@
                     if (currentUser.FavoriteListings.Select(l => l.Id).Contains(item.Id))
                     {
                         @Html.ActionLink("Favorite", "Favorite", new {listingId = item.Id, filterCriteria.MaxPrice, filterCriteria.Offset, filterCriteria.MaxAge, filterCriteria.MinSize, filterCriteria.Address, filterCriteria.Limit, filterCriteria.MinPrice, filterCriteria.OrderBy}, new {@class = "btn btn-danger"})
-                        ;
                     }
                     else
                     {
                         @Html.ActionLink("Favorite", "Favorite", new {listingId = item.Id, filterCriteria.MaxPrice, filterCriteria.Offset, filterCriteria.MaxAge, filterCriteria.MinSize, filterCriteria.Address, filterCriteria.Limit, filterCriteria.MinPrice, filterCriteria.OrderBy}, new {@class = "btn btn-light"})
-                        ;
                     }
                 }
 

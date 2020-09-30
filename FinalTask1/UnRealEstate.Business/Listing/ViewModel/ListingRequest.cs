@@ -27,9 +27,9 @@ namespace UnrealEstate.Business.Listing.ViewModel
 
         public double? Size { get; set; }
 
-        [Required] public decimal StatingPrice { get; set; }
+        public decimal StatingPrice { get; set; }
 
-        [Required] public DateTimeOffset DueDate { get; set; }
+        public DateTimeOffset DueDate { get; set; }
 
         public string Description { get; set; }
 

@@ -56,7 +56,7 @@
             <td class="text-danger">@item.StatusName</td>
             <td class="btn-group">
                 <a class="btn btn-success" asp-action="Bid" asp-route-listingId=@item.Id asp-route-returnUrl=@returnUrl>Bid</a>
-                <a class="btn btn-primary" asp-action="Detail" asp-route-id=@item.Id asp-route-returnUrl=@returnUrl>View</a>
+                <a class="btn btn-primary" asp-action="Detail" asp-route-listingId=@item.Id asp-route-returnUrl=@returnUrl>View</a>
 
                 @if (User.Identity.IsAuthenticated)
                 {

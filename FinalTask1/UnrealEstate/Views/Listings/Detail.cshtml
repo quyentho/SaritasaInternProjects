@@ -144,7 +144,7 @@
     <div>
         @if (User.Identity.IsAuthenticated || User.Identity.Name == Model.UserEmail)
         {
-            @Html.ActionLink("Edit", "Edit", new {id = Model.Id, returnUrl = ViewData["returnUrl"]})
+            @Html.ActionLink("Edit", "Edit", new {listingId = Model.Id, returnUrl = ViewData["returnUrl"]})
         }
         | <a href=@ViewData["returnUrl"]>Back To List</a>
     </div>

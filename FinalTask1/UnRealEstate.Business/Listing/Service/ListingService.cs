@@ -282,23 +282,23 @@ namespace UnrealEstate.Business.Listing.Service
             return listingPhotos;
         }
 
-        private async Task<Infrastructure.Models.Listing> ProduceListing(ListingRequest listingViewModel, string userId)
+        private async Task<Infrastructure.Models.Listing> ProduceListing(ListingRequest listingRequest, string userId)
         {
-            var listing = _mapper.Map<Infrastructure.Models.Listing>(listingViewModel);
+            var listing = _mapper.Map<Infrastructure.Models.Listing>(listingRequest);
 
             listing.UserId = userId;
-            listing.CurrentHighestBidPrice = listingViewModel.StatingPrice;
+            listing.CurrentHighestBidPrice = listingRequest.StatingPrice;
             listing.StatusId = (int) Status.Active;
 
-            await AddUploadedPhotosIfExist(listingViewModel, listing);
+            await AddUploadedPhotosIfExist(listingRequest, listing);
 
             return listing;
         }
 
-        private static async Task AddUploadedPhotosIfExist(ListingRequest listingViewModel,
+        private static async Task AddUploadedPhotosIfExist(ListingRequest listingRequest,
             Infrastructure.Models.Listing listing)
         {
-            var hasPhotoUploaded = listingViewModel.ListingPhoTos.Count > 0;
+            var hasPhotoUploaded = listingRequest.ListingPhoTos.Count > 0;
 
             if (hasPhotoUploaded)
             {
@@ -306,7 +306,7 @@ namespace UnrealEstate.Business.Listing.Service
 
                 if (existedPhotosNumber >= 3) throw new InvalidOperationException("Number of photos cannot exceeds 3");
 
-                var listingPhotos = await GetUploadedListingPhotos(listingViewModel);
+                var listingPhotos = await GetUploadedListingPhotos(listingRequest);
 
                 listing.ListingPhoTos.AddRange(listingPhotos);
             }
@@ -314,13 +314,15 @@ namespace UnrealEstate.Business.Listing.Service
 
 
         private async Task<Infrastructure.Models.Listing> GetEditedListing(ApplicationUser currentUser,
-            ListingRequest listingViewModel, int listingId)
+            ListingRequest listingRequest, int listingId)
         {
             var listing = await ValidateEditAction(currentUser, listingId);
 
-            _mapper.Map(listingViewModel, listing);
+            _mapper.Map(listingRequest, listing);
 
-            await AddUploadedPhotosIfExist(listingViewModel, listing);
+            listing.CurrentHighestBidPrice = listingRequest.StatingPrice;
+
+            await AddUploadedPhotosIfExist(listingRequest, listing);
 
             return listing;
         }

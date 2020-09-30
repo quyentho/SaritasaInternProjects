@@ -52,8 +52,7 @@ namespace UnrealEstate.Business.Listing.Repository
 
         public async Task UpdateListingAsync(Infrastructure.Models.Listing listing)
         {
-            var oldListing = await _context.Listings.FindAsync(listing.Id);
-            _context.Entry(oldListing).CurrentValues.SetValues(listing);
+            _context.Entry(listing).CurrentValues.SetValues(listing);
 
             await _context.SaveChangesAsync();
         }

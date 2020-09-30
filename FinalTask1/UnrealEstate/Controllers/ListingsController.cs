@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using UnrealEstate.Business.Comment.Service;
 using UnrealEstate.Business.Comment.ViewModel;
 using UnrealEstate.Business.Listing.Service;
@@ -58,7 +62,7 @@ namespace UnrealEstate.Controllers
             {
                 TempData["errorMessage"] = "Error when attempt to edit comment";
 
-                return RedirectToAction(nameof(Detail), new {id = commentRequest.ListingId, returnUrl});
+                return RedirectToAction(nameof(Detail), new { id = commentRequest.ListingId, returnUrl });
             }
 
             try
@@ -75,7 +79,7 @@ namespace UnrealEstate.Controllers
                 TempData["errorMessage"] = ex.Message;
             }
 
-            return RedirectToAction(nameof(Detail), new {id = commentRequest.ListingId, returnUrl});
+            return RedirectToAction(nameof(Detail), new { id = commentRequest.ListingId, returnUrl });
         }
 
         [HttpGet]
@@ -98,7 +102,7 @@ namespace UnrealEstate.Controllers
                     TempData["errorMessage"] = ex.Message;
                 }
 
-            return RedirectToAction(nameof(Detail), new {id = commentRequest.ListingId, returnUrl});
+            return RedirectToAction(nameof(Detail), new { id = commentRequest.ListingId, returnUrl });
         }
 
         [HttpGet]
@@ -120,7 +124,7 @@ namespace UnrealEstate.Controllers
                 TempData["errorMessage"] = ex.Message;
             }
 
-            return RedirectToAction(nameof(Detail), new {id = listingId, returnUrl});
+            return RedirectToAction(nameof(Detail), new { id = listingId, returnUrl });
         }
 
         [HttpGet]
@@ -169,7 +173,7 @@ namespace UnrealEstate.Controllers
                     ModelState.AddModelError(string.Empty, ex.Message);
                 }
 
-            return RedirectToAction("Edit", new {id = listingId, returnUrl});
+            return RedirectToAction("Edit", new { id = listingId, returnUrl });
         }
 
         [Route("MakeABid")]
@@ -225,36 +229,42 @@ namespace UnrealEstate.Controllers
         }
 
         [HttpGet]
-        [Route("{id}/edit")]
-        public async Task<IActionResult> Edit(int id, string returnUrl)
+        [Route("{listingId}/edit")]
+        public async Task<IActionResult> Edit(int listingId, string returnUrl)
         {
             // Error message from edit HttpPost method.
             if (TempData["errorMessage"] != null)
-                ModelState.AddModelError(string.Empty, TempData["errorMessage"].ToString());
+            {
+                foreach (var errorMessage in (IEnumerable<string>)TempData["errorMessage"])
+                {
+                    ModelState.AddModelError(string.Empty, errorMessage);    
+                }
+            }
 
-            var listingResponse = await _listingService.GetListingAsync(id);
+            var listingResponse = await _listingService.GetListingAsync(listingId);
 
             var listingRequest = _mapper.Map<ListingRequest>(listingResponse);
 
             ViewData["returnUrl"] = returnUrl;
             ViewData["photos"] = listingResponse.ListingPhoTos;
-            ViewData["listingId"] = id;
+            ViewData["listingId"] = listingId;
 
             return View(listingRequest);
         }
 
         [HttpPost]
-        [Route("{id}/edit")]
-        public async Task<IActionResult> Edit(ListingRequest listingRequest, int id, string returnUrl)
+        [Route("{listingId}/edit")]
+        public async Task<IActionResult> Edit(ListingRequest listingRequest, int listingId, string returnUrl)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var user = await _userService.GetUserByEmailAsync(User.Claims
-                        .FirstOrDefault(c => c.Type == ClaimTypes.Email)
-                        ?.Value);
-                    await _listingService.EditListingAsync(user, listingRequest, id);
+                    var user = await GetCurrentUser();
+
+                    await _listingService.EditListingAsync(user, listingRequest, listingId);
+                    
+                    return RedirectToAction("Detail", new { listingId, returnUrl });
                 }
             }
             catch (NotSupportedException ex) // Not have permission
@@ -267,22 +277,28 @@ namespace UnrealEstate.Controllers
             {
                 TempData["errorMessage"] = ex.Message;
 
-                return RedirectToAction("Edit", new {id, returnUrl});
+                return RedirectToAction("Edit", new { listingId, returnUrl });
             }
 
-            return RedirectToAction("Detail", new {id, returnUrl});
+            var errors = ModelState.SelectMany(x => x.Value.Errors).Select(e=>e.ErrorMessage).ToList();
+
+            TempData["errorMessage"] = errors;
+
+            return RedirectToAction("Edit", new { listingId, returnUrl });
         }
 
         [AllowAnonymous]
-        [Route("{id}")]
+        [Route("{listingId}")]
         [HttpGet]
-        public async Task<IActionResult> Detail(int id, string returnUrl)
+        public async Task<IActionResult> Detail(int listingId, string returnUrl)
         {
             // Error from other actions occur when performs action on detail view.
             if (TempData["errorMessage"] != null)
+            {
                 ModelState.AddModelError(string.Empty, TempData["errorMessage"].ToString());
+            }
 
-            var listingResponse = await _listingService.GetListingAsync(id);
+            var listingResponse = await _listingService.GetListingAsync(listingId);
 
             ViewData["returnUrl"] = returnUrl;
 

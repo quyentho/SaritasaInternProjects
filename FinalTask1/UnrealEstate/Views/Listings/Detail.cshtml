@@ -144,7 +144,7 @@
     <div>
         @if (User.Identity.IsAuthenticated || User.Identity.Name == Model.UserEmail)
         {
-            @Html.ActionLink("Edit", "Edit", new {listingId = Model.Id, returnUrl = ViewData["returnUrl"]})
+            @Html.ActionLink("Edit", "Edit", new {id = Model.Id, returnUrl = ViewData["returnUrl"]})
         }
         | <a href=@ViewData["returnUrl"]>Back To List</a>
     </div>
@@ -163,7 +163,7 @@
                 <th>
                     @if (User.IsInRole(UserRole.Admin))
                     {
-                        @Html.ActionLink("Delete", "Delete","Comments", new {commentId = comment.Id, listingId = Model.Id, returnUrl = ViewData["returnUrl"]})
+                        @Html.ActionLink("Delete", "Delete","Comments", new {id = comment.Id, listingId = Model.Id, returnUrl = ViewData["returnUrl"]})
                     }
                 </th>
                 <th>
@@ -200,6 +200,6 @@
         document.getElementById("commentText").focus();
         document.getElementById("commentText").select();
 
-        document.getElementById("commentForm").action = "/Comments/" + "/Update/" + comment.Id;
+        document.getElementById("commentForm").action = "/Comments" + "/Update/" + comment.Id;
     }
 </script>

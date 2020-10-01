@@ -16,7 +16,6 @@ using UnrealEstate.Infrastructure.Models;
 namespace UnrealEstate.Controllers
 {
     [Authorize]
-    [Route("[controller]")]
     public class ListingsController : Controller
     {
         private readonly ICommentService _commentService;
@@ -33,15 +32,15 @@ namespace UnrealEstate.Controllers
             _commentService = commentService;
         }
 
-        [Route("{listingId}/favorite")]
+        [Route("{id}/favorite")]
         [HttpGet]
-        public async Task<IActionResult> Favorite(int listingId, ListingFilterCriteriaRequest filterCriteria)
+        public async Task<IActionResult> Favorite(int id, ListingFilterCriteriaRequest filterCriteria)
         {
             try
             {
                 var user = await GetCurrentUser();
 
-                await _listingService.AddOrRemoveFavoriteAsync(listingId, user.Id);
+                await _listingService.AddOrRemoveFavoriteAsync(id, user.Id);
             }
             catch (ArgumentOutOfRangeException ex)
             {
@@ -52,14 +51,14 @@ namespace UnrealEstate.Controllers
         }
 
         [HttpGet]
-        [Route("{listingId}/Disable")]
-        public async Task<IActionResult> Disable(int listingId, string returnUrl)
+        [Route("{id}/Disable")]
+        public async Task<IActionResult> Disable(int id, string returnUrl)
         {
             try
             {
                 var currentUser = await GetCurrentUser();
 
-                await _listingService.DisableListingAsync(currentUser, listingId);
+                await _listingService.DisableListingAsync(currentUser, id);
 
                 return LocalRedirect(returnUrl);
             }
@@ -79,15 +78,15 @@ namespace UnrealEstate.Controllers
         }
 
         [HttpGet]
-        [Route("{listingId}/DeletePhoto/{photoId}")]
-        public async Task<IActionResult> DeleteListingPhoto(int listingId, int photoId, string returnUrl)
+        [Route("{id}/DeletePhoto/{photoId}")]
+        public async Task<IActionResult> DeleteListingPhoto(int id, int photoId, string returnUrl)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
                     var currentUser = await GetCurrentUser();
-                    await _listingService.DeletePhotoAsync(currentUser, listingId, photoId);
+                    await _listingService.DeletePhotoAsync(currentUser, id, photoId);
                 }
                 catch (NotSupportedException ex)
                 {
@@ -99,16 +98,16 @@ namespace UnrealEstate.Controllers
                 }
             }
 
-            return RedirectToAction("Edit", new {id = listingId, returnUrl});
+            return RedirectToAction("Edit", new { id = id, returnUrl });
         }
 
         [Route("MakeABid")]
         [HttpGet]
-        public IActionResult Bid(int listingId, string returnUrl)
+        public IActionResult Bid(int id, string returnUrl)
         {
             var bidRequest = new ListingBidRequest
             {
-                ListingId = listingId
+                ListingId = id
             };
 
             ViewData["returnUrl"] = returnUrl;
@@ -138,6 +137,7 @@ namespace UnrealEstate.Controllers
                     return View(bidRequest);
                 }
 
+                // BUG: Return url null.
                 return LocalRedirect(returnUrl);
             }
 
@@ -155,68 +155,71 @@ namespace UnrealEstate.Controllers
         }
 
         [HttpGet]
-        [Route("{listingId}/edit")]
-        public async Task<IActionResult> Edit(int listingId, string returnUrl)
+        [Route("{id}/edit")]
+        public async Task<IActionResult> Edit(int id, string returnUrl)
         {
             // Error message from edit HttpPost method.
             if (TempData["errorMessage"] != null)
             {
-                foreach (var errorMessage in (IEnumerable<string>) TempData["errorMessage"])
+                var errors = TempData["errorMessage"].ToString().Split(",", StringSplitOptions.RemoveEmptyEntries);
+                foreach (var error in errors)
                 {
-                    ModelState.AddModelError(string.Empty, errorMessage);
+                    ModelState.AddModelError(string.Empty, error);
                 }
             }
 
-            var listingResponse = await _listingService.GetListingAsync(listingId);
+            var listingResponse = await _listingService.GetListingAsync(id);
 
             var listingRequest = _mapper.Map<ListingRequest>(listingResponse);
 
             ViewData["returnUrl"] = returnUrl;
             ViewData["photos"] = listingResponse.ListingPhoTos;
-            ViewData["listingId"] = listingId;
+            ViewData["listingId"] = id;
 
             return View(listingRequest);
         }
 
         [HttpPost]
-        [Route("{listingId}/edit")]
-        public async Task<IActionResult> Edit(ListingRequest listingRequest, int listingId, string returnUrl)
+        [Route("{id}/edit")]
+        public async Task<IActionResult> Edit(ListingRequest listingRequest, int id, string returnUrl)
         {
-            try
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                try
                 {
                     var user = await GetCurrentUser();
 
-                    await _listingService.EditListingAsync(user, listingRequest, listingId);
+                    await _listingService.EditListingAsync(user, listingRequest, id);
 
-                    return RedirectToAction("Detail", new {listingId, returnUrl});
+                    return RedirectToAction("Detail", new { id, returnUrl });
+                }
+                catch (NotSupportedException ex) // Not have permission
+                {
+                    TempData["errorMessage"] = ex.Message; // BUG: lost message because redirect
+
+                    return LocalRedirect(returnUrl);
+                }
+                catch (InvalidOperationException ex) // Photos Exceed 3.
+                {
+                    TempData["errorMessage"] = ex.Message;
+
+                    return RedirectToAction("Edit", new { id, returnUrl });
                 }
             }
-            catch (NotSupportedException ex) // Not have permission
-            {
-                TempData["errorMessage"] = ex.Message; // BUG: lost message because redirect
 
-                return LocalRedirect(returnUrl);
-            }
-            catch (InvalidOperationException ex) // Photos Exceed 3.
-            {
-                TempData["errorMessage"] = ex.Message;
-
-                return RedirectToAction("Edit", new {listingId, returnUrl});
-            }
-
-            var errors = ModelState.SelectMany(x => x.Value.Errors).Select(e => e.ErrorMessage).ToList();
+            var errors = ModelState
+                .SelectMany(x => x.Value.Errors)
+                .Select(e => e.ErrorMessage)
+                .Aggregate((current, next) => current + "," + next);
 
             TempData["errorMessage"] = errors;
 
-            return RedirectToAction("Edit", new {listingId, returnUrl});
+            return RedirectToAction("Edit", new { id, returnUrl });
         }
 
         [AllowAnonymous]
-        [Route("{listingId}")]
         [HttpGet]
-        public async Task<IActionResult> Detail(int listingId, [FromQuery] string returnUrl)
+        public async Task<IActionResult> Detail(int id, [FromQuery] string returnUrl)
         {
             // Error from other actions occur when performs action on detail view.
             if (TempData["errorMessage"] != null)
@@ -224,7 +227,7 @@ namespace UnrealEstate.Controllers
                 ModelState.AddModelError(string.Empty, TempData["errorMessage"].ToString());
             }
 
-            var listingResponse = await _listingService.GetListingAsync(listingId);
+            var listingResponse = await _listingService.GetListingAsync(id);
 
             ViewData["returnUrl"] = returnUrl;
 

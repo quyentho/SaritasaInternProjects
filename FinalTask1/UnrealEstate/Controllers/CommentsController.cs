@@ -3,6 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using UnrealEstate.Business.Comment.Service;
 using UnrealEstate.Business.Comment.ViewModel;
 using UnrealEstate.Business.User.Service;
@@ -10,7 +11,6 @@ using UnrealEstate.Infrastructure.Models;
 
 namespace UnrealEstate.Controllers
 {
-    [Route("[controller]")]
     public class CommentsController : Controller
     {
         private readonly IUserService _userService;
@@ -21,8 +21,8 @@ namespace UnrealEstate.Controllers
             _commentService = commentService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Update(CommentRequest commentRequest, int commentId, string returnUrl)
+        [HttpPost]
+        public async Task<IActionResult> Update(int id, CommentRequest commentRequest, string returnUrl)
         {
             if (!ModelState.IsValid)
             {
@@ -35,7 +35,7 @@ namespace UnrealEstate.Controllers
             {
                 var currentUser = await GetCurrentUser();
 
-                await _commentService.EditCommentAsync(currentUser.Id, commentRequest, commentId);
+                await _commentService.EditCommentAsync(currentUser.Id, commentRequest, id);
             }
             catch (ArgumentOutOfRangeException ex)
             {
@@ -74,14 +74,13 @@ namespace UnrealEstate.Controllers
         }
 
         [HttpGet]
-        [Route("{commentId}")]
-        public async Task<IActionResult> Delete(int commentId, int listingId, string returnUrl)
+        public async Task<IActionResult> Delete(int id, int listingId, string returnUrl)
         {
             try
             {
                 var currentUser = await GetCurrentUser();
 
-                await _commentService.DeleteCommentAsync(currentUser, commentId);
+                await _commentService.DeleteCommentAsync(currentUser, id);
             }
             catch (NotSupportedException ex)
             {

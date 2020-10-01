@@ -78,11 +78,13 @@
     <div class="col-3">
         @foreach (var photo in (List<ListingPhotoResponse>) ViewData["photos"])
         {
-            <form asp-action="Delete" asp-controller="Photos" method="get" asp-route-listingId="@ViewData["listingId"]" asp-route-photoId="@photo.Id">
+            <form asp-action="Delete" asp-controller="Photos" method="get"  asp-route-photoId="@photo.Id">
 
                 <button type="submit" class="btn btn-danger float-right text-white">X</button>
 
                 <input type="hidden" value="@ViewData["returnUrl"]" name="returnUrl"/>
+                <input type="hidden" value="@ViewData["listingId"]" name="listingId"/>
+
 
                 <img src="@string.Format($"{Context.Request.Scheme}://{Context.Request.Host}/api/GetImage?photoUrl={photo.PhotoUrl}")" width="100%" style="border: 1px solid #bbb9b9; border-radius: 5px;" alt="image"/>
 

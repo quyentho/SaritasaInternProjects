@@ -40,9 +40,8 @@ namespace UnrealEstate.Controllers
         }
 
         [HttpGet]
-        // TODO: Change To Appropriate Route
-        [Route("[controller]/{listingId}/[action]/{photoId}")]
-        public async Task<IActionResult> Delete(int listingId, int photoId, string returnUrl)
+        [Route("[controller]/[action]/{photoId}")]
+        public async Task<IActionResult> Delete([FromQuery]int listingId, int photoId, string returnUrl)
         {
             if (ModelState.IsValid)
             {

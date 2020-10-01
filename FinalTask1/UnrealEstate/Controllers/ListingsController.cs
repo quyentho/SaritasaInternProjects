@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -7,7 +6,6 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UnrealEstate.Business.Comment.Service;
-using UnrealEstate.Business.Comment.ViewModel;
 using UnrealEstate.Business.Listing.Service;
 using UnrealEstate.Business.Listing.ViewModel;
 using UnrealEstate.Business.User.Service;
@@ -32,7 +30,6 @@ namespace UnrealEstate.Controllers
             _commentService = commentService;
         }
 
-        [Route("{id}/favorite")]
         [HttpGet]
         public async Task<IActionResult> Favorite(int id, ListingFilterCriteriaRequest filterCriteria)
         {
@@ -51,7 +48,6 @@ namespace UnrealEstate.Controllers
         }
 
         [HttpGet]
-        [Route("{id}/Disable")]
         public async Task<IActionResult> Disable(int id, string returnUrl)
         {
             try
@@ -77,6 +73,7 @@ namespace UnrealEstate.Controllers
             }
         }
 
+        // TODO: Move to Imagescontroller
         [HttpGet]
         [Route("{id}/DeletePhoto/{photoId}")]
         public async Task<IActionResult> DeleteListingPhoto(int id, int photoId, string returnUrl)
@@ -101,7 +98,6 @@ namespace UnrealEstate.Controllers
             return RedirectToAction("Edit", new { id = id, returnUrl });
         }
 
-        [Route("MakeABid")]
         [HttpGet]
         public IActionResult Bid(int id, string returnUrl)
         {
@@ -114,7 +110,6 @@ namespace UnrealEstate.Controllers
             return View(bidRequest);
         }
 
-        [Route("MakeABid")]
         [HttpPost]
         public async Task<IActionResult> Bid(ListingBidRequest bidRequest, string returnUrl)
         {
@@ -155,7 +150,6 @@ namespace UnrealEstate.Controllers
         }
 
         [HttpGet]
-        [Route("{id}/edit")]
         public async Task<IActionResult> Edit(int id, string returnUrl)
         {
             // Error message from edit HttpPost method.
@@ -180,7 +174,6 @@ namespace UnrealEstate.Controllers
         }
 
         [HttpPost]
-        [Route("{id}/edit")]
         public async Task<IActionResult> Edit(ListingRequest listingRequest, int id, string returnUrl)
         {
             if (ModelState.IsValid)
@@ -221,6 +214,11 @@ namespace UnrealEstate.Controllers
         [HttpGet]
         public async Task<IActionResult> Detail(int id, [FromQuery] string returnUrl)
         {
+            if (string.IsNullOrEmpty(returnUrl))
+            {
+                Url.Action(nameof(Search));
+            }
+
             // Error from other actions occur when performs action on detail view.
             if (TempData["errorMessage"] != null)
             {
@@ -235,13 +233,11 @@ namespace UnrealEstate.Controllers
         }
 
         [HttpGet]
-        [Route("Create")]
         public IActionResult Create()
         {
             return View();
         }
 
-        [Route("Create")]
         [HttpPost]
         public async Task<IActionResult> Create(ListingRequest listingRequest)
         {
@@ -261,7 +257,8 @@ namespace UnrealEstate.Controllers
                 }
             }
 
-            return View();
+            // TODO: Find a way to redirect to detail. For now it's cannot because doesn't have the created listing id.
+            return RedirectToAction(nameof(Index), "Home");
         }
 
         [AllowAnonymous]
@@ -302,7 +299,6 @@ namespace UnrealEstate.Controllers
         }
 
         [AllowAnonymous]
-        [Route("NextPage")]
         public IActionResult GoNextPage(ListingFilterCriteriaRequest filterCriteria)
         {
             filterCriteria.Offset += 3;
@@ -311,7 +307,6 @@ namespace UnrealEstate.Controllers
         }
 
         [AllowAnonymous]
-        [Route("PreviousPage")]
         public IActionResult BackPreviousPage(ListingFilterCriteriaRequest filterCriteria)
         {
             filterCriteria.Offset -= 3;

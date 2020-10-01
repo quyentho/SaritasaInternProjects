@@ -73,30 +73,7 @@ namespace UnrealEstate.Controllers
             }
         }
 
-        // TODO: Move to Imagescontroller
-        [HttpGet]
-        [Route("{id}/DeletePhoto/{photoId}")]
-        public async Task<IActionResult> DeleteListingPhoto(int id, int photoId, string returnUrl)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var currentUser = await GetCurrentUser();
-                    await _listingService.DeletePhotoAsync(currentUser, id, photoId);
-                }
-                catch (NotSupportedException ex)
-                {
-                    ModelState.AddModelError(string.Empty, ex.Message);
-                }
-                catch (ArgumentOutOfRangeException ex)
-                {
-                    ModelState.AddModelError(string.Empty, ex.Message);
-                }
-            }
-
-            return RedirectToAction("Edit", new { id = id, returnUrl });
-        }
+        
 
         [HttpGet]
         public IActionResult Bid(int id, string returnUrl)

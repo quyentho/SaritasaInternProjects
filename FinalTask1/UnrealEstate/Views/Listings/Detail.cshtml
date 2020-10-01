@@ -5,6 +5,8 @@
 @{
     ViewData["Title"] = "Detail";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string returnUrl = ViewData["returnUrl"].ToString();
 }
 
 <h1>Detail</h1>
@@ -144,9 +146,9 @@
     <div>
         @if (User.Identity.IsAuthenticated || User.Identity.Name == Model.UserEmail)
         {
-            @Html.ActionLink("Edit", "Edit", new {id = Model.Id, returnUrl = ViewData["returnUrl"]})
+            @Html.ActionLink("Edit", "Edit", new {id = Model.Id, returnUrl = returnUrl})
         }
-        | <a href=@ViewData["returnUrl"]>Back To List</a>
+        | <a href=@returnUrl>Back To List</a>
     </div>
 </div>
 
@@ -163,7 +165,7 @@
                 <th>
                     @if (User.IsInRole(UserRole.Admin))
                     {
-                        @Html.ActionLink("Delete", "Delete","Comments", new {id = comment.Id, listingId = Model.Id, returnUrl = ViewData["returnUrl"]})
+                        @Html.ActionLink("Delete", "Delete","Comments", new {id = comment.Id, listingId = Model.Id, returnUrl = returnUrl})
                     }
                 </th>
                 <th>
@@ -178,7 +180,8 @@
             </tr>
         }
     </table>
-    <form id="commentForm" asp-controller="Comments" asp-route-returnUrl="@ViewData["returnUrl"]" asp-action="Add"  method="post">
+
+    <form id="commentForm" asp-controller="Comments" asp-route-returnUrl="@returnUrl" asp-action="Create"  method="post">
         <textarea id="commentText" class="flex-fill" name="text" placeholder="Leave a comment"></textarea>
         <input type="hidden" name="listingId" value="@Model.Id"/>
     </form>

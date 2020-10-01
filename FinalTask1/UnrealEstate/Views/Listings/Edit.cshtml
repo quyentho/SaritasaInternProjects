@@ -78,7 +78,7 @@
     <div class="col-3">
         @foreach (var photo in (List<ListingPhotoResponse>) ViewData["photos"])
         {
-            <form asp-action="DeleteListingPhoto" method="get" asp-route-listingId="@ViewData["listingId"]" asp-route-photoId="@photo.Id">
+            <form asp-action="Delete" asp-controller="Photos" method="get" asp-route-listingId="@ViewData["listingId"]" asp-route-photoId="@photo.Id">
 
                 <button type="submit" class="btn btn-danger float-right text-white">X</button>
 

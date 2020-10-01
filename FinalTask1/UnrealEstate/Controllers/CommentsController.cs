@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
 using UnrealEstate.Business.Comment.Service;
 using UnrealEstate.Business.Comment.ViewModel;
 using UnrealEstate.Business.User.Service;
@@ -11,6 +11,7 @@ using UnrealEstate.Infrastructure.Models;
 
 namespace UnrealEstate.Controllers
 {
+    [Authorize]
     public class CommentsController : Controller
     {
         private readonly IUserService _userService;
@@ -49,8 +50,8 @@ namespace UnrealEstate.Controllers
             return RedirectToAction("Detail", "Listings", new { id = commentRequest.ListingId, returnUrl });
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Add([FromForm]CommentRequest commentRequest, string returnUrl)
+        [HttpGet]
+        public async Task<IActionResult> Create([FromForm]CommentRequest commentRequest, string returnUrl)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +66,7 @@ namespace UnrealEstate.Controllers
                     TempData["errorMessage"] = ex.Message;
                 }
                 catch (InvalidOperationException ex)
-                {
+                { 
                     TempData["errorMessage"] = ex.Message;
                 }
             }

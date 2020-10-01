@@ -53,6 +53,7 @@ namespace UnrealEstate.Controllers
         public async Task<IActionResult> Login(string returnUrl)
         {
             _ = returnUrl ?? Url.Action("Index", "Home");
+
             var model = new LoginViewModel
             {
                 ReturnUrl = returnUrl,

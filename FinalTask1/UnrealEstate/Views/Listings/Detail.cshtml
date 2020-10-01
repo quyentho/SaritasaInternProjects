@@ -181,9 +181,10 @@
         }
     </table>
 
-    <form id="commentForm" asp-controller="Comments" asp-route-returnUrl="@returnUrl" asp-action="Create"  method="post">
+    <form id="commentForm" asp-controller="Comments" asp-action="Create"  method="get">
         <textarea id="commentText" class="flex-fill" name="text" placeholder="Leave a comment"></textarea>
         <input type="hidden" name="listingId" value="@Model.Id"/>
+        <input type="hidden" name="returnUrl" value="@returnUrl"/>
     </form>
 </div>
 

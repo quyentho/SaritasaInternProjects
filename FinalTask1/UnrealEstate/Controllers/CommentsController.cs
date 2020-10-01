@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using UnrealEstate.Business.Comment.Service;
 using UnrealEstate.Business.Comment.ViewModel;
 using UnrealEstate.Business.User.Service;
+using UnrealEstate.Business.Utils;
 using UnrealEstate.Infrastructure.Models;
 
 namespace UnrealEstate.Controllers
@@ -22,7 +23,7 @@ namespace UnrealEstate.Controllers
             _commentService = commentService;
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> Update(int id, CommentRequest commentRequest, string returnUrl)
         {
             if (!ModelState.IsValid)
@@ -34,7 +35,7 @@ namespace UnrealEstate.Controllers
 
             try
             {
-                var currentUser = await GetCurrentUser();
+                var currentUser = await HttpContextHelper.GetCurrentUserAsync(HttpContext, _userService);
 
                 await _commentService.EditCommentAsync(currentUser.Id, commentRequest, id);
             }
@@ -51,13 +52,13 @@ namespace UnrealEstate.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Create([FromForm]CommentRequest commentRequest, string returnUrl)
+        public async Task<IActionResult> Create(CommentRequest commentRequest, string returnUrl)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var currentUser = await GetCurrentUser();
+                    var currentUser = await HttpContextHelper.GetCurrentUserAsync(HttpContext, _userService);
 
                     await _commentService.CreateCommentAsync(currentUser.Id, commentRequest);
                 }
@@ -79,7 +80,7 @@ namespace UnrealEstate.Controllers
         {
             try
             {
-                var currentUser = await GetCurrentUser();
+                var currentUser = await HttpContextHelper.GetCurrentUserAsync(HttpContext, _userService);
 
                 await _commentService.DeleteCommentAsync(currentUser, id);
             }
@@ -93,15 +94,6 @@ namespace UnrealEstate.Controllers
             }
 
             return RedirectToAction("Detail", "Listings", new { id = listingId, returnUrl });
-        }
-
-        private async Task<ApplicationUser> GetCurrentUser()
-        {
-            var currentUser = await
-                _userService.GetUserByEmailAsync(User.Claims
-                    .FirstOrDefault(c => c.Type == ClaimTypes.Email)
-                    ?.Value);
-            return currentUser;
         }
     }
 }

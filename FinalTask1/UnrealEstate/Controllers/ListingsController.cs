@@ -9,6 +9,7 @@ using UnrealEstate.Business.Comment.Service;
 using UnrealEstate.Business.Listing.Service;
 using UnrealEstate.Business.Listing.ViewModel;
 using UnrealEstate.Business.User.Service;
+using UnrealEstate.Business.Utils;
 using UnrealEstate.Infrastructure.Models;
 
 namespace UnrealEstate.Controllers
@@ -35,7 +36,7 @@ namespace UnrealEstate.Controllers
         {
             try
             {
-                var user = await GetCurrentUser();
+                var user = await  HttpContextHelper.GetCurrentUserAsync(HttpContext, _userService);
 
                 await _listingService.AddOrRemoveFavoriteAsync(id, user.Id);
             }
@@ -52,7 +53,7 @@ namespace UnrealEstate.Controllers
         {
             try
             {
-                var currentUser = await GetCurrentUser();
+                var currentUser = await  HttpContextHelper.GetCurrentUserAsync(HttpContext, _userService);
 
                 await _listingService.DisableListingAsync(currentUser, id);
 
@@ -92,7 +93,7 @@ namespace UnrealEstate.Controllers
         {
             if (ModelState.IsValid)
             {
-                var currentUser = await GetCurrentUser();
+                var currentUser = await  HttpContextHelper.GetCurrentUserAsync(HttpContext, _userService);
 
                 try
                 {
@@ -115,15 +116,6 @@ namespace UnrealEstate.Controllers
 
             ModelState.AddModelError(string.Empty, "Invalid bid attempt");
             return View(bidRequest);
-        }
-
-        private async Task<ApplicationUser> GetCurrentUser()
-        {
-            var currentUser = await
-                _userService.GetUserByEmailAsync(User.Claims
-                    .FirstOrDefault(c => c.Type == ClaimTypes.Email)
-                    ?.Value);
-            return currentUser;
         }
 
         [HttpGet]
@@ -157,7 +149,7 @@ namespace UnrealEstate.Controllers
             {
                 try
                 {
-                    var user = await GetCurrentUser();
+                    var user = await  HttpContextHelper.GetCurrentUserAsync(HttpContext, _userService);
 
                     await _listingService.EditListingAsync(user, listingRequest, id);
 
@@ -193,7 +185,7 @@ namespace UnrealEstate.Controllers
         {
             if (string.IsNullOrEmpty(returnUrl))
             {
-                Url.Action(nameof(Search));
+               returnUrl = Url.Action(nameof(Search));
             }
 
             // Error from other actions occur when performs action on detail view.

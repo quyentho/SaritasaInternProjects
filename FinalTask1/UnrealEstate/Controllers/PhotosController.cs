@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using UnrealEstate.Business.Listing.Service;
 using UnrealEstate.Business.User.Service;
+using UnrealEstate.Business.Utils;
 using UnrealEstate.Infrastructure.Models;
 
 namespace UnrealEstate.Controllers
@@ -39,6 +40,7 @@ namespace UnrealEstate.Controllers
         }
 
         [HttpGet]
+        // TODO: Change To Appropriate Route
         [Route("[controller]/{listingId}/[action]/{photoId}")]
         public async Task<IActionResult> Delete(int listingId, int photoId, string returnUrl)
         {
@@ -46,7 +48,8 @@ namespace UnrealEstate.Controllers
             {
                 try
                 {
-                    var currentUser = await GetCurrentUser();
+                    var currentUser = await HttpContextHelper.GetCurrentUserAsync(HttpContext, _userService);
+
                     await _listingService.DeletePhotoAsync(currentUser, listingId, photoId);
                 }
                 catch (NotSupportedException ex)
@@ -60,15 +63,6 @@ namespace UnrealEstate.Controllers
             }
 
             return RedirectToAction("Edit","Listings", new { id = listingId, returnUrl });
-        }
-
-        private async Task<ApplicationUser> GetCurrentUser()
-        {
-            var currentUser = await
-                _userService.GetUserByEmailAsync(User.Claims
-                    .FirstOrDefault(c => c.Type == ClaimTypes.Email)
-                    ?.Value);
-            return currentUser;
         }
     }
 }

@@ -90,6 +90,8 @@ namespace UnrealEstate
             services.AddTransient<IEmailSenderService, EmailSenderService>();
             services.AddTransient<EmailConfiguration>();
 
+            services.AddHttpContextAccessor();
+
             var emailConfig = Configuration.GetSection("EmailConfiguration")
                 .Get<EmailConfiguration>();
             services.AddSingleton(emailConfig);

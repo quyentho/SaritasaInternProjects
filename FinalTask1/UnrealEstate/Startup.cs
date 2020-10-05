@@ -69,6 +69,11 @@ namespace UnrealEstate
                 {
                     options.ClientId = "276236464048-s6dhn7otoiedo6j0hltv6r3ke4ir8kkj.apps.googleusercontent.com";
                     options.ClientSecret = "HAz2HReoehA9DKcAEN6l5c88";
+                })
+                .AddFacebook(options =>
+                {
+                    options.AppId = "2100732046726691";
+                    options.AppSecret = "b9f09335b9154b92ba6cd44a993a8141";
                 });
 
             services.ConfigureApplicationCookie(options =>

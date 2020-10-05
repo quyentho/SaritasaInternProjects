@@ -10,7 +10,7 @@
                 <h3>Sign In</h3>
                 <div class="d-flex justify-content-end social_icon">
                     <form asp-controller="Authentication" asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl">
-                        <button>
+                        <button type="submit" name="provider" value="Facebook">
                             <span>
                                 <i class="fab fa-facebook-square"></i>
                             </span>

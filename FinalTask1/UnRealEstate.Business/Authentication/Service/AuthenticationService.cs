@@ -184,7 +184,7 @@ namespace UnrealEstate.Business.Authentication
                 return new AuthenticationResponse
                 {
                     ResponseStatus = AuthenticationResponseStatus.Error,
-                    Message = "User creation failed! Please check user details and try again."
+                    Message = "Email already exists, please choose another email to register or login by this email."
                 };
             }
 
@@ -210,7 +210,7 @@ namespace UnrealEstate.Business.Authentication
             return new AuthenticationResponse
             {
                 ResponseStatus = AuthenticationResponseStatus.Error,
-                Message = "User creation failed! Please check user details and try again."
+                Message = result.Errors.Select(e=>e.Description).Aggregate((currentMessage, nextMessage) => currentMessage + "\n" + nextMessage)
             };
         }
 
@@ -261,7 +261,7 @@ namespace UnrealEstate.Business.Authentication
             return new AuthenticationResponse
             {
                 ResponseStatus = AuthenticationResponseStatus.Success,
-                Message = "Please check your email to get reset link"
+                Message = "Please check your email to get reset token"
             };
         }
 

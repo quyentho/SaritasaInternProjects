@@ -77,7 +77,7 @@ namespace UnrealEstate
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
 
-                options.LoginPath = "/Users/Login";
+                options.LoginPath = "/Authentication/Login";
                 options.SlidingExpiration = true;
             });
 

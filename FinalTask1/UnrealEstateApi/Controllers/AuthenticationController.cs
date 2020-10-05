@@ -9,11 +9,11 @@ namespace UnrealEstateApi.Controllers
 {
     [Route("api/auth")]
     [ApiController]
-    public class AuthenticateController : ControllerBase
+    public class AuthenticationController : ControllerBase
     {
         private readonly IAuthenticationService _authenticationService;
 
-        public AuthenticateController(IAuthenticationService userSerive)
+        public AuthenticationController(IAuthenticationService userSerive)
         {
             _authenticationService = userSerive;
         }

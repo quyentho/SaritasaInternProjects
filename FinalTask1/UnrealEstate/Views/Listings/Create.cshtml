@@ -84,13 +84,6 @@
 
 
 @section Scripts {
-    @*<script type="text/javascript">
-        $("#createListingForm").submit(function() {
-            var datetime = $("#datepicker").val;
-
-            $("#datepicker").val = new Date(datetime.year,  )
-        });
-    </script>*@
 
     @{ await Html.RenderPartialAsync("_DatePickerScriptPartial"); }
 

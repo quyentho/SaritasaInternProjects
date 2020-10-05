@@ -74,8 +74,6 @@ namespace UnrealEstate.Controllers
             }
         }
 
-        
-
         [HttpGet]
         public IActionResult Bid(int id, string returnUrl)
         {
@@ -226,7 +224,7 @@ namespace UnrealEstate.Controllers
                 }
             }
 
-            // TODO: Find a way to redirect to detail. For now it's cannot because doesn't have the created listing id.
+            // TODO: Find a way to redirect to detail. For now it cannot because doesn't have the created listing id.
             return RedirectToAction(nameof(Index), "Home");
         }
 

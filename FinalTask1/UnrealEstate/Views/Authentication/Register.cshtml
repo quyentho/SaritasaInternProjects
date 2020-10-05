@@ -1,23 +1,23 @@
-﻿@model UnrealEstate.Business.Authentication.ViewModel.Response.AuthenticationResponse
+﻿@model UnrealEstate.Business.Authentication.ViewModel.Request.RegisterRequest
+@{ Layout = "_Layout"; }
 
-<h1>Reset Password</h1>
-<form asp-controller="Users" asp-action="ResetPassword" method="post">
+<form asp-controller="Authentication" asp-action="Register" method="post">
     <div class="offset-4">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group col-md-4">
             <label>Email (*)</label>
             <input type="email" name="email" class="form-control" placeholder="Email">
-        </div>
-        <div class="form-group col-md-4">
-            <label>Token (*)</label>
-            <input name="token" class="form-control" placeholder="Email">
+            <span asp-validation-for="Email" class="text-danger"></span>
         </div>
         <div class="form-group col-md-4">
             <label>Password (*)</label>
-            <input type="password" class="form-control" name="newpassword" placeholder="Password">
+            <input type="password" class="form-control" name="password" placeholder="Password">
+            <span asp-validation-for="Password" class="text-danger"></span>
         </div>
         <div class="form-group col-md-4">
             <label>Confirm Password (*)</label>
             <input type="password" class="form-control" name="confirmpassword" placeholder="Confirm Password">
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
         </div>
         <div class="form-group col-md-4">
             <input type="submit" class="form-control btn btn-success"/>
@@ -25,7 +25,8 @@
     </div>
 </form>
 
-@if (Model != null)
-{
-    <p style="color: red">@Model.Message</p>
+
+@section Scripts{
+
+    @await Html.PartialAsync("_ValidationScriptsPartial")
 }

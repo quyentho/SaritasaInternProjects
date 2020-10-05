@@ -9,7 +9,7 @@
             <div class="card-header">
                 <h3>Sign In</h3>
                 <div class="d-flex justify-content-end social_icon">
-                    <form asp-controller="Users" asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl">
+                    <form asp-controller="Authentication" asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl">
                         <button>
                             <span>
                                 <i class="fab fa-facebook-square"></i>
@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <form asp-controller="Users" asp-action="Login" asp-route-returnUrl="@Model.ReturnUrl">
+                <form asp-controller="Authentication" asp-action="Login" asp-route-returnUrl="@Model.ReturnUrl">
                     <div class="input-group form-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text">
@@ -57,10 +57,10 @@
             </div>
             <div class="card-footer">
                 <div class="d-flex justify-content-center links">
-                    Don't have an account?<a href="@Url.Action("Register", "Users")">Sign Up</a>
+                    Don't have an account?<a href="@Url.Action("Register", "Authentication")">Sign Up</a>
                 </div>
                 <div class="d-flex justify-content-center">
-                    <a href="@Url.Action("ForgotPassword", "Users")">Forgot your password?</a>
+                    <a href="@Url.Action("ForgotPassword", "Authentication")">Forgot your password?</a>
                 </div>
             </div>
         </div>

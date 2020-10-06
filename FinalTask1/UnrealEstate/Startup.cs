@@ -20,6 +20,7 @@ using UnrealEstate.Business.Listing.Service;
 using UnrealEstate.Business.Listing.ViewModel;
 using UnrealEstate.Business.MappingConfig;
 using UnrealEstate.Business.User.Service;
+using UnrealEstate.Controllers.Apis;
 using UnrealEstate.Infrastructure;
 using UnrealEstate.Infrastructure.ModelConfigs;
 using UnrealEstate.Infrastructure.Models;
@@ -82,6 +83,8 @@ namespace UnrealEstate
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
 
+                options.AccessDeniedPath = "/AccessDenied";
+
                 options.LoginPath = "/Authentication/Login";
                 options.SlidingExpiration = true;
             });
@@ -94,8 +97,8 @@ namespace UnrealEstate
             services.AddTransient<ICommentService, CommentService>();
             services.AddTransient<IEmailSenderService, EmailSenderService>();
             services.AddTransient<EmailConfiguration>();
+            services.AddTransient<ApiUsersController>();
 
-            services.AddHttpContextAccessor();
 
             var emailConfig = Configuration.GetSection("EmailConfiguration")
                 .Get<EmailConfiguration>();

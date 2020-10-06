@@ -96,11 +96,11 @@ namespace UnrealEstate.Controllers.Apis
         /// <summary>
         ///     Update current logged in user's information.
         /// </summary>
-        /// <param name="userViewModel"></param>
+        /// <param name="userRequest"></param>
         /// <returns></returns>
         [HttpPut]
         [Route("me")]
-        public async Task<IActionResult> UpdateInformation(UserRequest userViewModel)
+        public async Task<IActionResult> UpdateInformation(UserRequest userRequest)
         {
             if (!ModelState.IsValid)
             {
@@ -111,7 +111,7 @@ namespace UnrealEstate.Controllers.Apis
 
             try
             {
-                await _userService.UpdateUser(currentUser, userViewModel);
+                await _userService.UpdateUser(currentUser, userRequest);
             }
             catch (NotSupportedException)
             {

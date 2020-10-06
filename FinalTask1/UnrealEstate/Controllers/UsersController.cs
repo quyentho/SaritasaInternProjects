@@ -20,13 +20,15 @@ namespace UnrealEstate.Controllers
     {
         private readonly IAuthenticationService _authenticationService;
         private readonly IUserService _userService;
+        private readonly ApiUsersController _apiUsers;
 
 
 
-        public UsersController(IAuthenticationService authenticationService, IUserService userService)
+        public UsersController(IAuthenticationService authenticationService, IUserService userService, ApiUsersController apiUsers)
         {
             _authenticationService = authenticationService;
             _userService = userService;
+            _apiUsers = apiUsers;
         }
 
         [HttpPost]
@@ -61,16 +63,17 @@ namespace UnrealEstate.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Profile(UserRequest userUpdatedUserRequest)
+        public async Task<IActionResult> Profile(UserRequest userRequest)
         {
+            // TODO: Finish this feature. Configure access denied path.
             if (ModelState.IsValid)
             {
-                // BUG: Email null 
                 var email = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
 
-                var user = await _userService.GetUserByEmailAsync(email);
+                ApplicationUser user = await _userService.GetUserByEmailAsync(email);
 
-                await _userService.UpdateUser(user, userUpdatedUserRequest);
+                ObjectResult updateResult = (ObjectResult)await _apiUsers.UpdateInformation(userRequest);
+
             }
 
             var userResponse = await GetCurrentUserViewModel();
@@ -91,20 +94,18 @@ namespace UnrealEstate.Controllers
         {
             if (ModelState.IsValid)
             {
-                ApiUsersController apiUsers = new ApiUsersController(_userService, _authenticationService);
-
-                var registerResult = (ObjectResult)await apiUsers.Register(model);
+                var registerResult = (ObjectResult)await _apiUsers.Register(model);
 
                 if (registerResult.StatusCode == StatusCodes.Status200OK)
                 {
                     var loginViewModel = new LoginViewModel { Email = model.Email, Password = model.Password };
-                    
+
                     await _authenticationService.LoginAsync(loginViewModel);
-                    
+
                     return RedirectToAction("Index", "Home", loginViewModel);
                 }
 
-                AuthenticationResponse response = (AuthenticationResponse) registerResult.Value;
+                AuthenticationResponse response = (AuthenticationResponse)registerResult.Value;
 
                 ModelState.AddModelError(string.Empty, response.Message);
             }
@@ -118,11 +119,9 @@ namespace UnrealEstate.Controllers
         {
             var userEmail = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
 
-            var currentUser = await _userService.GetUserByEmailAsync(userEmail);
+            var currentUser = await _userService.GetUserResponseByEmailAsync(userEmail);
 
-            var user = await _userService.GetUserResponseByEmailAsync(currentUser.Id);
-
-            return user;
+            return currentUser;
         }
 
     }

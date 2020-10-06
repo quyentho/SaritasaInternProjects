@@ -54,8 +54,6 @@ namespace UnrealEstate.Controllers
                 }
 
                 ModelState.AddModelError(string.Empty, loginResult.Message);
-
-                return View(model);
             }
 
             ModelState.AddModelError(string.Empty, "Invalid login attempt");
@@ -109,34 +107,6 @@ namespace UnrealEstate.Controllers
             }
 
             return LocalRedirect(returnUrl);
-        }
-
-        [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Register(RegisterRequest model)
-        {
-            if (ModelState.IsValid)
-            {
-                var response = await _authenticationService.Register(model);
-                if (response.ResponseStatus == AuthenticationResponseStatus.Success)
-                {
-                    var loginViewModel = new LoginViewModel { Email = model.Email, Password = model.Password };
-                    await Login(loginViewModel);
-
-                    return RedirectToAction("Index", "Home");
-                }
-
-                ModelState.AddModelError(string.Empty, response.Message);
-            }
-
-            ModelState.AddModelError(string.Empty, "Invalid register attempt");
-
-            return View();
         }
 
         [HttpGet]

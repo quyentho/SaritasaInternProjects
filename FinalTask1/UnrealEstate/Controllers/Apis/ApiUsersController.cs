@@ -8,22 +8,23 @@ using Microsoft.AspNetCore.Mvc;
 using UnrealEstate.Business;
 using UnrealEstate.Business.Authentication.Interface;
 using UnrealEstate.Business.Authentication.ViewModel.Request;
+using UnrealEstate.Business.Authentication.ViewModel.Response;
 using UnrealEstate.Business.User.Service;
 using UnrealEstate.Business.User.ViewModel;
 using UnrealEstate.Infrastructure.Models;
 
-namespace UnrealEstateApi.Controllers
+namespace UnrealEstate.Controllers.Apis
 {
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class ApiUsersController : ControllerBase
     {
         private readonly IAuthenticationService _authenticationService;
 
         private readonly IUserService _userService;
 
-        public UsersController(IUserService userService, IAuthenticationService authenticationService)
+        public ApiUsersController(IUserService userService, IAuthenticationService authenticationService)
         {
             _userService = userService;
             _authenticationService = authenticationService;
@@ -71,20 +72,20 @@ namespace UnrealEstateApi.Controllers
         /// <summary>
         ///     Register new user. Available for guest.
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="registerRequest"></param>
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest model)
+        public async Task<IActionResult> Register([FromBody] RegisterRequest registerRequest)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            var response = await _authenticationService.Register(model);
+            AuthenticationResponse response = await _authenticationService.Register(registerRequest);
 
-            if (response.ResponseStatus.Equals("Error"))
+            if (response.ResponseStatus == AuthenticationResponseStatus.Error)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, response);
             }
@@ -99,7 +100,7 @@ namespace UnrealEstateApi.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("me")]
-        public async Task<IActionResult> UpdateInfomation(UserRequest userViewModel)
+        public async Task<IActionResult> UpdateInformation(UserRequest userViewModel)
         {
             if (!ModelState.IsValid)
             {

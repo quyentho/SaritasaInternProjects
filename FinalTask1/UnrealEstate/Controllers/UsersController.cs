@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using UnrealEstate.Business.Authentication.Interface;
@@ -9,14 +10,18 @@ using UnrealEstate.Business.Authentication.ViewModel.Request;
 using UnrealEstate.Business.Authentication.ViewModel.Response;
 using UnrealEstate.Business.User.Service;
 using UnrealEstate.Business.User.ViewModel;
+using UnrealEstate.Controllers.Apis;
 using UnrealEstate.Infrastructure.Models;
 
 namespace UnrealEstate.Controllers
 {
+    [Authorize]
     public class UsersController : Controller
     {
         private readonly IAuthenticationService _authenticationService;
         private readonly IUserService _userService;
+
+
 
         public UsersController(IAuthenticationService authenticationService, IUserService userService)
         {
@@ -46,7 +51,7 @@ namespace UnrealEstate.Controllers
             return View("Profile");
         }
 
-        [Authorize]
+
         [HttpGet]
         public async Task<IActionResult> Profile()
         {
@@ -55,7 +60,6 @@ namespace UnrealEstate.Controllers
             return View(currentUser);
         }
 
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Profile(UserRequest userUpdatedUserRequest)
         {
@@ -83,6 +87,42 @@ namespace UnrealEstate.Controllers
             var user = await _userService.GetUserResponseByEmailAsync(currentUser.Id);
 
             return user;
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterRequest model)
+        {
+            if (ModelState.IsValid)
+            {
+                ApiUsersController apiUsers = new ApiUsersController(_userService, _authenticationService);
+
+                var registerResult = (ObjectResult)await apiUsers.Register(model);
+
+                if (registerResult.StatusCode == StatusCodes.Status200OK)
+                {
+                    var loginViewModel = new LoginViewModel { Email = model.Email, Password = model.Password };
+                    
+                    await _authenticationService.LoginAsync(loginViewModel);
+                    
+                    return RedirectToAction("Index", "Home", loginViewModel);
+                }
+
+                AuthenticationResponse response = (AuthenticationResponse) registerResult.Value;
+
+                ModelState.AddModelError(string.Empty, response.Message);
+            }
+
+            ModelState.AddModelError(string.Empty, "Invalid register attempt");
+
+            return View();
         }
     }
 }

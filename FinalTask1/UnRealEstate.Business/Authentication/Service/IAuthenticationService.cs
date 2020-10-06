@@ -1,9 +1,11 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using UnrealEstate.Business.Authentication.ViewModel.Request;
 using UnrealEstate.Business.Authentication.ViewModel.Response;
 
-namespace UnrealEstate.Business.Authentication.Interface
+namespace UnrealEstate.Business.Authentication.Service
 {
     public interface IAuthenticationService
     {
@@ -61,5 +63,19 @@ namespace UnrealEstate.Business.Authentication.Interface
         /// <param name="changePasswordRequest"></param>
         /// <returns></returns>
         Task<AuthenticationResponse> ChangePasswordAsync(ChangePasswordRequest changePasswordRequest);
+
+        /// <summary>
+        /// Gets authentication properties of external login after configure.
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <param name="redirectUrl"></param>
+        /// <returns></returns>
+        AuthenticationProperties GetExternalAuthenticationProperties(string provider, string redirectUrl);
+
+        /// <summary>
+        /// Gets external authentication schemes.
+        /// </summary>
+        /// <returns></returns>
+        Task<List<AuthenticationScheme>> GetExternalAuthenticationSchemesAsync();
     }
 }

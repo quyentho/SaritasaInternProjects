@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UnrealEstate.Business;
-using UnrealEstate.Business.Authentication.Interface;
+using UnrealEstate.Business.Authentication.Service;
 using UnrealEstate.Business.Authentication.ViewModel.Request;
 using UnrealEstate.Business.Authentication.ViewModel.Response;
 using UnrealEstate.Business.User.Service;

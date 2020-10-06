@@ -15,7 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using UnrealEstate.Business.Authentication;
-using UnrealEstate.Business.Authentication.Interface;
+using UnrealEstate.Business.Authentication.Service;
 using UnrealEstate.Business.Comment;
 using UnrealEstate.Business.Comment.Repository;
 using UnrealEstate.Business.Comment.Service;

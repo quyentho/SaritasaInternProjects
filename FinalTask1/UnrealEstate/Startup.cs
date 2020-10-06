@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using UnrealEstate.Business.Authentication;
-using UnrealEstate.Business.Authentication.Interface;
+using UnrealEstate.Business.Authentication.Service;
 using UnrealEstate.Business.Comment;
 using UnrealEstate.Business.Comment.Repository;
 using UnrealEstate.Business.Comment.Service;

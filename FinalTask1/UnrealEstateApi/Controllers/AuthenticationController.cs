@@ -1,7 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using UnrealEstate.Business.Authentication.Interface;
+using UnrealEstate.Business.Authentication.Service;
 using UnrealEstate.Business.Authentication.ViewModel.Request;
 using UnrealEstate.Business.Authentication.ViewModel.Response;
 

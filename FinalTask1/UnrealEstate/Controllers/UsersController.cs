@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using UnrealEstate.Business.Authentication.Interface;
+using UnrealEstate.Business.Authentication.Service;
 using UnrealEstate.Business.Authentication.ViewModel.Request;
 using UnrealEstate.Business.Authentication.ViewModel.Response;
 using UnrealEstate.Business.User.Service;
@@ -55,7 +55,7 @@ namespace UnrealEstate.Controllers
         [HttpGet]
         public async Task<IActionResult> Profile()
         {
-            var currentUser = await GetCurrentUserViewModel();
+            UserResponse currentUser = await GetCurrentUserViewModel();
 
             return View(currentUser);
         }
@@ -76,17 +76,6 @@ namespace UnrealEstate.Controllers
             var userResponse = await GetCurrentUserViewModel();
 
             return View(userResponse);
-        }
-
-        private async Task<UserResponse> GetCurrentUserViewModel()
-        {
-            var userEmail = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-
-            var currentUser = await _userService.GetUserByEmailAsync(userEmail);
-
-            var user = await _userService.GetUserResponseByEmailAsync(currentUser.Id);
-
-            return user;
         }
 
         [AllowAnonymous]
@@ -124,5 +113,17 @@ namespace UnrealEstate.Controllers
 
             return View();
         }
+
+        private async Task<UserResponse> GetCurrentUserViewModel()
+        {
+            var userEmail = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+
+            var currentUser = await _userService.GetUserByEmailAsync(userEmail);
+
+            var user = await _userService.GetUserResponseByEmailAsync(currentUser.Id);
+
+            return user;
+        }
+
     }
 }

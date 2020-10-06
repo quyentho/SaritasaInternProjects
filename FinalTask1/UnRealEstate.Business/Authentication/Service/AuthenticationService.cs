@@ -5,18 +5,18 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using MimeKit;
-using UnrealEstate.Business.Authentication.Interface;
 using UnrealEstate.Business.Authentication.ViewModel.Request;
 using UnrealEstate.Business.Authentication.ViewModel.Response;
 using UnrealEstate.Business.Email.BussinessModel;
 using UnrealEstate.Business.Email.Service;
 using UnrealEstate.Infrastructure.Models;
 
-namespace UnrealEstate.Business.Authentication
+namespace UnrealEstate.Business.Authentication.Service
 {
     public class AuthenticationService : IAuthenticationService
     {
@@ -67,6 +67,19 @@ namespace UnrealEstate.Business.Authentication
             };
         }
 
+        /// <inheritdoc />
+        public AuthenticationProperties GetExternalAuthenticationProperties(string provider, string redirectUrl)
+        {
+            return _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+        }
+
+        /// <inheritdoc />
+        public async Task<List<AuthenticationScheme>> GetExternalAuthenticationSchemesAsync()
+        {
+            return (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+        }
+
+        /// <inheritdoc />
         public async Task<AuthenticationResponse> ExternalLoginAsync(LoginViewModel loginViewModel)
         {
             var info = await _signInManager.GetExternalLoginInfoAsync();

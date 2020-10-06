@@ -1,23 +1,22 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using UnrealEstate.Business.Authentication.Interface;
 using UnrealEstate.Business.Authentication.ViewModel.Request;
 using UnrealEstate.Business.Authentication.ViewModel.Response;
 using UnrealEstate.Infrastructure.Models;
+using IAuthenticationService = UnrealEstate.Business.Authentication.Service.IAuthenticationService;
 
 namespace UnrealEstate.Controllers
 {
     public class AuthenticationController : Controller
     {
-        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IAuthenticationService _authenticationService;
 
-        public AuthenticationController(SignInManager<ApplicationUser> signInManager, IAuthenticationService authenticationService)
+        public AuthenticationController(IAuthenticationService authenticationService)
         {
-            _signInManager = signInManager;
             _authenticationService = authenticationService;
         }
 
@@ -30,7 +29,7 @@ namespace UnrealEstate.Controllers
             var model = new LoginViewModel
             {
                 ReturnUrl = returnUrl,
-                ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
+                ExternalLogins = await _authenticationService.GetExternalAuthenticationSchemesAsync()
             };
             return View(model);
         }
@@ -75,7 +74,7 @@ namespace UnrealEstate.Controllers
         {
             var redirectUrl = Url.Action("ExternalLoginCallBack", "Authentication", new { ReturnUrl = returnUrl });
 
-            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            AuthenticationProperties properties = _authenticationService.GetExternalAuthenticationProperties(provider, redirectUrl);
 
             return new ChallengeResult(provider, properties);
         }
@@ -88,7 +87,7 @@ namespace UnrealEstate.Controllers
             var loginViewModel = new LoginViewModel
             {
                 ReturnUrl = returnUrl,
-                ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
+                ExternalLogins = await _authenticationService.GetExternalAuthenticationSchemesAsync()
             };
 
             if (remoteError != null)

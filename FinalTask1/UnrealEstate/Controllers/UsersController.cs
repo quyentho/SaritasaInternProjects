@@ -10,6 +10,7 @@ using UnrealEstate.Business.Authentication.ViewModel.Request;
 using UnrealEstate.Business.Authentication.ViewModel.Response;
 using UnrealEstate.Business.User.Service;
 using UnrealEstate.Business.User.ViewModel;
+using UnrealEstate.Business.Utils;
 using UnrealEstate.Controllers.Apis;
 using UnrealEstate.Infrastructure.Models;
 
@@ -57,7 +58,12 @@ namespace UnrealEstate.Controllers
         [HttpGet]
         public async Task<IActionResult> Profile()
         {
-            UserResponse currentUser = await GetCurrentUserViewModel();
+            if (TempData["updateMessage"] != null)
+            {
+                ViewData["updateMessage"] = TempData["updateMessage"].ToString();
+            }
+
+            UserResponse currentUser = await HttpContextHelper.GetCurrentUserViewModelAsync(HttpContext, _userService);
 
             return View(currentUser);
         }
@@ -65,20 +71,23 @@ namespace UnrealEstate.Controllers
         [HttpPost]
         public async Task<IActionResult> Profile(UserRequest userRequest)
         {
-            // TODO: Finish this feature. Configure access denied path.
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var email = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+                TempData["updateMessage"] = "Invalid change profile attempt";
 
-                ApplicationUser user = await _userService.GetUserByEmailAsync(email);
-
-                ObjectResult updateResult = (ObjectResult)await _apiUsers.UpdateInformation(userRequest);
-
+                return RedirectToAction(nameof(Profile));
             }
 
-            var userResponse = await GetCurrentUserViewModel();
+            ApplicationUser currentUser = await HttpContextHelper.GetCurrentUserAsync(HttpContext, _userService);
 
-            return View(userResponse);
+            StatusCodeResult updateResult = (StatusCodeResult)await _apiUsers.UpdateInformation(userRequest, currentUser);
+
+            if (updateResult.StatusCode == StatusCodes.Status204NoContent)
+            {
+                TempData["updateMessage"] = "Profile updated";
+            }
+
+            return RedirectToAction(nameof(Profile));
         }
 
         [AllowAnonymous]
@@ -114,15 +123,5 @@ namespace UnrealEstate.Controllers
 
             return View();
         }
-
-        private async Task<UserResponse> GetCurrentUserViewModel()
-        {
-            var userEmail = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-
-            var currentUser = await _userService.GetUserResponseByEmailAsync(userEmail);
-
-            return currentUser;
-        }
-
     }
 }

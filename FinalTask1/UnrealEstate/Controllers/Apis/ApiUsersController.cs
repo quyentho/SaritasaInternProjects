@@ -11,6 +11,7 @@ using UnrealEstate.Business.Authentication.ViewModel.Request;
 using UnrealEstate.Business.Authentication.ViewModel.Response;
 using UnrealEstate.Business.User.Service;
 using UnrealEstate.Business.User.ViewModel;
+using UnrealEstate.Business.Utils;
 using UnrealEstate.Infrastructure.Models;
 
 namespace UnrealEstate.Controllers.Apis
@@ -100,34 +101,21 @@ namespace UnrealEstate.Controllers.Apis
         /// <returns></returns>
         [HttpPut]
         [Route("me")]
-        public async Task<IActionResult> UpdateInformation(UserRequest userRequest)
+        public async Task<IActionResult> UpdateInformation(UserRequest userRequest, [FromQuery] ApplicationUser currentUser = null)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            var currentUser = await GetCurrentUserAsync();
+            if (currentUser is null)
+            {
+                currentUser = await HttpContextHelper.GetCurrentUserAsync(HttpContext, _userService);
+            }
 
-            try
-            {
-                await _userService.UpdateUser(currentUser, userRequest);
-            }
-            catch (NotSupportedException)
-            {
-                return Forbid();
-            }
+            await _userService.UpdateUser(currentUser, userRequest);
 
             return NoContent();
-        }
-
-        private async Task<ApplicationUser> GetCurrentUserAsync()
-        {
-            var email = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-
-            var currentUser = await _userService.GetUserByEmailAsync(email);
-
-            return currentUser;
         }
     }
 }

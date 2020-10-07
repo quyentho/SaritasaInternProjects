@@ -55,11 +55,11 @@ namespace UnrealEstate.Business.User.Service
             return user;
         }
 
-        public async Task UpdateUser(ApplicationUser currentUser, UserRequest userViewModel)
+        public async Task UpdateUser(ApplicationUser currentUser, UserRequest userRequest)
         {
             var user = await _userManager.FindByEmailAsync(currentUser.Email);
 
-            _mapper.Map(userViewModel, user);
+            _mapper.Map(userRequest, user);
 
             await _userManager.UpdateAsync(user);
         }

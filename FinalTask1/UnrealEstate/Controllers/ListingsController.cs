@@ -108,7 +108,6 @@ namespace UnrealEstate.Controllers
                     return View(bidRequest);
                 }
 
-                // BUG: Return url null.
                 return LocalRedirect(returnUrl);
             }
 

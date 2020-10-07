@@ -38,7 +38,7 @@ namespace UnrealEstate.Business.Authentication.Service
         }
 
         /// <summary>
-        ///     Sign out.
+        /// Sign out.
         /// </summary>
         /// <returns></returns>
         public async Task LogoutAsync()
@@ -217,7 +217,9 @@ namespace UnrealEstate.Business.Authentication.Service
                 await _userManager.AddToRoleAsync(user, UserRole.User);
 
                 return new AuthenticationResponse
-                    {ResponseStatus = AuthenticationResponseStatus.Success, Message = "User created successfully!"};
+                {
+                    ResponseStatus = AuthenticationResponseStatus.Success, Message = "User created successfully!"
+                };
             }
 
             return new AuthenticationResponse

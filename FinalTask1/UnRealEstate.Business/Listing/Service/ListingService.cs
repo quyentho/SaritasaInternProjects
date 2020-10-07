@@ -28,8 +28,6 @@ namespace UnrealEstate.Business.Listing.Service
         }
 
         /// <inheritdoc />
-
-        // TODO: define exception for services.
         public async Task AddOrRemoveFavoriteAsync(int listingId, string userId)
         {
             var listing = await ValidateFavoriteAction(listingId);
@@ -39,18 +37,23 @@ namespace UnrealEstate.Business.Listing.Service
             await _listingRepository.UpdateAsync(listing);
         }
 
-
         /// <inheritdoc />
+        /// <exception cref="ArgumentOutOfRangeException">listingId does not exist in database.</exception>
+        /// <exception cref="NotSupportedException">currentUser is not an admin, thus do not has permission to do this action.</exception>
+        /// <exception cref="InvalidOperationException">The Listing not in disabled status, thus cannot be enable.</exception>
         public async Task EnableListingAsync(ApplicationUser currentUser, int listingId)
         {
             var listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
 
-            await ValidateAction(currentUser, listingFromDb, (int) Status.Disable);
+            await ValidateAction(currentUser, listingFromDb, (int) Status.Disabled);
 
             await Enable(listingFromDb);
         }
 
         /// <inheritdoc />
+        /// <exception cref="ArgumentOutOfRangeException">listingId does not exist in database.</exception>
+        /// <exception cref="NotSupportedException">currentUser is not an admin, thus do not has permission to do this action.</exception>
+        /// <exception cref="InvalidOperationException">The Listing not in active status, thus cannot be disable.</exception>
         public async Task DisableListingAsync(ApplicationUser currentUser, int listingId)
         {
             var listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
@@ -110,6 +113,8 @@ namespace UnrealEstate.Business.Listing.Service
         }
 
         /// <inheritdoc />
+        /// <exception cref="ArgumentOutOfRangeException">listingId does not exist in database.</exception>
+        /// <exception cref="InvalidOperationException">Bid price is less than current highest listing price.</exception>
         public async Task MakeABid(int listingId, ApplicationUser currentUser, ListingBidRequest bidRequestViewModel)
         {
             var listingToBid = await ValidateBidAction(listingId, bidRequestViewModel);
@@ -120,9 +125,11 @@ namespace UnrealEstate.Business.Listing.Service
         }
 
         /// <inheritdoc />
+        /// <exception cref="ArgumentNullException">currentUser is null</exception>
+        /// <exception cref="ArgumentOutOfRangeException">listingId or photoId is not exists in database.</exception>
         public async Task DeletePhotoAsync(ApplicationUser currentUser, int listingId, int photoId)
         {
-            GuardClauses.IsNotNull(currentUser, "User");
+            GuardClauses.IsNotNull(currentUser, "currentUser");
 
             var listingFromDb = await _listingRepository.GetListingByIdAsync(listingId);
 
@@ -171,7 +178,7 @@ namespace UnrealEstate.Business.Listing.Service
 
         private async Task Disable(Infrastructure.Models.Listing listingFromDb)
         {
-            listingFromDb.StatusId = (int) Status.Disable;
+            listingFromDb.StatusId = (int) Status.Disabled;
 
             await _listingRepository.UpdateAsync(listingFromDb);
         }

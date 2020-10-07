@@ -50,6 +50,8 @@ namespace UnrealEstate.Business.Comment
         }
 
         /// <inheritdoc />
+        /// <exception cref="ArgumentOutOfRangeException">listing does not exist in database.</exception>
+        /// <exception cref="InvalidOperationException">Listing status is not allowed for adding comment</exception>
         public async Task CreateCommentAsync(string userId, CommentRequest commentViewModel)
         {
             var listing = await _listingRepository.GetListingByIdAsync(commentViewModel.ListingId);
@@ -66,6 +68,8 @@ namespace UnrealEstate.Business.Comment
         }
 
         /// <inheritdoc />
+        /// <exception cref="ArgumentOutOfRangeException">commentId does not exist in database.</exception>
+        /// <exception cref="NotSupportedException">current user is not the author of this comment, so cannot edit the comment.</exception>
         public async Task EditCommentAsync(string currentUserId, CommentRequest commentViewModel, int commentId)
         {
             var commentFromDb = await _commentRepository.GetCommentByIdAsync(commentId);
@@ -82,6 +86,7 @@ namespace UnrealEstate.Business.Comment
         }
 
         /// <inheritdoc />
+        /// <exception cref="NotSupportedException">current user is not an admin, so cannot delete the comment.</exception>
         public async Task DeleteCommentAsync(ApplicationUser currentUser, int commentId)
         {
             var userRole = await _userManager.GetRolesAsync(currentUser);

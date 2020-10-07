@@ -14,7 +14,7 @@ namespace UnrealEstate.Infrastructure.Models
     public enum Status
     {
         Active = 1,
-        Disable = 2,
+        Disabled = 2,
         Canceled = 3,
         Sold = 4,
         NotAvailable = 5

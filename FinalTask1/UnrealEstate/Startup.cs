@@ -15,6 +15,7 @@ using UnrealEstate.Business.Comment;
 using UnrealEstate.Business.Comment.Repository;
 using UnrealEstate.Business.Comment.Service;
 using UnrealEstate.Business.Email.Service;
+using UnrealEstate.Business.Hubs;
 using UnrealEstate.Business.Listing.Repository;
 using UnrealEstate.Business.Listing.Service;
 using UnrealEstate.Business.Listing.ViewModel;
@@ -100,6 +101,8 @@ namespace UnrealEstate
             services.AddTransient<ApiUsersController>();
 
 
+            services.AddSignalR();
+
             var emailConfig = Configuration.GetSection("EmailConfiguration")
                 .Get<EmailConfiguration>();
             services.AddSingleton(emailConfig);
@@ -114,6 +117,7 @@ namespace UnrealEstate
                     fv.RegisterValidatorsFromAssembly(Assembly.GetAssembly(typeof(ListingValidator)));
                     fv.ImplicitlyValidateChildProperties = true;
                 });
+
             services.AddRazorPages();
         }
 
@@ -165,6 +169,8 @@ namespace UnrealEstate
                     "{controller=Home}/{action=Index}/{id?}");
 
                 endpoints.MapRazorPages();
+
+                endpoints.MapHub<ChatHub>("/chathub");
             });
         }
     }

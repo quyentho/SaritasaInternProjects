@@ -36,7 +36,6 @@ namespace UnrealEstate.Controllers
         }
 
         [HttpGet]
-        [Route("{email}")]
         public async Task<IActionResult> SetStatus(string email)
         {
             if (ModelState.IsValid)

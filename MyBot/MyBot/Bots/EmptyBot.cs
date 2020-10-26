@@ -6,11 +6,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Schema;
+using MyBot.Dtos;
 using MyBot.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RestSharp;
 
-namespace MyBot
+namespace MyBot.Bots
 {
     public class EmptyBot : ActivityHandler
     {
@@ -25,7 +27,7 @@ namespace MyBot
 
         protected override async Task OnMembersAddedAsync(IList<ChannelAccount> membersAdded, ITurnContext<IConversationUpdateActivity> turnContext, CancellationToken cancellationToken)
         {
-            await turnContext.SendActivityAsync("Hello", null, null, cancellationToken);
+            await turnContext.SendActivityAsync("Hello! Type any key to continue", null, null, cancellationToken);
         }
 
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
@@ -96,6 +98,11 @@ namespace MyBot
                         if (queryResult.Success)
                         {
                             await turnContext.SendActivityAsync($"Your access token is {queryResult.AccessToken}", null, null, cancellationToken);
+
+                            UserDto userDto = await CallGetMyInfoApi(queryResult.AccessToken,cancellationToken);
+
+                            await turnContext.SendActivityAsync($"Your name is {userDto.Name}", null, null, cancellationToken);
+                            await turnContext.SendActivityAsync($"Your department is {userDto.DepartmentName}", null, null, cancellationToken);
                         }
                         else
                         {
@@ -116,6 +123,18 @@ namespace MyBot
                         break;
                     }
             }
+        }
+
+        private async Task<UserDto> CallGetMyInfoApi(string queryResultAccessToken, CancellationToken cancellationToken)
+        {
+            var client = new RestClient("https://crm.saritasa.com/");
+            var request = new RestRequest("api/users/Me", Method.GET);
+
+            client.AddDefaultHeader("Authorization", string.Format($"Bearer {queryResultAccessToken}"));
+
+            var response = await client.ExecuteAsync(request, cancellationToken);
+
+            return JObject.Parse(response.Content.ToString()).SelectToken("data").ToObject<UserDto>();
         }
     }
 }

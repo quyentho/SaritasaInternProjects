@@ -1,0 +1,107 @@
+﻿@using UnrealEstate.Business.Listing.ViewModel
+@model UnrealEstate.Business.Listing.ViewModel.ListingRequest
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<hr/>
+<div class="row">
+    <div class="col-8">
+        <form asp-action="Edit" enctype="multipart/form-data" method="post" asp-route-returnUrl="@ViewData["returnUrl"]">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Zip" class="control-label"></label>
+                <input asp-for="Zip" class="form-control"/>
+                <span asp-validation-for="Zip" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="City" class="control-label"></label>
+                <input asp-for="City" class="form-control"/>
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AddressLine1" class="control-label"></label>
+                <input asp-for="AddressLine1" class="form-control"/>
+                <span asp-validation-for="AddressLine1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AddressLine2" class="control-label"></label>
+                <input asp-for="AddressLine2" class="form-control"/>
+                <span asp-validation-for="AddressLine2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BuiltYear" class="control-label"></label>
+                <input asp-for="BuiltYear" class="form-control"/>
+                <span asp-validation-for="BuiltYear" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Beds" class="control-label"></label>
+                <input asp-for="Beds" class="form-control"/>
+                <span asp-validation-for="Beds" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Size" class="control-label"></label>
+                <input asp-for="Size" class="form-control"/>
+                <span asp-validation-for="Size" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StatingPrice" class="control-label"></label>
+                <input asp-for="StatingPrice" class="form-control"/>
+                <span asp-validation-for="StatingPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DueDate" class="control-label"></label>
+                <input asp-for="DueDate" type="text" id="datepicker" class="form-control">
+                <span asp-validation-for="DueDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control"/>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group ">
+                <label asp-for="ListingPhoTos"></label>
+                <input type="file" name="ListingPhoTos" multiple="multiple" asp-for="ListingPhoTos" class="form-control">
+                <span asp-validation-for="ListingPhoTos"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary"/>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-1"></div>
+    <div class="col-3">
+        @foreach (var photo in (List<ListingPhotoResponse>) ViewData["photos"])
+        {
+            <form asp-action="Delete" asp-controller="Photos" method="get"  asp-route-photoId="@photo.Id">
+
+                <button type="submit" class="btn btn-danger float-right text-white">X</button>
+
+                <input type="hidden" value="@ViewData["returnUrl"]" name="returnUrl"/>
+                <input type="hidden" value="@ViewData["listingId"]" name="listingId"/>
+
+
+                <img src="@string.Format($"{Context.Request.Scheme}://{Context.Request.Host}/api/GetImage?photoUrl={photo.PhotoUrl}")" width="100%" style="border: 1px solid #bbb9b9; border-radius: 5px;" alt="image"/>
+
+                <div class="pt-4"></div>
+
+            </form>
+        }
+    </div>
+</div>
+
+<div>
+    <a asp-action="Search" asp-route-returnUrl="@ViewData["returnUrl"]">Back to List</a>
+</div>
+
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_DatePickerScriptPartial"); }
+
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

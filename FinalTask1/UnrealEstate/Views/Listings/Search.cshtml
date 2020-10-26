@@ -1,0 +1,88 @@
+﻿@inject IUserService UserService
+@using UnrealEstate.Business.User.Service
+@using UnrealEstate.Business.Listing.ViewModel
+@using UnrealEstate.Business
+@model List<UnrealEstate.Business.Listing.ViewModel.ListingResponse>
+
+@{
+    Layout = "_Layout";
+
+    var filterCriteria = (ListingFilterCriteriaRequest) ViewData["filterCriteria"];
+
+    var returnUrl = string.Format($"{Context.Request.Path}{Context.Request.QueryString}");
+}
+<partial name="_SearchBar"/>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col">Author email</th>
+        <th scope="col">Zip</th>
+        <th scope="col">City</th>
+        <th scope="col">Address line 1</th>
+        <th scope="col">Address line 2</th>
+        <th scope="col">Build year</th>
+        <th scope="col">Beds</th>
+        <th scope="col">Size</th>
+        <th scope="col">Current highest bid price</th>
+        <th scope="col">Starting price</th>
+        <th scope="col">Due date</th>
+        <th scope="col">Description</th>
+        <th scope="col">Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @item.UserEmail
+            </td>
+            <td>
+                @item.Zip
+            </td>
+            <td>
+                @item.City
+            </td>
+            <td>@item.AddressLine1</td>
+            <td>@item.AddressLine2</td>
+            <td>@item.BuiltYear</td>
+            <td>@item.Beds</td>
+            <td>@item.Size</td>
+            <td>@item.CurrentHighestBidPrice</td>
+            <td>@item.StatingPrice</td>
+            <td>@item.DueDate</td>
+            <td>@item.Description</td>
+            <td class="text-danger">@item.StatusName</td>
+            <td class="btn-group">
+                <a class="btn btn-success" asp-action="Bid" asp-route-id=@item.Id asp-route-returnUrl=@returnUrl>Bid</a>
+                <a class="btn btn-primary" asp-action="Detail" asp-route-id=@item.Id asp-route-returnUrl=@returnUrl>View</a>
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    var currentUser = await UserService.GetUserResponseByEmailAsync(User.Identity.Name);
+
+                    if (currentUser.FavoriteListings.Select(l => l.Id).Contains(item.Id))
+                    {
+                        @Html.ActionLink("Favorite", "Favorite", new {id = item.Id, filterCriteria.MaxPrice, filterCriteria.Offset, filterCriteria.MaxAge, filterCriteria.MinSize, filterCriteria.Address, filterCriteria.Limit, filterCriteria.MinPrice, filterCriteria.OrderBy}, new {@class = "btn btn-danger"})
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Favorite", "Favorite", new {id = item.Id, filterCriteria.MaxPrice, filterCriteria.Offset, filterCriteria.MaxAge, filterCriteria.MinSize, filterCriteria.Address, filterCriteria.Limit, filterCriteria.MinPrice, filterCriteria.OrderBy}, new {@class = "btn btn-light"})
+                    }
+                }
+
+                @if (User.IsInRole(UserRole.Admin))
+                {
+                    <a asp-controller="Listings" asp-action="Disable" asp-route-id=@item.Id asp-route-returnUrl=@string.Format("{0}{1}", Context.Request.Path, Context.Request.QueryString) class="btn btn-danger">Disable</a>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+@if (filterCriteria.Offset != 0) // not in the first page.
+{
+    @Html.ActionLink("Previous page", "BackPreviousPage", filterCriteria)
+}
+@Html.ActionLink("Next page", "GoNextPage", filterCriteria, new {style = "padding: 15px"})

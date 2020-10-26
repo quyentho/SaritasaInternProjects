@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MyBot.Bots;
+using MyBot.Models;
 
 namespace MyBot
 {
@@ -42,6 +43,9 @@ namespace MyBot
 
             // Create the Conversation state.
             services.AddSingleton<ConversationState>();
+
+            // Get my credentials.
+            services.Configure<Credentials>(Configuration.GetSection("Credentials"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

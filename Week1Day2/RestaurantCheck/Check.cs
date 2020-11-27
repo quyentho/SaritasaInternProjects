@@ -25,33 +25,13 @@ namespace RestaurantCheck
         /// <returns>True if empty.</returns>
         public bool IsEmpty()
         {
-            if (this.Items.Count == 0)
-            {
-                return true;
-            }
-
-            return false;
+            return this.Items.Count == 0;
         }
 
-        /// <summary>
-        /// Calculate discount.
-        /// </summary>
-        /// <param name="total">Total price to determine if discount.</param>
-        /// <returns>total * 5% discount.</returns>
-        private double GetDiscountAmout(double total)
-        {
-            double discount = 0;
-            if (total > 20)
-            {
-                discount = total * DiscountRate;
-            }
-
-            return discount;
-        }
         /// <summary>
         /// Calculate Check Result.
         /// </summary>
-        /// <returns>CheckResult</returns>
+        /// <returns>CheckResult.</returns>
         public CheckResult Calculate()
         {
             var total = this.Items.Sum(i => i.Price);
@@ -60,14 +40,30 @@ namespace RestaurantCheck
 
             var totalBeforeTax = total - discountAmount;
 
-            var totalAfterTax = totalBeforeTax + GetTaxAmount(totalBeforeTax);
+            var totalAfterTax = totalBeforeTax + this.GetTaxAmount(totalBeforeTax);
 
             return new CheckResult() { DiscountAmount = discountAmount, TotalAfterTax = totalAfterTax, TotalBeforeTax = totalBeforeTax };
         }
 
-        private static double GetTaxAmount(double totalBeforeTax)
+        /// <summary>
+        /// Calculate discount.
+        /// </summary>
+        /// <param name="total">Total price to determine if discount.</param>
+        /// <returns>total * 5% discount rate.</returns>
+        private double GetDiscountAmout(double total)
         {
-            return totalBeforeTax * TaxRate;
+            double discountAmount = 0;
+            if (total > 20)
+            {
+                discountAmount = total * DiscountRate;
+            }
+
+            return Math.Round(discountAmount, 2);
+        }
+
+        private double GetTaxAmount(double totalBeforeTax)
+        {
+            return Math.Round(totalBeforeTax * TaxRate, 2);
         }
     }
 }

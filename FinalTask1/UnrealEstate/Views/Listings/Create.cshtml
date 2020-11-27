@@ -1,0 +1,91 @@
+﻿@model UnrealEstate.Business.Listing.ViewModel.ListingRequest
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+<hr/>
+
+
+<form asp-controller="Listings" asp-action="Create" method="post" enctype="multipart/form-data" id="createListingForm">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group ">
+                <label asp-for="StatingPrice">Stating Price (*)</label>
+                <input asp-for="StatingPrice" class="form-control">
+                <span asp-validation-for="StatingPrice"></span>
+            </div>
+            <div class="form-group ">
+                <label asp-for="DueDate">Due Date (*)</label>
+                <input asp-for="DueDate" id="datepicker" class="form-control">
+                <span asp-validation-for="DueDate"></span>
+            </div>
+            <div class="form-group ">
+                <label asp-for="BuiltYear"></label>
+                <input asp-for="BuiltYear" class="form-control">
+                <span asp-validation-for="BuiltYear"></span>
+            </div>
+            <div class="form-group ">
+                <label asp-for="Beds"></label>
+                <input asp-for="Beds" class="form-control">
+                <span asp-validation-for="Beds"></span>
+            </div>
+            <div class="form-group ">
+                <label asp-for="Size"></label>
+                <input asp-for="Size" class="form-control">
+                <span asp-validation-for="Size"></span>
+            </div>
+            <div class="form-group ">
+                <label asp-for="ListingPhoTos"></label>
+                <input type="file" asp-for="ListingPhoTos" class="form-control">
+                <span asp-validation-for="ListingPhoTos"></span>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group ">
+                <label asp-for="Zip"></label>
+                <input asp-for="Zip" class="form-control">
+                <span asp-validation-for="Zip"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="City"></label>
+                <input asp-for="City" class="form-control">
+                <span asp-validation-for="City"></span>
+            </div>
+            <div class="form-group ">
+                <label asp-for="AddressLine1"></label>
+                <input asp-for="AddressLine1" class="form-control">
+                <span asp-validation-for="AddressLine1"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AddressLine2"></label>
+                <input asp-for="AddressLine2" class="form-control">
+                <span asp-validation-for="AddressLine2"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description"></label>
+                <input asp-for="Description" class="form-control">
+                <span asp-validation-for="Description"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ListingNotes"></label>
+                <input asp-for="ListingNotes" class="form-control">
+                <span asp-validation-for="ListingNotes"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group ">
+        <input type="submit" class="form-control btn btn-success"/>
+    </div>
+</form>
+
+
+@section Scripts {
+
+    @{ await Html.RenderPartialAsync("_DatePickerScriptPartial"); }
+
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

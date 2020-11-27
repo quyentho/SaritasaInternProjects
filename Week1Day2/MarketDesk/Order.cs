@@ -2,6 +2,7 @@
 
 namespace MarketDesk
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -10,31 +11,26 @@ namespace MarketDesk
     /// </summary>
     public class Order
     {
+        private const double TaxRate = 0.03;
+
         /// <summary>
         /// Gets or sets list of order items.
         /// </summary>
         public List<OrderItem> Items { get; set; } = new List<OrderItem>();
 
         /// <summary>
-        /// Calculate total price before tax.
+        /// Calculate total and total with tax.
         /// </summary>
-        /// <returns>Total price in list item.</returns>
-        public double CalculateTotalPrice()
+        /// <returns>object of type OrderResult.</returns>
+        public OrderResult Calculate()
         {
-            return this.Items.Select(i => i.Price * i.Quantity).Sum();
-        }
+            var total = this.Items.Sum(i => i.Price * i.Quantity);
 
-        /// <summary>
-        /// Calculate total price include tax.
-        /// </summary>
-        /// <returns>Total price include tax.</returns>
-        public double CalculateTotalWithTax()
-        {
-            double total = this.CalculateTotalPrice();
+            double tax = total * TaxRate;
 
-            double tax = total * 0.03;
+            double totalWithTax = total + tax;
 
-            return total + tax;
+            return new OrderResult() { Total = total, TotalWithTax = totalWithTax };
         }
 
         /// <summary>
@@ -43,12 +39,7 @@ namespace MarketDesk
         /// <returns>True if empty.</returns>
         public bool IsEmpty()
         {
-            if (this.Items.Count == 0)
-            {
-                return true;
-            }
-
-            return false;
+            return this.Items.Count == 0;
         }
     }
 }

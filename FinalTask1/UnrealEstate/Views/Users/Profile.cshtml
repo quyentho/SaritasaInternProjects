@@ -1,0 +1,76 @@
+﻿@model UnrealEstate.Business.User.ViewModel.UserResponse
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (ViewData["updateMessage"] != null)
+{
+    <div class="text-danger">@ViewData["updateMessage"].ToString()</div>
+}
+<div class="row">
+
+    <div class="col-6">
+        <form asp-controller="Users" asp-action="Profile" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group col-md-6">
+                <label>Email</label>
+                <input type="email" asp-for="Email" name="Email" class="form-control" placeholder="Email">
+            </div>
+            <div class="form-group col-md-6">
+                <label>First name</label>
+                <input asp-for="FirstName" name="FirstName" class="form-control" placeholder="First name">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Last name</label>
+                <input asp-for="LastName" name="LastName" class="form-control" placeholder="Last name">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Birth day</label>
+                <input asp-for="BirthDay" name="BirthDay" class="form-control" id="datepicker" placeholder="Birth day">
+            </div>
+            <div class="form-group col-md-6">
+                <label>Phone number</label>
+                <input asp-for="PhoneNumber" name="PhoneNumber" class="form-control" placeholder="Phone number">
+            </div>
+            <div class="form-group col-md-6">
+                <input type="submit" class="form-control btn btn-success" />
+            </div>
+        </form>
+    </div>
+    <div class="col-6">
+        <form asp-action="ChangePassword" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <label>Current Password</label>
+            <input type="password" name="currentPassword" class="form-control col-md-6 changePassword" disabled />
+            <label>New Password</label>
+            <input type="password" name="newpassword" class="form-control  col-md-6 changePassword" disabled />
+            <label>Confirm Password</label>
+            <input type="password" name="confirmpassword" class="form-control  col-md-6 changePassword" disabled />
+            <br />
+            <button type="submit" class="btn btn-success" id="changePasswordSubmitButton" style="visibility: hidden">Submit</button>
+            <button type="button" id="activeButton" class="btn btn-info" onclick="ActiveChangePassword()">Change Password</button>
+        </form>
+        <br />
+
+    </div>
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript">
+        function ActiveChangePassword() {
+            var textboxes = document.getElementsByClassName("changePassword");
+
+            for (var i = 0; i < textboxes.length; i++) {
+                textboxes[i].disabled = false;
+            }
+
+            document.getElementById("activeButton").style.visibility = "hidden";
+            document.getElementById("changePasswordSubmitButton").style.visibility = "visible";
+        }
+    </script>
+
+    @{ await Html.RenderPartialAsync("_DatePickerScriptPartial"); }
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

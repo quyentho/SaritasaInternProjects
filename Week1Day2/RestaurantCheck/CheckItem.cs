@@ -2,10 +2,12 @@
 
 namespace RestaurantCheck
 {
+    using System;
+
     /// <summary>
     /// Represent Item To Check.
     /// </summary>
-    public class CheckItem
+    public class CheckItem : ICheckItem
     {
         /// <summary>
         /// Gets or sets item name.
@@ -16,5 +18,10 @@ namespace RestaurantCheck
         /// Gets or sets price.
         /// </summary>
         public double Price { get; set; }
+
+        /// <summary>
+        /// Gets or sets Message.
+        /// </summary>
+        public string Message { get; set; }
     }
 }

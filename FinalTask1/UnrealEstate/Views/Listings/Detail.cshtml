@@ -1,0 +1,209 @@
+﻿@using UnrealEstate.Business
+@using Newtonsoft.Json
+@model UnrealEstate.Business.Listing.ViewModel.ListingResponse
+
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string returnUrl = ViewData["returnUrl"].ToString();
+}
+
+<h1>Detail</h1>
+<label class="text-warning font-weight-bold">
+</label>
+
+<hr/>
+<div class="p-4 border rounded row">
+    <div class="col-8">
+        <div class="form-group row">
+            <div class="col-4 font-weight-bold font-weight-bold">
+                @Html.DisplayNameFor(model => model.Id)
+            </div>
+            <div class="col-8">
+                @Html.DisplayFor(model => model.Id)
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4 font-weight-bold">
+                @Html.DisplayNameFor(model => model.StatusName)
+            </div>
+            <div class="col-8 text-danger ">
+                @Html.DisplayFor(model => model.StatusName)
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4 font-weight-bold">
+                @Html.DisplayNameFor(model => model.UserEmail)
+            </div>
+            <div class="col-8">
+                @Html.DisplayFor(model => model.UserEmail)
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4 font-weight-bold">
+                @Html.DisplayNameFor(model => model.Zip)
+            </div>
+            <div class="col-8">
+                @Html.DisplayFor(model => model.Zip)
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4 font-weight-bold">
+                @Html.DisplayNameFor(model => model.City)
+            </div>
+            <div class="col-8">
+                @Html.DisplayFor(model => model.City)
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4 font-weight-bold">
+                @Html.DisplayNameFor(model => model.AddressLine1)
+            </div>
+            <div class="col-8">
+                @Html.DisplayFor(model => model.AddressLine1)
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4 font-weight-bold">
+                @Html.DisplayNameFor(model => model.AddressLine2)
+            </div>
+            <div class="col-8">
+                @Html.DisplayFor(model => model.AddressLine2)
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4 font-weight-bold">
+                @Html.DisplayNameFor(model => model.BuiltYear)
+            </div>
+            <div class="col-8">
+                @Html.DisplayFor(model => model.BuiltYear)
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4 font-weight-bold">
+                @Html.DisplayNameFor(model => model.Beds)
+            </div>
+            <div class="col-8">
+                @Html.DisplayFor(model => model.Beds)
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4 font-weight-bold">
+                @Html.DisplayNameFor(model => model.Size)
+            </div>
+            <div class="col-8">
+                @Html.DisplayFor(model => model.Size)
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4 font-weight-bold">
+                @Html.DisplayNameFor(model => model.CurrentHighestBidPrice)
+            </div>
+            <div class="col-8">
+                @Html.DisplayFor(model => model.CurrentHighestBidPrice)
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4 font-weight-bold">
+                @Html.DisplayNameFor(model => model.StatingPrice)
+            </div>
+            <div class="col-8">
+                @Html.DisplayFor(model => model.StatingPrice)
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4 font-weight-bold">
+                @Html.DisplayNameFor(model => model.DueDate)
+            </div>
+            <div class="col-8">
+                @{
+                    var dueDate = Model.DueDate.ToString("dd/MM/yyyy H:mm:ss");
+                }
+                @Html.DisplayFor(model => dueDate)
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4 font-weight-bold">
+                @Html.DisplayNameFor(model => model.Description)
+            </div>
+            <div class="col-8">
+                @Html.DisplayFor(model => model.Description)
+            </div>
+        </div>
+    </div>
+
+    <div class="col-1">
+    </div>
+
+    <div class="col-3">
+        @foreach (var photo in Model.ListingPhoTos)
+        {
+            <img src="@string.Format($"{Context.Request.Scheme}://{Context.Request.Host}/api/GetImage?photoUrl={photo.PhotoUrl}")" width="100%" style="border: 1px solid #bbb9b9; border-radius: 5px;" alt="image"/>
+            <div class="pt-4"></div>
+        }
+    </div>
+    <div>
+        @if (User.Identity.IsAuthenticated || User.Identity.Name == Model.UserEmail)
+        {
+            @Html.ActionLink("Edit", "Edit", new {id = Model.Id, returnUrl = returnUrl})
+        }
+        | <a href=@returnUrl>Back To List</a>
+    </div>
+</div>
+
+<div>
+    <p class="font-weight-bold">Comments</p>
+</div>
+<div class="p-4 border rounded row">
+    <table class="table table-sm">
+        @foreach (var comment in Model.Comments)
+        {
+            <tr class="table-primary">
+                <th scope="col">@comment.UserEmail</th>
+                <th scope="col">@comment.CreatedAt.ToString("dd/MM/yyyy H:mm:ss")</th>
+                <th>
+                    @if (User.IsInRole(UserRole.Admin))
+                    {
+                        @Html.ActionLink("Delete", "Delete","Comments", new {id = comment.Id, listingId = Model.Id, returnUrl = returnUrl})
+                    }
+                </th>
+                <th>
+                    @if (User.Identity.Name == comment.UserEmail)
+                    {
+                        <a href="javascript:void(0)" onclick="editComment(@JsonConvert.SerializeObject(comment))">Edit</a>
+                    }
+                </th>
+            </tr>
+            <tr>
+                <td>@comment.Text</td>
+            </tr>
+        }
+    </table>
+
+    <form id="commentForm" asp-controller="Comments" asp-action="Create"  method="get">
+        <textarea id="commentText" class="flex-fill" name="text" placeholder="Leave a comment"></textarea>
+        <input type="hidden" name="listingId" value="@Model.Id"/>
+        <input type="hidden" name="returnUrl" value="@returnUrl"/>
+    </form>
+</div>
+
+<script type="text/javascript">
+    var form = document.getElementById("commentForm");
+
+    form.addEventListener("keydown",
+        function(event) {
+            if (event.key === "Enter") {
+                form.submit();
+            }
+        });
+
+    function editComment(comment) {
+
+        document.getElementById("commentText").value = comment.Text;
+        document.getElementById("commentText").focus();
+        document.getElementById("commentText").select();
+
+        document.getElementById("commentForm").action = "/Comments" + "/Update/" + comment.Id;
+    }
+</script>
